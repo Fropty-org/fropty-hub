@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import QuoteForm from "./components/QuoteForm";
+import AppDemos from "./components/AppDemos";
 
 const plans = [
   {
@@ -89,6 +90,9 @@ export default function Home() {
           <nav className="hidden items-center gap-6 text-sm text-neutral-400 sm:flex">
             <a href="#planos" className="hover:text-neutral-100">
               Planos
+            </a>
+            <a href="#exemplos" className="hover:text-neutral-100">
+              Exemplos
             </a>
             <a href="#tokens" className="hover:text-neutral-100">
               Tokens
@@ -217,6 +221,9 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* App Demos */}
+      <AppDemos />
 
       {/* Tokens */}
       <section

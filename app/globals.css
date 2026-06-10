@@ -19,3 +19,57 @@ body {
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
+
+/* ── App demo phone card animations ────────────────────────── */
+@keyframes demoStatus1 {
+  0%, 28% { opacity: 1; }
+  33%, 95% { opacity: 0; }
+  100%     { opacity: 1; }
+}
+@keyframes demoStatus2 {
+  0%, 28% { opacity: 0; }
+  33%, 61% { opacity: 1; }
+  66%, 100% { opacity: 0; }
+}
+@keyframes demoStatus3 {
+  0%, 61%  { opacity: 0; }
+  66%, 94% { opacity: 1; }
+  99%, 100% { opacity: 0; }
+}
+
+@keyframes demoBadgePulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+@keyframes demoSlotEmpty {
+  0%, 15%  { opacity: 1; }
+  22%, 78% { opacity: 0; }
+  85%, 100% { opacity: 1; }
+}
+@keyframes demoSlotBooked {
+  0%, 15%  { opacity: 0; }
+  22%, 78% { opacity: 1; }
+  85%, 100% { opacity: 0; }
+}
+
+@keyframes demoCount0 {
+  0%, 20%  { opacity: 1; }
+  26%, 95% { opacity: 0; }
+  100%     { opacity: 1; }
+}
+@keyframes demoCount1 {
+  0%, 20%  { opacity: 0; }
+  26%, 45% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+@keyframes demoCount2 {
+  0%, 45%  { opacity: 0; }
+  51%, 70% { opacity: 1; }
+  76%, 100% { opacity: 0; }
+}
+@keyframes demoCount3 {
+  0%, 70%  { opacity: 0; }
+  76%, 94% { opacity: 1; }
+  100%     { opacity: 0; }
+}
