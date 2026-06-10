@@ -191,7 +191,7 @@ export default function PlanConfigurator({ onSubmit }: Props) {
               <i className="ti ti-tool" style={{ fontSize: "16px", color: "#185FA5" }} />
               Plano de manutenção mensal
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, alignItems: "stretch" }}>
               {MAINTENANCE.map((m) => {
                 const active = maintenance === m.id;
                 return (
@@ -201,20 +201,22 @@ export default function PlanConfigurator({ onSubmit }: Props) {
                     borderRadius: 12, padding: "14px 16px",
                     cursor: "pointer", textAlign: "center",
                     transition: "all 0.18s", position: "relative",
+                    display: "flex", flexDirection: "column", justifyContent: "center",
                   }}>
                     {m.highlight && (
                       <div style={{ position: "absolute", top: -10, left: "50%", transform: "translateX(-50%)", background: "#EF9F27", color: "#fff", fontSize: 9, fontWeight: 700, padding: "2px 10px", borderRadius: 20, whiteSpace: "nowrap" }}>Mais popular</div>
                     )}
                     <div style={{ fontSize: 14, fontWeight: 800, color: active ? (m.highlight ? "#fff" : "#185FA5") : "#0f172a" }}>{m.label}</div>
-                    {m.tokens > 0 && (
-                      <div style={{ fontSize: 11, color: active ? (m.highlight ? "#bfdbfe" : "#185FA5") : "#64748b", marginTop: 2 }}>{m.tokens} tokens/mês</div>
-                    )}
-                    {m.price > 0 && (
-                      <div style={{ fontSize: 18, fontWeight: 800, color: active ? (m.highlight ? "#fff" : "#185FA5") : "#0f172a", marginTop: 6 }}>
-                        {formatPrice(m.price)}
-                        <span style={{ fontSize: 11, fontWeight: 400, color: active ? (m.highlight ? "#bfdbfe" : "#64748b") : "#94a3b8" }}>/mês</span>
-                      </div>
-                    )}
+                    <div style={{ fontSize: 11, color: active ? (m.highlight ? "#bfdbfe" : "#185FA5") : "#64748b", marginTop: 2 }}>
+                      {m.tokens > 0 ? `${m.tokens} tokens/mês` : "sem tokens"}
+                    </div>
+                    <div style={{ fontSize: m.price > 0 ? 18 : 13, fontWeight: m.price > 0 ? 800 : 400, color: active ? (m.highlight ? "#fff" : "#185FA5") : (m.price > 0 ? "#0f172a" : "#94a3b8"), marginTop: 6 }}>
+                      {m.price > 0 ? (
+                        <>{formatPrice(m.price)}<span style={{ fontSize: 11, fontWeight: 400, color: active ? (m.highlight ? "#bfdbfe" : "#64748b") : "#94a3b8" }}>/mês</span></>
+                      ) : (
+                        "sem mensalidade"
+                      )}
+                    </div>
                   </div>
                 );
               })}
