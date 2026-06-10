@@ -47,7 +47,7 @@ export default function QuoteForm() {
 
   if (status === "success") {
     return (
-      <div className="mt-10 rounded-2xl border border-green-200 bg-green-50 p-8 text-center">
+      <div className="mt-6 rounded-2xl border border-green-200 bg-green-50 p-8 text-center">
         <div className="text-4xl">🎉</div>
         <h3 className="mt-3 text-xl font-semibold text-green-800">
           Pedido enviado!
@@ -61,7 +61,7 @@ export default function QuoteForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mt-10 space-y-6">
+    <form onSubmit={handleSubmit} className="mt-6 space-y-5">
       <div>
         <label htmlFor="nome" className="block text-sm font-medium">
           Seu nome
@@ -165,7 +165,7 @@ export default function QuoteForm() {
       <button
         type="submit"
         disabled={status === "sending"}
-        className="w-full rounded-lg bg-[#185FA5] px-6 py-3 font-semibold text-white transition hover:brightness-110 disabled:opacity-60"
+        className="w-full rounded-full bg-[#185FA5] px-6 py-3 font-semibold text-white transition hover:brightness-110 disabled:opacity-60"
       >
         {status === "sending" ? "Enviando..." : "Enviar pedido de orçamento"}
       </button>
