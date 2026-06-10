@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import QuoteForm from "./components/QuoteForm";
 import AppDemos from "./components/AppDemos";
-import PlanConfigurator, { type PlanSummary } from "./components/PlanConfigurator";
 
 const plans = [
   {
@@ -74,32 +74,20 @@ const faqs = [
   },
 ];
 
+const PREVIEW_ADDONS = [
+  { icon: "lock", label: "Login" },
+  { icon: "tool", label: "Admin" },
+  { icon: "brand-whatsapp", label: "WhatsApp" },
+  { icon: "bell", label: "Push" },
+  { icon: "chart-bar", label: "Relatórios" },
+  { icon: "world", label: "Domínio" },
+];
+
 export default function Home() {
   const [formOpen, setFormOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const openForm = () => setFormOpen(true);
-
-  async function handlePlanSubmit(summary: PlanSummary) {
-    const addonNames =
-      summary.addons.map((a) => a.label).join(", ") || "nenhum";
-    const maintenanceName = summary.maintenance?.price
-      ? summary.maintenance.label
-      : "sem plano";
-    const ideia = `Pedido via configurador de planos. Extras: ${addonNames}. Manutenção: ${maintenanceName}. Total único: R$${summary.onceTotal}${
-      summary.monthTotal > 0 ? ` mais R$${summary.monthTotal}/mês` : ""
-    }.`;
-
-    try {
-      await fetch("/api/quote", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nome: summary.name, email: summary.email, ideia }),
-      });
-    } catch {
-      // PlanConfigurator mostra sucesso imediatamente; erro silencioso aqui
-    }
-  }
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-700">
@@ -126,8 +114,8 @@ export default function Home() {
       </header>
 
       {/* Hero */}
-      <section className="mx-auto max-w-4xl px-6 pb-16 pt-24 text-center">
-        <h1 className="mt-6 text-4xl font-bold leading-tight tracking-tight text-slate-900 sm:text-6xl">
+      <section className="mx-auto max-w-4xl px-6 pb-16 pt-12 text-center">
+        <h1 className="text-4xl font-bold leading-tight tracking-tight text-slate-900 sm:text-6xl">
           Seu app sob medida,{" "}
           <span className="text-[#185FA5]">do jeito que você imaginou</span>
         </h1>
@@ -222,10 +210,67 @@ export default function Home() {
             </div>
           ))}
         </div>
-      </section>
 
-      {/* Configurador de plano */}
-      <PlanConfigurator onSubmit={handlePlanSubmit} />
+        {/* Card configurador — entrada premium */}
+        <Link href="/configurador" className="group mt-10 block">
+          <div className="relative overflow-hidden rounded-2xl p-8 ring-1 ring-slate-700 transition hover:ring-[#185FA5] hover:shadow-2xl hover:shadow-blue-900/20 sm:p-10"
+            style={{ background: "#0f172a" }}
+          >
+            {/* glow blobs */}
+            <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full blur-3xl"
+              style={{ background: "rgba(24,95,165,0.2)" }}
+            />
+            <div className="pointer-events-none absolute -bottom-20 left-10 h-56 w-56 rounded-full blur-3xl"
+              style={{ background: "rgba(24,95,165,0.12)" }}
+            />
+
+            <div className="relative flex flex-col gap-8 sm:flex-row sm:items-center">
+              {/* esquerda */}
+              <div className="flex-1">
+                <span className="mb-4 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-widest"
+                  style={{ background: "rgba(239,159,39,0.15)", color: "#EF9F27" }}
+                >
+                  <i className="ti ti-adjustments-horizontal" />
+                  Personalizável
+                </span>
+                <h3 className="text-2xl font-bold text-white sm:text-3xl">
+                  Monte o app perfeito para o seu negócio
+                </h3>
+                <p className="mt-2 max-w-lg text-slate-400">
+                  Login com Google, painel admin, WhatsApp, relatórios... escolha o que faz sentido e veja o preço atualizar na hora.
+                </p>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {PREVIEW_ADDONS.map(({ icon, label }) => (
+                    <span key={icon} className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm text-slate-300"
+                      style={{ borderColor: "#334155", background: "#1e293b" }}
+                    >
+                      <i className={`ti ti-${icon} text-[#185FA5]`} />
+                      {label}
+                    </span>
+                  ))}
+                  <span className="inline-flex items-center rounded-lg border px-3 py-1.5 text-sm text-slate-500"
+                    style={{ borderColor: "#334155", background: "#1e293b" }}
+                  >
+                    +4 mais
+                  </span>
+                </div>
+              </div>
+
+              {/* direita */}
+              <div className="flex flex-row items-center gap-6 sm:flex-col sm:items-end">
+                <div className="sm:text-right">
+                  <div className="text-sm text-slate-500">a partir de</div>
+                  <div className="text-4xl font-bold text-white">R$499</div>
+                  <div className="text-sm text-slate-500">pagamento único</div>
+                </div>
+                <div className="rounded-full bg-[#185FA5] px-6 py-3 font-semibold text-white shadow-lg shadow-blue-900/40 transition group-hover:brightness-110 whitespace-nowrap">
+                  Monte seu App →
+                </div>
+              </div>
+            </div>
+          </div>
+        </Link>
+      </section>
 
       {/* App Demos */}
       <AppDemos />

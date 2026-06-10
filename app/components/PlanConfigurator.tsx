@@ -100,7 +100,7 @@ export default function PlanConfigurator({ onSubmit }: Props) {
 
   if (submitted) {
     return (
-      <section id="configurador" style={{ padding: "64px 16px", background: "#f0fdf4", textAlign: "center", fontFamily: "system-ui, sans-serif" }}>
+      <div style={{ padding: "64px 16px", textAlign: "center", fontFamily: "system-ui, sans-serif" }}>
         <div style={{ marginBottom: 16 }}>
           <i className="ti ti-circle-check" style={{ fontSize: "48px", color: "#16a34a" }} />
         </div>
@@ -108,13 +108,12 @@ export default function PlanConfigurator({ onSubmit }: Props) {
         <p style={{ fontSize: 15, color: "#64748b", maxWidth: 400, margin: "0 auto" }}>
           Recebemos seu pedido, <strong>{name}</strong>. Entraremos em contato em breve no e-mail <strong>{email}</strong>.
         </p>
-      </section>
+      </div>
     );
   }
 
   return (
-    <section id="configurador" style={{ padding: "64px 16px", background: "#f8fafc", fontFamily: "system-ui, sans-serif", scrollMarginTop: "80px" }}>
-      <div style={{ maxWidth: 760, margin: "0 auto" }}>
+    <div style={{ maxWidth: 760, margin: "0 auto", fontFamily: "system-ui, sans-serif" }}>
 
         <div style={{ textAlign: "center", marginBottom: 40 }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: "#185FA5", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8 }}>Monte seu app</div>
@@ -316,7 +315,6 @@ export default function PlanConfigurator({ onSubmit }: Props) {
           </div>
 
         </div>
-      </div>
-    </section>
+    </div>
   );
 }
