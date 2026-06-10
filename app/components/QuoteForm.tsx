@@ -48,7 +48,7 @@ export default function QuoteForm() {
   if (status === "success") {
     return (
       <div className="mt-6 rounded-2xl border border-green-200 bg-green-50 p-8 text-center">
-        <div className="text-4xl">🎉</div>
+        <i className="ti ti-circle-check" style={{ fontSize: "48px", color: "#16a34a" }} />
         <h3 className="mt-3 text-xl font-semibold text-green-700">
           Pedido enviado!
         </h3>

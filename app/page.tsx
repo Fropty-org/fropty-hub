@@ -3,6 +3,7 @@
 import { useState } from "react";
 import QuoteForm from "./components/QuoteForm";
 import AppDemos from "./components/AppDemos";
+import PlanConfigurator, { type PlanSummary } from "./components/PlanConfigurator";
 
 const plans = [
   {
@@ -53,7 +54,7 @@ const plans = [
 const faqs = [
   {
     q: "A prévia é gratuita mesmo?",
-    a: "Sim. Você conta sua ideia, a gente monta um mockup das telas principais e te envia sem nenhum custo. Só depois, se gostar, você decide se quer o app completo.",
+    a: "Sim. Você conta sua ideia, a gente monta uma visualização das telas principais e te envia sem nenhum custo. Só depois, se gostar, você decide se quer o app completo.",
   },
   {
     q: "Quanto tempo leva para ficar pronto?",
@@ -65,7 +66,7 @@ const faqs = [
   },
   {
     q: "Como funcionam os tokens da manutenção?",
-    a: "Você recebe 4 tokens por mês. Cada token vale um pedido de ajuste ou suporte — mudar um texto, ajustar uma cor, corrigir algo. Eles não acumulam: todo mês você começa com 4 novos.",
+    a: "Você recebe 4 tokens por mês. Cada token vale um pedido de ajuste ou suporte: mudar um texto, ajustar uma cor, corrigir algo. Eles não acumulam. Todo mês você começa com 4 novos.",
   },
   {
     q: "O app é meu mesmo?",
@@ -79,6 +80,27 @@ export default function Home() {
 
   const openForm = () => setFormOpen(true);
 
+  async function handlePlanSubmit(summary: PlanSummary) {
+    const addonNames =
+      summary.addons.map((a) => a.label).join(", ") || "nenhum";
+    const maintenanceName = summary.maintenance?.price
+      ? summary.maintenance.label
+      : "sem plano";
+    const ideia = `Pedido via configurador de planos. Extras: ${addonNames}. Manutenção: ${maintenanceName}. Total único: R$${summary.onceTotal}${
+      summary.monthTotal > 0 ? ` mais R$${summary.monthTotal}/mês` : ""
+    }.`;
+
+    try {
+      await fetch("/api/quote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nome: summary.name, email: summary.email, ideia }),
+      });
+    } catch {
+      // PlanConfigurator mostra sucesso imediatamente; erro silencioso aqui
+    }
+  }
+
   return (
     <main className="min-h-screen bg-slate-50 text-slate-700">
 
@@ -89,18 +111,10 @@ export default function Home() {
             Fropty<span className="text-[#185FA5]">Apps</span>
           </span>
           <nav className="hidden items-center gap-6 text-sm text-slate-500 sm:flex">
-            <a href="#planos" className="hover:text-slate-900">
-              Planos
-            </a>
-            <a href="#exemplos" className="hover:text-slate-900">
-              Exemplos
-            </a>
-            <a href="#tokens" className="hover:text-slate-900">
-              Tokens
-            </a>
-            <a href="#faq" className="hover:text-slate-900">
-              FAQ
-            </a>
+            <a href="#planos" className="hover:text-slate-900">Planos</a>
+            <a href="#exemplos" className="hover:text-slate-900">Exemplos</a>
+            <a href="#tokens" className="hover:text-slate-900">Tokens</a>
+            <a href="#faq" className="hover:text-slate-900">FAQ</a>
           </nav>
           <button
             onClick={openForm}
@@ -190,7 +204,7 @@ export default function Home() {
               <ul className={`mt-6 flex-1 space-y-3 text-sm ${plan.highlight ? "text-white" : "text-slate-600"}`}>
                 {plan.features.map((f) => (
                   <li key={f} className="flex items-start gap-2">
-                    <span className={`mt-0.5 font-bold ${plan.highlight ? "text-blue-200" : "text-[#185FA5]"}`}>✓</span>
+                    <i className={`ti ti-check mt-0.5 flex-shrink-0 text-base ${plan.highlight ? "text-blue-200" : "text-[#185FA5]"}`} />
                     {f}
                   </li>
                 ))}
@@ -210,6 +224,9 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Configurador de plano */}
+      <PlanConfigurator onSubmit={handlePlanSubmit} />
+
       {/* App Demos */}
       <AppDemos />
 
@@ -222,27 +239,27 @@ export default function Home() {
           <p className="mx-auto mt-4 max-w-2xl text-slate-500">
             No plano de manutenção mensal, você recebe{" "}
             <strong className="text-[#185FA5]">4 tokens por mês</strong>. Cada
-            token vale um pedido de suporte ou ajuste no seu app — como mudar
+            token vale um pedido de suporte ou ajuste no seu app, como mudar
             um texto, ajustar uma cor ou corrigir algo que não está
             funcionando.
           </p>
           <div className="mt-12 grid gap-6 sm:grid-cols-3">
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6">
-              <div className="text-3xl">🎟️</div>
+              <i className="ti ti-ticket text-3xl text-[#185FA5]" />
               <h3 className="mt-3 font-semibold text-slate-900">4 por mês</h3>
               <p className="mt-1 text-sm text-slate-500">
                 Todo mês você começa com 4 tokens novinhos.
               </p>
             </div>
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6">
-              <div className="text-3xl">⏳</div>
+              <i className="ti ti-hourglass text-3xl text-[#185FA5]" />
               <h3 className="mt-3 font-semibold text-slate-900">Não acumulam</h3>
               <p className="mt-1 text-sm text-slate-500">
-                Tokens não usados expiram no fim do mês — use sem medo.
+                Tokens não usados expiram no fim do mês. Use sem medo.
               </p>
             </div>
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6">
-              <div className="text-3xl">🛠️</div>
+              <i className="ti ti-tool text-3xl text-[#185FA5]" />
               <h3 className="mt-3 font-semibold text-slate-900">Suporte e ajustes</h3>
               <p className="mt-1 text-sm text-slate-500">
                 Cada token vale um ajuste ou atendimento de suporte.
