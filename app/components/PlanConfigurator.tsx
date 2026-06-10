@@ -113,7 +113,7 @@ export default function PlanConfigurator({ onSubmit }: Props) {
   }
 
   return (
-    <div style={{ maxWidth: 760, margin: "0 auto", fontFamily: "system-ui, sans-serif" }}>
+    <div className="overflow-x-hidden" style={{ maxWidth: 760, margin: "0 auto", fontFamily: "system-ui, sans-serif" }}>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 24 }}>
 
@@ -137,7 +137,7 @@ export default function PlanConfigurator({ onSubmit }: Props) {
               <i className="ti ti-plus" style={{ fontSize: "16px", color: "#185FA5" }} />
               Adicione recursos ao seu app
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 10 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 300px), 1fr))", gap: 10 }}>
               {ADDONS.map((addon) => {
                 const active = selected.has(addon.id);
                 return (
@@ -191,7 +191,7 @@ export default function PlanConfigurator({ onSubmit }: Props) {
               <i className="ti ti-tool" style={{ fontSize: "16px", color: "#185FA5" }} />
               Plano de manutenção mensal
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, alignItems: "stretch" }}>
+            <div className="grid grid-cols-1 sm:grid-cols-3 items-stretch" style={{ gap: 10 }}>
               {MAINTENANCE.map((m) => {
                 const active = maintenance === m.id;
                 return (

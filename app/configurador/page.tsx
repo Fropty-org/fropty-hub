@@ -94,7 +94,7 @@ export default function ConfiguradorPage() {
       {/* Configurador */}
       <div className="relative mx-auto max-w-5xl px-4 pb-24">
         <div
-          className="rounded-3xl p-6 sm:p-10"
+          className="rounded-3xl p-4 sm:p-8"
           style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <PlanConfigurator onSubmit={handleSubmit} />
