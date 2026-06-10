@@ -14,7 +14,7 @@ const plans = [
     description:
       "Conte sua ideia e receba uma prévia visual do seu app, sem compromisso.",
     features: [
-      "Mockup das telas principais",
+      "Como vão ficar as telas do seu app",
       "Sem custo e sem compromisso",
       "Entrega em poucos dias",
     ],
@@ -113,16 +113,14 @@ export default function Home() {
 
       {/* Hero */}
       <section className="mx-auto max-w-4xl px-6 pb-16 pt-24 text-center">
-        <span className="inline-block rounded-full border border-slate-200 bg-white px-4 py-1 text-sm font-medium text-slate-500">
-          ⚡ Do papel ao app em semanas
-        </span>
         <h1 className="mt-6 text-4xl font-bold leading-tight tracking-tight text-slate-900 sm:text-6xl">
           Seu app sob medida,{" "}
           <span className="text-[#185FA5]">do jeito que você imaginou</span>
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-500">
-          Conte sua ideia e receba uma prévia gratuita. Sem complicação, sem
-          jargão técnico — só o seu app saindo do papel.
+          Conte sua ideia e receba uma prévia dela em forma de app, totalmente
+          gratuita! Sem complicação técnica, sem precisar falar difícil. Conte
+          a sua ideia com suas palavras e a gente faz o resto para você :)
         </p>
         <button
           onClick={openForm}
@@ -130,9 +128,6 @@ export default function Home() {
         >
           Pedir orçamento grátis →
         </button>
-        <p className="mt-3 text-sm text-slate-400">
-          Prévia gratuita · Sem compromisso
-        </p>
       </section>
 
       {/* Métricas */}
