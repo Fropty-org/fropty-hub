@@ -95,3 +95,9 @@ body {
   background-size: 200% 100%;
   animation: demoShimmer 2.2s linear infinite;
 }
+
+/* Blinking text cursor used in OficinaApp search field */
+@keyframes blink {
+  0%, 49%  { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
