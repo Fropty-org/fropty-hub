@@ -115,14 +115,6 @@ export default function PlanConfigurator({ onSubmit }: Props) {
   return (
     <div style={{ maxWidth: 760, margin: "0 auto", fontFamily: "system-ui, sans-serif" }}>
 
-        <div style={{ textAlign: "center", marginBottom: 40 }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: "#185FA5", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8 }}>Monte seu app</div>
-          <h2 style={{ fontSize: 26, fontWeight: 800, color: "#0f172a", margin: "0 0 8px" }}>Configure seu plano</h2>
-          <p style={{ fontSize: 15, color: "#64748b", maxWidth: 480, margin: "0 auto" }}>
-            Escolha o que faz sentido pro seu negócio. O preço atualiza em tempo real.
-          </p>
-        </div>
-
         <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 24 }}>
 
           {/* base */}
@@ -141,7 +133,7 @@ export default function PlanConfigurator({ onSubmit }: Props) {
 
           {/* addons */}
           <div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: "#0f172a", marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#e2e8f0", marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
               <i className="ti ti-plus" style={{ fontSize: "16px", color: "#185FA5" }} />
               Adicione recursos ao seu app
             </div>
@@ -195,7 +187,7 @@ export default function PlanConfigurator({ onSubmit }: Props) {
 
           {/* maintenance */}
           <div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: "#0f172a", marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#e2e8f0", marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
               <i className="ti ti-tool" style={{ fontSize: "16px", color: "#185FA5" }} />
               Plano de manutenção mensal
             </div>
