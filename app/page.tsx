@@ -80,24 +80,25 @@ export default function Home() {
   const openForm = () => setFormOpen(true);
 
   return (
-    <main className="min-h-screen bg-neutral-950 text-neutral-300">
+    <main className="min-h-screen bg-slate-50 text-slate-700">
+
       {/* Navbar */}
-      <header className="sticky top-0 z-40 border-b border-neutral-800 bg-neutral-950/90 backdrop-blur">
+      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <span className="text-lg font-bold tracking-tight text-neutral-100">
-            Fropty<span className="text-[#4D9BE0]">Apps</span>
+          <span className="text-lg font-bold tracking-tight text-slate-900">
+            Fropty<span className="text-[#185FA5]">Apps</span>
           </span>
-          <nav className="hidden items-center gap-6 text-sm text-neutral-400 sm:flex">
-            <a href="#planos" className="hover:text-neutral-100">
+          <nav className="hidden items-center gap-6 text-sm text-slate-500 sm:flex">
+            <a href="#planos" className="hover:text-slate-900">
               Planos
             </a>
-            <a href="#exemplos" className="hover:text-neutral-100">
+            <a href="#exemplos" className="hover:text-slate-900">
               Exemplos
             </a>
-            <a href="#tokens" className="hover:text-neutral-100">
+            <a href="#tokens" className="hover:text-slate-900">
               Tokens
             </a>
-            <a href="#faq" className="hover:text-neutral-100">
+            <a href="#faq" className="hover:text-slate-900">
               FAQ
             </a>
           </nav>
@@ -112,60 +113,52 @@ export default function Home() {
 
       {/* Hero */}
       <section className="mx-auto max-w-4xl px-6 pb-16 pt-24 text-center">
-        <span className="inline-block rounded-full border border-neutral-800 bg-neutral-900 px-4 py-1 text-sm font-medium text-neutral-400">
+        <span className="inline-block rounded-full border border-slate-200 bg-white px-4 py-1 text-sm font-medium text-slate-500">
           ⚡ Do papel ao app em semanas
         </span>
-        <h1 className="mt-6 text-4xl font-bold leading-tight tracking-tight text-neutral-100 sm:text-6xl">
+        <h1 className="mt-6 text-4xl font-bold leading-tight tracking-tight text-slate-900 sm:text-6xl">
           Seu app sob medida,{" "}
-          <span className="text-[#4D9BE0]">do jeito que você imaginou</span>
+          <span className="text-[#185FA5]">do jeito que você imaginou</span>
         </h1>
-        <p className="mx-auto mt-6 max-w-2xl text-lg text-neutral-400">
+        <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-500">
           Conte sua ideia e receba uma prévia gratuita. Sem complicação, sem
           jargão técnico — só o seu app saindo do papel.
         </p>
         <button
           onClick={openForm}
-          className="mt-10 rounded-full bg-[#185FA5] px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-blue-500/10 transition hover:brightness-110"
+          className="mt-10 rounded-full bg-[#185FA5] px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-blue-500/20 transition hover:brightness-110"
         >
           Pedir orçamento grátis →
         </button>
-        <p className="mt-3 text-sm text-neutral-500">
+        <p className="mt-3 text-sm text-slate-400">
           Prévia gratuita · Sem compromisso
         </p>
       </section>
 
-      {/* Prova social / métricas */}
-      <section className="border-y border-neutral-800 bg-neutral-900">
+      {/* Métricas */}
+      <section className="border-y border-slate-200 bg-white">
         <div className="mx-auto grid max-w-4xl grid-cols-3 gap-4 px-6 py-10 text-center">
           <div>
-            <p className="text-2xl font-bold text-neutral-100 sm:text-3xl">
-              R$0
-            </p>
-            <p className="mt-1 text-sm text-neutral-500">para começar</p>
+            <p className="text-2xl font-bold text-slate-900 sm:text-3xl">R$0</p>
+            <p className="mt-1 text-sm text-slate-400">para começar</p>
           </div>
           <div>
-            <p className="text-2xl font-bold text-neutral-100 sm:text-3xl">
-              dias
-            </p>
-            <p className="mt-1 text-sm text-neutral-500">
-              para ver sua prévia
-            </p>
+            <p className="text-2xl font-bold text-slate-900 sm:text-3xl">dias</p>
+            <p className="mt-1 text-sm text-slate-400">para ver sua prévia</p>
           </div>
           <div>
-            <p className="text-2xl font-bold text-neutral-100 sm:text-3xl">
-              100%
-            </p>
-            <p className="mt-1 text-sm text-neutral-500">seu, com código</p>
+            <p className="text-2xl font-bold text-slate-900 sm:text-3xl">100%</p>
+            <p className="mt-1 text-sm text-slate-400">seu, com código</p>
           </div>
         </div>
       </section>
 
       {/* Planos */}
       <section id="planos" className="mx-auto max-w-6xl scroll-mt-20 px-6 py-20">
-        <h2 className="text-center text-3xl font-bold tracking-tight text-neutral-100 sm:text-4xl">
+        <h2 className="text-center text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
           Planos
         </h2>
-        <p className="mt-3 text-center text-neutral-400">
+        <p className="mt-3 text-center text-slate-500">
           Comece de graça e evolua quando fizer sentido.
         </p>
         <div className="mt-12 grid gap-6 md:grid-cols-3">
@@ -174,35 +167,35 @@ export default function Home() {
               key={plan.name}
               className={`relative flex flex-col rounded-2xl p-8 ${
                 plan.highlight
-                  ? "border border-[#185FA5] bg-gradient-to-b from-[#10243a] to-neutral-900 shadow-2xl shadow-blue-500/10"
-                  : "border border-neutral-800 bg-neutral-900"
+                  ? "border border-[#185FA5] bg-[#185FA5] shadow-2xl shadow-blue-500/20"
+                  : "border border-slate-200 bg-white"
               }`}
             >
               {plan.badge && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#185FA5] px-3 py-1 text-xs font-bold tracking-wide text-white">
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#EF9F27] px-3 py-1 text-xs font-bold tracking-wide text-white">
                   {plan.badge}
                 </span>
               )}
-              <h3 className="text-xl font-semibold text-neutral-100">
+              <h3 className={`text-xl font-semibold ${plan.highlight ? "text-white" : "text-slate-900"}`}>
                 {plan.name}
               </h3>
               <p className="mt-4">
-                <span className="text-2xl font-bold text-[#4D9BE0]">
+                <span className={`text-2xl font-bold ${plan.highlight ? "text-white" : "text-[#185FA5]"}`}>
                   {plan.price}
                 </span>
                 {plan.period && (
-                  <span className="ml-1 text-sm text-neutral-500">
+                  <span className={`ml-1 text-sm ${plan.highlight ? "text-blue-200" : "text-slate-400"}`}>
                     {plan.period}
                   </span>
                 )}
               </p>
-              <p className="mt-3 text-sm text-neutral-400">
+              <p className={`mt-3 text-sm ${plan.highlight ? "text-blue-100" : "text-slate-500"}`}>
                 {plan.description}
               </p>
-              <ul className="mt-6 flex-1 space-y-3 text-sm text-neutral-300">
+              <ul className={`mt-6 flex-1 space-y-3 text-sm ${plan.highlight ? "text-white" : "text-slate-600"}`}>
                 {plan.features.map((f) => (
                   <li key={f} className="flex items-start gap-2">
-                    <span className="mt-0.5 font-bold text-[#4D9BE0]">✓</span>
+                    <span className={`mt-0.5 font-bold ${plan.highlight ? "text-blue-200" : "text-[#185FA5]"}`}>✓</span>
                     {f}
                   </li>
                 ))}
@@ -211,8 +204,8 @@ export default function Home() {
                 onClick={openForm}
                 className={`mt-8 rounded-full px-4 py-3 text-center font-semibold transition ${
                   plan.highlight
-                    ? "bg-[#185FA5] text-white hover:brightness-110"
-                    : "border border-neutral-600 text-neutral-200 hover:border-[#4D9BE0] hover:text-[#4D9BE0]"
+                    ? "bg-white text-[#185FA5] hover:bg-blue-50"
+                    : "border border-slate-300 text-slate-600 hover:border-[#185FA5] hover:text-[#185FA5]"
                 }`}
               >
                 Quero esse →
@@ -226,46 +219,37 @@ export default function Home() {
       <AppDemos />
 
       {/* Tokens */}
-      <section
-        id="tokens"
-        className="scroll-mt-20 border-y border-neutral-800 bg-neutral-900"
-      >
+      <section id="tokens" className="scroll-mt-20 border-y border-slate-200 bg-white">
         <div className="mx-auto max-w-4xl px-6 py-20 text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-neutral-100 sm:text-4xl">
+          <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
             Como funcionam os tokens?
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-neutral-400">
+          <p className="mx-auto mt-4 max-w-2xl text-slate-500">
             No plano de manutenção mensal, você recebe{" "}
-            <strong className="text-[#4D9BE0]">4 tokens por mês</strong>. Cada
+            <strong className="text-[#185FA5]">4 tokens por mês</strong>. Cada
             token vale um pedido de suporte ou ajuste no seu app — como mudar
             um texto, ajustar uma cor ou corrigir algo que não está
             funcionando.
           </p>
           <div className="mt-12 grid gap-6 sm:grid-cols-3">
-            <div className="rounded-2xl border border-neutral-800 bg-neutral-950 p-6">
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6">
               <div className="text-3xl">🎟️</div>
-              <h3 className="mt-3 font-semibold text-neutral-100">
-                4 por mês
-              </h3>
-              <p className="mt-1 text-sm text-neutral-400">
+              <h3 className="mt-3 font-semibold text-slate-900">4 por mês</h3>
+              <p className="mt-1 text-sm text-slate-500">
                 Todo mês você começa com 4 tokens novinhos.
               </p>
             </div>
-            <div className="rounded-2xl border border-neutral-800 bg-neutral-950 p-6">
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6">
               <div className="text-3xl">⏳</div>
-              <h3 className="mt-3 font-semibold text-neutral-100">
-                Não acumulam
-              </h3>
-              <p className="mt-1 text-sm text-neutral-400">
+              <h3 className="mt-3 font-semibold text-slate-900">Não acumulam</h3>
+              <p className="mt-1 text-sm text-slate-500">
                 Tokens não usados expiram no fim do mês — use sem medo.
               </p>
             </div>
-            <div className="rounded-2xl border border-neutral-800 bg-neutral-950 p-6">
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6">
               <div className="text-3xl">🛠️</div>
-              <h3 className="mt-3 font-semibold text-neutral-100">
-                Suporte e ajustes
-              </h3>
-              <p className="mt-1 text-sm text-neutral-400">
+              <h3 className="mt-3 font-semibold text-slate-900">Suporte e ajustes</h3>
+              <p className="mt-1 text-sm text-slate-500">
                 Cada token vale um ajuste ou atendimento de suporte.
               </p>
             </div>
@@ -275,23 +259,23 @@ export default function Home() {
 
       {/* FAQ */}
       <section id="faq" className="mx-auto max-w-3xl scroll-mt-20 px-6 py-20">
-        <h2 className="text-center text-3xl font-bold tracking-tight text-neutral-100 sm:text-4xl">
+        <h2 className="text-center text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
           Perguntas frequentes
         </h2>
-        <div className="mt-10 divide-y divide-neutral-800 rounded-2xl border border-neutral-800 bg-neutral-900">
+        <div className="mt-10 divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white">
           {faqs.map((faq, i) => (
             <div key={faq.q}>
               <button
                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                className="flex w-full items-center justify-between px-6 py-5 text-left font-medium text-neutral-200 hover:bg-neutral-800/50"
+                className="flex w-full items-center justify-between px-6 py-5 text-left font-medium text-slate-800 hover:bg-slate-50"
               >
                 {faq.q}
-                <span className="ml-4 text-neutral-500">
+                <span className="ml-4 text-slate-400">
                   {openFaq === i ? "−" : "+"}
                 </span>
               </button>
               {openFaq === i && (
-                <p className="px-6 pb-5 text-sm leading-relaxed text-neutral-400">
+                <p className="px-6 pb-5 text-sm leading-relaxed text-slate-500">
                   {faq.a}
                 </p>
               )}
@@ -301,17 +285,17 @@ export default function Home() {
       </section>
 
       {/* CTA final */}
-      <section className="border-t border-neutral-800 bg-gradient-to-b from-neutral-900 to-[#10243a]">
+      <section className="bg-[#185FA5]">
         <div className="mx-auto max-w-3xl px-6 py-16 text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-neutral-100">
+          <h2 className="text-3xl font-bold tracking-tight text-white">
             Pronto para tirar sua ideia do papel?
           </h2>
-          <p className="mt-3 text-neutral-400">
+          <p className="mt-3 text-blue-100">
             A prévia é grátis. Você só tem a ganhar.
           </p>
           <button
             onClick={openForm}
-            className="mt-8 rounded-full bg-[#185FA5] px-8 py-4 font-semibold text-white shadow-lg shadow-blue-500/10 transition hover:brightness-110"
+            className="mt-8 rounded-full bg-white px-8 py-4 font-semibold text-[#185FA5] shadow-lg transition hover:bg-blue-50"
           >
             Pedir orçamento grátis →
           </button>
@@ -319,31 +303,31 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-neutral-800 py-8 text-center text-sm text-neutral-500">
+      <footer className="border-t border-slate-200 bg-white py-8 text-center text-sm text-slate-400">
         © 2025 Fropty Apps
       </footer>
 
       {/* Modal do formulário */}
       {formOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-4 sm:p-8"
+          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/50 p-4 sm:p-8"
           onClick={() => setFormOpen(false)}
         >
           <div
-            className="relative w-full max-w-xl rounded-2xl border border-neutral-800 bg-neutral-900 p-8 shadow-2xl"
+            className="relative w-full max-w-xl rounded-2xl border border-slate-200 bg-white p-8 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setFormOpen(false)}
               aria-label="Fechar"
-              className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full text-neutral-500 hover:bg-neutral-800 hover:text-neutral-200"
+              className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600"
             >
               ✕
             </button>
-            <h2 className="text-2xl font-bold tracking-tight text-neutral-100">
+            <h2 className="text-2xl font-bold tracking-tight text-slate-900">
               Peça seu orçamento
             </h2>
-            <p className="mt-1 text-sm text-neutral-400">
+            <p className="mt-1 text-sm text-slate-500">
               Conte sua ideia e a gente responde com uma prévia gratuita.
             </p>
             <QuoteForm />
