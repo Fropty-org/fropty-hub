@@ -66,7 +66,7 @@ const faqs = [
   },
   {
     q: "Como funcionam os tokens da manutenção?",
-    a: "Você recebe 4 tokens por mês. Cada token vale um pedido de ajuste ou suporte: mudar um texto, ajustar uma cor, corrigir algo. Eles não acumulam. Todo mês você começa com 4 novos.",
+    a: "Você recebe 4 tokens novos todo mês. Cada token vale um pedido de ajuste ou suporte: mudar um texto, ajustar uma cor, corrigir algo. Os tokens não acumulam. Você pode comprar tokens avulsos sempre que quiser!",
   },
 ];
 
@@ -102,12 +102,12 @@ export default function Home() {
             <a href="#tokens" className="hover:text-white transition">Tokens</a>
             <a href="#faq" className="hover:text-white transition">FAQ</a>
           </nav>
-          <button
-            onClick={openForm}
+          <Link
+            href="/configurador"
             className="rounded-full bg-[#185FA5] px-5 py-2 text-sm font-semibold text-white transition hover:brightness-110"
           >
             Pedir orçamento
-          </button>
+          </Link>
         </div>
       </header>
 
@@ -138,12 +138,12 @@ export default function Home() {
             <p className="mt-1 text-sm text-slate-500">para começar</p>
           </div>
           <div>
-            <p className="text-2xl font-bold text-white sm:text-3xl">dias</p>
+            <p className="text-2xl font-bold text-white sm:text-3xl">3 dias</p>
             <p className="mt-1 text-sm text-slate-500">para ver sua prévia</p>
           </div>
           <div>
             <p className="text-2xl font-bold text-white sm:text-3xl">100%</p>
-            <p className="mt-1 text-sm text-slate-500">seu, com código</p>
+            <p className="mt-1 text-sm text-slate-500">do seu jeito</p>
           </div>
         </div>
       </section>
