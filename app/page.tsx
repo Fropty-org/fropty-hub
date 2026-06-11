@@ -184,7 +184,7 @@ export default function Home() {
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`relative flex flex-col rounded-2xl p-8 transition-all duration-200 hover:-translate-y-1 ${
+              className={`relative flex flex-col rounded-2xl p-8 transition-all duration-200 hover:scale-[1.03] ${
                 plan.highlight
                   ? "border border-[#185FA5] bg-[#185FA5] shadow-2xl shadow-blue-900/30 hover:shadow-[0_20px_40px_rgba(24,95,165,0.45)]"
                   : "border border-white/10 bg-[#1e293b] hover:border-[#185FA5]/40 hover:shadow-[0_16px_32px_rgba(0,0,0,0.4)]"

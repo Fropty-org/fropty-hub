@@ -168,7 +168,7 @@ export default function PlanConfigurator({ onSubmit }: Props) {
               {ADDONS.map((addon) => {
                 const active = selected.has(addon.id);
                 return (
-                  <div key={addon.id} onClick={() => toggle(addon.id)} className="hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,0,0,0.12)]" style={{
+                  <div key={addon.id} onClick={() => toggle(addon.id)} className="hover:scale-[1.02] hover:shadow-[0_8px_20px_rgba(0,0,0,0.12)]" style={{
                     background: active ? "#EBF4FF" : "#fff",
                     border: `1.5px solid ${active ? "#185FA5" : "#e2e8f0"}`,
                     borderRadius: 12, padding: "14px 16px", cursor: "pointer",
@@ -217,7 +217,7 @@ export default function PlanConfigurator({ onSubmit }: Props) {
               {MAINTENANCE.map((m) => {
                 const active = maintenance === m.id;
                 return (
-                  <div key={m.id} onClick={() => setMaintenance(m.id)} className="hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,0,0,0.15)]" style={{
+                  <div key={m.id} onClick={() => setMaintenance(m.id)} className="hover:scale-[1.03] hover:shadow-[0_12px_28px_rgba(0,0,0,0.15)]" style={{
                     background: active ? (m.highlight ? "#185FA5" : "#EBF4FF") : "#fff",
                     border: `1.5px solid ${active ? "#185FA5" : "#e2e8f0"}`,
                     borderRadius: 12, padding: "14px 16px",
