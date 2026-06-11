@@ -341,9 +341,7 @@ export default function Home() {
           <h2 className="text-3xl font-bold tracking-tight text-white">
             Pronto para tirar sua ideia do papel?
           </h2>
-          <p className="mt-3 text-blue-100">
-            A prévia é grátis. Você só tem a ganhar.
-          </p>
+
           <button
             onClick={openForm}
             className="mt-8 rounded-full bg-white px-8 py-4 font-semibold text-[#185FA5] shadow-lg transition hover:bg-blue-50"
