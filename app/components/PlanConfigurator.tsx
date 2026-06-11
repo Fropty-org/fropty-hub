@@ -69,6 +69,9 @@ export default function PlanConfigurator({ onSubmit }: Props) {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
+  const allAddonIds = ADDONS.map(a => a.id);
+  const allSelected = allAddonIds.every(id => selected.has(id));
+
   const toggle = (id: string) => {
     setSelected((prev) => {
       const next = new Set(prev);
@@ -77,11 +80,16 @@ export default function PlanConfigurator({ onSubmit }: Props) {
     });
   };
 
+  const toggleAll = () => {
+    setSelected(allSelected ? new Set() : new Set(allAddonIds));
+  };
+
   const selectedAddons = ADDONS.filter((a) => selected.has(a.id));
   const onceTotal = BASE_PRICE + selectedAddons.filter(a => a.type === "once").reduce((s, a) => s + a.price, 0);
   const monthExtra = selectedAddons.filter(a => a.type === "month").reduce((s, a) => s + a.price, 0);
   const mPlan = MAINTENANCE.find(m => m.id === maintenance);
   const monthTotal = (mPlan?.price || 0) + monthExtra;
+  const firstMonthTotal = onceTotal + monthTotal;
 
   const handleSubmit = () => {
     if (!name || !email) return;
@@ -113,11 +121,13 @@ export default function PlanConfigurator({ onSubmit }: Props) {
   }
 
   return (
-    <div className="overflow-x-hidden" style={{ maxWidth: 760, margin: "0 auto", fontFamily: "system-ui, sans-serif" }}>
+    <div style={{ fontFamily: "system-ui, sans-serif" }}>
+      <div className="flex flex-col lg:flex-row gap-6 items-start">
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 24 }}>
+        {/* LEFT COLUMN */}
+        <div className="flex-[2] min-w-0 space-y-6">
 
-          {/* base */}
+          {/* App base */}
           <div style={{ background: "#fff", borderRadius: 16, border: "2px solid #185FA5", padding: "20px 22px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <div>
@@ -131,11 +141,26 @@ export default function PlanConfigurator({ onSubmit }: Props) {
             </div>
           </div>
 
-          {/* addons */}
+          {/* Addons */}
           <div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: "#e2e8f0", marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
-              <i className="ti ti-plus" style={{ fontSize: "16px", color: "#185FA5" }} />
-              Adicione recursos ao seu app
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: "#e2e8f0", display: "flex", alignItems: "center", gap: 6 }}>
+                <i className="ti ti-plus" style={{ fontSize: "16px", color: "#185FA5" }} />
+                Adicione recursos ao seu app
+              </div>
+              <button
+                onClick={toggleAll}
+                style={{
+                  fontSize: 11, fontWeight: 600,
+                  color: allSelected ? "#ef4444" : "#185FA5",
+                  background: "transparent",
+                  border: `1px solid ${allSelected ? "#ef4444" : "#185FA5"}`,
+                  borderRadius: 20, padding: "3px 10px", cursor: "pointer",
+                  transition: "all 0.18s", whiteSpace: "nowrap",
+                }}
+              >
+                {allSelected ? "Limpar seleção" : "Selecionar todos os recursos"}
+              </button>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 300px), 1fr))", gap: 10 }}>
               {ADDONS.map((addon) => {
@@ -144,13 +169,8 @@ export default function PlanConfigurator({ onSubmit }: Props) {
                   <div key={addon.id} onClick={() => toggle(addon.id)} style={{
                     background: active ? "#EBF4FF" : "#fff",
                     border: `1.5px solid ${active ? "#185FA5" : "#e2e8f0"}`,
-                    borderRadius: 12,
-                    padding: "14px 16px",
-                    cursor: "pointer",
-                    transition: "all 0.18s",
-                    display: "flex",
-                    gap: 12,
-                    alignItems: "flex-start",
+                    borderRadius: 12, padding: "14px 16px", cursor: "pointer",
+                    transition: "all 0.18s", display: "flex", gap: 12, alignItems: "flex-start",
                   }}>
                     <div style={{
                       width: 36, height: 36, borderRadius: 10,
@@ -185,7 +205,7 @@ export default function PlanConfigurator({ onSubmit }: Props) {
             </div>
           </div>
 
-          {/* maintenance */}
+          {/* Maintenance */}
           <div>
             <div style={{ fontSize: 13, fontWeight: 700, color: "#e2e8f0", marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
               <i className="ti ti-tool" style={{ fontSize: "16px", color: "#185FA5" }} />
@@ -226,7 +246,59 @@ export default function PlanConfigurator({ onSubmit }: Props) {
             </div>
           </div>
 
-          {/* summary */}
+          {/* Sem plano warning */}
+          {maintenance === "m_none" && (
+            <div style={{ background: "#fffbeb", border: "1.5px solid #f59e0b", borderRadius: 12, padding: "14px 16px", display: "flex", gap: 10, alignItems: "flex-start" }}>
+              <i className="ti ti-alert-triangle" style={{ color: "#f59e0b", fontSize: 20, flexShrink: 0, marginTop: 1 }} />
+              <p style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5, margin: 0 }}>
+                Sem um plano ativo, nenhuma manutenção ou suporte poderá ser contratado após a entrega do app. Tokens avulsos custam R$ 300,00 cada.
+              </p>
+            </div>
+          )}
+
+          {/* Token value section */}
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#e2e8f0", marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
+              <i className="ti ti-coin" style={{ fontSize: "16px", color: "#185FA5" }} />
+              O valor real de cada token
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3" style={{ gap: 10 }}>
+
+              {/* Básico */}
+              <div style={{ background: "#0f172a", border: "1.5px solid #334155", borderRadius: 12, padding: "18px 16px", textAlign: "center" }}>
+                <div style={{ fontSize: 11, color: "#94a3b8", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.05em" }}>Plano Básico</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: "#e2e8f0" }}>4 tokens inclusos</div>
+                <div style={{ textDecoration: "line-through", color: "rgba(239,68,68,0.6)", fontSize: 13, marginTop: 10 }}>R$ 600,00</div>
+                <div style={{ color: "#16a34a", fontWeight: 700, fontSize: 15, marginTop: 4 }}>Incluso no plano</div>
+                <div style={{ fontSize: 12, color: "#94a3b8", marginTop: 8 }}>Você paga apenas R$ 49,90/mês</div>
+              </div>
+
+              {/* Pro */}
+              <div style={{ background: "#185FA5", border: "2px solid #EF9F27", borderRadius: 12, padding: "18px 16px", textAlign: "center", position: "relative" }}>
+                <div style={{ position: "absolute", top: -10, left: "50%", transform: "translateX(-50%)", background: "#EF9F27", color: "#fff", fontSize: 9, fontWeight: 700, padding: "2px 10px", borderRadius: 20, whiteSpace: "nowrap" }}>Melhor custo-benefício</div>
+                <div style={{ fontSize: 11, color: "#bfdbfe", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.05em" }}>Plano Pro</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: "#fff" }}>8 tokens inclusos</div>
+                <div style={{ textDecoration: "line-through", color: "rgba(239,68,68,0.6)", fontSize: 13, marginTop: 10 }}>R$ 1.200,00</div>
+                <div style={{ color: "#4ade80", fontWeight: 700, fontSize: 15, marginTop: 4 }}>Incluso no plano</div>
+                <div style={{ fontSize: 12, color: "#bfdbfe", marginTop: 8 }}>Você paga apenas R$ 89,90/mês</div>
+              </div>
+
+              {/* Sem plano */}
+              <div style={{ background: "#f1f5f9", border: "1.5px solid #e2e8f0", borderRadius: 12, padding: "18px 16px", textAlign: "center" }}>
+                <div style={{ fontSize: 11, color: "#64748b", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.05em" }}>Sem plano</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: "#0f172a" }}>Token avulso</div>
+                <div style={{ fontSize: 20, fontWeight: 800, color: "#185FA5", marginTop: 10 }}>R$ 300,00 cada</div>
+                <div style={{ fontSize: 12, color: "#64748b", marginTop: 4 }}>Sem compromisso mensal</div>
+                <div style={{ fontSize: 11, color: "#ef4444", fontWeight: 600, marginTop: 8 }}>Tokens fora do plano custam o dobro</div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        {/* RIGHT COLUMN — Summary + Form */}
+        <div className="w-full lg:flex-1 lg:sticky" style={{ top: 24 }}>
           <div style={{ background: "#0f172a", borderRadius: 16, padding: "22px 24px", color: "#fff" }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: "#94a3b8", marginBottom: 14 }}>Resumo do seu plano</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
@@ -271,10 +343,21 @@ export default function PlanConfigurator({ onSubmit }: Props) {
                   </div>
                 </div>
               )}
+              {monthTotal > 0 && (
+                <div style={{ borderTop: "1px solid #334155", marginTop: 4, paddingTop: 10 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span style={{ fontWeight: 700, color: "#EF9F27" }}>Total geral (1º mês)</span>
+                    <span style={{ fontWeight: 800, fontSize: 20, color: "#EF9F27" }}>{formatPrice(firstMonthTotal)}</span>
+                  </div>
+                  <div style={{ fontSize: 11, color: "#64748b", marginTop: 6, textAlign: "right" }}>
+                    A partir do 2º mês: apenas {formatPrice(monthTotal)}/mês
+                  </div>
+                </div>
+              )}
             </div>
 
             <div style={{ borderTop: "1px solid #334155", paddingTop: 16, display: "flex", flexDirection: "column", gap: 10 }}>
-              <div style={{ fontSize: 13, color: "#94a3b8" }}>Pronto? Me conta quem você é:</div>
+              <div style={{ fontSize: 13, color: "#94a3b8" }}>Seus dados:</div>
               <input
                 value={name}
                 onChange={e => setName(e.target.value)}
@@ -307,8 +390,9 @@ export default function PlanConfigurator({ onSubmit }: Props) {
               </div>
             </div>
           </div>
-
         </div>
+
+      </div>
     </div>
   );
 }

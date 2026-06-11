@@ -19,6 +19,8 @@ const plans = [
       "Sem custo e sem compromisso",
       "Entrega em poucos dias",
     ],
+    savingsStrike: "",
+    savingsText: "",
   },
   {
     name: "App completo",
@@ -34,20 +36,40 @@ const plans = [
       "Publicação e entrega do código",
       "Suporte na entrega",
     ],
+    savingsStrike: "",
+    savingsText: "",
   },
   {
-    name: "Manutenção mensal",
+    name: "Manutenção Básico",
     price: "R$49,90",
     period: "/mês",
     badge: "",
     highlight: false,
     description:
-      "Mantenha seu app sempre funcionando e evoluindo com suporte contínuo.",
+      "Mantenha seu app funcionando com 4 tokens mensais de suporte e ajustes.",
     features: [
-      "4 tokens por mês para ajustes e suporte",
+      "4 tokens por mês para ajustes",
       "Correções e pequenas melhorias",
       "Atendimento prioritário",
     ],
+    savingsStrike: "4 tokens = R$ 600,00",
+    savingsText: "Você economiza R$ 600,00",
+  },
+  {
+    name: "Manutenção Pro",
+    price: "R$89,90",
+    period: "/mês",
+    badge: "MELHOR CUSTO",
+    highlight: false,
+    description:
+      "Mais tokens, mais liberdade. Ideal para quem usa o suporte com frequência.",
+    features: [
+      "8 tokens por mês para ajustes",
+      "Correções e pequenas melhorias",
+      "Atendimento prioritário",
+    ],
+    savingsStrike: "8 tokens = R$ 1.200,00",
+    savingsText: "Você economiza R$ 1.200,00",
   },
 ];
 
@@ -156,7 +178,7 @@ export default function Home() {
         <p className="mt-3 text-center text-slate-400">
           Comece de graça e evolua quando fizer sentido.
         </p>
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {plans.map((plan) => (
             <div
               key={plan.name}
@@ -195,6 +217,16 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
+              {plan.savingsStrike && (
+                <div className="mt-4 space-y-1">
+                  <p className="text-sm line-through" style={{ color: "rgba(239,68,68,0.6)" }}>
+                    {plan.savingsStrike}
+                  </p>
+                  <p className="text-sm font-bold" style={{ color: "#16a34a" }}>
+                    {plan.savingsText}
+                  </p>
+                </div>
+              )}
               <button
                 onClick={openForm}
                 className={`mt-8 rounded-full px-4 py-3 text-center font-semibold transition ${

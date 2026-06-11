@@ -67,7 +67,7 @@ export default function ConfiguradorPage() {
           Configuração personalizada
         </span>
         <h1 className="text-3xl font-bold leading-tight text-white sm:text-5xl">
-          Monte seu app,{" "}
+          Monte seu app{" "}
           <span className="text-[#185FA5]">do seu jeito</span>
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-lg text-slate-400">

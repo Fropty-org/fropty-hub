@@ -72,7 +72,6 @@ export default function QuoteForm() {
           type="text"
           required
           className="mt-1 w-full rounded-lg border border-white/20 bg-[#0f172a] px-4 py-2 text-white placeholder-slate-500 focus:border-[#185FA5] focus:outline-none focus:ring-2 focus:ring-[#185FA5]/30"
-          placeholder="Como podemos te chamar?"
         />
       </div>
 
@@ -86,7 +85,6 @@ export default function QuoteForm() {
           type="email"
           required
           className="mt-1 w-full rounded-lg border border-white/20 bg-[#0f172a] px-4 py-2 text-white placeholder-slate-500 focus:border-[#185FA5] focus:outline-none focus:ring-2 focus:ring-[#185FA5]/30"
-          placeholder="voce@exemplo.com"
         />
       </div>
 
@@ -100,7 +98,6 @@ export default function QuoteForm() {
           required
           rows={4}
           className="mt-1 w-full rounded-lg border border-white/20 bg-[#0f172a] px-4 py-2 text-white placeholder-slate-500 focus:border-[#185FA5] focus:outline-none focus:ring-2 focus:ring-[#185FA5]/30"
-          placeholder="Descreva com suas palavras o que o app deve fazer"
         />
       </div>
 
