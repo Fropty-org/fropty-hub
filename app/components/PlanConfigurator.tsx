@@ -263,8 +263,9 @@ export default function PlanConfigurator({ onSubmit }: Props) {
                   Sem plano, sem suporte após a entrega.
                 </p>
                 <p style={{ fontSize: 12, color: "#b91c1c", lineHeight: 1.5, margin: 0 }}>
-                  Nenhuma manutenção poderá ser contratada. Tokens avulsos custam{" "}
-                  <strong>R$ 300,00 cada</strong> — o dobro do valor incluso nos planos.
+                  Nenhuma manutenção poderá ser contratada. Sem plano, tokens avulsos custam{" "}
+                  <strong>R$ 300,00 cada</strong>. Assinantes de um plano pagam apenas{" "}
+                  <strong>R$ 150,00 por token extra</strong>.
                 </p>
               </div>
             </div>

@@ -33,7 +33,7 @@ const plans = [
     features: [
       "Desenvolvimento completo",
       "Design personalizado com suas cores e logo",
-      "Publicação e entrega do código",
+      "App publicado e entregue em funcionamento",
       "Suporte na entrega",
     ],
     savingsStrike: "",
@@ -88,7 +88,7 @@ const faqs = [
   },
   {
     q: "Como funcionam os tokens da manutenção?",
-    a: "Você recebe 4 tokens novos todo mês. Cada token vale um pedido de ajuste ou suporte: mudar um texto, ajustar uma cor, corrigir algo. Os tokens não acumulam. Você pode comprar tokens avulsos sempre que quiser!",
+    a: "Você recebe tokens mensais de acordo com seu plano: 4 no Básico e 8 no Pro. Cada token vale um pedido de ajuste ou suporte: mudar um texto, ajustar uma cor, corrigir algo. Os tokens não acumulam. Tokens extras podem ser comprados avulsos sempre que precisar.",
   },
 ];
 
@@ -308,8 +308,10 @@ export default function Home() {
             Como funcionam os tokens?
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-slate-400">
-            No plano de manutenção mensal, você recebe{" "}
-            <strong className="text-[#185FA5]">4 tokens por mês</strong>. Cada
+            No plano de manutenção mensal, você recebe tokens mensais conforme
+            sua assinatura —{" "}
+            <strong className="text-[#185FA5]">4 tokens no Básico</strong> e{" "}
+            <strong className="text-[#185FA5]">8 tokens no Pro</strong>. Cada
             token vale um pedido de suporte ou ajuste no seu app, como mudar
             um texto, ajustar uma cor ou corrigir algo que não está
             funcionando.
@@ -317,9 +319,9 @@ export default function Home() {
           <div className="mt-12 grid gap-6 sm:grid-cols-3">
             <div className="rounded-2xl border border-white/10 bg-[#1e293b] p-6">
               <i className="ti ti-ticket text-3xl text-[#185FA5]" />
-              <h3 className="mt-3 font-semibold text-white">4 por mês</h3>
+              <h3 className="mt-3 font-semibold text-white">Básico: 4 · Pro: 8</h3>
               <p className="mt-1 text-sm text-slate-400">
-                Todo mês você começa com 4 tokens novinhos.
+                Todo mês você recebe tokens novos conforme seu plano.
               </p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-[#1e293b] p-6">
