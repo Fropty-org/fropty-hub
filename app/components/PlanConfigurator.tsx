@@ -14,6 +14,7 @@ interface Addon {
   tech: string;
   price: number;
   type: AddonType;
+  unit?: string;
   disclaimer?: string;
 }
 
@@ -41,7 +42,7 @@ const ADDONS: Addon[] = [
   { id: "google_auth", icon: "lock", label: "Login com Google", desc: "Seus usuários entram com um clique, sem criar senha.", tech: "Google OAuth 2.0", price: 79, type: "once" },
   { id: "admin", icon: "tool", label: "Painel administrativo", desc: "Gerencie conteúdo, usuários e dados sem precisar de programador.", tech: "Dashboard com controle de acesso", price: 149, type: "once" },
   { id: "push", icon: "bell", label: "Notificações push", desc: "Avise seus clientes sobre novidades, pedidos ou lembretes direto no celular.", tech: "FCM / PWA Notifications", price: 99, type: "once" },
-  { id: "multiuser", icon: "users", label: "Múltiplos perfis de acesso", desc: "Defina quem pode ver e editar o que, perfeito pra times ou franquias.", tech: "Role-based access control", price: 129, type: "once" },
+  { id: "multiuser", icon: "users", label: "Membro administrativo adicional", desc: "Cada novo membro do seu time que precisar de acesso ao painel administrativo é cobrado à parte.", tech: "Role-based access control", price: 129, type: "once", unit: "membro" },
   { id: "reports", icon: "chart-bar", label: "Relatórios e exportação", desc: "Baixe seus dados em PDF ou Excel quando quiser.", tech: "Exportação estruturada de dados", price: 89, type: "once" },
   { id: "whatsapp", icon: "brand-whatsapp", label: "Integração com WhatsApp", desc: "Notificações e confirmações automáticas via WhatsApp para seus clientes.", tech: "WhatsApp Business API", price: 119, type: "once" },
   { id: "backup", icon: "database", label: "Backup automático diário", desc: "Seus dados salvos todo dia, com restauração em caso de qualquer problema.", tech: "Backup incremental · retenção 30 dias", price: 29, type: "month" },
@@ -186,7 +187,7 @@ export default function PlanConfigurator({ onSubmit }: Props) {
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                         <div style={{ fontSize: 13, fontWeight: 700, color: "#0f172a" }}>{addon.label}</div>
                         <div style={{ fontSize: 13, fontWeight: 700, color: active ? "#185FA5" : "#64748b", marginLeft: 8, whiteSpace: "nowrap" }}>
-                          + {formatPrice(addon.price)}{addon.type === "month" ? "/mês" : ""}
+                          + {formatPrice(addon.price)}{addon.type === "month" ? "/mês" : addon.unit ? `/${addon.unit}` : ""}
                         </div>
                       </div>
                       <div style={{ fontSize: 12, color: "#64748b", marginTop: 2, lineHeight: 1.5 }}>{addon.desc}</div>
