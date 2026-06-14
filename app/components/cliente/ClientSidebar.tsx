@@ -3,6 +3,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useTransition } from "react";
+import { signOut } from "../../actions/auth";
 import type { ClientUser } from "../../lib/types/cliente";
 
 interface Props {
@@ -17,6 +19,7 @@ const NAV = [
 
 export function ClientSidebar({ user }: Props) {
   const pathname = usePathname();
+  const [pending, startTransition] = useTransition();
 
   return (
     <aside
@@ -63,7 +66,7 @@ export function ClientSidebar({ user }: Props) {
             {user.name.split(" ")[0]}
           </p>
           <p style={{ margin: 0, fontSize: "11px", color: "var(--text-faint)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-            Plano {user.plan === "pro" ? "Pro" : "Básico"}
+            {user.plan ? `Plano ${user.plan === "pro" ? "Pro" : "Básico"}` : "Sem plano"}
           </p>
         </div>
       </div>
@@ -98,8 +101,9 @@ export function ClientSidebar({ user }: Props) {
       </nav>
 
       {/* Logout */}
-      <Link
-        href="/area-cliente"
+      <button
+        onClick={() => startTransition(() => signOut())}
+        disabled={pending}
         style={{
           display: "flex",
           alignItems: "center",
@@ -109,13 +113,19 @@ export function ClientSidebar({ user }: Props) {
           fontSize: "13px",
           fontWeight: 600,
           color: "var(--text-faint)",
-          textDecoration: "none",
+          background: "none",
+          border: "none",
+          cursor: pending ? "not-allowed" : "pointer",
+          opacity: pending ? 0.6 : 1,
           marginTop: 8,
+          fontFamily: "inherit",
+          width: "100%",
+          textAlign: "left",
         }}
       >
-        <i className="ti ti-logout" style={{ fontSize: 16 }} />
-        Sair
-      </Link>
+        <i className={`ti ${pending ? "ti-loader-2" : "ti-logout"}`} style={{ fontSize: 16 }} />
+        {pending ? "Saindo..." : "Sair"}
+      </button>
     </aside>
   );
 }

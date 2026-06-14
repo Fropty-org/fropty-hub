@@ -1,30 +1,25 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { signIn } from "@/app/actions/auth";
 
 export function LoginForm() {
-  const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [isPending, startTransition] = useTransition();
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
-    if (!email.trim() || !password.trim()) {
-      setError("Preencha email e senha para continuar.");
-      return;
+    const result = await signIn(new FormData(e.currentTarget));
+
+    if (result?.error) {
+      setError(result.error);
+      setLoading(false);
     }
-
-    startTransition(() => {
-      // TODO: substituir por Supabase auth: supabase.auth.signInWithPassword({ email, password })
-      // Por ora redireciona direto (modo demo)
-      router.push("/area-cliente/dashboard");
-    });
-  };
+    // Se ok, a Server Action redireciona — loading permanece true
+  }
 
   const inputStyle: React.CSSProperties = {
     width: "100%",
@@ -46,9 +41,9 @@ export function LoginForm() {
           E-mail
         </label>
         <input
+          name="email"
           type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          required
           placeholder="seu@email.com"
           style={inputStyle}
           onFocus={(e) => { e.currentTarget.style.borderColor = "var(--primary)"; }}
@@ -61,9 +56,9 @@ export function LoginForm() {
           Senha
         </label>
         <input
+          name="password"
           type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          required
           placeholder="••••••••"
           style={inputStyle}
           onFocus={(e) => { e.currentTarget.style.borderColor = "var(--primary)"; }}
@@ -79,7 +74,7 @@ export function LoginForm() {
 
       <button
         type="submit"
-        disabled={isPending}
+        disabled={loading}
         style={{
           width: "100%",
           background: "var(--cta-bg)",
@@ -89,8 +84,8 @@ export function LoginForm() {
           padding: "12px",
           fontSize: "14px",
           fontWeight: 700,
-          cursor: isPending ? "not-allowed" : "pointer",
-          opacity: isPending ? 0.7 : 1,
+          cursor: loading ? "not-allowed" : "pointer",
+          opacity: loading ? 0.7 : 1,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -98,7 +93,7 @@ export function LoginForm() {
           fontFamily: "inherit",
         }}
       >
-        {isPending
+        {loading
           ? <><i className="ti ti-loader-2" style={{ animation: "spin 1s linear infinite" }} /> Entrando...</>
           : <><i className="ti ti-login" /> Entrar na minha conta</>
         }
