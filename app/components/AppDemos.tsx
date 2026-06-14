@@ -11,6 +11,12 @@ import { OficinaDesktop } from "./demos/OficinaDesktop";
 import { DocesDesktop } from "./demos/DocesDesktop";
 import { BarbeariaDesktop } from "./demos/BarbeariaDesktop";
 import { ImobiliariaDesktop } from "./demos/ImobiliariaDesktop";
+import { FinanceiroDashboard } from "./demos/FinanceiroDashboard";
+import { EcommerceDashboard } from "./demos/EcommerceDashboard";
+import { MarketingDashboard } from "./demos/MarketingDashboard";
+import { ClinicaDashboard } from "./demos/ClinicaDashboard";
+import { RHDashboard } from "./demos/RHDashboard";
+import { LogisticaDashboard } from "./demos/LogisticaDashboard";
 
 /* ── Dados dos demos ──────────────────────────────────────────── */
 const MOBILE_DEMOS = [
@@ -27,6 +33,15 @@ const DESKTOP_DEMOS = [
   { label: "Doces da Carol",        tagline: "Loja online com catálogo e checkout", accent: "#ec4899", component: <DocesDesktop /> },
   { label: "Barbearia do João",     tagline: "Painel admin da barbearia",           accent: "#7c3aed", component: <BarbeariaDesktop /> },
   { label: "Imobiliária Express",   tagline: "Gestão de imóveis e propostas",       accent: "#5B57E8", component: <ImobiliariaDesktop /> },
+];
+
+const DASHBOARD_DEMOS = [
+  { label: "Dashboard Financeiro",  tagline: "Receita, despesas e fluxo de caixa",  accent: "#5B57E8", component: <FinanceiroDashboard /> },
+  { label: "Gestão de E-commerce",  tagline: "Pedidos, vendas e produtos em tempo real", accent: "#10b981", component: <EcommerceDashboard /> },
+  { label: "Painel de Tráfego",     tagline: "Campanhas, ROI e funil de conversão", accent: "#f59e0b", component: <MarketingDashboard /> },
+  { label: "Clínica Médica",        tagline: "Agenda, pacientes e ocupação",         accent: "#0ea5e9", component: <ClinicaDashboard /> },
+  { label: "Gestão de Equipes",     tagline: "Colaboradores, metas e performance",   accent: "#ec4899", component: <RHDashboard /> },
+  { label: "Logística & Frota",     tagline: "Rastreamento de entregas em tempo real", accent: "#f59e0b", component: <LogisticaDashboard /> },
 ];
 
 /* ── Phone Frame ─────────────────────────────────────────────── */
@@ -281,7 +296,7 @@ function Carousel({ items, type }: {
 
 /* ── Section ─────────────────────────────────────────────────── */
 export default function AppDemos() {
-  const [view, setView] = useState<"mobile" | "desktop">("mobile");
+  const [view, setView] = useState<"mobile" | "desktop" | "dashboard">("mobile");
 
   return (
     <section
@@ -318,12 +333,16 @@ export default function AppDemos() {
         {/* Tab switcher */}
         <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
           <div style={{ position: "relative", display: "inline-flex", borderBottom: "1px solid var(--border)" }}>
-            {(["mobile", "desktop"] as const).map((v) => (
+            {([
+              { v: "mobile",    label: "Mobile",      icon: "ti-device-mobile"  },
+              { v: "desktop",   label: "Computador",  icon: "ti-device-laptop"  },
+              { v: "dashboard", label: "Dashboard",   icon: "ti-layout-dashboard" },
+            ] as const).map(({ v, label, icon }) => (
               <button
                 key={v}
                 onClick={() => setView(v)}
                 style={{
-                  padding: "10px 32px",
+                  padding: "10px 28px",
                   background: "none", border: "none", cursor: "pointer",
                   color: view === v ? "var(--text)" : "var(--text-muted)",
                   fontWeight: view === v ? 700 : 400,
@@ -331,14 +350,14 @@ export default function AppDemos() {
                   display: "flex", alignItems: "center", gap: 6,
                 }}
               >
-                <i className={`ti ${v === "mobile" ? "ti-device-mobile" : "ti-device-laptop"}`} style={{ fontSize: 15 }} />
-                {v === "mobile" ? "Mobile" : "Computador"}
+                <i className={`ti ${icon}`} style={{ fontSize: 15 }} />
+                {label}
               </button>
             ))}
             <div style={{
               position: "absolute", bottom: -1,
-              left: view === "mobile" ? 0 : "50%",
-              width: "50%", height: 2,
+              left: view === "mobile" ? 0 : view === "desktop" ? "33.33%" : "66.66%",
+              width: "33.33%", height: 2,
               background: "var(--primary)", borderRadius: 1,
               transition: "left 0.28s cubic-bezier(0.4,0,0.2,1)",
             }} />
@@ -347,7 +366,11 @@ export default function AppDemos() {
       </div>
 
       {/* Carousel */}
-      <Carousel key={view} items={view === "mobile" ? MOBILE_DEMOS : DESKTOP_DEMOS} type={view} />
+      <Carousel
+        key={view}
+        items={view === "mobile" ? MOBILE_DEMOS : view === "desktop" ? DESKTOP_DEMOS : DASHBOARD_DEMOS}
+        type={view === "mobile" ? "mobile" : "desktop"}
+      />
 
       <div style={{ height: 24 }} />
     </section>
