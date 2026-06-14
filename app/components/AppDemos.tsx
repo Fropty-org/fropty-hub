@@ -121,10 +121,44 @@ function DesktopFrame({ children, accent }: { children: React.ReactNode; accent:
   );
 }
 
+/* ── Dashboard Frame ─────────────────────────────────────────── */
+function DashboardFrame({ children, accent }: { children: React.ReactNode; accent: string }) {
+  return (
+    <div style={{
+      width: 580, background: "#0d1117",
+      borderRadius: 12, overflow: "hidden",
+      boxShadow: `0 32px 72px ${accent}40, 0 8px 24px rgba(0,0,0,0.6)`,
+      flexShrink: 0,
+      border: "1px solid rgba(255,255,255,0.07)",
+    }}>
+      {/* Window chrome — dark */}
+      <div style={{
+        height: 32, background: "#161b27",
+        display: "flex", alignItems: "center", padding: "0 12px", gap: 8,
+        borderBottom: "1px solid rgba(255,255,255,0.06)",
+      }}>
+        <div style={{ display: "flex", gap: 5 }}>
+          <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#ff5f57" }} />
+          <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#febc2e" }} />
+          <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#28c840" }} />
+        </div>
+        <div style={{ flex: 1, height: 18, background: "#0d1117", borderRadius: 5, display: "flex", alignItems: "center", padding: "0 10px", gap: 4 }}>
+          <i className="ti ti-lock" style={{ fontSize: 9, color: "#334155" }} />
+          <span style={{ fontSize: 9, color: "#334155" }}>dashboard.fropty.com</span>
+        </div>
+        <div style={{ width: 8, height: 8, borderRadius: "50%", background: accent, opacity: 0.7 }} />
+      </div>
+      <div style={{ height: 360, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
 /* ── Carrossel ───────────────────────────────────────────────── */
 function Carousel({ items, type }: {
   items: typeof MOBILE_DEMOS;
-  type: "mobile" | "desktop";
+  type: "mobile" | "desktop" | "dashboard";
 }) {
   const [active, setActive] = useState(0);
   const [winW, setWinW] = useState(1200);
@@ -153,8 +187,8 @@ function Carousel({ items, type }: {
   const FRAME_W = type === "mobile" ? 240 : 580;
   const GAP     = type === "mobile" ? 32  : 40;
 
-  // Escala o frame desktop em telas pequenas
-  const desktopScale = type === "desktop" && winW < 640
+  // Escala o frame desktop/dashboard em telas pequenas
+  const desktopScale = (type === "desktop" || type === "dashboard") && winW < 640
     ? Math.max(0.45, (winW - 32) / FRAME_W)
     : 1;
 
@@ -213,9 +247,15 @@ function Carousel({ items, type }: {
                     transformOrigin: "top center",
                     marginBottom: desktopScale < 1 ? -360 * (1 - desktopScale) : 0,
                   }}>
-                    <DesktopFrame accent={item.accent}>
-                      {item.component}
-                    </DesktopFrame>
+                    {type === "dashboard" ? (
+                      <DashboardFrame accent={item.accent}>
+                        {item.component}
+                      </DashboardFrame>
+                    ) : (
+                      <DesktopFrame accent={item.accent}>
+                        {item.component}
+                      </DesktopFrame>
+                    )}
                   </div>
                 )}
                 <div style={{ textAlign: "center", opacity: isActive ? 1 : 0, transition: "opacity 0.4s", pointerEvents: "none" }}>
@@ -369,7 +409,7 @@ export default function AppDemos() {
       <Carousel
         key={view}
         items={view === "mobile" ? MOBILE_DEMOS : view === "desktop" ? DESKTOP_DEMOS : DASHBOARD_DEMOS}
-        type={view === "mobile" ? "mobile" : "desktop"}
+        type={view}
       />
 
       <div style={{ height: 24 }} />

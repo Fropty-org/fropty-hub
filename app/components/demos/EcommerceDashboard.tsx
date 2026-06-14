@@ -35,7 +35,7 @@ export function EcommerceDashboard() {
           <div style={{ fontSize: 9, padding: "3px 10px", borderRadius: 6, background: "#5B57E8", color: "#fff", fontWeight: 600 }}>+ Novo produto</div>
         </div>
 
-        <div style={{ flex: 1, overflowY: "auto", padding: "10px 14px", display: "flex", flexDirection: "column", gap: 10 }}>
+        <div style={{ flex: 1, overflow: "hidden", padding: "10px 14px", display: "flex", flexDirection: "column", gap: 10 }}>
           {/* KPIs */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 8 }}>
             {[

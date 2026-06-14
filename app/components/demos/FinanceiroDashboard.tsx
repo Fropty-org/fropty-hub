@@ -29,7 +29,7 @@ export function FinanceiroDashboard() {
           </div>
         </div>
 
-        <div style={{ flex: 1, overflowY: "auto", padding: "12px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
+        <div style={{ flex: 1, overflow: "hidden", padding: "12px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
           {/* KPI cards */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8 }}>
             {[
