@@ -210,24 +210,27 @@ export default function Home() {
           style={{ minHeight: "90vh" }}
         >
           {/* ── Coluna esquerda: imagem (mobile: topo, desktop: direita via order) */}
-          <div
-            className="order-1 flex w-full flex-shrink-0 items-center justify-center lg:order-2 lg:w-[44%]"
-          >
-            <Image
-              src="/hero.gif"
-              alt="Demo animada do app Fropty"
-              width={520}
-              height={520}
-              unoptimized
-              priority
-              className="w-[200px] sm:w-[300px] lg:w-full"
+          <div className="order-1 flex w-full flex-shrink-0 items-center justify-center lg:order-2 lg:w-[44%]">
+            {/* Container quadrado — recorta o canvas 1600×1200 e centraliza no cubo */}
+            <div
+              className="relative w-[240px] sm:w-[320px] lg:w-full"
               style={{
-                maxWidth: 520,
-                height: "auto",
-                display: "block",
-                filter: "drop-shadow(0 0 72px rgba(91,87,232,0.7)) drop-shadow(0 0 24px rgba(91,87,232,0.5))",
+                maxWidth: 480,
+                aspectRatio: "1 / 1",
+                borderRadius: 28,
+                overflow: "hidden",
+                boxShadow: "0 0 80px rgba(91,87,232,0.55), 0 0 32px rgba(91,87,232,0.35), 0 0 0 1px rgba(91,87,232,0.2)",
               }}
-            />
+            >
+              <Image
+                src="/hero.gif"
+                alt="Demo animada do app Fropty"
+                fill
+                unoptimized
+                priority
+                style={{ objectFit: "cover", objectPosition: "center center" }}
+              />
+            </div>
           </div>
 
           {/* ── Coluna direita: texto ──────────────────────────────────── */}
