@@ -6,6 +6,7 @@ import { QuoteButton } from "./components/QuoteModal";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { MobileNav } from "./components/MobileNav";
 import { Footer } from "./components/Footer";
+import { WhatsAppFloat } from "./components/WhatsAppFloat";
 import { plans, faqs, previewAddons } from "./lib/data/plans";
 
 const AppDemos = dynamic(() => import("./components/AppDemos"), {
@@ -25,6 +26,100 @@ const MARQUEE_ITEMS = [
   { icon: "ti-circle-check",    label: "100% personalizado" },
   { icon: "ti-target",          label: "Sem taxa de entrada" },
   { icon: "ti-lock-open",       label: "Sem fidelidade inicial" },
+  { icon: "ti-world",           label: "Sites institucionais" },
+  { icon: "ti-brand-android",   label: "Apps Android & iOS" },
+];
+
+const SERVICES = [
+  {
+    num: "01", icon: "ti-world", title: "Sites Institucionais",
+    body: "Presença digital profissional, responsiva e otimizada para SEO, que transmite confiança e autoridade para sua marca em qualquer dispositivo.",
+    tags: ["Design", "Responsivo", "SEO"],
+  },
+  {
+    num: "02", icon: "ti-target", title: "Landing Pages",
+    body: "Páginas focadas em captura de leads com formulários inteligentes, integração com CRM e rastreamento completo.",
+    tags: ["Leads", "Formulários", "Rastreamento"],
+  },
+  {
+    num: "03", icon: "ti-device-mobile", title: "Apps Mobile",
+    body: "Aplicativos nativos e híbridos para Android e iOS, com design premium, notificações push e integração com APIs.",
+    tags: ["Android", "iOS", "Nativo"],
+  },
+  {
+    num: "04", icon: "ti-layout-dashboard", title: "SaaS & Sistemas Web",
+    body: "Plataformas SaaS, dashboards e sistemas web completos com painel admin, autenticação e banco de dados.",
+    tags: ["SaaS", "Dashboard", "Full-stack"],
+  },
+  {
+    num: "05", icon: "ti-school", title: "Plataformas de Cursos",
+    body: "Venda cursos pela internet com login, módulos, certificados e vídeos. Sistema completo de EAD com layout à sua marca.",
+    tags: ["EAD", "Membros", "Vídeos"],
+  },
+  {
+    num: "06", icon: "ti-lock", title: "Área de Membros",
+    body: "Ofereça conteúdo exclusivo para clientes, parceiros ou alunos com acesso restrito por senha, protegendo arquivos e materiais digitais.",
+    tags: ["Acesso restrito", "Login"],
+  },
+  {
+    num: "07", icon: "ti-plug-connected", title: "Integrações Digitais",
+    body: "Conectamos seu site com CRM, ERP, WhatsApp, e-mail marketing e plataformas de pagamento para automatizar processos.",
+    tags: ["CRM", "WhatsApp", "Automação"],
+  },
+  {
+    num: "08", icon: "ti-chart-bar", title: "Gestão de Tráfego",
+    body: "Campanhas estratégicas no Google, Meta e TikTok com tagueamento completo, rastreamento de eventos e relatórios.",
+    tags: ["Google Ads", "Meta Ads", "TikTok Ads"],
+  },
+];
+
+const PROCESS_STEPS = [
+  {
+    num: "01", icon: "ti-message-2", title: "Briefing",
+    body: "Entendemos seu negócio, objetivos, público-alvo e o que torna sua empresa única no mercado.",
+  },
+  {
+    num: "02", icon: "ti-palette", title: "Estratégia & Design",
+    body: "Criamos o design visual alinhado à identidade da sua marca, responsivo e pensado para funcionar bem em qualquer tela.",
+  },
+  {
+    num: "03", icon: "ti-code", title: "Desenvolvimento",
+    body: "Seu projeto ganha vida com tecnologia moderna, performática e segura, pronto para qualquer dispositivo.",
+  },
+  {
+    num: "04", icon: "ti-rocket", title: "Lançamento",
+    body: "Publicamos, testamos e fazemos os ajustes finais para o projeto entrar no ar sem problemas.",
+  },
+];
+
+const SEGMENTS_ROW_1 = [
+  { icon: "ti-tooth",         label: "Dentistas" },
+  { icon: "ti-stethoscope",   label: "Clínicas e Consultórios" },
+  { icon: "ti-scale",         label: "Advogados" },
+  { icon: "ti-calculator",    label: "Contabilidade" },
+  { icon: "ti-barbell",       label: "Academias e Pilates" },
+  { icon: "ti-paw",           label: "Clínicas Veterinárias" },
+  { icon: "ti-tools-kitchen", label: "Restaurantes" },
+  { icon: "ti-music",         label: "Músicos e DJs" },
+  { icon: "ti-home",          label: "Imobiliárias" },
+  { icon: "ti-building",      label: "Construtoras" },
+  { icon: "ti-scissors",      label: "Salões de Beleza" },
+  { icon: "ti-sparkles",      label: "Spas e Estética" },
+];
+
+const SEGMENTS_ROW_2 = [
+  { icon: "ti-briefcase",    label: "Agências e Consultorias" },
+  { icon: "ti-ruler",        label: "Engenharia e Arquitetura" },
+  { icon: "ti-confetti",     label: "Eventos e Festas" },
+  { icon: "ti-shopping-bag", label: "Lojas e Varejo" },
+  { icon: "ti-pill",         label: "Farmácias" },
+  { icon: "ti-camera",       label: "Fotógrafos e Criativos" },
+  { icon: "ti-calendar",     label: "Estúdios com Agendamento" },
+  { icon: "ti-vacuum",       label: "Empresas de Limpeza" },
+  { icon: "ti-truck",        label: "Logística e Transporte" },
+  { icon: "ti-device-mobile",label: "Startups & Apps" },
+  { icon: "ti-currency-dollar", label: "Fintech & SaaS" },
+  { icon: "ti-school",       label: "Educação & EAD" },
 ];
 
 export default function Home() {
@@ -50,10 +145,10 @@ export default function Home() {
           </div>
 
           <nav className="hidden items-center gap-6 text-sm sm:flex">
-            <a href="#planos"   className="nav-link transition">Planos</a>
-            <a href="#exemplos" className="nav-link transition">Exemplos</a>
-            <a href="#tokens"   className="nav-link transition">Tokens</a>
-            <a href="#faq"      className="nav-link transition">FAQ</a>
+            <a href="#solucoes"  className="nav-link transition">Soluções</a>
+            <a href="#planos"    className="nav-link transition">Planos</a>
+            <a href="#exemplos"  className="nav-link transition">Exemplos</a>
+            <a href="#faq"       className="nav-link transition">FAQ</a>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -70,34 +165,37 @@ export default function Home() {
         </div>
       </header>
 
-      {/* ── Hero — full-bleed GIF ───────────────────────────────────── */}
+      {/* ── Hero — dois colunas ─────────────────────────────────────── */}
       <section
         className="relative overflow-hidden"
-        style={{ height: "88vh", minHeight: 580 }}
+        style={{ minHeight: "88vh", background: "var(--bg)" }}
       >
-        {/* GIF de fundo, cobre toda a seção */}
-        <Image
-          src="/hero.gif"
-          alt=""
-          fill
-          style={{ objectFit: "cover", objectPosition: "center 10%" }}
-          unoptimized
-          priority
+        {/* Glow blobs de fundo */}
+        <div
           aria-hidden
+          className="pointer-events-none absolute"
+          style={{
+            top: -120, left: -80,
+            width: 500, height: 500, borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(91,87,232,0.18) 0%, transparent 70%)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute"
+          style={{
+            bottom: -80, right: "20%",
+            width: 400, height: 400, borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(91,87,232,0.1) 0%, transparent 70%)",
+          }}
         />
 
-        {/* Overlay tema-adaptável via CSS variable */}
         <div
-          className="absolute inset-0"
-          style={{ background: "var(--hero-overlay)" }}
-        />
-
-        {/* Conteúdo sobre o overlay */}
-        <div
-          className="relative z-10 mx-auto flex h-full max-w-6xl flex-col justify-center px-6 py-16 sm:py-20"
+          className="relative z-10 mx-auto flex max-w-6xl items-center gap-8 px-6 py-16 sm:py-24 lg:gap-16"
+          style={{ minHeight: "88vh" }}
         >
-          <div className="max-w-2xl">
-            {/* Badge */}
+          {/* Coluna esquerda: texto */}
+          <div className="flex-1">
             <span
               className="mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-widest"
               style={{
@@ -112,13 +210,13 @@ export default function Home() {
 
             <h1
               className="text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl xl:text-6xl"
-              style={{ color: "var(--hero-text)", fontFamily: "var(--font-plus-jakarta), sans-serif" }}
+              style={{ color: "var(--text)", fontFamily: "var(--font-plus-jakarta), sans-serif" }}
             >
               Seu app sob medida,{" "}
               <span style={{ color: "var(--primary)" }}>do jeito que você imaginou</span>
             </h1>
 
-            <p className="mt-6 max-w-lg text-lg leading-relaxed" style={{ color: "var(--hero-muted)" }}>
+            <p className="mt-6 max-w-lg text-lg leading-relaxed" style={{ color: "var(--text-muted)" }}>
               Conte sua ideia e receba uma prévia real em forma de app, totalmente gratuita.
               Sem tecnicismo, sem complicação.
             </p>
@@ -135,10 +233,9 @@ export default function Home() {
                 href="#exemplos"
                 className="rounded-full px-8 py-4 text-base font-semibold transition"
                 style={{
-                  border: "1px solid rgba(255,255,255,0.2)",
-                  color: "var(--hero-text)",
-                  background: "rgba(255,255,255,0.06)",
-                  backdropFilter: "blur(8px)",
+                  border: "1px solid var(--border)",
+                  color: "var(--text-muted)",
+                  background: "var(--surface)",
                 }}
               >
                 Ver exemplos
@@ -148,18 +245,42 @@ export default function Home() {
             {/* Mini stats */}
             <div className="mt-12 flex flex-wrap items-center gap-8">
               {[
-                { val: "R$0",   sub: "para começar",       icon: "ti-gift" },
-                { val: "3 dias", sub: "para ver a prévia", icon: "ti-clock" },
-                { val: "100%",  sub: "personalizado",       icon: "ti-star" },
+                { val: "R$0",    sub: "para começar",       icon: "ti-gift" },
+                { val: "3 dias", sub: "para ver a prévia",  icon: "ti-clock" },
+                { val: "100%",   sub: "personalizado",       icon: "ti-star" },
               ].map(({ val, sub, icon }) => (
                 <div key={val} className="flex items-center gap-3">
                   <i className={`ti ${icon}`} style={{ fontSize: 20, color: "var(--primary)" }} />
                   <div>
-                    <span className="block text-2xl font-bold" style={{ color: "var(--hero-text)", lineHeight: 1 }}>{val}</span>
-                    <span className="block text-xs mt-0.5" style={{ color: "var(--hero-muted)" }}>{sub}</span>
+                    <span className="block text-2xl font-bold" style={{ color: "var(--text)", lineHeight: 1 }}>{val}</span>
+                    <span className="block text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>{sub}</span>
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* Coluna direita: GIF centralizado */}
+          <div
+            className="hidden flex-shrink-0 items-center justify-center lg:flex"
+            style={{ width: "44%" }}
+          >
+            <div
+              style={{
+                borderRadius: 24,
+                overflow: "hidden",
+                boxShadow: "0 24px 80px rgba(91,87,232,0.25), 0 0 0 1px rgba(91,87,232,0.15)",
+              }}
+            >
+              <Image
+                src="/hero.gif"
+                alt="Demo animada do app Fropty"
+                width={540}
+                height={540}
+                unoptimized
+                priority
+                style={{ width: "100%", height: "auto", display: "block" }}
+              />
             </div>
           </div>
         </div>
@@ -181,71 +302,248 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ── Como funciona ───────────────────────────────────────────── */}
-      <section className="mx-auto max-w-6xl scroll-mt-20 px-6 py-20">
+      {/* ── O que fazemos — Soluções digitais completas ─────────────── */}
+      <section id="solucoes" className="mx-auto max-w-6xl scroll-mt-20 px-6 py-20">
         <div className="mb-3 flex justify-center">
           <span className="section-chip">
-            <i className="ti ti-route" /> Como funciona
+            <i className="ti ti-sparkles" /> O que fazemos
           </span>
         </div>
-        <h2
-          className="text-center font-bold tracking-tight"
-          style={{
-            color: "var(--text)",
-            fontFamily: "var(--font-plus-jakarta), sans-serif",
-            fontSize: "clamp(2rem, 5vw, 3rem)",
-            lineHeight: 1.1,
-            marginBottom: 56,
-          }}
-        >
-          Do ideia ao app em 4 passos
-        </h2>
+        <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-end sm:justify-between" style={{ marginBottom: 48 }}>
+          <h2
+            className="font-bold tracking-tight"
+            style={{
+              color: "var(--text)",
+              fontFamily: "var(--font-plus-jakarta), sans-serif",
+              fontSize: "clamp(2rem, 5vw, 3rem)",
+              lineHeight: 1.1,
+              maxWidth: 480,
+            }}
+          >
+            Soluções digitais{" "}
+            <span style={{ color: "var(--primary)" }}>completas</span>
+          </h2>
+          <p className="max-w-xs text-sm leading-relaxed" style={{ color: "var(--text-muted)" }}>
+            Cada projeto construído com propósito, estratégia e atenção aos detalhes que fazem a diferença.
+          </p>
+        </div>
 
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {[
-            { step: "01", icon: "ti-message-2",   title: "Conta sua ideia",  body: "Você preenche um formulário simples descrevendo o que o seu app precisa fazer. Sem necessidade de conhecimento técnico." },
-            { step: "02", icon: "ti-eye",          title: "Recebe a prévia",  body: "Em até 3 dias úteis, você recebe um link com as telas principais do seu app funcionando no navegador. Totalmente gratuito." },
-            { step: "03", icon: "ti-circle-check", title: "Aprova e paga",    body: "Gostou? O app completo sai a partir de R$ 499. Não gostou? Sem cobranças, sem burocracia." },
-            { step: "04", icon: "ti-rocket",       title: "App no ar",        body: "Seu app é desenvolvido, testado e publicado. Você acompanha tudo e mantém com tokens de suporte." },
-          ].map(({ step, icon, title, body }, i) => (
-            <div key={step} className="relative flex flex-col gap-4">
-              {i < 3 && (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {SERVICES.map(({ num, icon, title, body, tags }) => (
+            <div
+              key={num}
+              className="card-hover group relative flex flex-col gap-4 rounded-2xl p-6"
+              style={{
+                background: "var(--card-bg)",
+                border: "1px solid var(--card-border)",
+              }}
+            >
+              <div className="flex items-start justify-between">
                 <div
-                  className="absolute left-[calc(50%+24px)] top-[22px] hidden h-px lg:block"
-                  style={{ width: "calc(100% - 0px)", background: "linear-gradient(to right, var(--border), transparent)" }}
-                />
-              )}
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 16 }}>
-                <div style={{ position: "relative" }}>
-                  <div
-                    style={{
-                      width: 52, height: 52, borderRadius: "50%",
-                      background: "rgba(91,87,232,0.12)",
-                      border: "1px solid rgba(91,87,232,0.22)",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                    }}
-                  >
-                    <i className={`ti ${icon}`} style={{ fontSize: 22, color: "var(--primary)" }} />
-                  </div>
+                  style={{
+                    width: 44, height: 44, borderRadius: 12,
+                    background: "rgba(91,87,232,0.1)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                  }}
+                >
+                  <i className={`ti ${icon}`} style={{ fontSize: 20, color: "var(--primary)" }} />
+                </div>
+                <span
+                  style={{
+                    fontSize: 11, fontWeight: 800, letterSpacing: "0.06em",
+                    color: "var(--text-faint)",
+                    fontVariantNumeric: "tabular-nums",
+                  }}
+                >
+                  {num}
+                </span>
+              </div>
+              <div>
+                <h3 className="font-bold text-base" style={{ color: "var(--text)", marginBottom: 8 }}>{title}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: "var(--text-muted)" }}>{body}</p>
+              </div>
+              <div className="mt-auto flex flex-wrap gap-1.5 pt-2">
+                {tags.map((t) => (
                   <span
-                    style={{
-                      position: "absolute", top: -6, right: -6,
-                      width: 20, height: 20, borderRadius: "50%",
-                      background: "var(--primary)", color: "#fff",
-                      fontSize: "9px", fontWeight: 800,
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                    }}
+                    key={t}
+                    className="rounded-md px-2 py-0.5 text-xs font-medium"
+                    style={{ background: "rgba(91,87,232,0.08)", color: "var(--primary)", border: "1px solid rgba(91,87,232,0.12)" }}
                   >
-                    {step}
+                    {t}
                   </span>
-                </div>
-                <div>
-                  <h3 className="font-bold" style={{ color: "var(--text)", marginBottom: 6 }}>{title}</h3>
-                  <p className="text-sm leading-relaxed" style={{ color: "var(--text-muted)" }}>{body}</p>
-                </div>
+                ))}
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* ── Nosso processo — Do briefing ao lançamento ──────────────── */}
+      <section
+        className="border-y scroll-mt-20 py-20"
+        style={{ background: "var(--bg-alt)", borderColor: "var(--border)" }}
+      >
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="mb-3 flex justify-center">
+            <span className="section-chip">
+              <i className="ti ti-route" /> Nosso processo
+            </span>
+          </div>
+          <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-end sm:justify-between" style={{ marginBottom: 56 }}>
+            <h2
+              className="font-bold tracking-tight"
+              style={{
+                color: "var(--text)",
+                fontFamily: "var(--font-plus-jakarta), sans-serif",
+                fontSize: "clamp(2rem, 5vw, 3rem)",
+                lineHeight: 1.1,
+              }}
+            >
+              Do briefing{" "}
+              <span style={{ color: "var(--primary)" }}>ao lançamento</span>
+            </h2>
+            <p className="max-w-xs text-sm leading-relaxed" style={{ color: "var(--text-muted)" }}>
+              Um processo claro e eficiente que garante resultados previsíveis e entregas no prazo.
+            </p>
+          </div>
+
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {PROCESS_STEPS.map(({ num, icon, title, body }, i) => (
+              <div key={num} className="relative flex flex-col gap-4">
+                {i < 3 && (
+                  <div
+                    className="absolute left-[calc(50%+28px)] top-[22px] hidden h-px lg:block"
+                    style={{ width: "calc(100% + 16px)", background: "linear-gradient(to right, var(--border), transparent)" }}
+                  />
+                )}
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 16 }}>
+                  <div style={{ position: "relative" }}>
+                    <div
+                      style={{
+                        width: 56, height: 56, borderRadius: 16,
+                        background: "var(--surface)",
+                        border: "1px solid var(--border)",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                      }}
+                    >
+                      <i className={`ti ${icon}`} style={{ fontSize: 24, color: "var(--primary)" }} />
+                    </div>
+                    <span
+                      style={{
+                        position: "absolute", top: -6, right: -8,
+                        background: "var(--primary)", color: "#fff",
+                        fontSize: "10px", fontWeight: 800,
+                        padding: "2px 6px", borderRadius: 6,
+                      }}
+                    >
+                      {num}
+                    </span>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-base" style={{ color: "var(--text)", marginBottom: 6 }}>{title}</h3>
+                    <p className="text-sm leading-relaxed" style={{ color: "var(--text-muted)" }}>{body}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-14 flex items-center justify-between gap-4 flex-wrap">
+            <p style={{ color: "var(--text-muted)", fontSize: 14 }}>
+              Pronto para começar? O processo é mais simples do que parece.
+            </p>
+            <QuoteButton
+              className="rounded-full px-6 py-3 text-sm font-semibold text-white transition hover:brightness-110 inline-flex items-center gap-2"
+              style={{ background: "var(--primary)", boxShadow: "0 8px 24px rgba(91,87,232,0.3)" }}
+            >
+              Falar com a equipe
+              <i className="ti ti-arrow-right" style={{ fontSize: 14 }} />
+            </QuoteButton>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Atendemos todos os segmentos ────────────────────────────── */}
+      <section className="scroll-mt-20 py-20 overflow-hidden">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="mb-3 flex justify-center">
+            <span className="section-chip">
+              <i className="ti ti-users" /> Atendemos todos os segmentos
+            </span>
+          </div>
+          <h2
+            className="text-center font-bold tracking-tight"
+            style={{
+              color: "var(--text)",
+              fontFamily: "var(--font-plus-jakarta), sans-serif",
+              fontSize: "clamp(2rem, 5vw, 3rem)",
+              lineHeight: 1.1,
+              marginBottom: 48,
+            }}
+          >
+            Criamos <span style={{ color: "var(--primary)" }}>apps e sites</span> para qualquer negócio
+          </h2>
+        </div>
+
+        {/* Faixa 1 */}
+        <div aria-hidden="true" className="overflow-hidden mb-4">
+          <div className="animate-marquee flex gap-3 whitespace-nowrap" style={{ width: "max-content" }}>
+            {[...SEGMENTS_ROW_1, ...SEGMENTS_ROW_1].map(({ icon, label }, i) => (
+              <span
+                key={i}
+                className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium"
+                style={{
+                  background: "var(--card-bg)",
+                  border: "1px solid var(--card-border)",
+                  color: "var(--text-muted)",
+                  flexShrink: 0,
+                }}
+              >
+                <i className={`ti ${icon}`} style={{ color: "var(--primary)", fontSize: 15 }} />
+                {label}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Faixa 2 — direção inversa */}
+        <div aria-hidden="true" className="overflow-hidden">
+          <div
+            className="flex gap-3 whitespace-nowrap"
+            style={{
+              width: "max-content",
+              animation: "marquee 36s linear infinite reverse",
+            }}
+          >
+            {[...SEGMENTS_ROW_2, ...SEGMENTS_ROW_2].map(({ icon, label }, i) => (
+              <span
+                key={i}
+                className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium"
+                style={{
+                  background: "var(--card-bg)",
+                  border: "1px solid var(--card-border)",
+                  color: "var(--text-muted)",
+                  flexShrink: 0,
+                }}
+              >
+                <i className={`ti ${icon}`} style={{ color: "var(--primary)", fontSize: 15 }} />
+                {label}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="mx-auto mt-10 max-w-6xl px-6 text-center">
+          <p className="mb-4 text-sm" style={{ color: "var(--text-faint)" }}>
+            Não encontrou seu segmento? Fale com a gente.
+          </p>
+          <QuoteButton
+            className="inline-flex items-center gap-2 rounded-full px-8 py-3 text-sm font-semibold text-white transition hover:brightness-110"
+            style={{ background: "var(--primary)" }}
+          >
+            Solicitar orçamento
+            <i className="ti ti-arrow-right" style={{ fontSize: 14 }} />
+          </QuoteButton>
         </div>
       </section>
 
@@ -323,7 +621,6 @@ export default function Home() {
                 ))}
               </ul>
 
-              {/* Economia — paleta azul/branca apenas */}
               {plan.savingsText && (
                 <div
                   className="mt-4 rounded-xl px-3 py-2"
@@ -443,7 +740,9 @@ export default function Home() {
       </section>
 
       {/* ── App Demos ───────────────────────────────────────────────── */}
-      <AppDemos />
+      <div id="exemplos">
+        <AppDemos />
+      </div>
 
       {/* ── Tokens ──────────────────────────────────────────────────── */}
       <section
@@ -584,6 +883,9 @@ export default function Home() {
       </section>
 
       <Footer />
+
+      {/* ── WhatsApp float ──────────────────────────────────────────── */}
+      <WhatsAppFloat />
 
     </main>
   );

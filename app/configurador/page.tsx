@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import PlanConfigurator from "../components/PlanConfigurator";
+import { ThemeToggle } from "../components/ThemeToggle";
+import { WhatsAppFloat } from "../components/WhatsAppFloat";
 import { SITE_URL } from "../lib/config";
 
 export const metadata: Metadata = {
@@ -42,7 +44,7 @@ export default function ConfiguradorPage() {
               Fropty<span style={{ color: "var(--primary)" }}>Apps</span>
             </span>
           </div>
-          <div className="w-16" />
+          <ThemeToggle />
         </div>
       </header>
 
@@ -84,6 +86,8 @@ export default function ConfiguradorPage() {
           <Link href="/privacidade" className="transition hover:text-white">Política de Privacidade</Link>
         </div>
       </footer>
+
+      <WhatsAppFloat />
     </div>
   );
 }
