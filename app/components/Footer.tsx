@@ -1,7 +1,6 @@
-"use client";
-
 import Link from "next/link";
 import Image from "next/image";
+import { WHATSAPP_URL, CONTACT_EMAIL } from "../lib/config";
 
 export function Footer() {
   return (
@@ -27,16 +26,13 @@ export function Footer() {
             <h4 className="mb-4 text-xs font-bold uppercase tracking-widest" style={{ color: "var(--text-faint)" }}>Produto</h4>
             <ul className="space-y-2 text-sm">
               {[
-                { href: "/#planos",    label: "Planos" },
-                { href: "/portfolio",  label: "Portfólio" },
-                { href: "/#tokens",    label: "Tokens" },
+                { href: "/#planos",      label: "Planos" },
+                { href: "/portfolio",    label: "Portfólio" },
+                { href: "/#tokens",      label: "Tokens" },
                 { href: "/configurador", label: "Configurador" },
               ].map(({ href, label }) => (
                 <li key={href}>
-                  <Link href={href} className="transition" style={{ color: "var(--text-muted)" }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = "var(--text)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-muted)")}
-                  >{label}</Link>
+                  <Link href={href} className="nav-link">{label}</Link>
                 </li>
               ))}
             </ul>
@@ -54,10 +50,7 @@ export function Footer() {
                 { href: "/privacidade", label: "Privacidade" },
               ].map(({ href, label }) => (
                 <li key={href}>
-                  <Link href={href} className="transition" style={{ color: "var(--text-muted)" }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = "var(--text)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-muted)")}
-                  >{label}</Link>
+                  <Link href={href} className="nav-link">{label}</Link>
                 </li>
               ))}
             </ul>
@@ -68,30 +61,24 @@ export function Footer() {
             <h4 className="mb-4 text-xs font-bold uppercase tracking-widest" style={{ color: "var(--text-faint)" }}>Contato</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="https://wa.me/5500000000000" target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-2 transition" style={{ color: "var(--text-muted)" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "var(--text)")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-muted)")}
-                >
+                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer"
+                  className="nav-link flex items-center gap-2">
                   <i className="ti ti-brand-whatsapp text-base" style={{ color: "#22c55e" }} />
                   WhatsApp
                 </a>
               </li>
               <li>
-                <a href="mailto:contato@fropty.com"
-                  className="flex items-center gap-2 transition" style={{ color: "var(--text-muted)" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "var(--text)")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-muted)")}
-                >
+                <a href={`mailto:${CONTACT_EMAIL}`} className="nav-link flex items-center gap-2">
                   <i className="ti ti-mail text-base" style={{ color: "var(--primary)" }} />
-                  contato@fropty.com
+                  {CONTACT_EMAIL}
                 </a>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t pt-8 text-xs sm:flex-row" style={{ borderColor: "var(--border)", color: "var(--text-faint)" }}>
+        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t pt-8 text-xs sm:flex-row"
+          style={{ borderColor: "var(--border)", color: "var(--text-faint)" }}>
           <p>© {new Date().getFullYear()} Fropty Apps. Todos os direitos reservados.</p>
           <p>Feito com 💜 para empreendedores brasileiros</p>
         </div>

@@ -134,12 +134,16 @@ export default function PlanConfigurator() {
                 return (
                   <div
                     key={addon.id}
+                    role="checkbox"
+                    aria-checked={active}
+                    tabIndex={0}
                     onClick={() => toggle(addon.id)}
-                    className="hover:scale-[1.02] hover:shadow-[0_8px_20px_rgba(0,0,0,0.12)]"
+                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(addon.id); } }}
+                    className="clickable-card hover:scale-[1.02] hover:shadow-[0_8px_20px_rgba(0,0,0,0.12)]"
                     style={{
                       background: active ? "rgba(91,87,232,0.12)" : "var(--card-bg)",
                       border: `1.5px solid ${active ? "var(--primary)" : "var(--card-border)"}`,
-                      borderRadius: 12, padding: "14px 16px", cursor: "pointer",
+                      borderRadius: 12, padding: "14px 16px",
                       transition: "all 0.18s", display: "flex", gap: 12, alignItems: "flex-start",
                     }}
                   >
@@ -191,13 +195,17 @@ export default function PlanConfigurator() {
                 return (
                   <div
                     key={m.id}
+                    role="radio"
+                    aria-checked={active}
+                    tabIndex={0}
                     onClick={() => setMaintenance(m.id)}
-                    className="hover:scale-[1.03] hover:shadow-[0_12px_28px_rgba(0,0,0,0.15)]"
+                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setMaintenance(m.id); } }}
+                    className="clickable-card hover:scale-[1.03] hover:shadow-[0_12px_28px_rgba(0,0,0,0.15)]"
                     style={{
                       background: active ? (m.highlight ? "var(--primary)" : "rgba(91,87,232,0.12)") : "var(--card-bg)",
                       border: `1.5px solid ${active ? "var(--primary)" : "var(--card-border)"}`,
                       borderRadius: 12, padding: "14px 16px",
-                      cursor: "pointer", textAlign: "center",
+                      textAlign: "center",
                       transition: "all 0.18s", position: "relative",
                       display: "flex", flexDirection: "column", justifyContent: "center",
                     }}

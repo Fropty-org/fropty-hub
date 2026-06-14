@@ -1,6 +1,21 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import PlanConfigurator from "../components/PlanConfigurator";
+import { SITE_URL } from "../lib/config";
+
+export const metadata: Metadata = {
+  title: "Configurador de Planos",
+  description: "Monte seu app sob medida, escolha os recursos e veja o preço em tempo real. Orçamento sem compromisso.",
+  openGraph: {
+    title: "Configurador de Planos — Fropty Apps",
+    description: "Monte seu app sob medida, escolha os recursos e veja o preço em tempo real.",
+    url: `${SITE_URL}/configurador`,
+    siteName: "Fropty Apps",
+    locale: "pt_BR",
+    type: "website",
+  },
+};
 
 export default function ConfiguradorPage() {
   return (

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "../../lib/supabase/server";
 import { ClientSidebar } from "../../components/cliente/ClientSidebar";
 import type { Database } from "../../lib/supabase/types";
+import { WHATSAPP_URL } from "../../lib/config";
 
 type ProfileRow     = Database["public"]["Tables"]["profiles"]["Row"];
 type TransactionRow = Database["public"]["Tables"]["token_transactions"]["Row"];
@@ -20,6 +21,13 @@ export default async function TokensPage() {
 
   const profileResult      = await supabase.from("profiles").select("*").eq("id", user.id).single();
   const transactionsResult = await supabase.from("token_transactions").select("*").eq("client_id", user.id).order("created_at", { ascending: false });
+
+  if (profileResult.error && profileResult.error.code !== "PGRST116") {
+    console.error("[tokens] profile fetch error:", profileResult.error.message);
+  }
+  if (transactionsResult.error) {
+    console.error("[tokens] transactions fetch error:", transactionsResult.error.message);
+  }
 
   const profile      = profileResult.data as ProfileRow | null;
   const transactions = transactionsResult.data as TransactionRow[] | null;
@@ -45,7 +53,7 @@ export default async function TokensPage() {
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg)", color: "var(--text)" }}>
-      <ClientSidebar user={sidebarUser} active="tokens" />
+      <ClientSidebar user={sidebarUser} />
 
       <main style={{ flex: 1, padding: "40px 32px", maxWidth: 800, margin: "0 auto" }}>
         <div style={{ marginBottom: 32 }}>
@@ -80,14 +88,21 @@ export default async function TokensPage() {
         {/* Info */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 32 }}>
           {[
-            { title: "1 token equivale a", body: "1 hora de dev, correção de bug, nova feature pequena ou ajuste de layout" },
-            { title: "Token avulso", body: "R$ 300,00 por token fora do plano. Assinante economiza 50% — R$ 150,00." },
+          { title: "1 token equivale a", body: "1 hora de dev, correção de bug, nova feature pequena ou ajuste de layout" },
           ].map(({ title, body }) => (
             <div key={title} style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "18px 20px" }}>
               <p style={{ margin: "0 0 4px", fontSize: "12px", color: "var(--text-faint)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>{title}</p>
-              <p style={{ margin: 0, fontSize: "14px", color: "var(--text-muted)", lineHeight: 1.6 }} dangerouslySetInnerHTML={{ __html: body.replace("50%", "<span style='color:var(--primary);font-weight:600'>50%</span>") }} />
+              <p style={{ margin: 0, fontSize: "14px", color: "var(--text-muted)", lineHeight: 1.6 }}>{body}</p>
             </div>
           ))}
+          <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "18px 20px" }}>
+            <p style={{ margin: "0 0 4px", fontSize: "12px", color: "var(--text-faint)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>Token avulso</p>
+            <p style={{ margin: 0, fontSize: "14px", color: "var(--text-muted)", lineHeight: 1.6 }}>
+              R$ 300,00 por token fora do plano. Assinante economiza{" "}
+              <span style={{ color: "var(--primary)", fontWeight: 600 }}>50%</span>
+              {" "}— R$ 150,00.
+            </p>
+          </div>
         </div>
 
         {/* CTA */}
@@ -96,7 +111,7 @@ export default async function TokensPage() {
             <p style={{ margin: "0 0 4px", fontWeight: 700, fontSize: "0.95rem" }}>Precisa de mais tokens?</p>
             <p style={{ margin: 0, fontSize: "13px", color: "var(--text-muted)" }}>Compre tokens avulsos por R$ 150,00 cada (preço de assinante).</p>
           </div>
-          <a href="https://wa.me/5500000000000" target="_blank" rel="noopener noreferrer"
+          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer"
             style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "var(--cta-bg)", color: "var(--cta-text)", padding: "10px 20px", borderRadius: 10, fontSize: "13px", fontWeight: 700, textDecoration: "none", whiteSpace: "nowrap" }}>
             <i className="ti ti-brand-whatsapp" /> Comprar via WhatsApp
           </a>

@@ -3,10 +3,19 @@ import Link from "next/link";
 import Image from "next/image";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
+import { SITE_URL } from "../lib/config";
 
 export const metadata: Metadata = {
   title: "Sobre",
   description: "Conheça a Fropty Apps — quem somos, nossa missão e como transformamos ideias em aplicativos reais.",
+  openGraph: {
+    title: "Sobre a Fropty Apps",
+    description: "Conheça a Fropty Apps — quem somos, nossa missão e como transformamos ideias em aplicativos reais.",
+    url: `${SITE_URL}/sobre`,
+    siteName: "Fropty Apps",
+    locale: "pt_BR",
+    type: "website",
+  },
 };
 
 const VALUES = [

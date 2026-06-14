@@ -56,6 +56,7 @@ export function PortfolioGrid() {
           {filtered.map((item) => (
             <div
               key={item.id}
+              className="card-hover"
               style={{
                 background: "var(--card-bg)",
                 border: "1px solid var(--card-border)",
@@ -65,17 +66,6 @@ export function PortfolioGrid() {
                 flexDirection: "column",
                 gap: 16,
                 position: "relative",
-                transition: "border-color 0.2s, box-shadow 0.2s",
-              }}
-              onMouseEnter={(e) => {
-                const el = e.currentTarget;
-                el.style.borderColor = "var(--border-hover)";
-                el.style.boxShadow = "0 8px 32px rgba(0,0,0,0.2)";
-              }}
-              onMouseLeave={(e) => {
-                const el = e.currentTarget;
-                el.style.borderColor = "var(--card-border)";
-                el.style.boxShadow = "";
               }}
             >
               {item.highlight && (

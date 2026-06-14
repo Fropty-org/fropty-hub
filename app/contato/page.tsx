@@ -2,10 +2,19 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
+import { WHATSAPP_URL, SITE_URL } from "../lib/config";
 
 export const metadata: Metadata = {
   title: "Contato",
   description: "Fale com a Fropty Apps. Tire dúvidas, solicite orçamento ou envie uma mensagem direta.",
+  openGraph: {
+    title: "Contato — Fropty Apps",
+    description: "Fale com a Fropty Apps. Tire dúvidas, solicite orçamento ou envie uma mensagem direta.",
+    url: `${SITE_URL}/contato`,
+    siteName: "Fropty Apps",
+    locale: "pt_BR",
+    type: "website",
+  },
 };
 
 const CHANNELS = [
@@ -15,7 +24,7 @@ const CHANNELS = [
     title: "WhatsApp",
     desc: "Resposta mais rápida. Fale diretamente com nossa equipe.",
     label: "Abrir conversa",
-    href: "https://wa.me/5500000000000",
+    href: WHATSAPP_URL,
     external: true,
   },
   {

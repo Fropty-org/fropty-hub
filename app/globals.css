@@ -183,9 +183,28 @@ body {
 
 .nav-link {
   color: var(--text-muted);
+  transition: color 0.15s;
 }
 .nav-link:hover {
   color: var(--text);
+}
+
+/* Hover lift para cards (substitui onMouseEnter/Leave em JS) */
+.card-hover {
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.card-hover:hover {
+  border-color: var(--border-hover) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+
+/* Foco acessível para elementos clicáveis sem <button> */
+.clickable-card {
+  cursor: pointer;
+}
+.clickable-card:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
 /* Section chip label */

@@ -6,6 +6,7 @@ import { ProjectCard } from "../../components/cliente/ProjectCard";
 import { ClientSidebar } from "../../components/cliente/ClientSidebar";
 import type { ClientProject, ProjectStatus } from "../../lib/types/cliente";
 import type { Database } from "../../lib/supabase/types";
+import { WHATSAPP_URL } from "../../lib/config";
 
 type ProfileRow = Database["public"]["Tables"]["profiles"]["Row"];
 type ProjectRow = Database["public"]["Tables"]["projects"]["Row"];
@@ -31,6 +32,13 @@ export default async function DashboardPage() {
 
   const profileResult  = await supabase.from("profiles").select("*").eq("id", user.id).single();
   const projectsResult = await supabase.from("projects").select("*").eq("client_id", user.id).order("created_at", { ascending: false });
+
+  if (profileResult.error && profileResult.error.code !== "PGRST116") {
+    console.error("[dashboard] profile fetch error:", profileResult.error.message);
+  }
+  if (projectsResult.error) {
+    console.error("[dashboard] projects fetch error:", projectsResult.error.message);
+  }
 
   const profile  = profileResult.data as ProfileRow | null;
   const projects = projectsResult.data as ProjectRow[] | null;
@@ -67,7 +75,7 @@ export default async function DashboardPage() {
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg)", color: "var(--text)" }}>
-      <ClientSidebar user={sidebarUser} active="dashboard" />
+      <ClientSidebar user={sidebarUser} />
 
       <main style={{ flex: 1, padding: "40px 32px", maxWidth: 900, margin: "0 auto" }}>
         <div style={{ marginBottom: 36 }}>
@@ -121,7 +129,7 @@ export default async function DashboardPage() {
             {[
               { href: "/area-cliente/tokens", icon: "ti-coins",           color: "var(--primary)", label: "Ver tokens" },
               { href: "/configurador",        icon: "ti-plus",            color: "var(--primary)", label: "Novo projeto" },
-              { href: "https://wa.me/5500000000000", icon: "ti-brand-whatsapp", color: "#22c55e", label: "Suporte", external: true },
+              { href: WHATSAPP_URL, icon: "ti-brand-whatsapp", color: "#22c55e", label: "Suporte", external: true },
             ].map(({ href, icon, color, label, external }) => (
               <Link key={href} href={href} target={external ? "_blank" : undefined} rel={external ? "noopener noreferrer" : undefined}
                 style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 10, padding: "10px 18px", fontSize: "13px", fontWeight: 600, color: "var(--text)", textDecoration: "none" }}>

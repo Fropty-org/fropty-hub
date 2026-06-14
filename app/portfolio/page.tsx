@@ -2,10 +2,19 @@ import type { Metadata } from "next";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { PortfolioGrid } from "../components/PortfolioGrid";
+import { SITE_URL } from "../lib/config";
 
 export const metadata: Metadata = {
   title: "Portfólio",
   description: "Veja exemplos de apps desenvolvidos pela Fropty Apps — saúde, comércio, serviços, educação e gestão.",
+  openGraph: {
+    title: "Portfólio — Fropty Apps",
+    description: "Veja exemplos de apps desenvolvidos pela Fropty Apps — saúde, comércio, serviços, educação e gestão.",
+    url: `${SITE_URL}/portfolio`,
+    siteName: "Fropty Apps",
+    locale: "pt_BR",
+    type: "website",
+  },
 };
 
 export default function PortfolioPage() {

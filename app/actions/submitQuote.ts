@@ -74,7 +74,6 @@ export async function submitQuote(payload: QuotePayload): Promise<QuoteResult> {
   });
 
   if (error) {
-    console.error("[submitQuote] Resend error:", error);
     return { ok: false, error: "Falha ao enviar o email. Tente novamente." };
   }
 

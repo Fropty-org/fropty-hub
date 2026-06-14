@@ -9,7 +9,6 @@ import type { ClientUser } from "../../lib/types/cliente";
 
 interface Props {
   user: ClientUser;
-  active: "dashboard" | "tokens";
 }
 
 const NAV = [
