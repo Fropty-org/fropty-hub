@@ -184,43 +184,60 @@ export default function Home() {
         </div>
       </header>
 
-      {/* ── Hero — dois colunas ─────────────────────────────────────── */}
+      {/* ── Hero ──────────────────────────────────────────────────────── */}
       <section
         className="relative overflow-hidden"
-        style={{ minHeight: "88vh", background: "var(--bg)" }}
+        style={{
+          minHeight: "90vh",
+          background: [
+            "radial-gradient(ellipse at 82% 48%, rgba(91,87,232,0.82) 0%, rgba(91,87,232,0.28) 38%, transparent 62%)",
+            "radial-gradient(ellipse at 100% 0%, rgba(107,108,255,0.35) 0%, transparent 45%)",
+            "var(--bg)",
+          ].join(", "),
+        }}
       >
-        {/* Glow blobs de fundo */}
+        {/* Vinheta escura no lado esquerdo para separar o texto do glow */}
         <div
           aria-hidden
-          className="pointer-events-none absolute"
+          className="pointer-events-none absolute inset-0"
           style={{
-            top: -120, left: -80,
-            width: 500, height: 500, borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(91,87,232,0.18) 0%, transparent 70%)",
-          }}
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute"
-          style={{
-            bottom: -80, right: "20%",
-            width: 400, height: 400, borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(91,87,232,0.1) 0%, transparent 70%)",
+            background: "linear-gradient(to right, var(--bg) 0%, var(--bg) 20%, transparent 55%)",
           }}
         />
 
         <div
-          className="relative z-10 mx-auto flex max-w-6xl items-center gap-8 px-6 py-16 sm:py-24 lg:gap-16"
-          style={{ minHeight: "88vh" }}
+          className="relative z-10 mx-auto flex max-w-6xl flex-col items-center gap-10 px-6 py-14 sm:py-20 lg:flex-row lg:items-center lg:gap-16"
+          style={{ minHeight: "90vh" }}
         >
-          {/* Coluna esquerda: texto */}
-          <div className="flex-1">
+          {/* ── Coluna esquerda: imagem (mobile: topo, desktop: direita via order) */}
+          <div
+            className="order-1 flex w-full flex-shrink-0 items-center justify-center lg:order-2 lg:w-[44%]"
+          >
+            <Image
+              src="/hero.gif"
+              alt="Demo animada do app Fropty"
+              width={520}
+              height={520}
+              unoptimized
+              priority
+              className="w-[200px] sm:w-[300px] lg:w-full"
+              style={{
+                maxWidth: 520,
+                height: "auto",
+                display: "block",
+                filter: "drop-shadow(0 0 72px rgba(91,87,232,0.7)) drop-shadow(0 0 24px rgba(91,87,232,0.5))",
+              }}
+            />
+          </div>
+
+          {/* ── Coluna direita: texto ──────────────────────────────────── */}
+          <div className="order-2 flex-1 text-center lg:order-1 lg:text-left">
             <span
               className="mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-widest"
               style={{
                 background: "rgba(91,87,232,0.18)",
                 color: "var(--primary)",
-                border: "1px solid rgba(91,87,232,0.3)",
+                border: "1px solid rgba(91,87,232,0.32)",
               }}
             >
               <i className="ti ti-gift" style={{ fontSize: 13 }} />
@@ -228,22 +245,27 @@ export default function Home() {
             </span>
 
             <h1
-              className="text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl xl:text-6xl"
+              className="text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl xl:text-6xl"
               style={{ color: "var(--text)", fontFamily: "var(--font-plus-jakarta), sans-serif" }}
             >
               Seu app sob medida,{" "}
-              <span style={{ color: "var(--primary)" }}>do jeito que você imaginou</span>
+              <span style={{ color: "var(--primary)" }}>
+                do jeito que você imaginou
+              </span>
             </h1>
 
-            <p className="mt-6 max-w-lg text-lg leading-relaxed" style={{ color: "var(--text-muted)" }}>
+            <p
+              className="mx-auto mt-6 max-w-lg text-lg leading-relaxed lg:mx-0"
+              style={{ color: "var(--text-muted)" }}
+            >
               Conte sua ideia e receba uma prévia real em forma de app, totalmente gratuita.
               Sem tecnicismo, sem complicação.
             </p>
 
-            <div className="mt-8 flex flex-wrap items-center gap-4">
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
               <QuoteButton
                 className="rounded-full px-8 py-4 text-base font-semibold text-white shadow-lg transition hover:brightness-110"
-                style={{ background: "var(--primary)", boxShadow: "0 8px 32px rgba(91,87,232,0.4)" }}
+                style={{ background: "var(--primary)", boxShadow: "0 8px 32px rgba(91,87,232,0.45)" }}
               >
                 Pedir orçamento grátis
                 <i className="ti ti-arrow-right ml-2" style={{ fontSize: 15 }} />
@@ -262,11 +284,11 @@ export default function Home() {
             </div>
 
             {/* Mini stats */}
-            <div className="mt-12 flex flex-wrap items-center gap-8">
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-6 lg:justify-start lg:gap-8">
               {[
-                { val: "R$0",    sub: "para começar",       icon: "ti-gift" },
-                { val: "3 dias", sub: "para ver a prévia",  icon: "ti-clock" },
-                { val: "100%",   sub: "personalizado",       icon: "ti-star" },
+                { val: "R$0",    sub: "para começar",      icon: "ti-gift"  },
+                { val: "3 dias", sub: "para ver a prévia", icon: "ti-clock" },
+                { val: "100%",   sub: "personalizado",      icon: "ti-star"  },
               ].map(({ val, sub, icon }) => (
                 <div key={val} className="flex items-center gap-3">
                   <i className={`ti ${icon}`} style={{ fontSize: 20, color: "var(--primary)" }} />
@@ -276,30 +298,6 @@ export default function Home() {
                   </div>
                 </div>
               ))}
-            </div>
-          </div>
-
-          {/* Coluna direita: GIF centralizado */}
-          <div
-            className="hidden flex-shrink-0 items-center justify-center lg:flex"
-            style={{ width: "44%" }}
-          >
-            <div
-              style={{
-                borderRadius: 24,
-                overflow: "hidden",
-                boxShadow: "0 24px 80px rgba(91,87,232,0.25), 0 0 0 1px rgba(91,87,232,0.15)",
-              }}
-            >
-              <Image
-                src="/hero.gif"
-                alt="Demo animada do app Fropty"
-                width={540}
-                height={540}
-                unoptimized
-                priority
-                style={{ width: "100%", height: "auto", display: "block" }}
-              />
             </div>
           </div>
         </div>
