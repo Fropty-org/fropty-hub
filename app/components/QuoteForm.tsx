@@ -71,7 +71,7 @@ export default function QuoteForm() {
           name="nome"
           type="text"
           required
-          className="mt-1 w-full rounded-lg border border-white/20 bg-[#0f172a] px-4 py-2 text-white placeholder-slate-500 transition duration-150 focus:border-[#5B57E8] focus:outline-none focus:ring-2 focus:ring-[#5B57E8]/25 focus:shadow-[0_0_0_4px_rgba(91,87,232,0.12)]"
+          className="mt-1 w-full rounded-lg border border-white/20 bg-[#0A093F] px-4 py-2 text-white placeholder-slate-500 transition duration-150 focus:border-[#5B57E8] focus:outline-none focus:ring-2 focus:ring-[#5B57E8]/25 focus:shadow-[0_0_0_4px_rgba(91,87,232,0.12)]"
         />
       </div>
 
@@ -84,7 +84,7 @@ export default function QuoteForm() {
           name="email"
           type="email"
           required
-          className="mt-1 w-full rounded-lg border border-white/20 bg-[#0f172a] px-4 py-2 text-white placeholder-slate-500 transition duration-150 focus:border-[#5B57E8] focus:outline-none focus:ring-2 focus:ring-[#5B57E8]/25 focus:shadow-[0_0_0_4px_rgba(91,87,232,0.12)]"
+          className="mt-1 w-full rounded-lg border border-white/20 bg-[#0A093F] px-4 py-2 text-white placeholder-slate-500 transition duration-150 focus:border-[#5B57E8] focus:outline-none focus:ring-2 focus:ring-[#5B57E8]/25 focus:shadow-[0_0_0_4px_rgba(91,87,232,0.12)]"
         />
       </div>
 
@@ -97,7 +97,7 @@ export default function QuoteForm() {
           name="ideia"
           required
           rows={4}
-          className="mt-1 w-full rounded-lg border border-white/20 bg-[#0f172a] px-4 py-2 text-white placeholder-slate-500 transition duration-150 focus:border-[#5B57E8] focus:outline-none focus:ring-2 focus:ring-[#5B57E8]/25 focus:shadow-[0_0_0_4px_rgba(91,87,232,0.12)]"
+          className="mt-1 w-full rounded-lg border border-white/20 bg-[#0A093F] px-4 py-2 text-white placeholder-slate-500 transition duration-150 focus:border-[#5B57E8] focus:outline-none focus:ring-2 focus:ring-[#5B57E8]/25 focus:shadow-[0_0_0_4px_rgba(91,87,232,0.12)]"
         />
       </div>
 
@@ -110,14 +110,14 @@ export default function QuoteForm() {
           name="temLogo"
           required
           defaultValue=""
-          className="mt-1 w-full rounded-lg border border-white/20 bg-[#0f172a] px-4 py-2 text-white focus:border-[#5B57E8] focus:outline-none focus:ring-2 focus:ring-[#5B57E8]/30"
+          className="mt-1 w-full rounded-lg border border-white/20 bg-[#0A093F] px-4 py-2 text-white focus:border-[#5B57E8] focus:outline-none focus:ring-2 focus:ring-[#5B57E8]/30"
         >
           <option value="" disabled className="text-slate-500">
             Selecione uma opção
           </option>
-          <option value="sim" className="text-white bg-[#0f172a]">Sim, já tenho</option>
-          <option value="nao" className="text-white bg-[#0f172a]">Não, preciso de um</option>
-          <option value="em-andamento" className="text-white bg-[#0f172a]">Estou criando</option>
+          <option value="sim" className="text-white bg-[#0A093F]">Sim, já tenho</option>
+          <option value="nao" className="text-white bg-[#0A093F]">Não, preciso de um</option>
+          <option value="em-andamento" className="text-white bg-[#0A093F]">Estou criando</option>
         </select>
       </div>
 
@@ -129,7 +129,7 @@ export default function QuoteForm() {
           id="cores"
           name="cores"
           type="text"
-          className="mt-1 w-full rounded-lg border border-white/20 bg-[#0f172a] px-4 py-2 text-white placeholder-slate-500 transition duration-150 focus:border-[#5B57E8] focus:outline-none focus:ring-2 focus:ring-[#5B57E8]/25 focus:shadow-[0_0_0_4px_rgba(91,87,232,0.12)]"
+          className="mt-1 w-full rounded-lg border border-white/20 bg-[#0A093F] px-4 py-2 text-white placeholder-slate-500 transition duration-150 focus:border-[#5B57E8] focus:outline-none focus:ring-2 focus:ring-[#5B57E8]/25 focus:shadow-[0_0_0_4px_rgba(91,87,232,0.12)]"
           placeholder="Ex: azul e branco, tema escuro, moderno..."
         />
       </div>

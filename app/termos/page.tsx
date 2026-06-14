@@ -17,7 +17,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export default function TermosPage() {
   return (
-    <div className="min-h-screen" style={{ background: "#080e1c" }}>
+    <div className="min-h-screen" style={{ background: "#040316" }}>
 
       {/* Header */}
       <header className="sticky top-0 z-40 border-b border-white/5 backdrop-blur"

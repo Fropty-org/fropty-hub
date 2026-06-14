@@ -47,7 +47,7 @@ export function OficinaDesktop() {
 
   return (
     <div style={{ flex: 1, display: "flex", fontFamily: "system-ui, sans-serif", overflow: "hidden", position: "relative" }}>
-      <div style={{ width: 96, background: "#1e293b", display: "flex", flexDirection: "column", padding: "10px 0", flexShrink: 0 }}>
+      <div style={{ width: 96, background: "#181490", display: "flex", flexDirection: "column", padding: "10px 0", flexShrink: 0 }}>
         <div style={{ padding: "0 10px 10px", borderBottom: "1px solid #334155", marginBottom: 6 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: "#fff" }}>🔧 Oficina</div>
           <div style={{ fontSize: 9, color: "#64748b" }}>do Zé</div>
@@ -68,7 +68,7 @@ export function OficinaDesktop() {
       </div>
 
       <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
-        <div style={{ background: "#1e293b", padding: "8px 12px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
+        <div style={{ background: "#181490", padding: "8px 12px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: "#fff" }}>
             {activeNav === "os" ? "Ordens de Serviço" : activeNav === "pecas" ? "Estoque de Peças" : "Clientes"}
           </div>

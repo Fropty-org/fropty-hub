@@ -25,7 +25,7 @@ export function QuoteButton({
         >
           <div
             className="relative w-full max-w-xl rounded-2xl border border-white/10 p-8 shadow-2xl"
-            style={{ background: "#1e293b" }}
+            style={{ background: "#181490" }}
             onClick={(e) => e.stopPropagation()}
           >
             <button

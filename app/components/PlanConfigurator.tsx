@@ -297,7 +297,7 @@ export default function PlanConfigurator({ onSubmit }: Props) {
 
         {/* RIGHT COLUMN — Summary + Form */}
         <div className="w-full lg:flex-1 lg:sticky" style={{ top: 24 }}>
-          <div style={{ background: "#0f172a", borderRadius: 16, padding: "22px 24px", color: "#fff" }}>
+          <div style={{ background: "#0A093F", borderRadius: 16, padding: "22px 24px", color: "#fff" }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: "#94a3b8", marginBottom: 14 }}>Resumo do seu plano</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
               <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13 }}>
@@ -361,7 +361,7 @@ export default function PlanConfigurator({ onSubmit }: Props) {
                 onChange={e => setName(e.target.value)}
                 placeholder="Seu nome"
                 className="transition duration-150 focus:border-[#5B57E8] focus:ring-2 focus:ring-[#5B57E8]/25 focus:shadow-[0_0_0_4px_rgba(91,87,232,0.12)]"
-                style={{ background: "#1e293b", border: "1px solid #334155", borderRadius: 10, padding: "10px 14px", color: "#fff", fontSize: 13, fontFamily: "system-ui", outline: "none" }}
+                style={{ background: "#181490", border: "1px solid #334155", borderRadius: 10, padding: "10px 14px", color: "#fff", fontSize: 13, fontFamily: "system-ui", outline: "none" }}
               />
               <input
                 value={email}
@@ -369,7 +369,7 @@ export default function PlanConfigurator({ onSubmit }: Props) {
                 placeholder="Seu e-mail"
                 type="email"
                 className="transition duration-150 focus:border-[#5B57E8] focus:ring-2 focus:ring-[#5B57E8]/25 focus:shadow-[0_0_0_4px_rgba(91,87,232,0.12)]"
-                style={{ background: "#1e293b", border: "1px solid #334155", borderRadius: 10, padding: "10px 14px", color: "#fff", fontSize: 13, fontFamily: "system-ui", outline: "none" }}
+                style={{ background: "#181490", border: "1px solid #334155", borderRadius: 10, padding: "10px 14px", color: "#fff", fontSize: 13, fontFamily: "system-ui", outline: "none" }}
               />
               <button
                 onClick={handleSubmit}

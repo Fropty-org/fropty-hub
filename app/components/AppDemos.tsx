@@ -19,7 +19,7 @@ export default function AppDemos() {
       style={{
         padding: "56px 16px",
         scrollMarginTop: "80px",
-        background: "#111c30",
+        background: "#110E67",
         fontFamily: "system-ui, -apple-system, sans-serif",
       }}
     >

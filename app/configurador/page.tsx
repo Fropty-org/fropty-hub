@@ -26,7 +26,7 @@ export default function ConfiguradorPage() {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: "#080e1c" }}>
+    <div className="min-h-screen" style={{ background: "#040316" }}>
 
       {/* Glow de fundo */}
       <div

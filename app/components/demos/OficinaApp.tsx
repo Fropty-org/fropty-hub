@@ -53,7 +53,7 @@ export function OficinaApp() {
       }} onClick={() => setSidebarOpen(false)} />
       <div style={{
         position: "absolute", left: 0, top: 0, bottom: 0,
-        width: 180, background: "#1e293b", zIndex: 30,
+        width: 180, background: "#181490", zIndex: 30,
         transform: sidebarOpen ? "translateX(0)" : "translateX(-100%)",
         transition: "transform 0.3s cubic-bezier(0.4,0,0.2,1)",
         padding: "16px 0",
@@ -71,7 +71,7 @@ export function OficinaApp() {
         )))}
       </div>
 
-      <div style={{ background: "#1e293b", padding: "8px 12px", display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+      <div style={{ background: "#181490", padding: "8px 12px", display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
         <div onClick={() => setSidebarOpen(true)} style={{ cursor: "pointer", display: "flex", flexDirection: "column", gap: 3, padding: 4 }}>
           {([0,1,2] as number[]).map(i => <div key={i} style={{ width: 16, height: 2, background: "#fff", borderRadius: 1 }} />)}
         </div>
@@ -145,7 +145,7 @@ export function OficinaApp() {
 
       <Toast visible={toast.visible} message={toast.message} color="#f59e0b" />
 
-      <div style={{ height: 50, background: "#1e293b", display: "flex", alignItems: "center", justifyContent: "space-around", flexShrink: 0 }}>
+      <div style={{ height: 50, background: "#181490", display: "flex", alignItems: "center", justifyContent: "space-around", flexShrink: 0 }}>
         {(([["📋","OS"],["🔩","Peças"],["👥","Clientes"],["📊","Stats"]] as [string,string][]).map(([icon, label]) => (
           <div key={label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
             <span style={{ fontSize: 16 }}>{icon}</span>

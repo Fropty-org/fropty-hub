@@ -7,7 +7,7 @@ export default function FaqAccordion({ faqs }: { faqs: Faq[] }) {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
-    <div className="mt-10 divide-y divide-white/10 rounded-2xl border border-white/10 bg-[#111c30]">
+    <div className="mt-10 divide-y divide-white/10 rounded-2xl border border-white/10 bg-[#110E67]">
       {faqs.map((faq, i) => (
         <div key={faq.q}>
           <button

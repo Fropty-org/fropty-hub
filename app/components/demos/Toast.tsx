@@ -6,7 +6,7 @@ export function Toast({ message, visible, color = "#22c55e" }: { message?: strin
   return (
     <div style={{
       position: "absolute", bottom: 20, left: 12, right: 12,
-      background: "#1e293b", color: "#fff",
+      background: "#181490", color: "#fff",
       borderRadius: 12, padding: "10px 14px",
       display: "flex", alignItems: "center", gap: 8,
       fontSize: 12, fontWeight: 500,

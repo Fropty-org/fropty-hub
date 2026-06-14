@@ -12,10 +12,18 @@
   --brand-500: #5B57E8;
   --brand-600: #251FE0;
   --brand-700: #1E19B8;
+  --brand-800: #181490;
+  --brand-900: #110E67;
+  --brand-950: #0A093F;
+  --brand-black: #040316;
 
   /* ── Aliases semânticos ───────────────────────────────────────── */
-  --color-primary:   var(--brand-500);   /* #5B57E8 */
-  --color-primary-dark: var(--brand-700); /* #1E19B8 */
+  --color-primary:      var(--brand-500);   /* #5B57E8 */
+  --color-primary-dark: var(--brand-700);   /* #1E19B8 */
+  --color-surface:      var(--brand-800);   /* #181490 */
+  --color-surface-alt:  var(--brand-900);   /* #110E67 */
+  --color-bg:           var(--brand-950);   /* #0A093F */
+  --color-bg-deep:      var(--brand-black); /* #040316 */
   --color-accent:    #EF9F27;
 }
 

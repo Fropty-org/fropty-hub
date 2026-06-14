@@ -6,11 +6,11 @@ import { plans, faqs, previewAddons } from "./lib/data/plans";
 
 export default function Home() {
   return (
-    <main className="min-h-screen text-slate-300" style={{ background: "#0f172a" }}>
+    <main className="min-h-screen text-slate-300" style={{ background: "#0A093F" }}>
 
       {/* Navbar */}
       <header className="sticky top-0 z-40 border-b border-white/10 backdrop-blur"
-        style={{ background: "rgba(15,23,42,0.9)" }}
+        style={{ background: "rgba(10,9,63,0.9)" }}
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <span className="text-lg font-bold tracking-tight text-white">
@@ -48,7 +48,7 @@ export default function Home() {
       </section>
 
       {/* Métricas */}
-      <section className="border-y border-white/10" style={{ background: "#111c30" }}>
+      <section className="border-y border-white/10" style={{ background: "#110E67" }}>
         <div className="mx-auto grid max-w-4xl grid-cols-3 gap-4 px-6 py-10 text-center">
           <div>
             <p className="text-2xl font-bold text-white sm:text-3xl">R$0</p>
@@ -80,7 +80,7 @@ export default function Home() {
               className={`relative flex flex-col rounded-2xl p-8 transition-all duration-200 hover:scale-[1.03] ${
                 plan.highlight
                   ? "border border-[#5B57E8] bg-[#5B57E8] shadow-2xl shadow-[#1E19B8]/30 hover:shadow-[0_20px_40px_rgba(91,87,232,0.45)]"
-                  : "border border-white/10 bg-[#1e293b] hover:border-[#5B57E8]/40 hover:shadow-[0_16px_32px_rgba(0,0,0,0.4)]"
+                  : "border border-white/10 bg-[#181490] hover:border-[#5B57E8]/40 hover:shadow-[0_16px_32px_rgba(0,0,0,0.4)]"
               }`}
             >
               {plan.badge && (
@@ -161,7 +161,7 @@ export default function Home() {
         <Link href="/configurador" className="group mt-10 block">
           <div
             className="relative overflow-hidden rounded-2xl p-8 ring-1 ring-white/10 transition hover:ring-[#5B57E8] hover:shadow-2xl hover:shadow-[#1E19B8]/20 sm:p-10"
-            style={{ background: "#0f172a" }}
+            style={{ background: "#0A093F" }}
           >
             <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full blur-3xl"
               style={{ background: "rgba(91,87,232,0.2)" }} />
@@ -185,14 +185,14 @@ export default function Home() {
                 <div className="mt-5 flex flex-wrap gap-2">
                   {previewAddons.map(({ icon, label }) => (
                     <span key={icon} className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm text-slate-300"
-                      style={{ borderColor: "#334155", background: "#1e293b" }}
+                      style={{ borderColor: "#334155", background: "#181490" }}
                     >
                       <i className={`ti ti-${icon} text-[#5B57E8]`} />
                       {label}
                     </span>
                   ))}
                   <span className="inline-flex items-center rounded-lg border px-3 py-1.5 text-sm text-slate-500"
-                    style={{ borderColor: "#334155", background: "#1e293b" }}
+                    style={{ borderColor: "#334155", background: "#181490" }}
                   >
                     +4 mais
                   </span>
@@ -218,7 +218,7 @@ export default function Home() {
       <AppDemos />
 
       {/* Tokens */}
-      <section id="tokens" className="scroll-mt-20 border-y border-white/10" style={{ background: "#111c30" }}>
+      <section id="tokens" className="scroll-mt-20 border-y border-white/10" style={{ background: "#110E67" }}>
         <div className="mx-auto max-w-4xl px-6 py-20 text-center">
           <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
             Como funcionam os tokens?
@@ -233,21 +233,21 @@ export default function Home() {
             funcionando.
           </p>
           <div className="mt-12 grid gap-6 sm:grid-cols-3">
-            <div className="rounded-2xl border border-white/10 bg-[#1e293b] p-6">
+            <div className="rounded-2xl border border-white/10 bg-[#181490] p-6">
               <i className="ti ti-ticket text-3xl text-[#5B57E8]" />
               <h3 className="mt-3 font-semibold text-white">Básico: 4 · Pro: 8</h3>
               <p className="mt-1 text-sm text-slate-400">
                 Todo mês você recebe tokens novos conforme seu plano.
               </p>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-[#1e293b] p-6">
+            <div className="rounded-2xl border border-white/10 bg-[#181490] p-6">
               <i className="ti ti-hourglass text-3xl text-[#5B57E8]" />
               <h3 className="mt-3 font-semibold text-white">Não acumulam</h3>
               <p className="mt-1 text-sm text-slate-400">
                 Tokens não usados expiram no fim do mês. Use sem medo.
               </p>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-[#1e293b] p-6">
+            <div className="rounded-2xl border border-white/10 bg-[#181490] p-6">
               <i className="ti ti-tool text-3xl text-[#5B57E8]" />
               <h3 className="mt-3 font-semibold text-white">Suporte e ajustes</h3>
               <p className="mt-1 text-sm text-slate-400">
@@ -279,7 +279,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/10 py-8 text-center text-sm text-slate-500" style={{ background: "#111c30" }}>
+      <footer className="border-t border-white/10 py-8 text-center text-sm text-slate-500" style={{ background: "#110E67" }}>
         <p>© 2026 Fropty Apps</p>
         <div className="mt-2 flex items-center justify-center gap-4">
           <Link href="/termos" className="hover:text-slate-300 transition">Termos de Uso</Link>
