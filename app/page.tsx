@@ -191,6 +191,110 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Como funciona ───────────────────────────────────────────── */}
+      <section className="mx-auto max-w-6xl scroll-mt-20 px-6 py-20">
+        <div className="mb-3 flex justify-center">
+          <span className="section-chip">
+            <i className="ti ti-route" /> Como funciona
+          </span>
+        </div>
+        <h2
+          className="text-center font-bold tracking-tight"
+          style={{
+            color: "var(--text)",
+            fontFamily: "var(--font-plus-jakarta), sans-serif",
+            fontSize: "clamp(2rem, 5vw, 3rem)",
+            lineHeight: 1.1,
+            marginBottom: 56,
+          }}
+        >
+          Do ideia ao app em 4 passos
+        </h2>
+
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            {
+              step: "01",
+              icon: "ti-message-2",
+              title: "Conta sua ideia",
+              body: "Você preenche um formulário simples descrevendo o que o seu app precisa fazer. Sem necessidade de conhecimento técnico.",
+            },
+            {
+              step: "02",
+              icon: "ti-eye",
+              title: "Recebe a prévia",
+              body: "Em até 3 dias úteis, você recebe um link com as telas principais do seu app funcionando no navegador. Totalmente gratuito.",
+            },
+            {
+              step: "03",
+              icon: "ti-circle-check",
+              title: "Aprova e paga",
+              body: "Gostou? O app completo sai a partir de R$ 499. Não gostou? Sem cobranças, sem burocracia.",
+            },
+            {
+              step: "04",
+              icon: "ti-rocket",
+              title: "App no ar",
+              body: "Seu app é desenvolvido, testado e publicado. Você acompanha tudo e mantém com tokens de suporte.",
+            },
+          ].map(({ step, icon, title, body }, i) => (
+            <div key={step} className="relative flex flex-col gap-4">
+              {/* Connector line (hidden on last) */}
+              {i < 3 && (
+                <div
+                  className="absolute left-[calc(50%+24px)] top-[22px] hidden h-px lg:block"
+                  style={{
+                    width: "calc(100% - 0px)",
+                    background: "linear-gradient(to right, var(--border), transparent)",
+                  }}
+                />
+              )}
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 16 }}>
+                <div style={{ position: "relative" }}>
+                  <div
+                    style={{
+                      width: 52,
+                      height: 52,
+                      borderRadius: "50%",
+                      background: "rgba(91,87,232,0.15)",
+                      border: "1px solid rgba(91,87,232,0.25)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <i className={`ti ${icon}`} style={{ fontSize: 24, color: "var(--primary)" }} />
+                  </div>
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: -6,
+                      right: -6,
+                      width: 20,
+                      height: 20,
+                      borderRadius: "50%",
+                      background: "var(--primary)",
+                      color: "#fff",
+                      fontSize: "9px",
+                      fontWeight: 800,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {step}
+                  </span>
+                </div>
+                <div>
+                  <h3 className="font-bold" style={{ color: "var(--text)", marginBottom: 6 }}>{title}</h3>
+                  <p className="text-sm leading-relaxed" style={{ color: "var(--text-muted)" }}>{body}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* ── Planos ──────────────────────────────────────────────────── */}
       <section id="planos" className="mx-auto max-w-6xl scroll-mt-20 px-6 py-20">
         <div className="mb-3 flex justify-center">
@@ -469,6 +573,58 @@ export default function Home() {
           Dúvidas? A gente responde
         </h2>
         <FaqAccordion faqs={faqs} />
+      </section>
+
+      {/* ── Prova social ────────────────────────────────────────────── */}
+      <section className="mx-auto max-w-6xl px-6 py-20">
+        <div className="mb-3 flex justify-center">
+          <span className="section-chip">
+            <i className="ti ti-chart-bar" /> Resultados
+          </span>
+        </div>
+        <h2
+          className="text-center font-bold tracking-tight"
+          style={{
+            color: "var(--text)",
+            fontFamily: "var(--font-plus-jakarta), sans-serif",
+            fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
+            lineHeight: 1.1,
+            marginBottom: 48,
+          }}
+        >
+          Números que falam por si
+        </h2>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            { value: "R$ 0",    label: "para ver a prévia",       icon: "ti-gift",          color: "#22c55e" },
+            { value: "3 dias",  label: "para prévia ficar pronta", icon: "ti-clock",         color: "var(--primary)" },
+            { value: "R$ 499",  label: "app completo a partir de", icon: "ti-rocket",        color: "#EF9F27" },
+            { value: "50%",     label: "de economia nos tokens",   icon: "ti-piggy-bank",    color: "#a855f7" },
+          ].map(({ value, label, icon, color }) => (
+            <div
+              key={label}
+              className="flex flex-col items-center rounded-2xl p-8 text-center"
+              style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)" }}
+            >
+              <div
+                style={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: 14,
+                  background: `${color}22`,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginBottom: 16,
+                }}
+              >
+                <i className={`ti ${icon}`} style={{ fontSize: 24, color }} />
+              </div>
+              <p className="text-3xl font-extrabold" style={{ color: "var(--text)", lineHeight: 1 }}>{value}</p>
+              <p className="mt-2 text-sm" style={{ color: "var(--text-muted)" }}>{label}</p>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* ── CTA final ───────────────────────────────────────────────── */}

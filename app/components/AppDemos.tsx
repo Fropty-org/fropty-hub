@@ -19,30 +19,30 @@ export default function AppDemos() {
       style={{
         padding: "56px 16px",
         scrollMarginTop: "80px",
-        background: "#110E67",
+        background: "var(--surface)",
         fontFamily: "system-ui, -apple-system, sans-serif",
       }}
     >
       <div style={{ textAlign: "center", marginBottom: 32 }}>
-        <div style={{ fontSize: 12, fontWeight: 600, color: "#5B57E8", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8 }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: "var(--primary)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8 }}>
           Exemplos reais
         </div>
-        <h2 style={{ fontSize: 28, fontWeight: 700, color: "#fff", margin: "0 0 8px" }}>
+        <h2 style={{ fontSize: 28, fontWeight: 700, color: "var(--text)", margin: "0 0 8px" }}>
           Veja o que é possível
         </h2>
-        <p style={{ fontSize: 15, color: "#64748b", maxWidth: 460, margin: "0 auto" }}>
+        <p style={{ fontSize: 15, color: "var(--text-muted)", maxWidth: 460, margin: "0 auto" }}>
           Apps reais para negócios reais — do seu jeito, com a sua cara.
         </p>
       </div>
 
       <div style={{ display: "flex", justifyContent: "center", marginBottom: 44 }}>
-        <div style={{ position: "relative", display: "inline-flex", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+        <div style={{ position: "relative", display: "inline-flex", borderBottom: "1px solid var(--border)" }}>
           <button
             onClick={() => setView("mobile")}
             style={{
               padding: "8px 28px",
               background: "none", border: "none", cursor: "pointer",
-              color: view === "mobile" ? "#fff" : "#64748b",
+              color: view === "mobile" ? "var(--text)" : "var(--text-muted)",
               fontWeight: view === "mobile" ? 500 : 400,
               fontSize: 14,
               transition: "color 0.2s",
@@ -55,7 +55,7 @@ export default function AppDemos() {
             style={{
               padding: "8px 28px",
               background: "none", border: "none", cursor: "pointer",
-              color: view === "desktop" ? "#fff" : "#64748b",
+              color: view === "desktop" ? "var(--text)" : "var(--text-muted)",
               fontWeight: view === "desktop" ? 500 : 400,
               fontSize: 14,
               transition: "color 0.2s",
@@ -69,7 +69,7 @@ export default function AppDemos() {
             left: view === "mobile" ? 0 : "50%",
             width: "50%",
             height: 2,
-            background: "#5B57E8",
+            background: "var(--primary)",
             borderRadius: 1,
             transition: "left 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
           }} />
