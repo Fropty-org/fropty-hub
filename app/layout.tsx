@@ -106,10 +106,6 @@ export default function RootLayout({
     <html lang="pt-BR" data-theme="dark">
       <head>
         <link rel="icon" type="image/png" href="/logo-icon.png" />
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaOrg) }}

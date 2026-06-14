@@ -1,67 +1,61 @@
-import { NextResponse } from "next/server";
-import { Resend } from "resend";
+import { NextRequest, NextResponse } from "next/server";
+import { submitQuote } from "@/app/actions/submitQuote";
 
-export async function POST(request: Request) {
-  const contactEmail = process.env.CONTACT_EMAIL;
-  const resendApiKey = process.env.RESEND_API_KEY;
+// Simple in-process rate limiter: max 5 requests per IP per 60s
+// (resets on cold start — acceptable for serverless)
+const rateMap = new Map<string, { count: number; reset: number }>();
 
-  if (!contactEmail || !resendApiKey) {
+function checkRate(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateMap.get(ip);
+  if (!entry || now > entry.reset) {
+    rateMap.set(ip, { count: 1, reset: now + 60_000 });
+    return true;
+  }
+  if (entry.count >= 5) return false;
+  entry.count++;
+  return true;
+}
+
+export async function POST(request: NextRequest) {
+  const ip =
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    "unknown";
+
+  if (!checkRate(ip)) {
     return NextResponse.json(
-      { error: "Configuração de email ausente no servidor." },
-      { status: 500 }
+      { error: "Muitas requisições. Aguarde um momento e tente novamente." },
+      { status: 429 }
     );
   }
 
-  let body: {
-    nome?: string;
-    email?: string;
-    ideia?: string;
-    temLogo?: string;
-    cores?: string;
-    prioridades?: string[];
-  };
-
+  let body: Record<string, unknown>;
   try {
     body = await request.json();
   } catch {
     return NextResponse.json({ error: "JSON inválido." }, { status: 400 });
   }
 
-  const { nome, email, ideia, temLogo, cores, prioridades } = body;
-
-  if (!nome || !email || !ideia) {
-    return NextResponse.json(
-      { error: "Nome, email e ideia são obrigatórios." },
-      { status: 400 }
-    );
+  // Honeypot: bots fill this hidden field
+  if (body.website) {
+    return NextResponse.json({ ok: true }); // silent reject
   }
 
-  const resend = new Resend(resendApiKey);
-
-  const { error } = await resend.emails.send({
-    from: "Fropty Apps <onboarding@resend.dev>",
-    to: contactEmail,
-    replyTo: email,
-    subject: `Novo pedido de orçamento — ${nome}`,
-    text: [
-      `Nome: ${nome}`,
-      `Email: ${email}`,
-      `Ideia do app: ${ideia}`,
-      `Tem logo: ${temLogo || "não informado"}`,
-      `Cores/tema: ${cores || "não informado"}`,
-      `Prioridades: ${
-        prioridades && prioridades.length > 0
-          ? prioridades.join(", ")
-          : "não informado"
-      }`,
-    ].join("\n"),
+  const result = await submitQuote({
+    nome: body.nome as string,
+    email: body.email as string,
+    ideia: body.ideia as string,
+    temLogo: body.temLogo as string | undefined,
+    cores: body.cores as string | undefined,
+    prioridades: body.prioridades as string[] | undefined,
   });
 
-  if (error) {
-    return NextResponse.json(
-      { error: "Falha ao enviar o email." },
-      { status: 502 }
-    );
+  if (!result.ok) {
+    const status =
+      result.error.includes("obrigatórios") || result.error.includes("inválido")
+        ? 400
+        : 502;
+    return NextResponse.json({ error: result.error }, { status });
   }
 
   return NextResponse.json({ ok: true });

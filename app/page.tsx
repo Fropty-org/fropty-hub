@@ -1,10 +1,20 @@
 import Link from "next/link";
 import Image from "next/image";
-import AppDemos from "./components/AppDemos";
+import dynamic from "next/dynamic";
 import FaqAccordion from "./components/FaqAccordion";
 import { QuoteButton } from "./components/QuoteModal";
 import { ThemeToggle } from "./components/ThemeToggle";
+import { MobileNav } from "./components/MobileNav";
+import { Footer } from "./components/Footer";
 import { plans, faqs, previewAddons } from "./lib/data/plans";
+
+const AppDemos = dynamic(() => import("./components/AppDemos"), {
+  loading: () => (
+    <div style={{ height: 400, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-faint)" }}>
+      <i className="ti ti-loader-2 text-3xl" style={{ animation: "spin 1s linear infinite" }} />
+    </div>
+  ),
+});
 
 export default function Home() {
   return (
@@ -39,11 +49,12 @@ export default function Home() {
             <ThemeToggle />
             <Link
               href="/configurador"
-              className="rounded-full px-5 py-2 text-sm font-semibold text-white transition hover:brightness-110"
+              className="hidden rounded-full px-5 py-2 text-sm font-semibold text-white transition hover:brightness-110 sm:inline-flex"
               style={{ background: "var(--primary)" }}
             >
               Orçamento grátis
             </Link>
+            <MobileNav />
           </div>
         </div>
       </header>
@@ -475,6 +486,8 @@ export default function Home() {
           </QuoteButton>
         </div>
       </section>
+
+      <Footer />
 
     </main>
   );
