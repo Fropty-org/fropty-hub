@@ -1,11 +1,12 @@
-﻿{
+{
   "version": "0.0.1",
   "configurations": [
     {
       "name": "fropty-dev",
-      "runtimeExecutable": "C:\\Claude\\Code\\Projetos\\Fropty Apps\\fropty-com\\node_modules\\.bin\\next.cmd",
-      "runtimeArgs": ["dev", "--turbopack"],
-      "port": 3000
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000,
+      "cwd": "C:\\Claude\\Code\\Projetos\\Fropty Apps\\fropty-com"
     }
   ]
 }

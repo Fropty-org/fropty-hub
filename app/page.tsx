@@ -107,6 +107,24 @@ const SEGMENTS_ROW_1 = [
   { icon: "ti-sparkles",      label: "Spas e Estética" },
 ];
 
+const TESTIMONIALS_ROW_1 = [
+  { name: "Rafael S.", role: "Diretor Comercial", company: "Snider Studios", avatar: "R", color: "#5B57E8", quote: "O resultado superou todas as expectativas. O site ficou moderno, rápido e os leads começaram a chegar já na primeira semana após o lançamento." },
+  { name: "Marcos T.", role: "Empreendedor", company: "Imobiliário", avatar: "M", color: "#0ea5e9", quote: "Profissionalismo do começo ao fim. Cumpriram o prazo, explicaram cada etapa e entregaram muito além do que foi combinado. Recomendo sem hesitar." },
+  { name: "Camila R.", role: "Gestora", company: "Lançamento Imobiliário", avatar: "C", color: "#ec4899", quote: "A landing page converteu muito bem. O formulário em etapas qualificou exatamente os leads que a gente precisava. Parceria que pretendo continuar." },
+  { name: "Fernando A.", role: "Sócio", company: "Incorporadora", avatar: "F", color: "#10b981", quote: "Atendimento rápido e muito competente. Resolveram tudo que precisávamos: site, domínio, e-mail e integração com as ferramentas de marketing." },
+  { name: "Juliana M.", role: "Fundadora", company: "E-commerce", avatar: "J", color: "#f59e0b", quote: "Entregaram no prazo prometido e com qualidade acima do esperado. Já indiquei para outros empreendedores e todos ficaram satisfeitos." },
+  { name: "Bruno C.", role: "CEO", company: "Consultoria", avatar: "B", color: "#7c3aed", quote: "Finalmente um site que parece profissional de verdade. A velocidade e o SEO estão ótimos. Minha presença online melhorou muito." },
+];
+
+const TESTIMONIALS_ROW_2 = [
+  { name: "Ana L.", role: "Proprietária", company: "Clínica Estética", avatar: "A", color: "#ec4899", quote: "O app de agendamento transformou meu negócio. Reduzi o no-show em 60% com as confirmações automáticas. Simplesmente incrível." },
+  { name: "Pedro V.", role: "Gerente", company: "Auto Peças MVC", avatar: "P", color: "#f59e0b", quote: "O sistema de ordem de serviço ficou exatamente como eu precisava. Minha equipe se adaptou rapidinho e a produtividade subiu muito." },
+  { name: "Thais O.", role: "Diretora", company: "Escola de Idiomas", avatar: "T", color: "#0ea5e9", quote: "A plataforma EAD ficou linda e funcional. Os alunos amaram e as matrículas online aumentaram 40% no primeiro mês." },
+  { name: "Rodrigo N.", role: "Advogado", company: "Escritório Nunes", avatar: "R", color: "#5B57E8", quote: "Site institucional impecável. Clientes chegam comentando que o site passa muita credibilidade. Valeu cada centavo investido." },
+  { name: "Carla M.", role: "Personal Trainer", company: "Studio Fit", avatar: "C", color: "#10b981", quote: "O app de agendamento de treinos ficou perfeito. Consigo gerenciar todos os meus alunos em um lugar só. Super recomendo!" },
+  { name: "Eduardo K.", role: "Sócio", company: "Imobiliária Klass", avatar: "E", color: "#7c3aed", quote: "Migramos do site antigo para o novo em tempo recorde. A equipe foi super atenciosa e o resultado ficou bem acima do esperado." },
+];
+
 const SEGMENTS_ROW_2 = [
   { icon: "ti-briefcase",    label: "Agências e Consultorias" },
   { icon: "ti-ruler",        label: "Engenharia e Arquitetura" },
@@ -285,6 +303,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ══ Wrapper com dot-grid bg (tudo após a hero) ═══════════════ */}
+      <div className="dot-bg">
 
       {/* ── Marquee strip ───────────────────────────────────────────── */}
       <div
@@ -739,6 +760,106 @@ export default function Home() {
         </Link>
       </section>
 
+      {/* ── Depoimentos ─────────────────────────────────────────────── */}
+      <section className="scroll-mt-20 py-20 overflow-hidden">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="mb-3 flex justify-center">
+            <span className="section-chip">
+              <i className="ti ti-quote" /> Depoimentos
+            </span>
+          </div>
+          <h2
+            className="text-center font-bold tracking-tight"
+            style={{
+              color: "var(--text)",
+              fontFamily: "var(--font-plus-jakarta), sans-serif",
+              fontSize: "clamp(1.75rem, 4vw, 3rem)",
+              lineHeight: 1.1,
+              marginBottom: 48,
+            }}
+          >
+            O que nossos <span style={{ color: "var(--primary)" }}>clientes</span> dizem
+          </h2>
+        </div>
+
+        {/* Faixa 1 */}
+        <div aria-label="Depoimentos de clientes" className="overflow-hidden mb-4">
+          <div className="animate-marquee flex gap-4 whitespace-nowrap" style={{ width: "max-content", animationDuration: "42s" }}>
+            {[...TESTIMONIALS_ROW_1, ...TESTIMONIALS_ROW_1].map((t, i) => (
+              <div
+                key={i}
+                style={{
+                  flexShrink: 0, width: 300,
+                  background: "var(--card-bg)",
+                  border: "1px solid var(--card-border)",
+                  borderRadius: 16, padding: "18px 20px",
+                  display: "flex", flexDirection: "column", gap: 12,
+                  whiteSpace: "normal",
+                }}
+              >
+                <div style={{ display: "flex", gap: 2 }}>
+                  {[1,2,3,4,5].map(s => <span key={s} style={{ color: "#f59e0b", fontSize: 13 }}>★</span>)}
+                </div>
+                <p style={{ fontSize: 12, color: "var(--text-muted)", lineHeight: 1.6, margin: 0 }}>
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: "auto" }}>
+                  <div style={{
+                    width: 34, height: 34, borderRadius: "50%", flexShrink: 0,
+                    background: t.color, display: "flex", alignItems: "center",
+                    justifyContent: "center", fontSize: 13, fontWeight: 700, color: "#fff",
+                  }}>{t.avatar}</div>
+                  <div>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: "var(--text)" }}>{t.name}</div>
+                    <div style={{ fontSize: 10, color: "var(--text-faint)" }}>{t.role} · {t.company}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Faixa 2 — invertida */}
+        <div aria-hidden="true" className="overflow-hidden">
+          <div
+            className="flex gap-4 whitespace-nowrap"
+            style={{ width: "max-content", animation: "marquee 48s linear infinite reverse" }}
+          >
+            {[...TESTIMONIALS_ROW_2, ...TESTIMONIALS_ROW_2].map((t, i) => (
+              <div
+                key={i}
+                style={{
+                  flexShrink: 0, width: 300,
+                  background: "var(--card-bg)",
+                  border: "1px solid var(--card-border)",
+                  borderRadius: 16, padding: "18px 20px",
+                  display: "flex", flexDirection: "column", gap: 12,
+                  whiteSpace: "normal",
+                }}
+              >
+                <div style={{ display: "flex", gap: 2 }}>
+                  {[1,2,3,4,5].map(s => <span key={s} style={{ color: "#f59e0b", fontSize: 13 }}>★</span>)}
+                </div>
+                <p style={{ fontSize: 12, color: "var(--text-muted)", lineHeight: 1.6, margin: 0 }}>
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: "auto" }}>
+                  <div style={{
+                    width: 34, height: 34, borderRadius: "50%", flexShrink: 0,
+                    background: t.color, display: "flex", alignItems: "center",
+                    justifyContent: "center", fontSize: 13, fontWeight: 700, color: "#fff",
+                  }}>{t.avatar}</div>
+                  <div>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: "var(--text)" }}>{t.name}</div>
+                    <div style={{ fontSize: 10, color: "var(--text-faint)" }}>{t.role} · {t.company}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── App Demos ───────────────────────────────────────────────── */}
       <div id="exemplos">
         <AppDemos />
@@ -881,6 +1002,8 @@ export default function Home() {
           </QuoteButton>
         </div>
       </section>
+
+      </div>{/* fim .dot-bg */}
 
       <Footer />
 
