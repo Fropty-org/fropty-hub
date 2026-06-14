@@ -4,10 +4,10 @@ import { ThemeToggle } from "./ThemeToggle";
 import { MobileNav } from "./MobileNav";
 
 const NAV_LINKS = [
-  { href: "/#planos",   label: "Planos" },
-  { href: "/#exemplos", label: "Exemplos" },
-  { href: "/sobre",     label: "Sobre" },
-  { href: "/#faq",      label: "FAQ" },
+  { href: "/#planos",    label: "Planos" },
+  { href: "/portfolio",  label: "Portfólio" },
+  { href: "/sobre",      label: "Sobre" },
+  { href: "/#faq",       label: "FAQ" },
 ];
 
 export function Navbar() {

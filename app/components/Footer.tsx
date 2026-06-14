@@ -27,9 +27,9 @@ export function Footer() {
             <h4 className="mb-4 text-xs font-bold uppercase tracking-widest" style={{ color: "var(--text-faint)" }}>Produto</h4>
             <ul className="space-y-2 text-sm">
               {[
-                { href: "/#planos",   label: "Planos" },
-                { href: "/#exemplos", label: "Exemplos" },
-                { href: "/#tokens",   label: "Tokens" },
+                { href: "/#planos",    label: "Planos" },
+                { href: "/portfolio",  label: "Portfólio" },
+                { href: "/#tokens",    label: "Tokens" },
                 { href: "/configurador", label: "Configurador" },
               ].map(({ href, label }) => (
                 <li key={href}>
