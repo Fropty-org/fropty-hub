@@ -8,6 +8,7 @@ const PRIORITIES = [
   { label: "Preço baixo",                 icon: "ti-coin" },
   { label: "Funcionalidades completas",   icon: "ti-puzzle" },
   { label: "Facilidade de uso",           icon: "ti-hand-finger" },
+  { label: "Suporte contínuo",            icon: "ti-headset" },
 ];
 
 const BENEFITS = [
@@ -36,6 +37,7 @@ export function QuoteSection() {
     const data = new FormData(form);
     const payload = {
       nome:        data.get("nome"),
+      telefone:    data.get("telefone"),
       email:       data.get("email"),
       ideia:       data.get("ideia"),
       temLogo:     data.get("temLogo"),
@@ -170,17 +172,30 @@ export function QuoteSection() {
                   />
                 </div>
 
-                {/* Email */}
-                <div>
-                  <label htmlFor="q-email" className="mb-1.5 block text-sm font-semibold" style={{ color: "var(--text)" }}>
-                    Seu e-mail
-                  </label>
-                  <input
-                    id="q-email" name="email" type="email" required
-                    className="w-full rounded-xl px-4 py-3 text-sm outline-none transition focus:ring-2 focus:ring-[#5B57E8]/30"
-                    style={{ background: "var(--bg)", border: "1px solid var(--border)", color: "var(--text)" }}
-                    placeholder="joao@empresa.com"
-                  />
+                {/* Telefone + Email — lado a lado */}
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="q-tel" className="mb-1.5 block text-sm font-semibold" style={{ color: "var(--text)" }}>
+                      Telefone / WhatsApp
+                    </label>
+                    <input
+                      id="q-tel" name="telefone" type="tel" required
+                      className="w-full rounded-xl px-4 py-3 text-sm outline-none transition focus:ring-2 focus:ring-[#5B57E8]/30"
+                      style={{ background: "var(--bg)", border: "1px solid var(--border)", color: "var(--text)" }}
+                      placeholder="(11) 99999-9999"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="q-email" className="mb-1.5 block text-sm font-semibold" style={{ color: "var(--text)" }}>
+                      Seu e-mail
+                    </label>
+                    <input
+                      id="q-email" name="email" type="email" required
+                      className="w-full rounded-xl px-4 py-3 text-sm outline-none transition focus:ring-2 focus:ring-[#5B57E8]/30"
+                      style={{ background: "var(--bg)", border: "1px solid var(--border)", color: "var(--text)" }}
+                      placeholder="joao@empresa.com"
+                    />
+                  </div>
                 </div>
 
                 {/* Ideia */}
