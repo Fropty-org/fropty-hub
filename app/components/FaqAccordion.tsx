@@ -7,18 +7,19 @@ export default function FaqAccordion({ faqs }: { faqs: Faq[] }) {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
-    <div className="mt-10 divide-y divide-white/10 rounded-2xl border border-white/10 bg-[#110E67]">
+    <div className="mt-10 divide-y rounded-2xl border" style={{ borderColor: "var(--border)", background: "var(--card-bg)" }}>
       {faqs.map((faq, i) => (
-        <div key={faq.q}>
+        <div key={faq.q} style={{ borderColor: "var(--border)" }}>
           <button
             onClick={() => setOpenFaq(openFaq === i ? null : i)}
-            className="flex w-full items-center justify-between px-6 py-5 text-left font-medium text-slate-100 hover:bg-white/5 transition"
+            className="flex w-full items-center justify-between px-6 py-5 text-left font-medium transition"
+            style={{ color: "var(--text)" }}
           >
             {faq.q}
-            <span className="ml-4 text-slate-500">{openFaq === i ? "−" : "+"}</span>
+            <span className="ml-4" style={{ color: "var(--text-faint)" }}>{openFaq === i ? "−" : "+"}</span>
           </button>
           {openFaq === i && (
-            <p className="px-6 pb-5 text-sm leading-relaxed text-slate-400">{faq.a}</p>
+            <p className="px-6 pb-5 text-sm leading-relaxed" style={{ color: "var(--text-muted)" }}>{faq.a}</p>
           )}
         </div>
       ))}

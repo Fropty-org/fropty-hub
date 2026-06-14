@@ -6,15 +6,17 @@ import QuoteForm from "./QuoteForm";
 export function QuoteButton({
   children,
   className,
+  style,
 }: {
   children: React.ReactNode;
   className?: string;
+  style?: React.CSSProperties;
 }) {
   const [open, setOpen] = useState(false);
 
   return (
     <>
-      <button onClick={() => setOpen(true)} className={className}>
+      <button onClick={() => setOpen(true)} className={className} style={style}>
         {children}
       </button>
 

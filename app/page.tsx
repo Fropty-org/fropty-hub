@@ -1,117 +1,267 @@
 import Link from "next/link";
+import Image from "next/image";
 import AppDemos from "./components/AppDemos";
 import FaqAccordion from "./components/FaqAccordion";
 import { QuoteButton } from "./components/QuoteModal";
+import { ThemeToggle } from "./components/ThemeToggle";
 import { plans, faqs, previewAddons } from "./lib/data/plans";
 
 export default function Home() {
   return (
-    <main className="min-h-screen text-slate-300" style={{ background: "#0A093F" }}>
+    <main style={{ minHeight: "100vh", background: "var(--bg)", color: "var(--text)" }}>
 
       {/* Navbar */}
-      <header className="sticky top-0 z-40 border-b border-white/10 backdrop-blur"
-        style={{ background: "rgba(10,9,63,0.9)" }}
+      <header
+        className="sticky top-0 z-40"
+        style={{
+          background: "var(--nav-bg)",
+          borderBottom: "1px solid var(--border)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+        }}
       >
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <span className="text-lg font-bold tracking-tight text-white">
-            Fropty<span className="text-[#5B57E8]">Apps</span>
-          </span>
-          <nav className="hidden items-center gap-6 text-sm text-slate-400 sm:flex">
-            <a href="#planos" className="hover:text-white transition">Planos</a>
-            <a href="#exemplos" className="hover:text-white transition">Exemplos</a>
-            <a href="#tokens" className="hover:text-white transition">Tokens</a>
-            <a href="#faq" className="hover:text-white transition">FAQ</a>
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
+          <div className="flex items-center gap-2">
+            <Image src="/logo-icon.png" alt="Fropty Apps" width={28} height={28} className="rounded-md" />
+            <span className="text-base font-bold tracking-tight" style={{ color: "var(--text)" }}>
+              Fropty<span style={{ color: "var(--primary)" }}>Apps</span>
+            </span>
+          </div>
+
+          <nav className="hidden items-center gap-6 text-sm sm:flex nav-links">
+            <a href="#planos" className="nav-link transition">Planos</a>
+            <a href="#exemplos" className="nav-link transition">Exemplos</a>
+            <a href="#tokens" className="nav-link transition">Tokens</a>
+            <a href="#faq" className="nav-link transition">FAQ</a>
           </nav>
-          <Link
-            href="/configurador"
-            className="rounded-full bg-[#5B57E8] px-5 py-2 text-sm font-semibold text-white transition hover:brightness-110"
-          >
-            Pedir orçamento
-          </Link>
+
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <Link
+              href="/configurador"
+              className="rounded-full px-5 py-2 text-sm font-semibold text-white transition hover:brightness-110"
+              style={{ background: "var(--primary)" }}
+            >
+              Orçamento grátis
+            </Link>
+          </div>
         </div>
       </header>
 
-      {/* Hero */}
-      <section className="mx-auto max-w-4xl px-6 pb-16 pt-12 text-center">
-        <h1 className="mt-6 text-4xl font-bold leading-tight tracking-tight text-white sm:text-6xl">
-          Seu app sob medida,{" "}
-          <span className="text-[#5B57E8]">do jeito que você imaginou</span>
-        </h1>
-        <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-400">
-          Conte sua ideia e receba uma prévia dela em forma de app, totalmente
-          gratuita! Sem complicação técnica, sem precisar falar difícil. Conte
-          a sua ideia com suas palavras e a gente faz o resto para você :)
-        </p>
-        <QuoteButton className="mt-10 rounded-full bg-[#5B57E8] px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-[#1E19B8]/40 transition hover:brightness-110">
-          Pedir orçamento grátis →
-        </QuoteButton>
-      </section>
+      {/* ── Hero ────────────────────────────────────────────────────── */}
+      <section
+        className="relative overflow-hidden"
+        style={{ background: "var(--bg)" }}
+      >
+        {/* Background glow blobs */}
+        <div
+          className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full blur-[120px]"
+          style={{ background: "rgba(91,87,232,0.18)" }}
+        />
+        <div
+          className="pointer-events-none absolute -right-40 top-20 h-[400px] w-[400px] rounded-full blur-[100px]"
+          style={{ background: "rgba(239,159,39,0.08)" }}
+        />
 
-      {/* Métricas */}
-      <section className="border-y border-white/10" style={{ background: "#110E67" }}>
-        <div className="mx-auto grid max-w-4xl grid-cols-3 gap-4 px-6 py-10 text-center">
-          <div>
-            <p className="text-2xl font-bold text-white sm:text-3xl">R$0</p>
-            <p className="mt-1 text-sm text-slate-500">para começar</p>
+        <div className="relative mx-auto max-w-6xl px-6 pb-0 pt-16 sm:pt-20">
+          <div className="flex flex-col items-center gap-12 lg:flex-row lg:items-start lg:gap-16">
+
+            {/* Left — text */}
+            <div className="flex-1 text-center lg:text-left lg:pt-6">
+              <span
+                className="mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-widest"
+                style={{
+                  background: "rgba(91,87,232,0.15)",
+                  color: "var(--primary)",
+                  border: "1px solid rgba(91,87,232,0.25)",
+                }}
+              >
+                <span
+                  className="h-1.5 w-1.5 rounded-full"
+                  style={{ background: "var(--primary)" }}
+                />
+                Prévia 100% gratuita
+              </span>
+
+              <h1
+                className="text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl xl:text-6xl"
+                style={{ color: "var(--text)", fontFamily: "var(--font-plus-jakarta), sans-serif" }}
+              >
+                Seu app sob medida,{" "}
+                <span style={{ color: "var(--primary)" }}>do jeito que você imaginou</span>
+              </h1>
+
+              <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed lg:mx-0" style={{ color: "var(--text-muted)" }}>
+                Conte sua ideia e receba uma prévia real em forma de app, totalmente gratuita.
+                Sem tecnicismo, sem complicação. Só você e sua ideia.
+              </p>
+
+              <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row lg:items-start">
+                <QuoteButton
+                  className="rounded-full px-8 py-4 text-base font-semibold text-white shadow-lg transition hover:brightness-110"
+                  style={{ background: "var(--primary)", boxShadow: "0 8px 32px rgba(91,87,232,0.35)" }}
+                >
+                  Pedir orçamento grátis →
+                </QuoteButton>
+                <a
+                  href="#exemplos"
+                  className="rounded-full px-8 py-4 text-base font-semibold transition"
+                  style={{
+                    border: "1px solid var(--border)",
+                    color: "var(--text-muted)",
+                    background: "transparent",
+                  }}
+                >
+                  Ver exemplos
+                </a>
+              </div>
+
+              {/* Social proof mini stats */}
+              <div className="mt-10 flex flex-wrap items-center justify-center gap-6 lg:justify-start">
+                {[
+                  { val: "R$0", sub: "para começar" },
+                  { val: "3 dias", sub: "para ver a prévia" },
+                  { val: "100%", sub: "personalizado" },
+                ].map(({ val, sub }) => (
+                  <div key={val} className="flex flex-col items-center lg:items-start">
+                    <span className="text-2xl font-bold" style={{ color: "var(--text)" }}>{val}</span>
+                    <span className="text-xs" style={{ color: "var(--text-faint)" }}>{sub}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right — GIF hero */}
+            <div className="w-full max-w-sm flex-shrink-0 lg:max-w-[380px] xl:max-w-[420px]">
+              <div
+                className="relative overflow-hidden rounded-2xl"
+                style={{
+                  border: "1px solid var(--border)",
+                  boxShadow: "0 24px 80px rgba(91,87,232,0.25)",
+                  background: "var(--surface)",
+                }}
+              >
+                <Image
+                  src="/hero.gif"
+                  alt="Demo do app Fropty"
+                  width={420}
+                  height={560}
+                  className="w-full"
+                  unoptimized
+                  priority
+                />
+              </div>
+            </div>
+
           </div>
-          <div>
-            <p className="text-2xl font-bold text-white sm:text-3xl">3 dias</p>
-            <p className="mt-1 text-sm text-slate-500">para ver sua prévia</p>
-          </div>
-          <div>
-            <p className="text-2xl font-bold text-white sm:text-3xl">100%</p>
-            <p className="mt-1 text-sm text-slate-500">do seu jeito</p>
+        </div>
+
+        {/* Marquee strip */}
+        <div
+          className="mt-16 overflow-hidden border-y py-4"
+          style={{ borderColor: "var(--border)", background: "var(--bg-alt)" }}
+        >
+          <div className="animate-marquee flex gap-8 whitespace-nowrap" style={{ width: "max-content" }}>
+            {Array(2).fill([
+              "🚀 Prévia gratuita",
+              "📱 Apps sob medida",
+              "⚡ Entrega em 3 dias",
+              "🔧 Manutenção mensal",
+              "💬 Suporte com tokens",
+              "✅ 100% personalizado",
+              "🎯 Sem taxa de entrada",
+              "🔒 Sem fidelidade inicial",
+            ]).flat().map((item, i) => (
+              <span key={i} className="text-sm font-medium" style={{ color: "var(--text-faint)" }}>
+                {item}
+              </span>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Planos */}
+      {/* ── Planos ──────────────────────────────────────────────────── */}
       <section id="planos" className="mx-auto max-w-6xl scroll-mt-20 px-6 py-20">
-        <h2 className="text-center text-3xl font-bold tracking-tight text-white sm:text-4xl">
+        <h2
+          className="text-center text-3xl font-bold tracking-tight sm:text-4xl"
+          style={{ color: "var(--text)", fontFamily: "var(--font-plus-jakarta), sans-serif" }}
+        >
           Planos
         </h2>
-        <p className="mt-3 text-center text-slate-400">
+        <p className="mt-3 text-center" style={{ color: "var(--text-muted)" }}>
           Comece de graça e evolua quando fizer sentido.
         </p>
+
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`relative flex flex-col rounded-2xl p-8 transition-all duration-200 hover:scale-[1.03] ${
-                plan.highlight
-                  ? "border border-[#5B57E8] bg-[#5B57E8] shadow-2xl shadow-[#1E19B8]/30 hover:shadow-[0_20px_40px_rgba(91,87,232,0.45)]"
-                  : "border border-white/10 bg-[#181490] hover:border-[#5B57E8]/40 hover:shadow-[0_16px_32px_rgba(0,0,0,0.4)]"
-              }`}
+              className="relative flex flex-col rounded-2xl p-8 transition-all duration-200 hover:scale-[1.03]"
+              style={{
+                background: plan.highlight ? "var(--primary)" : "var(--card-bg)",
+                border: plan.highlight
+                  ? "1px solid var(--primary)"
+                  : "1px solid var(--card-border)",
+                boxShadow: plan.highlight
+                  ? "0 20px 60px rgba(91,87,232,0.35)"
+                  : "0 4px 20px rgba(0,0,0,0.1)",
+              }}
             >
               {plan.badge && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#EF9F27] px-3 py-1 text-xs font-bold tracking-wide text-white">
+                <span
+                  className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-xs font-bold tracking-wide text-white"
+                  style={{ background: "var(--accent)" }}
+                >
                   {plan.badge}
                 </span>
               )}
-              <h3 className="text-xl font-semibold text-white">{plan.name}</h3>
+              <h3
+                className="text-xl font-semibold"
+                style={{ color: plan.highlight ? "#fff" : "var(--text)" }}
+              >
+                {plan.name}
+              </h3>
               <p className="mt-4">
-                <span className={`text-2xl font-bold ${plan.highlight ? "text-white" : "text-[#5B57E8]"}`}>
+                <span
+                  className="text-2xl font-bold"
+                  style={{ color: plan.highlight ? "#fff" : "var(--primary)" }}
+                >
                   {plan.price}
                 </span>
                 {plan.period && (
-                  <span className={`ml-1 text-sm ${plan.highlight ? "text-[#C2C0F6]" : "text-slate-500"}`}>
+                  <span
+                    className="ml-1 text-sm"
+                    style={{ color: plan.highlight ? "rgba(255,255,255,0.7)" : "var(--text-faint)" }}
+                  >
                     {plan.period}
                   </span>
                 )}
               </p>
-              <p className={`mt-3 text-sm ${plan.highlight ? "text-blue-100" : "text-slate-400"}`}>
+              <p
+                className="mt-3 text-sm"
+                style={{ color: plan.highlight ? "rgba(255,255,255,0.85)" : "var(--text-muted)" }}
+              >
                 {plan.description}
               </p>
-              <ul className={`mt-6 flex-1 space-y-3 text-sm ${plan.highlight ? "text-white" : "text-slate-300"}`}>
+              <ul
+                className="mt-6 flex-1 space-y-3 text-sm"
+                style={{ color: plan.highlight ? "#fff" : "var(--text-muted)" }}
+              >
                 {plan.features.map((f) => (
                   <li key={f} className="flex items-start gap-2">
-                    <i className={`ti ti-check mt-0.5 flex-shrink-0 text-base ${plan.highlight ? "text-[#C2C0F6]" : "text-[#5B57E8]"}`} />
+                    <i
+                      className="ti ti-check mt-0.5 flex-shrink-0 text-base"
+                      style={{ color: plan.highlight ? "rgba(255,255,255,0.8)" : "var(--primary)" }}
+                    />
                     {f}
                   </li>
                 ))}
               </ul>
               {plan.savingsStrike && (
-                <div className="mt-4 border-t pt-3" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
+                <div
+                  className="mt-4 border-t pt-3"
+                  style={{ borderColor: plan.highlight ? "rgba(255,255,255,0.2)" : "var(--border)" }}
+                >
                   <p className="text-xs line-through" style={{ color: "rgba(239,68,68,0.65)" }}>
                     {plan.savingsStrike}
                   </p>
@@ -122,8 +272,8 @@ export default function Home() {
               )}
               {plan.note && (
                 <p
-                  className={`mt-3 text-xs font-bold ${plan.highlight ? "text-blue-100" : ""}`}
-                  style={plan.highlight ? undefined : { color: "#EF9F27" }}
+                  className="mt-3 text-xs font-bold"
+                  style={{ color: plan.highlight ? "rgba(255,255,255,0.8)" : "var(--accent)" }}
                 >
                   {plan.note}
                 </p>
@@ -131,21 +281,19 @@ export default function Home() {
               {plan.href ? (
                 <Link
                   href={plan.href}
-                  className={`mt-8 rounded-full px-4 py-3 text-center font-semibold transition ${
-                    plan.highlight
-                      ? "bg-white text-[#5B57E8] hover:bg-[#E9E9FC]"
-                      : "border border-white/20 text-slate-300 hover:border-[#5B57E8] hover:text-[#5B57E8]"
-                  }`}
+                  className="mt-8 rounded-full px-4 py-3 text-center font-semibold transition"
+                  style={plan.highlight
+                    ? { background: "#fff", color: "var(--primary)" }
+                    : { border: "1px solid var(--border)", color: "var(--text-muted)" }}
                 >
                   Quero esse →
                 </Link>
               ) : (
                 <QuoteButton
-                  className={`mt-8 rounded-full px-4 py-3 text-center font-semibold transition ${
-                    plan.highlight
-                      ? "bg-white text-[#5B57E8] hover:bg-[#E9E9FC]"
-                      : "border border-white/20 text-slate-300 hover:border-[#5B57E8] hover:text-[#5B57E8]"
-                  }`}
+                  className="mt-8 rounded-full px-4 py-3 text-center font-semibold transition"
+                  style={plan.highlight
+                    ? { background: "#fff", color: "var(--primary)" }
+                    : { border: "1px solid var(--border)", color: "var(--text-muted)" }}
                 >
                   Quero esse →
                 </QuoteButton>
@@ -153,59 +301,79 @@ export default function Home() {
             </div>
           ))}
         </div>
-        <p className="mt-6 text-center text-xs text-slate-500">
+
+        <p className="mt-6 text-center text-xs" style={{ color: "var(--text-faint)" }}>
           Valor de referência considerando token avulso de R$ 300,00 para não assinantes.
         </p>
 
-        {/* Card configurador */}
+        {/* Configurador card */}
         <Link href="/configurador" className="group mt-10 block">
           <div
-            className="relative overflow-hidden rounded-2xl p-8 ring-1 ring-white/10 transition hover:ring-[#5B57E8] hover:shadow-2xl hover:shadow-[#1E19B8]/20 sm:p-10"
-            style={{ background: "#0A093F" }}
+            className="relative overflow-hidden rounded-2xl p-8 transition-all sm:p-10"
+            style={{
+              background: "var(--bg-alt)",
+              border: "1px solid var(--border)",
+            }}
           >
-            <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full blur-3xl"
-              style={{ background: "rgba(91,87,232,0.2)" }} />
-            <div className="pointer-events-none absolute -bottom-20 left-10 h-56 w-56 rounded-full blur-3xl"
-              style={{ background: "rgba(91,87,232,0.12)" }} />
-
+            <div
+              className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full blur-3xl"
+              style={{ background: "rgba(91,87,232,0.2)" }}
+            />
+            <div
+              className="pointer-events-none absolute -bottom-20 left-10 h-56 w-56 rounded-full blur-3xl"
+              style={{ background: "rgba(91,87,232,0.1)" }}
+            />
             <div className="relative flex flex-col gap-8 sm:flex-row sm:items-center">
               <div className="flex-1">
-                <span className="mb-4 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-widest"
-                  style={{ background: "rgba(239,159,39,0.15)", color: "#EF9F27" }}
+                <span
+                  className="mb-4 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-widest"
+                  style={{ background: "rgba(239,159,39,0.15)", color: "var(--accent)" }}
                 >
                   <i className="ti ti-adjustments-horizontal" />
                   Personalizável
                 </span>
-                <h3 className="text-2xl font-bold text-white sm:text-3xl">
+                <h3
+                  className="text-2xl font-bold sm:text-3xl"
+                  style={{ color: "var(--text)", fontFamily: "var(--font-plus-jakarta), sans-serif" }}
+                >
                   Monte o app perfeito para o seu negócio
                 </h3>
-                <p className="mt-2 max-w-lg text-slate-400">
-                  Login com Google, painel admin, WhatsApp, relatórios... escolha o que faz sentido e veja o preço atualizar na hora.
+                <p className="mt-2 max-w-lg" style={{ color: "var(--text-muted)" }}>
+                  Login com Google, painel admin, WhatsApp, relatórios... escolha o que faz sentido.
                 </p>
                 <div className="mt-5 flex flex-wrap gap-2">
                   {previewAddons.map(({ icon, label }) => (
-                    <span key={icon} className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm text-slate-300"
-                      style={{ borderColor: "#334155", background: "#181490" }}
+                    <span
+                      key={icon}
+                      className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm"
+                      style={{
+                        border: "1px solid var(--border)",
+                        background: "var(--card-bg)",
+                        color: "var(--text-muted)",
+                      }}
                     >
-                      <i className={`ti ti-${icon} text-[#5B57E8]`} />
+                      <i className={`ti ti-${icon}`} style={{ color: "var(--primary)" }} />
                       {label}
                     </span>
                   ))}
-                  <span className="inline-flex items-center rounded-lg border px-3 py-1.5 text-sm text-slate-500"
-                    style={{ borderColor: "#334155", background: "#181490" }}
+                  <span
+                    className="inline-flex items-center rounded-lg px-3 py-1.5 text-sm"
+                    style={{ border: "1px solid var(--border)", background: "var(--card-bg)", color: "var(--text-faint)" }}
                   >
                     +4 mais
                   </span>
                 </div>
               </div>
-
               <div className="flex flex-row items-center gap-6 sm:flex-col sm:items-end">
                 <div className="sm:text-right">
-                  <div className="text-sm text-slate-500">a partir de</div>
-                  <div className="text-4xl font-bold text-white">R$499</div>
-                  <div className="text-sm text-slate-500">pagamento único</div>
+                  <div className="text-sm" style={{ color: "var(--text-faint)" }}>a partir de</div>
+                  <div className="text-4xl font-bold" style={{ color: "var(--text)" }}>R$499</div>
+                  <div className="text-sm" style={{ color: "var(--text-faint)" }}>pagamento único</div>
                 </div>
-                <div className="whitespace-nowrap rounded-full bg-[#5B57E8] px-6 py-3 font-semibold text-white shadow-lg shadow-[#1E19B8]/40 transition group-hover:brightness-110">
+                <div
+                  className="whitespace-nowrap rounded-full px-6 py-3 font-semibold text-white shadow-lg transition group-hover:brightness-110"
+                  style={{ background: "var(--primary)", boxShadow: "0 8px 24px rgba(91,87,232,0.3)" }}
+                >
                   Monte seu App →
                 </div>
               </div>
@@ -214,79 +382,76 @@ export default function Home() {
         </Link>
       </section>
 
-      {/* App Demos */}
+      {/* ── App Demos ───────────────────────────────────────────────── */}
       <AppDemos />
 
-      {/* Tokens */}
-      <section id="tokens" className="scroll-mt-20 border-y border-white/10" style={{ background: "#110E67" }}>
-        <div className="mx-auto max-w-4xl px-6 py-20 text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+      {/* ── Tokens ──────────────────────────────────────────────────── */}
+      <section
+        id="tokens"
+        className="scroll-mt-20 border-y py-20"
+        style={{ background: "var(--bg-alt)", borderColor: "var(--border)" }}
+      >
+        <div className="mx-auto max-w-4xl px-6 text-center">
+          <h2
+            className="text-3xl font-bold tracking-tight sm:text-4xl"
+            style={{ color: "var(--text)", fontFamily: "var(--font-plus-jakarta), sans-serif" }}
+          >
             Como funcionam os tokens?
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-slate-400">
+          <p className="mx-auto mt-4 max-w-2xl" style={{ color: "var(--text-muted)" }}>
             No plano de manutenção mensal, você recebe tokens mensais conforme
             sua assinatura —{" "}
-            <strong className="text-[#5B57E8]">4 tokens no Básico</strong> e{" "}
-            <strong className="text-[#5B57E8]">8 tokens no Pro</strong>. Cada
-            token vale um pedido de suporte ou ajuste no seu app, como mudar
-            um texto, ajustar uma cor ou corrigir algo que não está
-            funcionando.
+            <strong style={{ color: "var(--primary)" }}>4 tokens no Básico</strong> e{" "}
+            <strong style={{ color: "var(--primary)" }}>8 tokens no Pro</strong>. Cada
+            token vale um pedido de suporte ou ajuste no seu app.
           </p>
           <div className="mt-12 grid gap-6 sm:grid-cols-3">
-            <div className="rounded-2xl border border-white/10 bg-[#181490] p-6">
-              <i className="ti ti-ticket text-3xl text-[#5B57E8]" />
-              <h3 className="mt-3 font-semibold text-white">Básico: 4 · Pro: 8</h3>
-              <p className="mt-1 text-sm text-slate-400">
-                Todo mês você recebe tokens novos conforme seu plano.
-              </p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-[#181490] p-6">
-              <i className="ti ti-hourglass text-3xl text-[#5B57E8]" />
-              <h3 className="mt-3 font-semibold text-white">Não acumulam</h3>
-              <p className="mt-1 text-sm text-slate-400">
-                Tokens não usados expiram no fim do mês. Use sem medo.
-              </p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-[#181490] p-6">
-              <i className="ti ti-tool text-3xl text-[#5B57E8]" />
-              <h3 className="mt-3 font-semibold text-white">Suporte e ajustes</h3>
-              <p className="mt-1 text-sm text-slate-400">
-                Cada token vale um ajuste ou atendimento de suporte.
-              </p>
-            </div>
+            {[
+              { icon: "ti-ticket",   title: "Básico: 4 · Pro: 8", body: "Todo mês você recebe tokens novos conforme seu plano." },
+              { icon: "ti-hourglass", title: "Não acumulam",       body: "Tokens não usados expiram no fim do mês. Use sem medo." },
+              { icon: "ti-tool",     title: "Suporte e ajustes",   body: "Cada token vale um ajuste ou atendimento de suporte." },
+            ].map(({ icon, title, body }) => (
+              <div
+                key={title}
+                className="rounded-2xl p-6"
+                style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)" }}
+              >
+                <i className={`ti ${icon} text-3xl`} style={{ color: "var(--primary)" }} />
+                <h3 className="mt-3 font-semibold" style={{ color: "var(--text)" }}>{title}</h3>
+                <p className="mt-1 text-sm" style={{ color: "var(--text-muted)" }}>{body}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* FAQ */}
+      {/* ── FAQ ─────────────────────────────────────────────────────── */}
       <section id="faq" className="mx-auto max-w-3xl scroll-mt-20 px-6 py-20">
-        <h2 className="text-center text-3xl font-bold tracking-tight text-white sm:text-4xl">
+        <h2
+          className="text-center text-3xl font-bold tracking-tight sm:text-4xl"
+          style={{ color: "var(--text)", fontFamily: "var(--font-plus-jakarta), sans-serif" }}
+        >
           Perguntas frequentes
         </h2>
         <FaqAccordion faqs={faqs} />
       </section>
 
-      {/* CTA final */}
-      <section className="bg-[#5B57E8]">
+      {/* ── CTA final ───────────────────────────────────────────────── */}
+      <section style={{ background: "var(--primary)" }}>
         <div className="mx-auto max-w-3xl px-6 py-16 text-center">
           <h2 className="text-3xl font-bold tracking-tight text-white">
             Pronto para tirar sua ideia do papel?
           </h2>
-          <QuoteButton className="mt-8 rounded-full bg-white px-8 py-4 font-semibold text-[#5B57E8] shadow-lg transition hover:bg-[#E9E9FC]">
+          <p className="mt-3 text-base text-white/75">
+            Prévia gratuita. Sem compromisso. Do seu jeito.
+          </p>
+          <QuoteButton className="mt-8 rounded-full bg-white px-8 py-4 font-semibold transition hover:bg-[#E9E9FC]"
+            style={{ color: "var(--primary)" }}>
             Pedir orçamento grátis →
           </QuoteButton>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-white/10 py-8 text-center text-sm text-slate-500" style={{ background: "#110E67" }}>
-        <p>© 2026 Fropty Apps</p>
-        <div className="mt-2 flex items-center justify-center gap-4">
-          <Link href="/termos" className="hover:text-slate-300 transition">Termos de Uso</Link>
-          <span className="text-slate-700">·</span>
-          <Link href="/privacidade" className="hover:text-slate-300 transition">Política de Privacidade</Link>
-        </div>
-      </footer>
     </main>
   );
 }
