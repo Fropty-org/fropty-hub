@@ -182,13 +182,21 @@ export default function Home() {
 
       {/* ── Planos ──────────────────────────────────────────────────── */}
       <section id="planos" className="mx-auto max-w-6xl scroll-mt-20 px-6 py-20">
+        <div className="mb-3 flex justify-center">
+          <span className="section-chip">Planos</span>
+        </div>
         <h2
-          className="text-center text-3xl font-bold tracking-tight sm:text-4xl"
-          style={{ color: "var(--text)", fontFamily: "var(--font-plus-jakarta), sans-serif" }}
+          className="text-center font-bold tracking-tight"
+          style={{
+            color: "var(--text)",
+            fontFamily: "var(--font-plus-jakarta), sans-serif",
+            fontSize: "clamp(2rem, 5vw, 3.25rem)",
+            lineHeight: 1.1,
+          }}
         >
-          Planos
+          Planos que crescem com você
         </h2>
-        <p className="mt-3 text-center" style={{ color: "var(--text-muted)" }}>
+        <p className="mt-4 text-center" style={{ color: "var(--text-muted)" }}>
           Comece de graça e evolua quando fizer sentido.
         </p>
 
@@ -281,18 +289,18 @@ export default function Home() {
               {plan.href ? (
                 <Link
                   href={plan.href}
-                  className="mt-8 rounded-full px-4 py-3 text-center font-semibold transition"
+                  className="mt-8 block rounded-xl px-4 py-3 text-center text-sm font-semibold transition hover:opacity-90"
                   style={plan.highlight
-                    ? { background: "#fff", color: "var(--primary)" }
+                    ? { background: "var(--cta-bg)", color: "var(--cta-text)" }
                     : { border: "1px solid var(--border)", color: "var(--text-muted)" }}
                 >
                   Quero esse →
                 </Link>
               ) : (
                 <QuoteButton
-                  className="mt-8 rounded-full px-4 py-3 text-center font-semibold transition"
+                  className="mt-8 block w-full rounded-xl px-4 py-3 text-center text-sm font-semibold transition hover:opacity-90"
                   style={plan.highlight
-                    ? { background: "#fff", color: "var(--primary)" }
+                    ? { background: "var(--cta-bg)", color: "var(--cta-text)" }
                     : { border: "1px solid var(--border)", color: "var(--text-muted)" }}
                 >
                   Quero esse →
@@ -392,9 +400,17 @@ export default function Home() {
         style={{ background: "var(--bg-alt)", borderColor: "var(--border)" }}
       >
         <div className="mx-auto max-w-4xl px-6 text-center">
+          <div className="mb-3 flex justify-center">
+            <span className="section-chip">Tokens</span>
+          </div>
           <h2
-            className="text-3xl font-bold tracking-tight sm:text-4xl"
-            style={{ color: "var(--text)", fontFamily: "var(--font-plus-jakarta), sans-serif" }}
+            className="font-bold tracking-tight"
+            style={{
+              color: "var(--text)",
+              fontFamily: "var(--font-plus-jakarta), sans-serif",
+              fontSize: "clamp(1.75rem, 4vw, 3rem)",
+              lineHeight: 1.1,
+            }}
           >
             Como funcionam os tokens?
           </h2>
@@ -427,11 +443,19 @@ export default function Home() {
 
       {/* ── FAQ ─────────────────────────────────────────────────────── */}
       <section id="faq" className="mx-auto max-w-3xl scroll-mt-20 px-6 py-20">
+        <div className="mb-3 flex justify-center">
+          <span className="section-chip">FAQ</span>
+        </div>
         <h2
-          className="text-center text-3xl font-bold tracking-tight sm:text-4xl"
-          style={{ color: "var(--text)", fontFamily: "var(--font-plus-jakarta), sans-serif" }}
+          className="text-center font-bold tracking-tight"
+          style={{
+            color: "var(--text)",
+            fontFamily: "var(--font-plus-jakarta), sans-serif",
+            fontSize: "clamp(2rem, 5vw, 3.25rem)",
+            lineHeight: 1.1,
+          }}
         >
-          Perguntas frequentes
+          Dúvidas? A gente responde
         </h2>
         <FaqAccordion faqs={faqs} />
       </section>
