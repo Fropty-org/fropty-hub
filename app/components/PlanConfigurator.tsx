@@ -131,16 +131,16 @@ export default function PlanConfigurator({ onSubmit }: Props) {
         <div className="flex-[2] min-w-0 space-y-6">
 
           {/* App base */}
-          <div style={{ background: "#fff", borderRadius: 16, border: "2px solid #185FA5", padding: "20px 22px" }}>
+          <div style={{ background: "#fff", borderRadius: 16, border: "2px solid #5B57E8", padding: "20px 22px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <div>
                 <div style={{ fontSize: 15, fontWeight: 800, color: "#0f172a", display: "flex", alignItems: "center", gap: 8 }}>
-                  <i className="ti ti-rocket" style={{ fontSize: "18px", color: "#185FA5" }} />
+                  <i className="ti ti-rocket" style={{ fontSize: "18px", color: "#5B57E8" }} />
                   App completo
                 </div>
                 <div style={{ fontSize: 13, color: "#64748b", marginTop: 3 }}>Login, banco de dados, deploy, 1 rodada de ajustes. Tudo funcionando.</div>
               </div>
-              <div style={{ fontSize: 18, fontWeight: 800, color: "#185FA5", whiteSpace: "nowrap", marginLeft: 16 }}>{formatPrice(BASE_PRICE)}</div>
+              <div style={{ fontSize: 18, fontWeight: 800, color: "#5B57E8", whiteSpace: "nowrap", marginLeft: 16 }}>{formatPrice(BASE_PRICE)}</div>
             </div>
             <div style={{ fontSize: 11, color: "#b45309", fontWeight: 700, marginTop: 8 }}>
               O plano base não inclui backup automático. Recomendamos fortemente a contratação do add-on de backup.
@@ -151,16 +151,16 @@ export default function PlanConfigurator({ onSubmit }: Props) {
           <div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
               <div style={{ fontSize: 13, fontWeight: 700, color: "#e2e8f0", display: "flex", alignItems: "center", gap: 6 }}>
-                <i className="ti ti-plus" style={{ fontSize: "16px", color: "#185FA5" }} />
+                <i className="ti ti-plus" style={{ fontSize: "16px", color: "#5B57E8" }} />
                 Adicione recursos ao seu app
               </div>
               <button
                 onClick={toggleAll}
                 style={{
                   fontSize: 11, fontWeight: 600,
-                  color: allSelected ? "#ef4444" : "#185FA5",
+                  color: allSelected ? "#ef4444" : "#5B57E8",
                   background: "transparent",
-                  border: `1px solid ${allSelected ? "#ef4444" : "#185FA5"}`,
+                  border: `1px solid ${allSelected ? "#ef4444" : "#5B57E8"}`,
                   borderRadius: 20, padding: "3px 10px", cursor: "pointer",
                   transition: "all 0.18s", whiteSpace: "nowrap",
                 }}
@@ -173,23 +173,23 @@ export default function PlanConfigurator({ onSubmit }: Props) {
                 const active = selected.has(addon.id);
                 return (
                   <div key={addon.id} onClick={() => toggle(addon.id)} className="hover:scale-[1.02] hover:shadow-[0_8px_20px_rgba(0,0,0,0.12)]" style={{
-                    background: active ? "#EBF4FF" : "#fff",
-                    border: `1.5px solid ${active ? "#185FA5" : "#e2e8f0"}`,
+                    background: active ? "#E9E9FC" : "#fff",
+                    border: `1.5px solid ${active ? "#5B57E8" : "#e2e8f0"}`,
                     borderRadius: 12, padding: "14px 16px", cursor: "pointer",
                     transition: "all 0.18s", display: "flex", gap: 12, alignItems: "flex-start",
                   }}>
                     <div style={{
                       width: 36, height: 36, borderRadius: 10,
-                      background: active ? "#185FA5" : "#f1f5f9",
+                      background: active ? "#5B57E8" : "#f1f5f9",
                       display: "flex", alignItems: "center", justifyContent: "center",
                       flexShrink: 0, transition: "all 0.18s",
                     }}>
-                      <i className={`ti ti-${addon.icon}`} style={{ fontSize: "18px", color: active ? "#fff" : "#185FA5" }} />
+                      <i className={`ti ti-${addon.icon}`} style={{ fontSize: "18px", color: active ? "#fff" : "#5B57E8" }} />
                     </div>
                     <div style={{ flex: 1 }}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                         <div style={{ fontSize: 13, fontWeight: 700, color: "#0f172a" }}>{addon.label}</div>
-                        <div style={{ fontSize: 13, fontWeight: 700, color: active ? "#185FA5" : "#64748b", marginLeft: 8, whiteSpace: "nowrap" }}>
+                        <div style={{ fontSize: 13, fontWeight: 700, color: active ? "#5B57E8" : "#64748b", marginLeft: 8, whiteSpace: "nowrap" }}>
                           + {formatPrice(addon.price)}{addon.type === "month" ? "/mês" : addon.unit ? `/${addon.unit}` : ""}
                         </div>
                       </div>
@@ -199,7 +199,7 @@ export default function PlanConfigurator({ onSubmit }: Props) {
                     </div>
                     <div style={{
                       width: 18, height: 18, borderRadius: "50%", flexShrink: 0, marginTop: 2,
-                      background: active ? "#185FA5" : "#e2e8f0",
+                      background: active ? "#5B57E8" : "#e2e8f0",
                       display: "flex", alignItems: "center", justifyContent: "center",
                       transition: "all 0.18s",
                     }}>
@@ -214,7 +214,7 @@ export default function PlanConfigurator({ onSubmit }: Props) {
           {/* Maintenance */}
           <div>
             <div style={{ fontSize: 13, fontWeight: 700, color: "#e2e8f0", marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
-              <i className="ti ti-tool" style={{ fontSize: "16px", color: "#185FA5" }} />
+              <i className="ti ti-tool" style={{ fontSize: "16px", color: "#5B57E8" }} />
               Plano de manutenção mensal
               <span style={{ background: "rgba(239,159,39,0.15)", color: "#EF9F27", fontSize: 10, fontWeight: 700, padding: "2px 10px", borderRadius: 20, whiteSpace: "nowrap" }}>
                 Fidelidade mínima: 3 meses
@@ -225,8 +225,8 @@ export default function PlanConfigurator({ onSubmit }: Props) {
                 const active = maintenance === m.id;
                 return (
                   <div key={m.id} onClick={() => setMaintenance(m.id)} className="hover:scale-[1.03] hover:shadow-[0_12px_28px_rgba(0,0,0,0.15)]" style={{
-                    background: active ? (m.highlight ? "#185FA5" : "#EBF4FF") : "#fff",
-                    border: `1.5px solid ${active ? "#185FA5" : "#e2e8f0"}`,
+                    background: active ? (m.highlight ? "#5B57E8" : "#E9E9FC") : "#fff",
+                    border: `1.5px solid ${active ? "#5B57E8" : "#e2e8f0"}`,
                     borderRadius: 12, padding: "14px 16px",
                     cursor: "pointer", textAlign: "center",
                     transition: "all 0.18s", position: "relative",
@@ -235,11 +235,11 @@ export default function PlanConfigurator({ onSubmit }: Props) {
                     {m.highlight && (
                       <div style={{ position: "absolute", top: -10, left: "50%", transform: "translateX(-50%)", background: "#EF9F27", color: "#fff", fontSize: 9, fontWeight: 700, padding: "2px 10px", borderRadius: 20, whiteSpace: "nowrap" }}>Mais popular</div>
                     )}
-                    <div style={{ fontSize: 14, fontWeight: 800, color: active ? (m.highlight ? "#fff" : "#185FA5") : "#0f172a" }}>{m.label}</div>
-                    <div style={{ fontSize: 11, color: active ? (m.highlight ? "#bfdbfe" : "#185FA5") : "#64748b", marginTop: 2 }}>
+                    <div style={{ fontSize: 14, fontWeight: 800, color: active ? (m.highlight ? "#fff" : "#5B57E8") : "#0f172a" }}>{m.label}</div>
+                    <div style={{ fontSize: 11, color: active ? (m.highlight ? "#bfdbfe" : "#5B57E8") : "#64748b", marginTop: 2 }}>
                       {m.tokens > 0 ? `${m.tokens} tokens/mês` : "sem tokens"}
                     </div>
-                    <div style={{ fontSize: m.price > 0 ? 18 : 13, fontWeight: m.price > 0 ? 800 : 400, color: active ? (m.highlight ? "#fff" : "#185FA5") : (m.price > 0 ? "#0f172a" : "#94a3b8"), marginTop: 6 }}>
+                    <div style={{ fontSize: m.price > 0 ? 18 : 13, fontWeight: m.price > 0 ? 800 : 400, color: active ? (m.highlight ? "#fff" : "#5B57E8") : (m.price > 0 ? "#0f172a" : "#94a3b8"), marginTop: 6 }}>
                       {m.price > 0 ? (
                         <>{formatPrice(m.price)}<span style={{ fontSize: 11, fontWeight: 400, color: active ? (m.highlight ? "#bfdbfe" : "#64748b") : "#94a3b8" }}>/mês</span></>
                       ) : (
@@ -360,7 +360,7 @@ export default function PlanConfigurator({ onSubmit }: Props) {
                 value={name}
                 onChange={e => setName(e.target.value)}
                 placeholder="Seu nome"
-                className="transition duration-150 focus:border-[#185FA5] focus:ring-2 focus:ring-[#185FA5]/25 focus:shadow-[0_0_0_4px_rgba(24,95,165,0.12)]"
+                className="transition duration-150 focus:border-[#5B57E8] focus:ring-2 focus:ring-[#5B57E8]/25 focus:shadow-[0_0_0_4px_rgba(91,87,232,0.12)]"
                 style={{ background: "#1e293b", border: "1px solid #334155", borderRadius: 10, padding: "10px 14px", color: "#fff", fontSize: 13, fontFamily: "system-ui", outline: "none" }}
               />
               <input
@@ -368,14 +368,14 @@ export default function PlanConfigurator({ onSubmit }: Props) {
                 onChange={e => setEmail(e.target.value)}
                 placeholder="Seu e-mail"
                 type="email"
-                className="transition duration-150 focus:border-[#185FA5] focus:ring-2 focus:ring-[#185FA5]/25 focus:shadow-[0_0_0_4px_rgba(24,95,165,0.12)]"
+                className="transition duration-150 focus:border-[#5B57E8] focus:ring-2 focus:ring-[#5B57E8]/25 focus:shadow-[0_0_0_4px_rgba(91,87,232,0.12)]"
                 style={{ background: "#1e293b", border: "1px solid #334155", borderRadius: 10, padding: "10px 14px", color: "#fff", fontSize: 13, fontFamily: "system-ui", outline: "none" }}
               />
               <button
                 onClick={handleSubmit}
                 disabled={!name || !email}
                 style={{
-                  background: name && email ? "#185FA5" : "#334155",
+                  background: name && email ? "#5B57E8" : "#334155",
                   color: "#fff", border: "none", borderRadius: 10,
                   padding: "12px", fontSize: 14, fontWeight: 700,
                   cursor: name && email ? "pointer" : "not-allowed",

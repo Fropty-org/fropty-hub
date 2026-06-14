@@ -32,7 +32,7 @@ export default function TermosPage() {
             Voltar
           </Link>
           <span className="text-base font-bold tracking-tight text-white">
-            Fropty<span className="text-[#185FA5]">Apps</span>
+            Fropty<span className="text-[#5B57E8]">Apps</span>
           </span>
           <div className="w-16" />
         </div>

@@ -24,7 +24,7 @@ export default function AppDemos() {
       }}
     >
       <div style={{ textAlign: "center", marginBottom: 32 }}>
-        <div style={{ fontSize: 12, fontWeight: 600, color: "#185FA5", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8 }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: "#5B57E8", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8 }}>
           Exemplos reais
         </div>
         <h2 style={{ fontSize: 28, fontWeight: 700, color: "#fff", margin: "0 0 8px" }}>
@@ -69,7 +69,7 @@ export default function AppDemos() {
             left: view === "mobile" ? 0 : "50%",
             width: "50%",
             height: 2,
-            background: "#185FA5",
+            background: "#5B57E8",
             borderRadius: 1,
             transition: "left 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
           }} />

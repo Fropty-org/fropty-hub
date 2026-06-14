@@ -71,7 +71,7 @@ export default function QuoteForm() {
           name="nome"
           type="text"
           required
-          className="mt-1 w-full rounded-lg border border-white/20 bg-[#0f172a] px-4 py-2 text-white placeholder-slate-500 transition duration-150 focus:border-[#185FA5] focus:outline-none focus:ring-2 focus:ring-[#185FA5]/25 focus:shadow-[0_0_0_4px_rgba(24,95,165,0.12)]"
+          className="mt-1 w-full rounded-lg border border-white/20 bg-[#0f172a] px-4 py-2 text-white placeholder-slate-500 transition duration-150 focus:border-[#5B57E8] focus:outline-none focus:ring-2 focus:ring-[#5B57E8]/25 focus:shadow-[0_0_0_4px_rgba(91,87,232,0.12)]"
         />
       </div>
 
@@ -84,7 +84,7 @@ export default function QuoteForm() {
           name="email"
           type="email"
           required
-          className="mt-1 w-full rounded-lg border border-white/20 bg-[#0f172a] px-4 py-2 text-white placeholder-slate-500 transition duration-150 focus:border-[#185FA5] focus:outline-none focus:ring-2 focus:ring-[#185FA5]/25 focus:shadow-[0_0_0_4px_rgba(24,95,165,0.12)]"
+          className="mt-1 w-full rounded-lg border border-white/20 bg-[#0f172a] px-4 py-2 text-white placeholder-slate-500 transition duration-150 focus:border-[#5B57E8] focus:outline-none focus:ring-2 focus:ring-[#5B57E8]/25 focus:shadow-[0_0_0_4px_rgba(91,87,232,0.12)]"
         />
       </div>
 
@@ -97,7 +97,7 @@ export default function QuoteForm() {
           name="ideia"
           required
           rows={4}
-          className="mt-1 w-full rounded-lg border border-white/20 bg-[#0f172a] px-4 py-2 text-white placeholder-slate-500 transition duration-150 focus:border-[#185FA5] focus:outline-none focus:ring-2 focus:ring-[#185FA5]/25 focus:shadow-[0_0_0_4px_rgba(24,95,165,0.12)]"
+          className="mt-1 w-full rounded-lg border border-white/20 bg-[#0f172a] px-4 py-2 text-white placeholder-slate-500 transition duration-150 focus:border-[#5B57E8] focus:outline-none focus:ring-2 focus:ring-[#5B57E8]/25 focus:shadow-[0_0_0_4px_rgba(91,87,232,0.12)]"
         />
       </div>
 
@@ -110,7 +110,7 @@ export default function QuoteForm() {
           name="temLogo"
           required
           defaultValue=""
-          className="mt-1 w-full rounded-lg border border-white/20 bg-[#0f172a] px-4 py-2 text-white focus:border-[#185FA5] focus:outline-none focus:ring-2 focus:ring-[#185FA5]/30"
+          className="mt-1 w-full rounded-lg border border-white/20 bg-[#0f172a] px-4 py-2 text-white focus:border-[#5B57E8] focus:outline-none focus:ring-2 focus:ring-[#5B57E8]/30"
         >
           <option value="" disabled className="text-slate-500">
             Selecione uma opção
@@ -129,7 +129,7 @@ export default function QuoteForm() {
           id="cores"
           name="cores"
           type="text"
-          className="mt-1 w-full rounded-lg border border-white/20 bg-[#0f172a] px-4 py-2 text-white placeholder-slate-500 transition duration-150 focus:border-[#185FA5] focus:outline-none focus:ring-2 focus:ring-[#185FA5]/25 focus:shadow-[0_0_0_4px_rgba(24,95,165,0.12)]"
+          className="mt-1 w-full rounded-lg border border-white/20 bg-[#0f172a] px-4 py-2 text-white placeholder-slate-500 transition duration-150 focus:border-[#5B57E8] focus:outline-none focus:ring-2 focus:ring-[#5B57E8]/25 focus:shadow-[0_0_0_4px_rgba(91,87,232,0.12)]"
           placeholder="Ex: azul e branco, tema escuro, moderno..."
         />
       </div>
@@ -145,7 +145,7 @@ export default function QuoteForm() {
                 type="checkbox"
                 name="prioridades"
                 value={p}
-                className="h-4 w-4 rounded border-white/20 accent-[#185FA5]"
+                className="h-4 w-4 rounded border-white/20 accent-[#5B57E8]"
               />
               {p}
             </label>
@@ -162,7 +162,7 @@ export default function QuoteForm() {
       <button
         type="submit"
         disabled={status === "sending"}
-        className="w-full rounded-full bg-[#185FA5] px-6 py-3 font-semibold text-white transition hover:brightness-110 disabled:opacity-60"
+        className="w-full rounded-full bg-[#5B57E8] px-6 py-3 font-semibold text-white transition hover:brightness-110 disabled:opacity-60"
       >
         {status === "sending" ? "Enviando..." : "Enviar pedido de orçamento"}
       </button>

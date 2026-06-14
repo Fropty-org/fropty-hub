@@ -34,10 +34,10 @@ export default function ConfiguradorPage() {
         className="pointer-events-none fixed inset-0 overflow-hidden"
       >
         <div className="absolute left-1/2 top-0 h-[500px] w-[700px] -translate-x-1/2 rounded-full opacity-20"
-          style={{ background: "radial-gradient(circle, #185FA5 0%, transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, #5B57E8 0%, transparent 70%)" }}
         />
         <div className="absolute bottom-0 left-0 h-[300px] w-[400px] rounded-full opacity-10"
-          style={{ background: "radial-gradient(circle, #185FA5 0%, transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, #5B57E8 0%, transparent 70%)" }}
         />
       </div>
 
@@ -54,7 +54,7 @@ export default function ConfiguradorPage() {
             Voltar
           </Link>
           <span className="text-base font-bold tracking-tight text-white">
-            Fropty<span className="text-[#185FA5]">Apps</span>
+            Fropty<span className="text-[#5B57E8]">Apps</span>
           </span>
           <div className="w-16" />
         </div>
@@ -62,13 +62,13 @@ export default function ConfiguradorPage() {
 
       {/* Hero */}
       <div className="relative mx-auto max-w-3xl px-6 pb-10 pt-14 text-center">
-        <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#185FA5]/30 bg-[#185FA5]/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-[#185FA5]">
+        <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#5B57E8]/30 bg-[#5B57E8]/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-[#5B57E8]">
           <i className="ti ti-adjustments-horizontal" />
           Configuração personalizada
         </span>
         <h1 className="text-3xl font-bold leading-tight text-white sm:text-5xl">
           Monte seu app{" "}
-          <span className="text-[#185FA5]">do seu jeito</span>
+          <span className="text-[#5B57E8]">do seu jeito</span>
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-lg text-slate-400">
           Escolha cada recurso, veja o preço mudar em tempo real e peça seu orçamento. Sem surpresa, sem enrolação.
@@ -77,15 +77,15 @@ export default function ConfiguradorPage() {
         {/* Métricas rápidas */}
         <div className="mt-8 flex items-center justify-center gap-6 text-sm text-slate-500">
           <span className="flex items-center gap-1.5">
-            <i className="ti ti-check text-[#185FA5]" />
+            <i className="ti ti-check text-[#5B57E8]" />
             Preço em tempo real
           </span>
           <span className="flex items-center gap-1.5">
-            <i className="ti ti-check text-[#185FA5]" />
+            <i className="ti ti-check text-[#5B57E8]" />
             Sem compromisso
           </span>
           <span className="flex items-center gap-1.5">
-            <i className="ti ti-check text-[#185FA5]" />
+            <i className="ti ti-check text-[#5B57E8]" />
             Resposta em 48h
           </span>
         </div>
