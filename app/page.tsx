@@ -1,142 +1,10 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
-import QuoteForm from "./components/QuoteForm";
 import AppDemos from "./components/AppDemos";
-
-const plans = [
-  {
-    name: "Prévia gratuita",
-    price: "R$0",
-    period: "",
-    badge: "",
-    highlight: false,
-    description:
-      "Conte sua ideia e receba uma prévia visual do seu app, sem compromisso.",
-    features: [
-      "Como vão ficar as telas do seu app",
-      "Sem custo e sem compromisso",
-      "Entrega em poucos dias",
-    ],
-    savingsStrike: "",
-    savingsText: "",
-    note: "",
-  },
-  {
-    name: "App completo",
-    price: "a partir de R$499",
-    period: "pagamento único",
-    badge: "MAIS POPULAR",
-    highlight: true,
-    description:
-      "Seu app desenvolvido do início ao fim, pronto para usar e publicar.",
-    features: [
-      "Desenvolvimento completo",
-      "Design personalizado com suas cores e logo",
-      "App publicado e entregue em funcionamento",
-      "Suporte na entrega",
-    ],
-    savingsStrike: "",
-    savingsText: "",
-    note: "O plano base não inclui backup automático. Recomendamos fortemente a contratação do add-on de backup.",
-  },
-  {
-    name: "Manutenção Básico",
-    price: "R$49,90",
-    period: "/mês",
-    badge: "",
-    highlight: false,
-    description:
-      "Mantenha seu app funcionando com 4 tokens mensais de suporte e ajustes.",
-    features: [
-      "4 tokens por mês para ajustes",
-      "Correções e pequenas melhorias",
-      "Atendimento prioritário",
-    ],
-    savingsStrike: "4 tokens = R$ 1.200,00 avulso",
-    savingsText: "Você economiza R$ 1.150,10",
-    note: "Fidelidade mínima: 3 meses",
-    href: "/configurador",
-  },
-  {
-    name: "Manutenção Pro",
-    price: "R$89,90",
-    period: "/mês",
-    badge: "MELHOR CUSTO",
-    highlight: false,
-    description:
-      "Mais tokens, mais liberdade. Ideal para quem usa o suporte com frequência.",
-    features: [
-      "8 tokens por mês para ajustes",
-      "Correções e pequenas melhorias",
-      "Atendimento prioritário",
-    ],
-    savingsStrike: "8 tokens = R$ 2.400,00 avulso",
-    savingsText: "Você economiza R$ 2.310,10",
-    note: "Fidelidade mínima: 3 meses",
-    href: "/configurador",
-  },
-];
-
-const faqs = [
-  {
-    q: "A prévia é gratuita mesmo?",
-    a: "Sim. Você conta sua ideia, a gente monta uma visualização das telas principais e te envia sem nenhum custo. Só depois, se gostar, você decide se quer o app completo.",
-  },
-  {
-    q: "Quanto tempo leva para ficar pronto?",
-    a: "A prévia sai em poucos dias. O app completo depende da complexidade, mas a maioria dos projetos é entregue em poucas semanas.",
-  },
-  {
-    q: "Preciso entender de tecnologia?",
-    a: "Não. Você descreve a ideia com suas palavras e a gente cuida de toda a parte técnica, da construção à publicação.",
-  },
-  {
-    q: "Como funcionam os tokens da manutenção?",
-    a: "Você recebe tokens mensais de acordo com seu plano: 4 no Básico e 8 no Pro. Cada token vale um pedido de ajuste ou suporte: mudar um texto, ajustar uma cor, corrigir algo. Os tokens não acumulam. Tokens extras podem ser comprados avulsos sempre que precisar.",
-  },
-  {
-    q: "O que é um token exatamente?",
-    a: "Um token representa uma demanda de suporte ou ajuste no seu app: correção de bug, alteração visual, mudança de texto, atualização de conteúdo ou pequena melhoria funcional. Demandas mais complexas podem consumir mais de um token — isso é combinado antes da execução.",
-  },
-  {
-    q: "Os tokens acumulam se eu não usar?",
-    a: "Não. Tokens não utilizados expiram no fim de cada mês e não são transferidos para o mês seguinte. Use sem medo, mas planeje suas demandas.",
-  },
-  {
-    q: "Posso cancelar o plano quando quiser?",
-    a: "Os planos têm fidelidade mínima de 3 meses. Após esse período, o cancelamento é livre e sem multa. Cancelamentos antecipados estão sujeitos à cobrança da diferença entre os tokens utilizados e o valor avulso (R$300,00/token). Clientes que cancelaram e desejam retornar pagam uma taxa de reativação de R$79,90 no primeiro mês.",
-  },
-  {
-    q: "Posso cancelar e assinar novamente depois?",
-    a: "Sim, desde que respeitada a fidelidade mínima de 3 meses do plano. Clientes que cancelaram e desejam reativar o plano pagam uma taxa de reativação de R$79,90 no primeiro mês de retorno. A partir do segundo mês, a mensalidade volta ao valor normal do plano escolhido.",
-  },
-  {
-    q: "O que acontece com meu app se eu não tiver plano?",
-    a: "O app continua funcionando normalmente — ele é seu. Mas sem plano ativo, nenhum suporte, ajuste ou melhoria pode ser solicitado. Para demandas pontuais sem plano, o valor é de R$300,00 por token avulso.",
-  },
-  {
-    q: "Tenho direito a reembolso?",
-    a: "Sim. Para contratos celebrados online, o CDC garante 7 dias de arrependimento a partir da contratação (Art. 49). Fora desse prazo, reembolsos são analisados caso a caso conforme os termos de uso.",
-  },
-];
-
-const PREVIEW_ADDONS = [
-  { icon: "lock", label: "Login" },
-  { icon: "tool", label: "Admin" },
-  { icon: "brand-whatsapp", label: "WhatsApp" },
-  { icon: "bell", label: "Push" },
-  { icon: "chart-bar", label: "Relatórios" },
-  { icon: "world", label: "Domínio" },
-];
+import FaqAccordion from "./components/FaqAccordion";
+import { QuoteButton } from "./components/QuoteModal";
+import { plans, faqs, previewAddons } from "./lib/data/plans";
 
 export default function Home() {
-  const [formOpen, setFormOpen] = useState(false);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
-
-  const openForm = () => setFormOpen(true);
-
   return (
     <main className="min-h-screen text-slate-300" style={{ background: "#0f172a" }}>
 
@@ -174,12 +42,9 @@ export default function Home() {
           gratuita! Sem complicação técnica, sem precisar falar difícil. Conte
           a sua ideia com suas palavras e a gente faz o resto para você :)
         </p>
-        <button
-          onClick={openForm}
-          className="mt-10 rounded-full bg-[#185FA5] px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-blue-900/40 transition hover:brightness-110"
-        >
+        <QuoteButton className="mt-10 rounded-full bg-[#185FA5] px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-blue-900/40 transition hover:brightness-110">
           Pedir orçamento grátis →
-        </button>
+        </QuoteButton>
       </section>
 
       {/* Métricas */}
@@ -223,9 +88,7 @@ export default function Home() {
                   {plan.badge}
                 </span>
               )}
-              <h3 className={`text-xl font-semibold ${plan.highlight ? "text-white" : "text-white"}`}>
-                {plan.name}
-              </h3>
+              <h3 className="text-xl font-semibold text-white">{plan.name}</h3>
               <p className="mt-4">
                 <span className={`text-2xl font-bold ${plan.highlight ? "text-white" : "text-[#185FA5]"}`}>
                   {plan.price}
@@ -258,7 +121,8 @@ export default function Home() {
                 </div>
               )}
               {plan.note && (
-                <p className={`mt-3 text-xs font-bold ${plan.highlight ? "text-blue-100" : ""}`}
+                <p
+                  className={`mt-3 text-xs font-bold ${plan.highlight ? "text-blue-100" : ""}`}
                   style={plan.highlight ? undefined : { color: "#EF9F27" }}
                 >
                   {plan.note}
@@ -276,8 +140,7 @@ export default function Home() {
                   Quero esse →
                 </Link>
               ) : (
-                <button
-                  onClick={openForm}
+                <QuoteButton
                   className={`mt-8 rounded-full px-4 py-3 text-center font-semibold transition ${
                     plan.highlight
                       ? "bg-white text-[#185FA5] hover:bg-blue-50"
@@ -285,7 +148,7 @@ export default function Home() {
                   }`}
                 >
                   Quero esse →
-                </button>
+                </QuoteButton>
               )}
             </div>
           ))}
@@ -320,7 +183,7 @@ export default function Home() {
                   Login com Google, painel admin, WhatsApp, relatórios... escolha o que faz sentido e veja o preço atualizar na hora.
                 </p>
                 <div className="mt-5 flex flex-wrap gap-2">
-                  {PREVIEW_ADDONS.map(({ icon, label }) => (
+                  {previewAddons.map(({ icon, label }) => (
                     <span key={icon} className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm text-slate-300"
                       style={{ borderColor: "#334155", background: "#1e293b" }}
                     >
@@ -400,26 +263,7 @@ export default function Home() {
         <h2 className="text-center text-3xl font-bold tracking-tight text-white sm:text-4xl">
           Perguntas frequentes
         </h2>
-        <div className="mt-10 divide-y divide-white/10 rounded-2xl border border-white/10 bg-[#111c30]">
-          {faqs.map((faq, i) => (
-            <div key={faq.q}>
-              <button
-                onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                className="flex w-full items-center justify-between px-6 py-5 text-left font-medium text-slate-100 hover:bg-white/5 transition"
-              >
-                {faq.q}
-                <span className="ml-4 text-slate-500">
-                  {openFaq === i ? "−" : "+"}
-                </span>
-              </button>
-              {openFaq === i && (
-                <p className="px-6 pb-5 text-sm leading-relaxed text-slate-400">
-                  {faq.a}
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
+        <FaqAccordion faqs={faqs} />
       </section>
 
       {/* CTA final */}
@@ -428,13 +272,9 @@ export default function Home() {
           <h2 className="text-3xl font-bold tracking-tight text-white">
             Pronto para tirar sua ideia do papel?
           </h2>
-
-          <button
-            onClick={openForm}
-            className="mt-8 rounded-full bg-white px-8 py-4 font-semibold text-[#185FA5] shadow-lg transition hover:bg-blue-50"
-          >
+          <QuoteButton className="mt-8 rounded-full bg-white px-8 py-4 font-semibold text-[#185FA5] shadow-lg transition hover:bg-blue-50">
             Pedir orçamento grátis →
-          </button>
+          </QuoteButton>
         </div>
       </section>
 
@@ -447,35 +287,6 @@ export default function Home() {
           <Link href="/privacidade" className="hover:text-slate-300 transition">Política de Privacidade</Link>
         </div>
       </footer>
-
-      {/* Modal do formulário */}
-      {formOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/60 p-4 sm:p-8"
-          onClick={() => setFormOpen(false)}
-        >
-          <div
-            className="relative w-full max-w-xl rounded-2xl border border-white/10 p-8 shadow-2xl"
-            style={{ background: "#1e293b" }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setFormOpen(false)}
-              aria-label="Fechar"
-              className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full text-slate-400 hover:bg-white/10 hover:text-white transition"
-            >
-              ✕
-            </button>
-            <h2 className="text-2xl font-bold tracking-tight text-white">
-              Peça seu orçamento
-            </h2>
-            <p className="mt-1 text-sm text-slate-400">
-              Conte sua ideia e a gente responde com uma prévia gratuita.
-            </p>
-            <QuoteForm />
-          </div>
-        </div>
-      )}
     </main>
   );
 }

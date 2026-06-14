@@ -10,14 +10,14 @@
   --color-foreground: var(--foreground);
   --color-primary: #185fa5;
   --color-accent: #ef9f27;
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-plus-jakarta);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
 }
 
 /* ── App demo animations ──────────────────────────────────────── */
