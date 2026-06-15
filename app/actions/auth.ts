@@ -90,7 +90,7 @@ export async function signUp(formData: FormData) {
 export async function signOut() {
   const supabase = await createClient();
   await supabase.auth.signOut();
-  redirect("/area-cliente");
+  return { redirectTo: "/area-cliente" };
 }
 
 export async function requestPasswordReset(formData: FormData) {

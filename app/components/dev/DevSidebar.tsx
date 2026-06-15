@@ -65,7 +65,10 @@ export function DevSidebar({ name, initials }: Props) {
       </nav>
 
       <button
-        onClick={() => startTransition(() => signOut())}
+        onClick={() => startTransition(async () => {
+          const result = await signOut();
+          if (result?.redirectTo) window.location.href = result.redirectTo;
+        })}
         disabled={pending}
         style={{ display: "flex", alignItems: "center", gap: 8, padding: "9px 12px", borderRadius: 9, fontSize: "13px", fontWeight: 600, color: "var(--text-faint)", background: "none", border: "none", cursor: "pointer", opacity: pending ? 0.6 : 1, marginTop: 8, fontFamily: "inherit", width: "100%", textAlign: "left" }}
       >

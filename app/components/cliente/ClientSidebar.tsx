@@ -123,7 +123,10 @@ export function ClientSidebar({ user, navItems, avatarUrl, initialTheme = "dark"
 
       {/* Logout */}
       <button
-        onClick={() => startTransition(() => signOut())}
+        onClick={() => startTransition(async () => {
+          const result = await signOut();
+          if (result?.redirectTo) window.location.href = result.redirectTo;
+        })}
         disabled={pending}
         style={{
           display: "flex",

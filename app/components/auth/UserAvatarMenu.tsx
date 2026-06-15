@@ -123,7 +123,10 @@ export function UserAvatarMenu({ name, email, initials, role, plan }: Props) {
           <button
             onClick={() => {
               setOpen(false);
-              startTrans(() => signOut());
+              startTrans(async () => {
+                const result = await signOut();
+                if (result?.redirectTo) window.location.href = result.redirectTo;
+              });
             }}
             disabled={pending}
             style={{
