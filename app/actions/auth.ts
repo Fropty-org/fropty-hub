@@ -19,15 +19,19 @@ export async function signIn(formData: FormData) {
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const { data: { user }, error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) return { error: "Email ou senha incorretos." };
 
-  // Middleware lê o role do banco e redireciona para a home correta.
-  // Cliente → /portal/dashboard (sem redirect adicional)
-  // Dev     → middleware redireciona para /dev/tasks
-  // Admin   → middleware redireciona para /admin/overview
-  redirect(ROLE_HOME[DEFAULT_ROLE]);
+  // Busca o role para redirecionar para a home correta de cada tipo de usuário
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user!.id)
+    .single();
+
+  const role = (profile?.role as UserRole) ?? DEFAULT_ROLE;
+  redirect(ROLE_HOME[role]);
 }
 
 /**
