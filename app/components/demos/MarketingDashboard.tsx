@@ -52,7 +52,7 @@ export function MarketingDashboard() {
             {/* Campaigns table */}
             <div style={{ background: "#161b27", border: "1px solid rgba(255,255,255,0.05)", borderRadius: 9, padding: "10px 12px" }}>
               <div style={{ fontSize: 10, fontWeight: 700, color: "#f1f5f9", marginBottom: 8 }}>Campanhas ativas</div>
-              {campaigns.map(({ name, spend, clicks, conv, cpa, status }, i) => (
+              {campaigns.map(({ name, spend, clicks, cpa, status }, i) => (
                 <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "5px 0", borderBottom: i < 3 ? "1px solid rgba(255,255,255,0.04)" : "none", gap: 4 }}>
                   <div style={{ minWidth: 0 }}>
                     <div style={{ fontSize: 9, fontWeight: 600, color: "#e2e8f0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 130 }}>{name}</div>

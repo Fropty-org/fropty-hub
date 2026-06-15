@@ -1,80 +1,182 @@
-import type { Metadata } from "next";
+﻿"use client";
+
+import { useState, useTransition } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { LoginForm } from "../components/cliente/LoginForm";
+import { signIn, signUp, requestPasswordReset } from "@/app/actions/auth";
 
-export const metadata: Metadata = {
-  title: "Área do Cliente",
-  description: "Acesse sua conta Fropty Apps e acompanhe o desenvolvimento do seu projeto.",
-  robots: { index: false, follow: false },
-};
+type Mode = "login" | "cadastro" | "reset";
 
 export default function AreaClientePage() {
+  const [mode, setMode]       = useState<Mode>("login");
+  const [error, setError]     = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+
+  function changeMode(m: Mode) { setMode(m); setError(null); setSuccess(null); }
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError(null);
+    setSuccess(null);
+    const formData = new FormData(e.currentTarget);
+
+    startTransition(async () => {
+      if (mode === "reset") {
+        const result = await requestPasswordReset(formData);
+        if (result && "error"   in result) setError(result.error ?? null);
+        if (result && "success" in result) setSuccess(result.success as string);
+        return;
+      }
+      const action = mode === "login" ? signIn : signUp;
+      const result = await action(formData);
+      if (result && "error"   in result) setError(result.error ?? null);
+      if (result && "success" in result) setSuccess(result.success as string);
+    });
+  }
+
   return (
-    <main
-      style={{
-        minHeight: "100vh",
-        background: "var(--bg)",
-        color: "var(--text)",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "24px",
-      }}
-    >
-      {/* Logo */}
-      <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: 8, marginBottom: 40, textDecoration: "none" }}>
-        <Image src="/logo-icon.png" alt="Fropty Apps" width={32} height={32} className="rounded-md" />
-        <span style={{ fontWeight: 700, fontSize: "1.1rem", color: "var(--text)" }}>
+    <div style={{
+      minHeight: "100dvh", background: "var(--bg)",
+      display: "flex", flexDirection: "column",
+      alignItems: "center", justifyContent: "center",
+      padding: "24px 16px",
+    }}>
+      <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 36, textDecoration: "none" }}>
+        <Image src="/logo-icon.png" alt="Fropty Apps" width={32} height={32} style={{ borderRadius: 8 }} />
+        <span style={{ fontSize: 18, fontWeight: 800, color: "var(--text)", fontFamily: "var(--font-plus-jakarta), sans-serif" }}>
           Fropty<span style={{ color: "var(--primary)" }}>Apps</span>
         </span>
       </Link>
 
-      <div
-        style={{
-          width: "100%",
-          maxWidth: 420,
-          background: "var(--card-bg)",
-          border: "1px solid var(--card-border)",
-          borderRadius: 20,
-          padding: "36px 32px",
-        }}
-      >
-        <h1 style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: 6, textAlign: "center" }}>
-          Área do Cliente
-        </h1>
-        <p style={{ color: "var(--text-muted)", fontSize: "0.9rem", textAlign: "center", marginBottom: 28 }}>
-          Acompanhe seu projeto e gerencie seus tokens
-        </p>
+      <div style={{
+        width: "100%", maxWidth: 400,
+        background: "var(--surface)",
+        border: "1px solid var(--border)",
+        borderRadius: 20, padding: "32px 28px",
+        boxShadow: "0 24px 64px rgba(0,0,0,0.2)",
+      }}>
+        {/* Tab switcher — só mostra em login/cadastro */}
+        {mode !== "reset" && (
+          <div style={{ display: "flex", background: "var(--bg)", borderRadius: 12, padding: 3, marginBottom: 28 }}>
+            {(["login", "cadastro"] as const).map((m) => (
+              <button key={m} type="button" onClick={() => changeMode(m)} style={{
+                flex: 1, padding: "9px 0", borderRadius: 10, border: "none",
+                cursor: "pointer", fontWeight: 700, fontSize: 14, fontFamily: "inherit",
+                transition: "all 0.2s",
+                background: mode === m ? "var(--primary)" : "transparent",
+                color:      mode === m ? "#fff" : "var(--text-muted)",
+              }}>
+                {m === "login" ? "Entrar" : "Criar conta"}
+              </button>
+            ))}
+          </div>
+        )}
 
-        <LoginForm />
+        {/* Header do modo reset */}
+        {mode === "reset" && (
+          <div style={{ marginBottom: 24 }}>
+            <button onClick={() => changeMode("login")} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)", padding: 0, display: "flex", alignItems: "center", gap: 6, fontSize: 13, marginBottom: 16, fontFamily: "inherit" }}>
+              <i className="ti ti-arrow-left" style={{ fontSize: 14 }} /> Voltar ao login
+            </button>
+            <h2 style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--text)", margin: "0 0 6px", fontFamily: "var(--font-plus-jakarta), sans-serif" }}>
+              Recuperar senha
+            </h2>
+            <p style={{ fontSize: 13, color: "var(--text-muted)", margin: 0 }}>
+              Informe seu e-mail e enviaremos um link para criar nova senha.
+            </p>
+          </div>
+        )}
 
-        <p style={{ marginTop: 24, fontSize: "0.8rem", color: "var(--text-faint)", textAlign: "center" }}>
-          Ainda não tem conta?{" "}
-          <Link href="/configurador" style={{ color: "var(--primary)", textDecoration: "none", fontWeight: 600 }}>
-            Configure seu plano
-          </Link>
-        </p>
+        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          {mode === "cadastro" && (
+            <div>
+              <label style={labelStyle}>Nome completo</label>
+              <input name="name" type="text" required autoComplete="name" placeholder="Seu nome" style={inputStyle} />
+            </div>
+          )}
+
+          <div>
+            <label style={labelStyle}>E-mail</label>
+            <input name="email" type="email" required autoComplete="email" placeholder="seu@email.com" style={inputStyle} />
+          </div>
+
+          {mode !== "reset" && (
+            <div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                <label style={{ ...labelStyle, marginBottom: 0 }}>Senha</label>
+                {mode === "login" && (
+                  <button type="button" onClick={() => changeMode("reset")} style={{ fontSize: 12, color: "var(--primary)", background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "inherit" }}>
+                    Esqueci a senha
+                  </button>
+                )}
+              </div>
+              <input
+                name="password" type="password" required
+                autoComplete={mode === "login" ? "current-password" : "new-password"}
+                placeholder={mode === "cadastro" ? "Mínimo 8 caracteres" : "••••••••"}
+                style={inputStyle}
+              />
+            </div>
+          )}
+
+          {mode === "cadastro" && (
+            <div>
+              <label style={labelStyle}>Confirmar senha</label>
+              <input name="confirm" type="password" required autoComplete="new-password" placeholder="Repita a senha" style={inputStyle} />
+            </div>
+          )}
+
+          {error && (
+            <div style={{ padding: "10px 14px", borderRadius: 10, background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.25)", color: "#ef4444", fontSize: 13, display: "flex", alignItems: "center", gap: 8 }}>
+              <i className="ti ti-alert-circle" style={{ fontSize: 15, flexShrink: 0 }} />{error}
+            </div>
+          )}
+
+          {success && (
+            <div style={{ padding: "10px 14px", borderRadius: 10, background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.25)", color: "#22c55e", fontSize: 13, display: "flex", alignItems: "center", gap: 8 }}>
+              <i className="ti ti-circle-check" style={{ fontSize: 15, flexShrink: 0 }} />{success}
+            </div>
+          )}
+
+          <button type="submit" disabled={isPending} style={{
+            marginTop: 4, padding: "12px 0", borderRadius: 12, border: "none",
+            background: isPending ? "var(--border)" : "var(--primary)",
+            color: isPending ? "var(--text-muted)" : "#fff",
+            fontWeight: 700, fontSize: 15, cursor: isPending ? "not-allowed" : "pointer",
+            fontFamily: "inherit", transition: "all 0.2s",
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+          }}>
+            {isPending ? (
+              <><i className="ti ti-loader-2" style={{ fontSize: 16, animation: "spin 1s linear infinite" }} />Aguarde…</>
+            ) : mode === "login" ? "Entrar na conta" : mode === "cadastro" ? "Criar minha conta" : "Enviar link de recuperação"}
+          </button>
+        </form>
       </div>
 
-      {/* Demo notice */}
-      <div
-        style={{
-          marginTop: 20,
-          padding: "10px 16px",
-          background: "rgba(91,87,232,0.1)",
-          border: "1px solid rgba(91,87,232,0.2)",
-          borderRadius: 10,
-          fontSize: "12px",
-          color: "var(--text-muted)",
-          maxWidth: 420,
-          textAlign: "center",
-        }}
-      >
-        <i className="ti ti-info-circle" style={{ color: "var(--primary)", marginRight: 6 }} />
-        Modo demonstração — use qualquer email e senha para entrar
-      </div>
-    </main>
+      <p style={{ marginTop: 24, fontSize: 12, color: "var(--text-faint)", textAlign: "center" }}>
+        Ao continuar você concorda com os{" "}
+        <Link href="/termos" style={{ color: "var(--text-muted)", textDecoration: "underline" }}>Termos de Uso</Link>
+        {" "}e{" "}
+        <Link href="/privacidade" style={{ color: "var(--text-muted)", textDecoration: "underline" }}>Privacidade</Link>.
+      </p>
+
+      <style>{`
+        @keyframes spin { to { transform: rotate(360deg); } }
+        input::placeholder { color: var(--text-faint); }
+        input:focus { outline: none; border-color: var(--primary) !important; box-shadow: 0 0 0 3px rgba(91,87,232,0.15); }
+      `}</style>
+    </div>
   );
 }
+
+const labelStyle: React.CSSProperties = {
+  display: "block", fontSize: 13, fontWeight: 600,
+  color: "var(--text-muted)", marginBottom: 6,
+};
+const inputStyle: React.CSSProperties = {
+  width: "100%", padding: "11px 14px", borderRadius: 10,
+  border: "1px solid var(--border)", background: "var(--bg)",
+  color: "var(--text)", fontSize: 14, fontFamily: "inherit",
+  boxSizing: "border-box", transition: "border-color 0.2s, box-shadow 0.2s",
+};

@@ -5,19 +5,34 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useTransition } from "react";
 import { signOut } from "../../actions/auth";
+import { AvatarUpload } from "./AvatarUpload";
+import { PortalThemeToggle } from "./PortalThemeToggle";
 import type { ClientUser } from "../../lib/types/cliente";
+
+interface NavItem {
+  id: string;
+  href: string;
+  icon: string;
+  label: string;
+  badge?: number;
+}
 
 interface Props {
   user: ClientUser;
+  /** Itens de navegação. Se omitido, usa o padrão da área-cliente legada. */
+  navItems?:    NavItem[];
+  avatarUrl?:   string | null;
+  initialTheme?: "dark" | "light";
 }
 
-const NAV = [
+const DEFAULT_NAV: NavItem[] = [
   { id: "dashboard", href: "/area-cliente/dashboard", icon: "ti-layout-dashboard", label: "Painel" },
   { id: "tokens",    href: "/area-cliente/tokens",    icon: "ti-coins",             label: "Tokens" },
 ];
 
-export function ClientSidebar({ user }: Props) {
+export function ClientSidebar({ user, navItems, avatarUrl, initialTheme = "dark" }: Props) {
   const pathname = usePathname();
+  const NAV = navItems ?? DEFAULT_NAV;
   const [pending, startTransition] = useTransition();
 
   return (
@@ -42,25 +57,14 @@ export function ClientSidebar({ user }: Props) {
       </Link>
 
       {/* User */}
-      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 28, padding: "12px", background: "var(--surface-2)", borderRadius: 12 }}>
-        <div
-          style={{
-            width: 36,
-            height: 36,
-            borderRadius: "50%",
-            background: "var(--primary)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "13px",
-            fontWeight: 700,
-            color: "#fff",
-            flexShrink: 0,
-          }}
-        >
-          {user.avatarInitials}
-        </div>
-        <div style={{ overflow: "hidden" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 28, padding: "10px 12px", background: "var(--surface-2)", borderRadius: 12 }}>
+        <AvatarUpload
+          userId={user.id}
+          currentUrl={avatarUrl ?? null}
+          initials={user.avatarInitials}
+          size={36}
+        />
+        <div style={{ overflow: "hidden", flex: 1 }}>
           <p style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
             {user.name.split(" ")[0]}
           </p>
@@ -68,11 +72,12 @@ export function ClientSidebar({ user }: Props) {
             {user.plan ? `Plano ${user.plan === "pro" ? "Pro" : "Básico"}` : "Sem plano"}
           </p>
         </div>
+        <PortalThemeToggle initialTheme={initialTheme} />
       </div>
 
       {/* Nav */}
       <nav style={{ display: "flex", flexDirection: "column", gap: 4, flex: 1 }}>
-        {NAV.map(({ id, href, icon, label }) => {
+        {NAV.map(({ id, href, icon, label, badge }) => {
           const isActive = pathname.startsWith(href);
           return (
             <Link
@@ -93,7 +98,24 @@ export function ClientSidebar({ user }: Props) {
               }}
             >
               <i className={`ti ${icon}`} style={{ fontSize: 16 }} />
-              {label}
+              <span style={{ flex: 1 }}>{label}</span>
+              {badge != null && badge > 0 && (
+                <span style={{
+                  minWidth: 18, height: 18,
+                  padding: "0 5px",
+                  borderRadius: 999,
+                  background: "var(--primary)",
+                  color: "#fff",
+                  fontSize: 10,
+                  fontWeight: 800,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  lineHeight: 1,
+                }}>
+                  {badge > 99 ? "99+" : badge}
+                </span>
+              )}
             </Link>
           );
         })}

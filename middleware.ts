@@ -1,6 +1,11 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+const LOGIN_PAGE = "/area-cliente";
+
+// Rotas que exigem autenticação
+const PROTECTED_PREFIXES = ["/portal", "/dev", "/admin", "/area-cliente/"];
+
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
 
@@ -23,22 +28,25 @@ export async function middleware(request: NextRequest) {
     }
   );
 
+  // Valida JWT contra o Supabase Auth — sem query ao banco de dados
   const { data: { user } } = await supabase.auth.getUser();
 
-  const isClientArea = request.nextUrl.pathname.startsWith("/area-cliente");
-  const isLoginPage  = request.nextUrl.pathname === "/area-cliente";
+  const path        = request.nextUrl.pathname;
+  const isLoginPage = path === LOGIN_PAGE;
+  const isProtected = PROTECTED_PREFIXES.some((p) => path.startsWith(p));
 
-  // Redireciona usuário não autenticado para login
-  if (isClientArea && !isLoginPage && !user) {
+  // Visitante tenta acessar rota protegida → redireciona para login
+  if (isProtected && !user) {
     const url = request.nextUrl.clone();
-    url.pathname = "/area-cliente";
+    url.pathname = LOGIN_PAGE;
     return NextResponse.redirect(url);
   }
 
-  // Redireciona usuário autenticado que acessa login para o dashboard
+  // Usuário autenticado acessa a página de login → redireciona para o portal
+  // O controle de role (cliente/dev/admin) fica nos layouts — sem query de DB aqui
   if (isLoginPage && user) {
     const url = request.nextUrl.clone();
-    url.pathname = "/area-cliente/dashboard";
+    url.pathname = "/portal/dashboard";
     return NextResponse.redirect(url);
   }
 
@@ -46,5 +54,10 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/area-cliente/:path*"],
+  matcher: [
+    "/area-cliente/:path*",
+    "/portal/:path*",
+    "/dev/:path*",
+    "/admin/:path*",
+  ],
 };

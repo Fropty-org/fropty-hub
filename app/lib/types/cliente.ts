@@ -5,6 +5,9 @@ export type ProjectStatus =
   | "entregue"
   | "manutencao";
 
+export type TicketStatus = "aberto" | "em_andamento" | "resolvido" | "fechado";
+export type TicketPriority = "baixa" | "media" | "alta";
+
 export interface ClientProject {
   id: string;
   name: string;
@@ -26,14 +29,27 @@ export interface TokenTransaction {
   balance: number;
 }
 
+export interface Ticket {
+  id: string;
+  subject: string;
+  category: string;
+  status: TicketStatus;
+  priority: TicketPriority;
+  projectId?: string;
+  projectName?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface ClientUser {
   id: string;
   name: string;
   email: string;
   avatarInitials: string;
+  role?: "cliente" | "dev" | "admin";
   projects: ClientProject[];
   tokenBalance: number;
   tokenHistory: TokenTransaction[];
-  plan?: "basico" | "pro";
+  plan?: "sem_plano" | "basico" | "pro";
   planRenewal?: string;
 }

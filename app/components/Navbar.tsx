@@ -38,6 +38,24 @@ export function Navbar() {
         <div className="hidden md:flex items-center gap-3">
           <ThemeToggle />
           <Link
+            href="/area-cliente"
+            style={{
+              border: "1px solid var(--border)",
+              color: "var(--text-muted)",
+              padding: "7px 16px",
+              borderRadius: "10px",
+              fontSize: "13px",
+              fontWeight: 600,
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+            }}
+          >
+            <i className="ti ti-login-2" style={{ fontSize: 14 }} />
+            Entrar
+          </Link>
+          <Link
             href="/configurador"
             style={{
               background: "var(--cta-bg)",

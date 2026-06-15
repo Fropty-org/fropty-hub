@@ -55,10 +55,19 @@ export function MobileNav() {
             ))}
             <div className="mt-6 flex flex-col gap-3">
               <Link
+                href="/area-cliente"
+                onClick={() => setOpen(false)}
+                className="rounded-xl px-4 py-4 text-center text-base font-semibold transition"
+                style={{ border: "1px solid var(--border)", color: "var(--text-muted)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}
+              >
+                <i className="ti ti-login-2" style={{ fontSize: 16 }} />
+                Entrar na conta
+              </Link>
+              <Link
                 href="/configurador"
                 onClick={() => setOpen(false)}
                 className="rounded-xl px-4 py-4 text-center text-base font-semibold transition"
-                style={{ border: "1px solid var(--border)", color: "var(--text-muted)" }}
+                style={{ border: "1px solid var(--border)", color: "var(--text-muted)", textDecoration: "none" }}
               >
                 Configurador de planos
               </Link>
