@@ -10,12 +10,13 @@ export default async function AdminPortalLayout({ children }: { children: React.
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  const name     = profile?.name || user?.email?.split("@")[0] || "Admin";
-  const initials = name.slice(0, 2).toUpperCase();
+  const name         = profile?.name || user?.email?.split("@")[0] || "Admin";
+  const initials     = name.slice(0, 2).toUpperCase();
+  const initialTheme = (profile?.theme ?? "dark") as "dark" | "light";
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg)", color: "var(--text)" }}>
-      <AdminSidebar name={name} initials={initials} />
+      <AdminSidebar name={name} initials={initials} initialTheme={initialTheme} />
       <main style={{ flex: 1, overflow: "hidden" }}>{children}</main>
     </div>
   );

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useTransition } from "react";
 import { signOut } from "@/app/actions/auth";
+import { PortalThemeToggle } from "@/app/components/cliente/PortalThemeToggle";
 
 const NAV = [
   { id: "overview",   href: "/admin/overview",   icon: "ti-layout-dashboard", label: "Visão Geral" },
@@ -18,9 +19,10 @@ const NAV = [
 interface Props {
   name: string;
   initials: string;
+  initialTheme?: "dark" | "light";
 }
 
-export function AdminSidebar({ name, initials }: Props) {
+export function AdminSidebar({ name, initials, initialTheme = "dark" }: Props) {
   const pathname = usePathname();
   const [pending, startTransition] = useTransition();
 
@@ -48,12 +50,13 @@ export function AdminSidebar({ name, initials }: Props) {
         <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#EF9F27", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", fontWeight: 700, color: "#fff", flexShrink: 0 }}>
           {initials}
         </div>
-        <div style={{ overflow: "hidden" }}>
+        <div style={{ overflow: "hidden", flex: 1 }}>
           <p style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
             {name.split(" ")[0]}
           </p>
           <p style={{ margin: 0, fontSize: "11px", color: "#EF9F27" }}>Administrador</p>
         </div>
+        <PortalThemeToggle initialTheme={initialTheme} />
       </div>
 
       <nav style={{ display: "flex", flexDirection: "column", gap: 4, flex: 1 }}>
