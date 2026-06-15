@@ -22,11 +22,15 @@ export default async function PortalDashboardPage() {
 
   const { data: { user } } = await supabase.auth.getUser();
 
-  const { data: projectRows, error: projError } = await supabase
-    .from("projects")
-    .select("*")
-    .eq("client_id", user!.id)
-    .order("created_at", { ascending: false });
+  if (!user) console.error("[portal/dashboard] user is null after requireRole");
+
+  const { data: projectRows, error: projError } = user
+    ? await supabase
+        .from("projects")
+        .select("*")
+        .eq("client_id", user.id)
+        .order("created_at", { ascending: false })
+    : { data: [], error: null };
 
   if (projError) {
     console.error("[portal/dashboard] projects fetch error:", projError.message);

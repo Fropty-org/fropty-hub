@@ -20,18 +20,25 @@ export default async function PortalLayout({
 
   // Busca e-mail do usuário Auth (não armazenado em profiles por design)
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+  if (userError) console.error("[portal/layout] getUser error:", userError.message);
+  if (!user)     console.error("[portal/layout] getUser returned null user — profile:", profile?.id);
 
   const displayName   = profile?.name || user?.email?.split("@")[0] || "Cliente";
   const initials      = displayName.slice(0, 2).toUpperCase();
   const email         = user?.email ?? "";
 
-  // Contagem de tickets abertos para badge
-  const { count: openTickets } = await supabase
-    .from("tickets")
-    .select("id", { count: "exact", head: true })
-    .eq("client_id", user!.id)
-    .in("status", ["aberto", "em_andamento"]);
+  // Contagem de tickets abertos para badge (seguro contra user null)
+  const { count: openTickets, error: ticketsError } = user
+    ? await supabase
+        .from("tickets")
+        .select("id", { count: "exact", head: true })
+        .eq("client_id", user.id)
+        .in("status", ["aberto", "em_andamento"])
+    : { count: 0, error: null };
+
+  if (ticketsError) console.error("[portal/layout] tickets error:", ticketsError.message);
 
   const portalNav = [
     { id: "dashboard",  href: "/portal/dashboard",  icon: "ti-layout-dashboard", label: "Painel" },
