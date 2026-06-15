@@ -14,15 +14,15 @@ interface Props {
 }
 
 export function SuporteClient({ tickets, projects }: Props) {
-  const [showForm, setShowForm]   = useState(false);
-  const [search,   setSearch]     = useState("");
-  const [filter,   setFilter]     = useState<FilterMode>("todos");
+  const [showForm, setShowForm] = useState(false);
+  const [search,   setSearch]   = useState("");
+  const [filter,   setFilter]   = useState<FilterMode>("todos");
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase();
     return tickets.filter((t) => {
       const matchSearch = !q || t.subject.toLowerCase().includes(q) || t.category.toLowerCase().includes(q);
-      const isOpen   = t.status === "aberto" || t.status === "em_andamento";
+      const isOpen      = t.status === "aberto" || t.status === "em_andamento";
       const matchFilter =
         filter === "todos"   ? true :
         filter === "abertos" ? isOpen :
@@ -34,41 +34,107 @@ export function SuporteClient({ tickets, projects }: Props) {
   const openTickets   = filtered.filter((t) => t.status === "aberto" || t.status === "em_andamento");
   const closedTickets = filtered.filter((t) => t.status === "resolvido" || t.status === "fechado");
 
-  return (
-    <div style={{ padding: "40px 32px", maxWidth: 900, margin: "0 auto" }}>
+  const totalOpen     = tickets.filter((t) => t.status === "aberto" || t.status === "em_andamento").length;
+  const totalResolved = tickets.filter((t) => t.status === "resolvido" || t.status === "fechado").length;
+  const totalHigh     = tickets.filter((t) => t.priority === "alta" && (t.status === "aberto" || t.status === "em_andamento")).length;
 
-      {/* Header */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>
-        <div>
-          <h1 style={{ fontSize: "1.75rem", fontWeight: 800, margin: "0 0 4px", color: "var(--text)" }}>
-            Suporte
-          </h1>
-          <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>
-            Abra chamados e acompanhe o status das suas solicitações
-          </p>
+  return (
+    <div style={{ padding: "36px 32px", maxWidth: 940, margin: "0 auto" }}>
+
+      {/* ── Header ─────────────────────────────────────────────── */}
+      <div
+        className="dot-bg animate-fade-up"
+        style={{
+          borderRadius: 20,
+          border: "1px solid var(--card-border)",
+          background: "var(--card-bg)",
+          padding: "28px 28px 24px",
+          marginBottom: 24,
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        {/* Gradient glow top-right */}
+        <div style={{
+          position: "absolute", top: -40, right: -40,
+          width: 220, height: 220,
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(91,87,232,0.18) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }} />
+
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
+          <div>
+            <span className="section-chip" style={{ marginBottom: 12 }}>
+              <i className="ti ti-headset" style={{ fontSize: 11 }} />
+              Service Desk
+            </span>
+            <h1 style={{ fontSize: "1.6rem", fontWeight: 800, margin: "0 0 4px", color: "var(--text)", letterSpacing: "-0.02em" }}>
+              Suporte
+            </h1>
+            <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>
+              Abra chamados e acompanhe suas solicitações em tempo real
+            </p>
+          </div>
+          <button
+            onClick={() => setShowForm(true)}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 7,
+              background: "var(--primary)",
+              color: "#fff",
+              border: "none",
+              padding: "10px 18px",
+              borderRadius: 10,
+              fontWeight: 700,
+              cursor: "pointer",
+              fontSize: "13px",
+              fontFamily: "inherit",
+              flexShrink: 0,
+              boxShadow: "0 4px 16px rgba(91,87,232,0.35)",
+              transition: "opacity 0.15s, transform 0.15s",
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.9"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.transform = "translateY(0)"; }}
+          >
+            <i className="ti ti-plus" style={{ fontSize: 15 }} /> Novo chamado
+          </button>
         </div>
-        <button
-          onClick={() => setShowForm(true)}
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 6,
-            background: "var(--cta-bg)",
-            color: "var(--cta-text)",
-            border: "none",
-            padding: "10px 18px",
-            borderRadius: 10,
-            fontWeight: 700,
-            cursor: "pointer",
-            fontSize: "13px",
-            fontFamily: "inherit",
-          }}
-        >
-          <i className="ti ti-plus" /> Novo chamado
-        </button>
+
+        {/* Stats row */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginTop: 24 }}>
+          <StatCard
+            label="Total de chamados"
+            value={tickets.length}
+            icon="ti-ticket"
+            color="var(--primary)"
+          />
+          <StatCard
+            label="Em aberto"
+            value={totalOpen}
+            icon="ti-circle-dot"
+            color="#3b82f6"
+          />
+          {totalHigh > 0 ? (
+            <StatCard
+              label="Alta prioridade"
+              value={totalHigh}
+              icon="ti-alert-triangle"
+              color="#ef4444"
+            />
+          ) : (
+            <StatCard
+              label="Resolvidos"
+              value={totalResolved}
+              icon="ti-circle-check"
+              color="#22c55e"
+            />
+          )}
+        </div>
       </div>
 
-      {/* Busca + filtros */}
+      {/* ── Busca + filtros ─────────────────────────────────────── */}
       <div style={{ display: "flex", gap: 10, marginBottom: 28, flexWrap: "wrap" }}>
         <div
           style={{
@@ -81,14 +147,17 @@ export function SuporteClient({ tickets, projects }: Props) {
             border: "1px solid var(--card-border)",
             borderRadius: 10,
             padding: "8px 14px",
+            transition: "border-color 0.15s",
           }}
+          onFocusCapture={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = "var(--border-hover)"; }}
+          onBlurCapture={(e)  => { (e.currentTarget as HTMLDivElement).style.borderColor = "var(--card-border)"; }}
         >
           <i className="ti ti-search" style={{ color: "var(--text-faint)", fontSize: 15, flexShrink: 0 }} />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Buscar chamados…"
+            placeholder="Buscar por assunto ou categoria…"
             style={{
               flex: 1,
               background: "none",
@@ -115,10 +184,10 @@ export function SuporteClient({ tickets, projects }: Props) {
               key={f}
               onClick={() => setFilter(f)}
               style={{
-                padding: "8px 14px",
+                padding: "8px 16px",
                 borderRadius: 10,
                 border: "1px solid",
-                borderColor: filter === f ? "var(--primary)" : "var(--card-border)",
+                borderColor: filter === f ? "rgba(91,87,232,0.5)" : "var(--card-border)",
                 background: filter === f ? "rgba(91,87,232,0.12)" : "var(--card-bg)",
                 color: filter === f ? "var(--primary)" : "var(--text-muted)",
                 fontWeight: 600,
@@ -135,14 +204,14 @@ export function SuporteClient({ tickets, projects }: Props) {
         </div>
       </div>
 
-      {/* Modal de novo chamado */}
+      {/* ── Modal novo chamado ──────────────────────────────────── */}
       {showForm && (
         <div
           style={{
             position: "fixed",
             inset: 0,
-            background: "rgba(4,3,22,0.7)",
-            backdropFilter: "blur(4px)",
+            background: "rgba(4,3,22,0.72)",
+            backdropFilter: "blur(6px)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -152,11 +221,12 @@ export function SuporteClient({ tickets, projects }: Props) {
           onClick={(e) => { if (e.target === e.currentTarget) setShowForm(false); }}
         >
           <div
+            className="animate-fade-up"
             style={{
               background: "var(--card-bg)",
               border: "1px solid var(--card-border)",
               borderRadius: 20,
-              padding: "32px",
+              padding: "28px 32px 32px",
               width: "100%",
               maxWidth: 560,
               maxHeight: "90vh",
@@ -164,14 +234,31 @@ export function SuporteClient({ tickets, projects }: Props) {
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-              <h2 style={{ margin: 0, fontSize: "1.1rem", fontWeight: 700, color: "var(--text)" }}>
-                Abrir chamado
-              </h2>
+              <div>
+                <h2 style={{ margin: "0 0 2px", fontSize: "1.1rem", fontWeight: 800, color: "var(--text)", letterSpacing: "-0.01em" }}>
+                  Abrir chamado
+                </h2>
+                <p style={{ margin: 0, fontSize: "12px", color: "var(--text-faint)" }}>
+                  Descreva o problema — respondemos em até 24h
+                </p>
+              </div>
               <button
                 onClick={() => setShowForm(false)}
-                style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-faint)", fontSize: 20, padding: 4, fontFamily: "inherit" }}
+                style={{
+                  width: 32, height: 32,
+                  borderRadius: 8,
+                  background: "var(--surface-2, rgba(255,255,255,0.06))",
+                  border: "1px solid var(--border)",
+                  cursor: "pointer",
+                  color: "var(--text-faint)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                  fontFamily: "inherit",
+                }}
               >
-                <i className="ti ti-x" />
+                <i className="ti ti-x" style={{ fontSize: 14 }} />
               </button>
             </div>
             <NewTicketForm projects={projects} onClose={() => setShowForm(false)} />
@@ -179,72 +266,40 @@ export function SuporteClient({ tickets, projects }: Props) {
         </div>
       )}
 
-      {/* Chamados abertos */}
-      <section style={{ marginBottom: 36 }}>
-        <h2 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: 14, color: "var(--text)", display: "flex", alignItems: "center", gap: 8 }}>
-          <i className="ti ti-circle-dot" style={{ color: "#3b82f6" }} />
-          Chamados abertos
-          {openTickets.length > 0 && (
-            <span style={{ fontSize: "11px", fontWeight: 700, background: "#3b82f610", color: "#3b82f6", border: "1px solid #3b82f630", borderRadius: 999, padding: "2px 8px" }}>
-              {openTickets.length}
-            </span>
-          )}
-        </h2>
-
-        {openTickets.length === 0 ? (
-          <div
-            style={{
-              background: "var(--card-bg)",
-              border: "1px solid var(--card-border)",
-              borderRadius: 14,
-              padding: "28px 24px",
-              textAlign: "center",
-            }}
-          >
-            <i className="ti ti-mood-happy" style={{ fontSize: 32, color: "#22c55e", display: "block", marginBottom: 8 }} />
-            <p style={{ color: "var(--text-muted)", margin: 0, fontSize: "14px" }}>
-              Nenhum chamado aberto. Tudo certo!
-            </p>
-          </div>
-        ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {openTickets.map((t) => <TicketRow key={t.id} ticket={t} />)}
-          </div>
-        )}
-      </section>
-
-      {/* Histórico */}
-      {closedTickets.length > 0 && (
-        <section>
-          <h2 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: 14, color: "var(--text)", display: "flex", alignItems: "center", gap: 8 }}>
-            <i className="ti ti-history" style={{ color: "var(--text-faint)" }} />
-            Histórico
-          </h2>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {closedTickets.map((t) => <TicketRow key={t.id} ticket={t} />)}
-          </div>
-        </section>
-      )}
-
+      {/* ── Estado vazio total ──────────────────────────────────── */}
       {tickets.length === 0 && (
         <div
           style={{
             background: "var(--card-bg)",
             border: "1px solid var(--card-border)",
             borderRadius: 16,
-            padding: "48px 24px",
+            padding: "56px 24px",
             textAlign: "center",
           }}
         >
-          <i className="ti ti-headset" style={{ fontSize: 40, color: "var(--text-faint)", display: "block", marginBottom: 12 }} />
-          <p style={{ color: "var(--text-muted)", margin: "0 0 20px", fontSize: "15px" }}>
-            Nenhum chamado ainda.
+          <div style={{
+            width: 64, height: 64,
+            borderRadius: "50%",
+            background: "rgba(91,87,232,0.12)",
+            border: "1px solid rgba(91,87,232,0.2)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            margin: "0 auto 16px",
+          }}>
+            <i className="ti ti-headset" style={{ fontSize: 28, color: "var(--primary)" }} />
+          </div>
+          <p style={{ fontWeight: 700, fontSize: "15px", color: "var(--text)", margin: "0 0 6px" }}>
+            Nenhum chamado ainda
+          </p>
+          <p style={{ color: "var(--text-faint)", margin: "0 0 24px", fontSize: "13px" }}>
+            Quando precisar de suporte, estamos aqui.
           </p>
           <button
             onClick={() => setShowForm(true)}
             style={{
-              background: "var(--cta-bg)",
-              color: "var(--cta-text)",
+              background: "var(--primary)",
+              color: "#fff",
               border: "none",
               padding: "10px 22px",
               borderRadius: 10,
@@ -252,87 +307,201 @@ export function SuporteClient({ tickets, projects }: Props) {
               cursor: "pointer",
               fontSize: "13px",
               fontFamily: "inherit",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+              boxShadow: "0 4px 16px rgba(91,87,232,0.35)",
             }}
           >
-            Abrir primeiro chamado
+            <i className="ti ti-plus" /> Abrir primeiro chamado
           </button>
         </div>
+      )}
+
+      {/* ── Chamados abertos ────────────────────────────────────── */}
+      {(filter !== "fechados") && (
+        <section style={{ marginBottom: 32 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+            <span className="section-chip">
+              <i className="ti ti-circle-dot" style={{ fontSize: 11, color: "#3b82f6" }} />
+              Abertos
+            </span>
+            {openTickets.length > 0 && (
+              <span style={{
+                fontSize: "11px", fontWeight: 700,
+                background: "rgba(59,130,246,0.12)",
+                color: "#3b82f6",
+                border: "1px solid rgba(59,130,246,0.25)",
+                borderRadius: 999, padding: "2px 9px",
+              }}>
+                {openTickets.length}
+              </span>
+            )}
+          </div>
+
+          {openTickets.length === 0 && tickets.length > 0 ? (
+            <div
+              style={{
+                background: "var(--card-bg)",
+                border: "1px solid var(--card-border)",
+                borderRadius: 14,
+                padding: "24px",
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+              }}
+            >
+              <div style={{
+                width: 40, height: 40,
+                borderRadius: "50%",
+                background: "rgba(34,197,94,0.12)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+              }}>
+                <i className="ti ti-mood-happy" style={{ fontSize: 20, color: "#22c55e" }} />
+              </div>
+              <p style={{ color: "var(--text-muted)", margin: 0, fontSize: "14px", fontWeight: 500 }}>
+                Tudo resolvido — nenhum chamado em aberto.
+              </p>
+            </div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {openTickets.map((t) => <TicketCard key={t.id} ticket={t} />)}
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* ── Histórico ───────────────────────────────────────────── */}
+      {closedTickets.length > 0 && (filter !== "abertos") && (
+        <section>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+            <span className="section-chip">
+              <i className="ti ti-history" style={{ fontSize: 11 }} />
+              Histórico
+            </span>
+            <span style={{
+              fontSize: "11px", fontWeight: 700,
+              background: "rgba(148,163,184,0.1)",
+              color: "var(--text-faint)",
+              border: "1px solid rgba(148,163,184,0.15)",
+              borderRadius: 999, padding: "2px 9px",
+            }}>
+              {closedTickets.length}
+            </span>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {closedTickets.map((t) => <TicketCard key={t.id} ticket={t} dimmed />)}
+          </div>
+        </section>
       )}
     </div>
   );
 }
 
-function TicketRow({ ticket }: { ticket: Ticket }) {
+/* ── StatCard ──────────────────────────────────────────────────── */
+function StatCard({ label, value, icon, color }: { label: string; value: number; icon: string; color: string }) {
+  return (
+    <div style={{
+      background: "rgba(255,255,255,0.03)",
+      border: "1px solid var(--card-border)",
+      borderRadius: 12,
+      padding: "14px 16px",
+      display: "flex",
+      alignItems: "center",
+      gap: 12,
+    }}>
+      <div style={{
+        width: 36, height: 36,
+        borderRadius: 10,
+        background: `${color}15`,
+        border: `1px solid ${color}25`,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexShrink: 0,
+      }}>
+        <i className={`ti ${icon}`} style={{ fontSize: 16, color }} />
+      </div>
+      <div>
+        <p style={{ margin: 0, fontSize: "20px", fontWeight: 800, color: "var(--text)", lineHeight: 1 }}>{value}</p>
+        <p style={{ margin: "3px 0 0", fontSize: "11px", color: "var(--text-faint)" }}>{label}</p>
+      </div>
+    </div>
+  );
+}
+
+/* ── TicketCard ────────────────────────────────────────────────── */
+function TicketCard({ ticket, dimmed }: { ticket: Ticket; dimmed?: boolean }) {
   const statusInfo   = TICKET_STATUS_MAP[ticket.status];
   const priorityInfo = TICKET_PRIORITY_MAP[ticket.priority];
-  const updatedDate  = new Date(ticket.updatedAt).toLocaleDateString("pt-BR");
+  const updatedDate  = new Date(ticket.updatedAt).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
+  const borderAccent = priorityInfo.color;
 
   return (
     <Link
       href={`/portal/suporte/${ticket.id}`}
+      className="card-hover"
       style={{
         background: "var(--card-bg)",
         border: "1px solid var(--card-border)",
+        borderLeft: `3px solid ${borderAccent}`,
         borderRadius: 12,
-        padding: "16px 20px",
+        padding: "14px 18px 14px 16px",
         display: "flex",
         alignItems: "center",
-        gap: 16,
+        gap: 14,
         flexWrap: "wrap",
         textDecoration: "none",
-        transition: "border-color 0.15s, background 0.15s",
-      }}
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLAnchorElement).style.borderColor = "var(--primary)";
-        (e.currentTarget as HTMLAnchorElement).style.background  = "var(--surface)";
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLAnchorElement).style.borderColor = "var(--card-border)";
-        (e.currentTarget as HTMLAnchorElement).style.background  = "var(--card-bg)";
+        opacity: dimmed ? 0.65 : 1,
+        transition: "opacity 0.2s",
       }}
     >
-      {/* Status dot */}
-      <i className={`ti ${statusInfo.icon}`} style={{ color: statusInfo.color, fontSize: 18, flexShrink: 0 }} />
+      {/* Status icon */}
+      <div style={{
+        width: 32, height: 32,
+        borderRadius: 9,
+        background: `${statusInfo.color}12`,
+        border: `1px solid ${statusInfo.color}25`,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexShrink: 0,
+      }}>
+        <i className={`ti ${statusInfo.icon}`} style={{ color: statusInfo.color, fontSize: 15 }} />
+      </div>
 
       {/* Info principal */}
-      <div style={{ flex: 1, minWidth: 160 }}>
-        <p style={{ margin: "0 0 3px", fontWeight: 700, fontSize: "14px", color: "var(--text)" }}>
+      <div style={{ flex: 1, minWidth: 140 }}>
+        <p style={{ margin: "0 0 3px", fontWeight: 700, fontSize: "13px", color: "var(--text)", lineHeight: 1.3 }}>
           {ticket.subject}
         </p>
-        <p style={{ margin: 0, fontSize: "12px", color: "var(--text-faint)" }}>
-          {ticket.category} · Atualizado em {updatedDate}
+        <p style={{ margin: 0, fontSize: "11px", color: "var(--text-faint)" }}>
+          {ticket.category} · {updatedDate}
         </p>
       </div>
 
       {/* Badges */}
-      <div style={{ display: "flex", gap: 8, flexShrink: 0, flexWrap: "wrap", alignItems: "center" }}>
-        <span
-          style={{
-            fontSize: "11px",
-            fontWeight: 700,
-            padding: "3px 10px",
-            borderRadius: 999,
-            background: `${statusInfo.color}18`,
-            color: statusInfo.color,
-            border: `1px solid ${statusInfo.color}30`,
-          }}
-        >
+      <div style={{ display: "flex", gap: 6, flexShrink: 0, alignItems: "center" }}>
+        <span style={{
+          fontSize: "10px", fontWeight: 700, padding: "3px 9px", borderRadius: 999,
+          background: `${statusInfo.color}15`, color: statusInfo.color,
+          border: `1px solid ${statusInfo.color}28`,
+          whiteSpace: "nowrap",
+        }}>
           {statusInfo.label}
         </span>
-        <span
-          style={{
-            fontSize: "11px",
-            fontWeight: 700,
-            padding: "3px 10px",
-            borderRadius: 999,
-            background: `${priorityInfo.color}15`,
-            color: priorityInfo.color,
-            border: `1px solid ${priorityInfo.color}25`,
-          }}
-        >
+        <span style={{
+          fontSize: "10px", fontWeight: 700, padding: "3px 9px", borderRadius: 999,
+          background: `${priorityInfo.color}12`, color: priorityInfo.color,
+          border: `1px solid ${priorityInfo.color}22`,
+          whiteSpace: "nowrap",
+        }}>
           {priorityInfo.label}
         </span>
-        <i className="ti ti-chevron-right" style={{ fontSize: 14, color: "var(--text-faint)" }} />
+        <i className="ti ti-chevron-right" style={{ fontSize: 13, color: "var(--text-faint)", marginLeft: 2 }} />
       </div>
     </Link>
   );
