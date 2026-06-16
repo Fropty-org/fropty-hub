@@ -28,6 +28,15 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL ?? "https://rflnhzpepbnhanuxpqag.supabase.co",
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJmbG5oenBlcGJuaGFudXhwcWFnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0NDE5MDcsImV4cCI6MjA5NzAxNzkwN30.L-ZgsCiDMAmBpThPKp4Z73TBiTrGRuV3i9gIw-WNbBE",
   },
+  async rewrites() {
+    return [
+      {
+        source: "/",
+        destination: "/demo",
+        has: [{ type: "host", value: "demo.fropty.com" }],
+      },
+    ];
+  },
   async headers() {
     return [
       // Security headers em todas as rotas
