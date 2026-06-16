@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { Role, Section } from "./data";
+import type { Segment } from "../page";
 
 type Props = {
   role: Role;
@@ -16,6 +17,8 @@ type Props = {
   onLogout: () => void;
   sectionLabels: Record<Section, string>;
   onMenuOpen: () => void;
+  segment?: Segment;
+  onSwitchSegment?: (seg: Segment) => void;
 };
 
 export default function Header({
