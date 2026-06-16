@@ -48,6 +48,7 @@ const FAKE_PRODUCTS: Record<string, Product> = {
     available: true,
     description: "",
     color: "#E85D26",
+    image: "https://picsum.photos/seed/carrot-cake/400/300",
   },
   pao: {
     id: 6,
@@ -58,6 +59,7 @@ const FAKE_PRODUCTS: Record<string, Product> = {
     available: true,
     description: "",
     color: "#D4A837",
+    image: "https://picsum.photos/seed/cheese-bread-rolls/400/300",
   },
   kit: {
     id: 4,
@@ -68,6 +70,7 @@ const FAKE_PRODUCTS: Record<string, Product> = {
     available: true,
     description: "",
     color: "#5B57E8",
+    image: "https://picsum.photos/seed/party-food-platter/400/300",
   },
   croissant: {
     id: 2,
@@ -78,6 +81,7 @@ const FAKE_PRODUCTS: Record<string, Product> = {
     available: true,
     description: "",
     color: "#C2783A",
+    image: "https://picsum.photos/seed/croissant-ham/400/300",
   },
   cafe: {
     id: 5,
@@ -88,6 +92,7 @@ const FAKE_PRODUCTS: Record<string, Product> = {
     available: false,
     description: "",
     color: "#6B4423",
+    image: "https://picsum.photos/seed/specialty-coffee/400/300",
   },
 };
 

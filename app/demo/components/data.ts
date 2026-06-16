@@ -20,6 +20,7 @@ export type Product = {
   available: boolean;
   description: string;
   color: string;
+  image: string;
 };
 
 export type CartItem = { product: Product; qty: number };
@@ -63,14 +64,14 @@ export type ProfileData = {
 };
 
 export const INITIAL_PRODUCTS: Product[] = [
-  { id: 1, name: "Sonho de Doce de Leite", price: 8, category: "Salgados & Doces", stock: 24, available: true, description: "Sonho artesanal recheado com doce de leite cremoso. Massa fofinha e irresistível.", color: "#EF9F27" },
-  { id: 2, name: "Croissant de Presunto", price: 12, category: "Pães & Croissants", stock: 18, available: true, description: "Croissant folhado recheado com presunto e queijo. Assado na hora, crocante por fora.", color: "#C2783A" },
-  { id: 3, name: "Bolo de Cenoura", price: 45, category: "Bolos & Tortas", stock: 6, available: true, description: "Bolo de cenoura com cobertura de brigadeiro de chocolate. Fatia generosa.", color: "#E85D26" },
-  { id: 4, name: "Kit Festa (6 un)", price: 42, category: "Kits & Combos", stock: 12, available: true, description: "Kit com 6 mini salgados sortidos: coxinha, bolinha de queijo e risole. Ideal para festas.", color: "#5B57E8" },
-  { id: 5, name: "Café Especial 250g", price: 7, category: "Bebidas", stock: 0, available: false, description: "Café torrado e moído especialmente selecionado. Aroma intenso e sabor equilibrado.", color: "#6B4423" },
-  { id: 6, name: "Pão de Queijo (10 un)", price: 18, category: "Pães & Croissants", stock: 30, available: true, description: "Pão de queijo artesanal com polvilho azedo e queijo minas. Crocante por fora, mole por dentro.", color: "#D4A837" },
-  { id: 7, name: "Torta de Frango", price: 38, category: "Bolos & Tortas", stock: 8, available: true, description: "Torta recheada com frango desfiado, catupiry e milho. Massa crocante e recheio cremoso.", color: "#4A90D9" },
-  { id: 8, name: "Brownie de Chocolate", price: 9, category: "Salgados & Doces", stock: 20, available: true, description: "Brownie denso e fudgy com chocolate belga 70%. Levemente crocante por fora.", color: "#3D2010" },
+  { id: 1, name: "Sonho de Doce de Leite", price: 8, category: "Salgados & Doces", stock: 24, available: true, description: "Sonho artesanal recheado com doce de leite cremoso. Massa fofinha e irresistível.", color: "#EF9F27", image: "https://picsum.photos/seed/donut-caramel/400/300" },
+  { id: 2, name: "Croissant de Presunto", price: 12, category: "Pães & Croissants", stock: 18, available: true, description: "Croissant folhado recheado com presunto e queijo. Assado na hora, crocante por fora.", color: "#C2783A", image: "https://picsum.photos/seed/croissant-ham/400/300" },
+  { id: 3, name: "Bolo de Cenoura", price: 45, category: "Bolos & Tortas", stock: 6, available: true, description: "Bolo de cenoura com cobertura de brigadeiro de chocolate. Fatia generosa.", color: "#E85D26", image: "https://picsum.photos/seed/carrot-cake/400/300" },
+  { id: 4, name: "Kit Festa (6 un)", price: 42, category: "Kits & Combos", stock: 12, available: true, description: "Kit com 6 mini salgados sortidos: coxinha, bolinha de queijo e risole. Ideal para festas.", color: "#5B57E8", image: "https://picsum.photos/seed/party-food-platter/400/300" },
+  { id: 5, name: "Café Especial 250g", price: 7, category: "Bebidas", stock: 0, available: false, description: "Café torrado e moído especialmente selecionado. Aroma intenso e sabor equilibrado.", color: "#6B4423", image: "https://picsum.photos/seed/specialty-coffee/400/300" },
+  { id: 6, name: "Pão de Queijo (10 un)", price: 18, category: "Pães & Croissants", stock: 30, available: true, description: "Pão de queijo artesanal com polvilho azedo e queijo minas. Crocante por fora, mole por dentro.", color: "#D4A837", image: "https://picsum.photos/seed/cheese-bread-rolls/400/300" },
+  { id: 7, name: "Torta de Frango", price: 38, category: "Bolos & Tortas", stock: 8, available: true, description: "Torta recheada com frango desfiado, catupiry e milho. Massa crocante e recheio cremoso.", color: "#4A90D9", image: "https://picsum.photos/seed/chicken-pie/400/300" },
+  { id: 8, name: "Brownie de Chocolate", price: 9, category: "Salgados & Doces", stock: 20, available: true, description: "Brownie denso e fudgy com chocolate belga 70%. Levemente crocante por fora.", color: "#3D2010", image: "https://picsum.photos/seed/chocolate-brownie/400/300" },
 ];
 
 export const INITIAL_CUSTOMERS: Customer[] = [

@@ -60,13 +60,12 @@ export default function Equipe({ addToast }: { addToast: (type: "success"|"error
           }}>
             {/* Top */}
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <div style={{
-                width: 56, height: 56, borderRadius: "50%", background: b.color,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                color: "#fff", fontWeight: 700, fontSize: 22, flexShrink: 0
-              }}>
-                {b.name[0]}
-              </div>
+              <img
+                src={b.image}
+                alt={b.name}
+                style={{ width: 56, height: 56, borderRadius: "50%", objectFit: "cover", flexShrink: 0, border: `2px solid ${b.color}` }}
+                loading="lazy"
+              />
               <div>
                 <div style={{ fontWeight: 700, fontSize: 18, color: "var(--text)" }}>{b.name}</div>
                 <div style={{ color: "var(--text-muted)", fontSize: 13 }}>{b.specialty}</div>
@@ -146,13 +145,11 @@ export default function Equipe({ addToast }: { addToast: (type: "success"|"error
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20 }}>
-              <div style={{
-                width: 72, height: 72, borderRadius: "50%", background: selectedBarb.color,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                color: "#fff", fontWeight: 700, fontSize: 28, flexShrink: 0
-              }}>
-                {selectedBarb.name[0]}
-              </div>
+              <img
+                src={selectedBarb.image}
+                alt={selectedBarb.name}
+                style={{ width: 72, height: 72, borderRadius: "50%", objectFit: "cover", flexShrink: 0, border: `3px solid ${selectedBarb.color}` }}
+              />
               <div>
                 <div style={{ fontWeight: 700, fontSize: 20, color: "var(--text)" }}>{selectedBarb.name}</div>
                 <div style={{ color: "var(--text-muted)", fontSize: 14, marginBottom: 6 }}>{selectedBarb.specialty}</div>

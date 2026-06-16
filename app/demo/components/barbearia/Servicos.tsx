@@ -47,8 +47,18 @@ export default function Servicos({ addToast }: { addToast: (type: "success"|"err
         {servicos.map(s => (
           <div key={s.id} style={{
             background: "var(--card-bg)", border: "1px solid var(--card-border)",
-            borderRadius: 14, padding: 20, display: "flex", flexDirection: "column", gap: 10
+            borderRadius: 14, overflow: "hidden", display: "flex", flexDirection: "column", gap: 0
           }}>
+            {/* Service image */}
+            <div style={{ height: 120, overflow: "hidden", position: "relative" }}>
+              <img src={s.image} alt={s.nome} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: s.ativo ? "none" : "grayscale(80%)" }} loading="lazy" />
+              {!s.ativo && (
+                <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <span style={{ color: "#fff", fontSize: 12, fontWeight: 700, background: "rgba(0,0,0,0.5)", padding: "3px 10px", borderRadius: 20 }}>Inativo</span>
+                </div>
+              )}
+            </div>
+            <div style={{ padding: 16, display: "flex", flexDirection: "column", gap: 10 }}>
             {/* Top row */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <span style={{ fontWeight: 700, fontSize: 16, color: "var(--text)" }}>{s.nome}</span>
@@ -120,16 +130,7 @@ export default function Servicos({ addToast }: { addToast: (type: "success"|"err
             {/* Descrição */}
             <p style={{ fontSize: 13, color: "var(--text-muted)", margin: 0 }}>{s.descricao}</p>
 
-            {/* Badge indisponível */}
-            {!s.ativo && (
-              <div style={{
-                display: "inline-flex", alignItems: "center", gap: 4,
-                background: "#ef444420", color: "#ef4444",
-                borderRadius: 6, padding: "3px 10px", fontSize: 12, fontWeight: 600, width: "fit-content"
-              }}>
-                Indisponível
-              </div>
-            )}
+          </div>
           </div>
         ))}
       </div>

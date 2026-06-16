@@ -124,23 +124,21 @@ export default function Veiculos({ addToast }: Props) {
                 flexDirection: "column",
               }}
             >
-              {/* Top colored section */}
-              <div
-                style={{
-                  background: v.corHex + "26",
-                  padding: "20px 20px 14px",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: 10,
-                }}
-              >
-                <i
-                  className="ti ti-car"
-                  style={{ fontSize: 48, color: v.corHex, lineHeight: 1 }}
+              {/* Top image section */}
+              <div style={{ position: "relative", height: 140, overflow: "hidden" }}>
+                <img
+                  src={v.image}
+                  alt={`${v.marca} ${v.modelo}`}
+                  style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                  loading="lazy"
                 />
+                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 60%)" }} />
                 <span
                   style={{
+                    position: "absolute",
+                    bottom: 10,
+                    left: "50%",
+                    transform: "translateX(-50%)",
                     fontFamily: "monospace",
                     background: "#EF9F27",
                     color: "#080e1c",
@@ -149,6 +147,7 @@ export default function Veiculos({ addToast }: Props) {
                     fontWeight: 700,
                     fontSize: 15,
                     letterSpacing: 1,
+                    whiteSpace: "nowrap",
                   }}
                 >
                   {v.placa}

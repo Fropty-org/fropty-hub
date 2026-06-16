@@ -111,25 +111,23 @@ function ProductCard({
         style={{
           width: "100%",
           height: 140,
-          background: `linear-gradient(135deg, ${product.color}cc, ${product.color}55)`,
           borderRadius: "10px 10px 0 0",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          overflow: "hidden",
           position: "relative",
+          background: `${product.color}22`,
         }}
       >
-        <span
-          style={{
-            fontSize: 36,
-            fontWeight: 800,
-            color: "rgba(255,255,255,0.85)",
-            letterSpacing: -1,
-            userSelect: "none",
-          }}
-        >
-          {initials}
-        </span>
+        <img
+          src={product.image}
+          alt={product.name}
+          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+          loading="lazy"
+        />
+        {!product.available && (
+          <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.45)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <span style={{ color: "#fff", fontWeight: 700, fontSize: 13, background: "rgba(0,0,0,0.6)", padding: "4px 12px", borderRadius: 20 }}>Indisponível</span>
+          </div>
+        )}
       </div>
 
       {/* Body */}
@@ -306,28 +304,10 @@ function ProductModal({
           boxShadow: "0 24px 64px rgba(0,0,0,0.5)",
         }}
       >
-        {/* Gradient image */}
-        <div
-          style={{
-            height: 160,
-            background: `linear-gradient(135deg, ${product.color}cc, ${product.color}44)`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <span
-            style={{
-              fontSize: 52,
-              fontWeight: 800,
-              color: "rgba(255,255,255,0.85)",
-              letterSpacing: -2,
-            }}
-          >
-            {initials}
-          </span>
+        {/* Product image */}
+        <div style={{ height: 160, overflow: "hidden", position: "relative", background: `${product.color}22` }}>
+          <img src={product.image} alt={product.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
         </div>
-
         {/* Content */}
         <div style={{ padding: 28 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 8 }}>
