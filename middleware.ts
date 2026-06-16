@@ -7,7 +7,15 @@ const PROTECTED_PREFIXES = ["/portal", "/dev", "/admin", "/area-cliente/"];
 // Verifica apenas a presença do cookie de sessão do Supabase (sb-*-auth-token).
 // A validação real do JWT acontece nos layouts server-side (Node.js runtime).
 export function middleware(request: NextRequest) {
+  const host = request.headers.get("host") ?? "";
   const path = request.nextUrl.pathname;
+
+  // Subdomínio demo.fropty.com — serve /demo na raiz
+  if (host === "demo.fropty.com" && path === "/") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/demo";
+    return NextResponse.rewrite(url);
+  }
   const isLoginPage = path === LOGIN_PAGE;
   const isProtected = PROTECTED_PREFIXES.some((p) => path.startsWith(p));
 
@@ -32,6 +40,7 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
+    "/",
     "/area-cliente/:path*",
     "/portal/:path*",
     "/dev/:path*",
