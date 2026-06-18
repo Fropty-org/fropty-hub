@@ -4,7 +4,8 @@ import { useState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { signIn, requestPasswordReset } from "@/app/actions/auth";
+import { signIn } from "@/app/actions/auth";
+import { createClient } from "@/app/lib/supabase/browser";
 
 type Mode = "login" | "reset";
 
@@ -38,9 +39,13 @@ export default function AreaClientePage() {
 
     startTransition(async () => {
       if (mode === "reset") {
-        const result = await requestPasswordReset(formData);
-        if (result && "error"   in result) setError(result.error ?? null);
-        if (result && "success" in result) setSuccess(result.success as string);
+        const email = (formData.get("email") as string)?.trim().toLowerCase();
+        if (!email) { setError("Informe seu e-mail."); return; }
+        const supabase = createClient();
+        await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/auth/callback?next=/area-cliente/nova-senha`,
+        });
+        setSuccess("Se esse e-mail estiver cadastrado, você receberá o link em breve.");
         return;
       }
       const result = await signIn(formData);
