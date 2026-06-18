@@ -1,12 +1,12 @@
-﻿"use client";
+"use client";
 
 import { useState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { signIn, signUp, requestPasswordReset } from "@/app/actions/auth";
+import { signIn, requestPasswordReset } from "@/app/actions/auth";
 
-type Mode = "login" | "cadastro" | "reset";
+type Mode = "login" | "reset";
 
 export default function AreaClientePage() {
   const router = useRouter();
@@ -43,8 +43,7 @@ export default function AreaClientePage() {
         if (result && "success" in result) setSuccess(result.success as string);
         return;
       }
-      const action = mode === "login" ? signIn : signUp;
-      const result = await action(formData);
+      const result = await signIn(formData);
       if (!result) return;
       if ("error"      in result) { setError(result.error ?? null); return; }
       if ("success"    in result) { setSuccess(result.success as string); return; }
@@ -67,8 +66,8 @@ export default function AreaClientePage() {
           position: "fixed", top: 16, right: 16,
           width: 38, height: 38, borderRadius: 10,
           border: "1px solid var(--border)",
-          background: "var(--surface-2, var(--bg-alt))",
-          color: "var(--text-muted)",
+          background: "var(--surface)",
+          color: "var(--text)",
           cursor: "pointer", display: "flex",
           alignItems: "center", justifyContent: "center",
           fontSize: 18, zIndex: 50,
@@ -91,24 +90,17 @@ export default function AreaClientePage() {
         borderRadius: 20, padding: "32px 28px",
         boxShadow: "0 24px 64px rgba(0,0,0,0.2)",
       }}>
-        {/* Tab switcher — só mostra em login/cadastro */}
-        {mode !== "reset" && (
-          <div style={{ display: "flex", background: "var(--bg)", borderRadius: 12, padding: 3, marginBottom: 28 }}>
-            {(["login", "cadastro"] as const).map((m) => (
-              <button key={m} type="button" onClick={() => changeMode(m)} style={{
-                flex: 1, padding: "9px 0", borderRadius: 10, border: "none",
-                cursor: "pointer", fontWeight: 700, fontSize: 14, fontFamily: "inherit",
-                transition: "all 0.2s",
-                background: mode === m ? "var(--primary)" : "transparent",
-                color:      mode === m ? "#fff" : "var(--text-muted)",
-              }}>
-                {m === "login" ? "Entrar" : "Criar conta"}
-              </button>
-            ))}
+        {mode === "login" && (
+          <div style={{ marginBottom: 24 }}>
+            <h2 style={{ fontSize: "1.2rem", fontWeight: 800, color: "var(--text)", margin: "0 0 6px", fontFamily: "var(--font-plus-jakarta), sans-serif" }}>
+              Área do cliente
+            </h2>
+            <p style={{ fontSize: 13, color: "var(--text-muted)", margin: 0 }}>
+              Acesse seus projetos, chamados e tokens.
+            </p>
           </div>
         )}
 
-        {/* Header do modo reset */}
         {mode === "reset" && (
           <div style={{ marginBottom: 24 }}>
             <button onClick={() => changeMode("login")} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)", padding: 0, display: "flex", alignItems: "center", gap: 6, fontSize: 13, marginBottom: 16, fontFamily: "inherit" }}>
@@ -124,41 +116,25 @@ export default function AreaClientePage() {
         )}
 
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-          {mode === "cadastro" && (
-            <div>
-              <label style={labelStyle}>Nome completo</label>
-              <input name="name" type="text" required autoComplete="name" placeholder="Seu nome" style={inputStyle} />
-            </div>
-          )}
-
           <div>
             <label style={labelStyle}>E-mail</label>
             <input name="email" type="email" required autoComplete="email" placeholder="seu@email.com" style={inputStyle} />
           </div>
 
-          {mode !== "reset" && (
+          {mode === "login" && (
             <div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                 <label style={{ ...labelStyle, marginBottom: 0 }}>Senha</label>
-                {mode === "login" && (
-                  <button type="button" onClick={() => changeMode("reset")} style={{ fontSize: 12, color: "var(--primary)", background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "inherit" }}>
-                    Esqueci a senha
-                  </button>
-                )}
+                <button type="button" onClick={() => changeMode("reset")} style={{ fontSize: 12, color: "var(--primary)", background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "inherit" }}>
+                  Esqueci a senha
+                </button>
               </div>
               <input
                 name="password" type="password" required
-                autoComplete={mode === "login" ? "current-password" : "new-password"}
-                placeholder={mode === "cadastro" ? "Mínimo 8 caracteres" : "••••••••"}
+                autoComplete="current-password"
+                placeholder="••••••••"
                 style={inputStyle}
               />
-            </div>
-          )}
-
-          {mode === "cadastro" && (
-            <div>
-              <label style={labelStyle}>Confirmar senha</label>
-              <input name="confirm" type="password" required autoComplete="new-password" placeholder="Repita a senha" style={inputStyle} />
             </div>
           )}
 
@@ -184,7 +160,7 @@ export default function AreaClientePage() {
           }}>
             {isPending ? (
               <><i className="ti ti-loader-2" style={{ fontSize: 16, animation: "spin 1s linear infinite" }} />Aguarde…</>
-            ) : mode === "login" ? "Entrar na conta" : mode === "cadastro" ? "Criar minha conta" : "Enviar link de recuperação"}
+            ) : mode === "login" ? "Entrar na conta" : "Enviar link de recuperação"}
           </button>
         </form>
       </div>
