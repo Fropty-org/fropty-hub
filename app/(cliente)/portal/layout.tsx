@@ -45,6 +45,7 @@ export default async function PortalLayout({
     { id: "projetos",   href: "/portal/projetos",   icon: "ti-folder",           label: "Projetos" },
     { id: "suporte",    href: "/portal/suporte",    icon: "ti-message-circle",   label: "Suporte", badge: openTickets ?? 0 },
     { id: "financeiro", href: "/portal/financeiro", icon: "ti-credit-card",      label: "Financeiro" },
+    { id: "perfil",     href: "/portal/perfil",     icon: "ti-user-circle",      label: "Meu Perfil" },
   ];
 
   // Objeto compatível com ClientUser (campos mínimos necessários)

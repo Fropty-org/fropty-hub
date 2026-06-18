@@ -14,6 +14,7 @@ const NAV = [
   { id: "financeiro", href: "/admin/financeiro", icon: "ti-credit-card",      label: "Financeiro" },
   { id: "analytics",  href: "/admin/analytics",  icon: "ti-chart-bar",        label: "Analytics" },
   { id: "audit",      href: "/admin/audit",      icon: "ti-shield-check",     label: "Auditoria" },
+  { id: "perfil",     href: "/portal/perfil",    icon: "ti-user-circle",      label: "Meu Perfil" },
 ];
 
 interface Props {

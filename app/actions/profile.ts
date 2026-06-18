@@ -16,6 +16,22 @@ export async function updateAvatarUrl(url: string): Promise<void> {
   revalidatePath("/portal/dashboard");
 }
 
+export async function updateProfile(formData: FormData): Promise<{ error?: string; success?: string }> {
+  const userId = await requireAuth();
+  const name = (formData.get("name") as string)?.trim().slice(0, 100);
+  if (!name) return { error: "Nome não pode estar vazio." };
+
+  const supabase = await createClient();
+  const { error } = await supabase.from("profiles").update({ name }).eq("id", userId);
+  if (error) return { error: "Erro ao salvar. Tente novamente." };
+
+  revalidatePath("/portal");
+  revalidatePath("/portal/perfil");
+  revalidatePath("/portal/dashboard");
+  revalidatePath("/admin");
+  return { success: "Perfil atualizado!" };
+}
+
 export async function updateTheme(theme: "dark" | "light"): Promise<void> {
   const userId = await requireAuth();
   if (theme !== "dark" && theme !== "light") return;
