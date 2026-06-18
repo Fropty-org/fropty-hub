@@ -46,7 +46,7 @@ export interface ClientUser {
   name: string;
   email: string;
   avatarInitials: string;
-  role?: "cliente" | "dev" | "admin";
+  role?: "cliente" | "admin";
   projects: ClientProject[];
   tokenBalance: number;
   tokenHistory: TokenTransaction[];

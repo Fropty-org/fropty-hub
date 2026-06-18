@@ -79,10 +79,10 @@ export async function adminUpdateUserRole(formData: FormData): Promise<void> {
   const userId  = (formData.get("user_id") as string)?.trim();
   const role    = (formData.get("role") as string)?.trim();
 
-  if (!userId || !["cliente", "dev", "admin"].includes(role)) return;
+  if (!userId || !["cliente", "admin"].includes(role)) return;
 
   const supabase = await createClient();
-  await supabase.from("profiles").update({ role: role as "cliente" | "dev" | "admin" }).eq("id", userId);
+  await supabase.from("profiles").update({ role: role as "cliente" | "admin" }).eq("id", userId);
   logAdminAction({ adminId, action: "update_role", targetType: "user", targetId: userId, metadata: { role } });
   revalidatePath("/admin/usuarios");
 }

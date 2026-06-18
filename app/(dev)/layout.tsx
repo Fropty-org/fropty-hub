@@ -1,15 +1,14 @@
 import { requireRole } from "@/app/lib/auth/session";
 
 /**
- * Guard para o grupo (dev).
- * Redireciona para /area-cliente se não autenticado ou role !== 'dev'.
- * As páginas do portal do desenvolvedor são implementadas no Sprint 5.
+ * Guard para o grupo (dev) — agora restrito a admins.
+ * Redireciona para /area-cliente se não autenticado ou role !== 'admin'.
  */
 export default async function DevGroupLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  await requireRole("dev");
+  await requireRole("admin");
   return <>{children}</>;
 }

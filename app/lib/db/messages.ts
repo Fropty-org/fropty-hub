@@ -8,7 +8,7 @@ export async function dbSendMessage({
 }: {
   ticketId:   string;
   senderId:   string;
-  senderRole: "cliente" | "dev" | "admin";
+  senderRole: "cliente" | "admin";
   body:       string;
 }) {
   const supabase = await createClient();

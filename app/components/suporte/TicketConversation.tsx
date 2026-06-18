@@ -14,7 +14,7 @@ interface Props {
   currentUserId:   string;
   currentUserName: string;
   ticketStatus:    TicketStatus;
-  senderRole?:     "cliente" | "dev" | "admin";
+  senderRole?:     "cliente" | "admin";
 }
 
 const ROLE_LABEL: Record<string, string> = {

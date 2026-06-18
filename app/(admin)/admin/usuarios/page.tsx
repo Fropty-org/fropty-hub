@@ -15,7 +15,6 @@ const PLAN_LABEL: Record<string, string> = {
 
 const ROLE_COLOR: Record<string, string> = {
   cliente: "#3b82f6",
-  dev:     "#22c55e",
   admin:   "#EF9F27",
 };
 
@@ -88,7 +87,6 @@ export default async function AdminUsuariosPage({ searchParams }: Props) {
                 <input type="hidden" name="user_id" value={u.id} />
                 <select name="role" defaultValue={u.role} style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 7, color: "var(--text)", padding: "4px 6px", fontSize: "11px", fontFamily: "inherit", cursor: "pointer" }}>
                   <option value="cliente">cliente</option>
-                  <option value="dev">dev</option>
                   <option value="admin">admin</option>
                 </select>
                 <button type="submit" style={{ padding: "5px 8px", borderRadius: 7, border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text-muted)", fontSize: "11px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>

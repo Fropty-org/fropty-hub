@@ -12,7 +12,7 @@ const VALID_PROJECT_STATUSES: ProjectStatus[] = [
 ];
 
 export async function updateTicketStatus(ticketId: string, status: TicketStatus): Promise<void> {
-  await requireRole("dev");
+  await requireRole("admin");
   if (!VALID_TICKET_STATUSES.includes(status)) return;
 
   const supabase = await createClient();
@@ -22,21 +22,21 @@ export async function updateTicketStatus(ticketId: string, status: TicketStatus)
     .eq("id", ticketId);
 
   if (error) return;
-  revalidatePath("/dev/tasks");
+  revalidatePath("/admin/suporte");
   revalidatePath(`/area-cliente/suporte/${ticketId}`);
 }
 
 export async function updateTicketPriority(ticketId: string, priority: TicketPriority): Promise<void> {
-  await requireRole("dev");
+  await requireRole("admin");
   if (!VALID_TICKET_PRIORITIES.includes(priority)) return;
 
   const supabase = await createClient();
   await supabase.from("tickets").update({ priority }).eq("id", ticketId);
-  revalidatePath("/dev/tasks");
+  revalidatePath("/admin/suporte");
 }
 
 export async function updateProjectStatus(projectId: string, status: ProjectStatus, progress?: number): Promise<void> {
-  await requireRole("dev");
+  await requireRole("admin");
   if (!VALID_PROJECT_STATUSES.includes(status)) return;
   const safeProgress = progress !== undefined ? Math.min(100, Math.max(0, progress)) : undefined;
 
@@ -46,12 +46,12 @@ export async function updateProjectStatus(projectId: string, status: ProjectStat
     ...(safeProgress !== undefined ? { progress: safeProgress } : {}),
   }).eq("id", projectId);
 
-  revalidatePath("/dev/projetos");
+  revalidatePath("/admin/projetos");
   revalidatePath("/area-cliente/projetos");
 }
 
 export async function sendDevMessage(formData: FormData): Promise<void> {
-  const userId   = await requireRole("dev");
+  const userId   = await requireRole("admin");
   const ticketId = (formData.get("ticket_id") as string)?.trim();
   const body     = (formData.get("body") as string)?.trim().slice(0, 5000);
 
@@ -61,10 +61,10 @@ export async function sendDevMessage(formData: FormData): Promise<void> {
   await supabase.from("ticket_messages").insert({
     ticket_id:   ticketId,
     sender_id:   userId,
-    sender_role: "dev" as const,
+    sender_role: "admin" as const,
     body,
   });
 
-  revalidatePath(`/dev/tasks/${ticketId}`);
+  revalidatePath(`/admin/suporte/${ticketId}`);
   revalidatePath(`/area-cliente/suporte/${ticketId}`);
 }

@@ -81,7 +81,7 @@ export async function sendMessage(formData: FormData) {
     .eq("id", userId)
     .single();
 
-  const senderRole = (senderProfile?.role as "cliente" | "dev" | "admin") ?? "cliente";
+  const senderRole = (senderProfile?.role as "cliente" | "admin") ?? "cliente";
   const senderName = senderProfile?.name ?? "Fropty";
 
   const { data: ticket } = await supabase
@@ -144,6 +144,6 @@ export async function sendMessage(formData: FormData) {
   }
 
   revalidatePath(`/area-cliente/suporte/${ticketId}`);
-  revalidatePath(`/dev/tasks/${ticketId}`);
+  revalidatePath(`/admin/suporte/${ticketId}`);
   return { success: true };
 }

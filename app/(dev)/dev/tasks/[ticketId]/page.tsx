@@ -64,9 +64,9 @@ export default async function DevTicketDetailPage({ params }: Props) {
         ticketId={row.id}
         initialMessages={messages}
         currentUserId={user!.id}
-        currentUserName={profile?.name ?? "Dev"}
+        currentUserName={profile?.name ?? "Admin"}
         ticketStatus={row.status as TicketStatus}
-        senderRole="dev"
+        senderRole="admin"
       />
     </div>
   );

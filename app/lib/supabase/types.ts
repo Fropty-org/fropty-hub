@@ -7,7 +7,7 @@ export type Database = {
         Row: {
           id: string;
           name: string;
-          role: "cliente" | "dev" | "admin";
+          role: "cliente" | "admin";
           plan: "sem_plano" | "basico" | "pro";
           plan_renewal: string | null;
           token_balance: number;
@@ -21,7 +21,7 @@ export type Database = {
         Insert: {
           id: string;
           name?: string;
-          role?: "cliente" | "dev" | "admin";
+          role?: "cliente" | "admin";
           plan?: "sem_plano" | "basico" | "pro";
           plan_renewal?: string | null;
           token_balance?: number;
@@ -32,7 +32,7 @@ export type Database = {
         };
         Update: {
           name?: string;
-          role?: "cliente" | "dev" | "admin";
+          role?: "cliente" | "admin";
           plan?: "sem_plano" | "basico" | "pro";
           plan_renewal?: string | null;
           token_balance?: number;
@@ -136,7 +136,7 @@ export type Database = {
           id: string;
           ticket_id: string;
           sender_id: string;
-          sender_role: "cliente" | "dev" | "admin";
+          sender_role: "cliente" | "admin";
           body: string;
           attachments: string[];
           created_at: string;
@@ -144,7 +144,7 @@ export type Database = {
         Insert: {
           ticket_id: string;
           sender_id: string;
-          sender_role: "cliente" | "dev" | "admin";
+          sender_role: "cliente" | "admin";
           body: string;
           attachments?: string[];
         };

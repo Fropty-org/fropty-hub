@@ -65,7 +65,7 @@ export async function sendNewTicketAlert(opts: {
         <p style="margin:4px 0;"><strong style="color:#F7F8FC;">Cliente:</strong> ${opts.clientName}</p>
         <p style="margin:4px 0;"><strong style="color:#F7F8FC;">E-mail:</strong> ${opts.clientEmail}</p>
       </div>
-      ${btn("Abrir chamado", `${APP_URL}/dev/tasks/${opts.ticketId}`)}
+      ${btn("Abrir chamado", `${APP_URL}/admin/suporte/${opts.ticketId}`)}
     `),
   }).catch((e) => console.error("[email] sendNewTicketAlert:", e));
 }
@@ -75,7 +75,7 @@ export async function sendNewMessageAlert(opts: {
   toEmail: string;
   toName: string;
   fromName: string;
-  senderRole: "cliente" | "dev" | "admin";
+  senderRole: "cliente" | "admin";
   ticketSubject: string;
   ticketId: string;
   preview: string;
@@ -83,7 +83,7 @@ export async function sendNewMessageAlert(opts: {
   const isClient = opts.senderRole !== "cliente";
   const destUrl = isClient
     ? `${APP_URL}/portal/suporte/${opts.ticketId}`
-    : `${APP_URL}/dev/tasks/${opts.ticketId}`;
+    : `${APP_URL}/admin/suporte/${opts.ticketId}`;
 
   await getResend().emails.send({
     from: FROM,
