@@ -107,6 +107,12 @@ export default function RootLayout({
     <html lang="pt-BR" data-theme="dark">
       <head>
         <link rel="icon" type="image/png" href="/logo-icon.png" />
+        <link rel="apple-touch-icon" href="/logo-icon.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="Fropty" />
+        <meta name="theme-color" content="#040316" />
+        <meta name="mobile-web-app-capable" content="yes" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaOrg) }}

@@ -42,6 +42,64 @@ function tag(text: string, color = "#5B57E8") {
   return `<span style="display:inline-block;padding:2px 10px;border-radius:999px;background:${color}22;color:${color};font-size:11px;font-weight:700;border:1px solid ${color}30;">${text}</span>`;
 }
 
+// ── Boas-vindas ao novo cliente ───────────────────────────────────
+export async function sendWelcomeEmail(opts: {
+  toEmail: string;
+  toName: string;
+  plan: string;
+  tokenBalance: number;
+}) {
+  const planLabel: Record<string, string> = {
+    sem_plano: "Sem plano",
+    basico:    "Básico",
+    pro:       "Pro",
+  };
+  const plan = planLabel[opts.plan] ?? "Sem plano";
+  const hasPlan = opts.plan !== "sem_plano";
+
+  await getResend().emails.send({
+    from: FROM,
+    to:   opts.toEmail,
+    subject: `Sua conta está pronta, ${opts.toName.split(" ")[0]}! 🎉`,
+    html: baseTemplate(`
+      <p style="margin:0 0 8px;font-size:13px;color:#94a3b8;">Bem-vindo à Fropty Apps</p>
+      <h2 style="margin:0 0 16px;font-size:20px;font-weight:800;color:#F7F8FC;line-height:1.3;">
+        Que bom ter você com a gente, ${opts.toName.split(" ")[0]}! 🙌
+      </h2>
+      <p style="font-size:14px;color:#94a3b8;line-height:1.7;margin:0 0 20px;">
+        Sua conta foi criada e está pronta para usar. Ficamos muito felizes que você tenha escolhido a Fropty Apps para transformar sua ideia em realidade — a gente vai caprichar! 🚀
+      </p>
+
+      <!-- Resumo da conta -->
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:18px 20px;margin-bottom:20px;">
+        <p style="margin:0 0 12px;font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;">Sua conta</p>
+        <table cellpadding="0" cellspacing="0" style="width:100%;">
+          <tr>
+            <td style="padding:6px 0;font-size:13px;color:#94a3b8;">Plano</td>
+            <td style="padding:6px 0;font-size:13px;font-weight:700;color:#F7F8FC;text-align:right;">
+              ${hasPlan
+                ? `<span style="background:#5B57E822;color:#5B57E8;border:1px solid #5B57E830;padding:2px 10px;border-radius:999px;">${plan}</span>`
+                : `<span style="color:#475569;">${plan}</span>`
+              }
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:6px 0;font-size:13px;color:#94a3b8;border-top:1px solid rgba(255,255,255,0.06);">Tokens disponíveis</td>
+            <td style="padding:6px 0;font-size:13px;font-weight:700;color:#EF9F27;text-align:right;border-top:1px solid rgba(255,255,255,0.06);">
+              ${opts.tokenBalance} token${opts.tokenBalance !== 1 ? "s" : ""}
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <p style="font-size:13px;color:#94a3b8;line-height:1.7;margin:0 0 4px;">
+        Acesse o portal para acompanhar seus projetos, abrir chamados de suporte e muito mais. Qualquer dúvida, estamos aqui! 😊
+      </p>
+      ${btn("Acessar meu portal →", `${APP_URL}/portal/dashboard`)}
+    `),
+  }).catch((e) => console.error("[email] sendWelcomeEmail:", e));
+}
+
 // ── Novo ticket aberto (para o time interno) ──────────────────────
 export async function sendNewTicketAlert(opts: {
   subject: string;

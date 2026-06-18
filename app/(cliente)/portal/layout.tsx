@@ -3,6 +3,7 @@ import { getProfile } from "@/app/lib/auth/session";
 import { createClient } from "@/app/lib/supabase/server";
 import { ClientSidebar } from "@/app/components/cliente/ClientSidebar";
 import { UserAvatarMenu } from "@/app/components/auth/UserAvatarMenu";
+import { PullToRefresh } from "@/app/components/PullToRefresh";
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -86,8 +87,8 @@ export default async function PortalLayout({
         />
       </div>
 
-      <main className="portal-main-content" style={{ flex: 1, overflow: "hidden" }}>
-        {children}
+      <main className="portal-main-content" style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+        <PullToRefresh>{children}</PullToRefresh>
       </main>
     </div>
   );

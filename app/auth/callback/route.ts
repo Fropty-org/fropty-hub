@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/app/lib/supabase/server";
 import type { EmailOtpType } from "@supabase/supabase-js";
+import { sendWelcomeEmail } from "@/app/lib/email/send";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
@@ -11,8 +12,27 @@ export async function GET(request: Request) {
   const tokenHash = searchParams.get("token_hash");
   const type = searchParams.get("type") as EmailOtpType | null;
   if (tokenHash && type) {
-    const { error } = await supabase.auth.verifyOtp({ token_hash: tokenHash, type });
-    if (!error) return NextResponse.redirect(`${origin}${next}`);
+    const { data, error } = await supabase.auth.verifyOtp({ token_hash: tokenHash, type });
+    if (!error) {
+      // Convite aceito — dispara boas-vindas com resumo do plano (não bloqueia redirect)
+      if (type === "invite" && data.user) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("name, plan, token_balance")
+          .eq("id", data.user.id)
+          .single();
+
+        const email = data.user.email ?? "";
+        const name  = profile?.name || email.split("@")[0] || "Cliente";
+        sendWelcomeEmail({
+          toEmail:      email,
+          toName:       name,
+          plan:         profile?.plan ?? "sem_plano",
+          tokenBalance: profile?.token_balance ?? 0,
+        });
+      }
+      return NextResponse.redirect(`${origin}${next}`);
+    }
   }
 
   // Fluxo 2: PKCE code exchange (OAuth, magic link)
