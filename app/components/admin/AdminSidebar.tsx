@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useTransition, useState } from "react";
 import { signOut } from "@/app/actions/auth";
 import { PortalThemeToggle } from "@/app/components/cliente/PortalThemeToggle";
+import { NotificationBell } from "@/app/components/NotificationBell";
 
 const NAV = [
   { id: "overview",   href: "/admin/overview",   icon: "ti-layout-dashboard", label: "Visão Geral" },
@@ -20,10 +21,11 @@ const NAV = [
 interface Props {
   name: string;
   initials: string;
+  userId: string;
   initialTheme?: "dark" | "light";
 }
 
-export function AdminSidebar({ name, initials, initialTheme = "dark" }: Props) {
+export function AdminSidebar({ name, initials, userId, initialTheme = "dark" }: Props) {
   const pathname = usePathname();
   const [pending,    startTransition] = useTransition();
   const [mobileOpen, setMobileOpen]   = useState(false);
@@ -100,6 +102,7 @@ export function AdminSidebar({ name, initials, initialTheme = "dark" }: Props) {
             </p>
             <p style={{ margin: 0, fontSize: "11px", color: "#EF9F27" }}>Administrador</p>
           </div>
+          <NotificationBell userId={userId} />
           <PortalThemeToggle initialTheme={initialTheme} />
         </div>
 

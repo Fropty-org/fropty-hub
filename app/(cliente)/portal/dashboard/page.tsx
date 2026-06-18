@@ -8,6 +8,7 @@ import { WHATSAPP_URL } from "@/app/lib/config";
 import type { ClientProject, ProjectStatus } from "@/app/lib/types/cliente";
 import type { Database } from "@/app/lib/supabase/types";
 import { STATUS_MAP } from "@/app/lib/constants/status";
+import { PlanRenewalBanner } from "@/app/components/cliente/PlanRenewalBanner";
 
 type ProjectRow = Database["public"]["Tables"]["projects"]["Row"];
 
@@ -113,6 +114,14 @@ export default async function PortalDashboardPage() {
           </div>
         ))}
       </div>
+
+      {/* Banner de renovação de plano */}
+      {profile?.plan && profile.plan !== "sem_plano" && profile.plan_renewal && (
+        <PlanRenewalBanner
+          plan={profile.plan as "basico" | "pro"}
+          renewalDate={profile.plan_renewal}
+        />
+      )}
 
       {/* Onboarding — só aparece quando não há projetos */}
       {projects.length === 0 && (

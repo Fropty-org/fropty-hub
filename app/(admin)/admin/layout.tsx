@@ -16,7 +16,7 @@ export default async function AdminPortalLayout({ children }: { children: React.
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg)", color: "var(--text)" }}>
-      <AdminSidebar name={name} initials={initials} initialTheme={initialTheme} />
+      <AdminSidebar name={name} initials={initials} userId={user?.id ?? ""} initialTheme={initialTheme} />
       <main className="portal-main-content" style={{ flex: 1, overflow: "hidden" }}>{children}</main>
     </div>
   );

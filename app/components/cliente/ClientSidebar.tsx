@@ -7,6 +7,7 @@ import { useTransition, useState } from "react";
 import { signOut } from "../../actions/auth";
 import { AvatarUpload } from "./AvatarUpload";
 import { PortalThemeToggle } from "./PortalThemeToggle";
+import { NotificationBell } from "@/app/components/NotificationBell";
 import type { ClientUser } from "../../lib/types/cliente";
 
 interface NavItem {
@@ -78,6 +79,7 @@ export function ClientSidebar({ user, navItems, avatarUrl, initialTheme = "dark"
             {user.plan ? `Plano ${user.plan === "pro" ? "Pro" : "Básico"}` : "Sem plano"}
           </p>
         </div>
+        <NotificationBell userId={user.id} />
         <PortalThemeToggle initialTheme={initialTheme} />
       </div>
 
