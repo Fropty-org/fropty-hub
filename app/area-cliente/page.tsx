@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -14,6 +14,19 @@ export default function AreaClientePage() {
   const [error, setError]     = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+
+  useEffect(() => {
+    const saved = (localStorage.getItem("theme") as "dark" | "light") || "dark";
+    setTheme(saved);
+  }, []);
+
+  function toggleTheme() {
+    const next = theme === "dark" ? "light" : "dark";
+    setTheme(next);
+    document.documentElement.setAttribute("data-theme", next);
+    localStorage.setItem("theme", next);
+  }
 
   function changeMode(m: Mode) { setMode(m); setError(null); setSuccess(null); }
 
@@ -46,6 +59,24 @@ export default function AreaClientePage() {
       alignItems: "center", justifyContent: "center",
       padding: "24px 16px",
     }}>
+      {/* Theme toggle */}
+      <button
+        onClick={toggleTheme}
+        title={theme === "dark" ? "Modo claro" : "Modo escuro"}
+        style={{
+          position: "fixed", top: 16, right: 16,
+          width: 38, height: 38, borderRadius: 10,
+          border: "1px solid var(--border)",
+          background: "var(--surface-2, var(--bg-alt))",
+          color: "var(--text-muted)",
+          cursor: "pointer", display: "flex",
+          alignItems: "center", justifyContent: "center",
+          fontSize: 18, zIndex: 50,
+        }}
+      >
+        <i className={`ti ${theme === "dark" ? "ti-sun" : "ti-moon"}`} />
+      </button>
+
       <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 36, textDecoration: "none" }}>
         <Image src="/logo-icon.png" alt="Fropty Apps" width={32} height={32} style={{ borderRadius: 8 }} />
         <span style={{ fontSize: 18, fontWeight: 800, color: "var(--text)", fontFamily: "var(--font-plus-jakarta), sans-serif" }}>
