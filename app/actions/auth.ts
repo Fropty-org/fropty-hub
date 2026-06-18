@@ -37,7 +37,7 @@ export async function signIn(formData: FormData) {
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error("[signIn] unhandled exception:", msg);
-    return { error: `Erro interno: ${msg}` };
+    return { error: "Erro interno. Tente novamente mais tarde." };
   }
 }
 
@@ -120,7 +120,7 @@ export async function updatePassword(formData: FormData) {
 
   if (error) return { error: "Não foi possível atualizar a senha. O link pode ter expirado." };
 
-  redirect("/portal/dashboard");
+  redirect("/area-cliente/dashboard");
 }
 
 /**

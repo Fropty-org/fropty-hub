@@ -2,7 +2,7 @@ export type UserRole = "cliente" | "dev" | "admin";
 
 /** URL de destino após login para cada role. */
 export const ROLE_HOME: Record<UserRole, string> = {
-  cliente: "/portal/dashboard",
+  cliente: "/area-cliente/dashboard",
   dev:     "/dev/tasks",
   admin:   "/admin/overview",
 };
