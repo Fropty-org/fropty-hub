@@ -1,19 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServiceClient } from "@/app/lib/supabase/service";
 import { sendLowTokenAlert } from "@/app/lib/email/send";
+import crypto from "crypto";
 
 export const runtime = "nodejs";
 
 export async function GET(req: NextRequest) {
-  // Verifica secret para proteger o endpoint
-  const auth = req.headers.get("authorization");
-  if (auth !== `Bearer ${process.env.CRON_SECRET}`) {
+  const auth = req.headers.get("authorization") ?? "";
+  const expected = Buffer.from(`Bearer ${process.env.CRON_SECRET ?? ""}`);
+  const received = Buffer.from(auth);
+  if (
+    expected.length !== received.length ||
+    !crypto.timingSafeEqual(expected, received)
+  ) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const supabase = createServiceClient();
 
-  // Busca alertas pendentes criados nas últimas 48h
   const { data: alerts } = await supabase
     .from("low_token_alerts")
     .select("id, client_id, token_balance")
@@ -28,7 +32,6 @@ export async function GET(req: NextRequest) {
 
   for (const alert of alerts) {
     try {
-      // Busca email do usuário
       const { data: authUser } = await supabase.auth.admin.getUserById(alert.client_id);
       const { data: profile }  = await supabase
         .from("profiles")
@@ -45,7 +48,6 @@ export async function GET(req: NextRequest) {
         balance:  alert.token_balance,
       });
 
-      // Marca como enviado
       await supabase
         .from("low_token_alerts")
         .update({ sent_at: new Date().toISOString() })

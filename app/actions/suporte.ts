@@ -1,7 +1,8 @@
-﻿"use server";
+"use server";
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/app/lib/supabase/server";
+import { createServiceClient } from "@/app/lib/supabase/service";
 import { requireAuth } from "@/app/lib/auth/require-role";
 import { dbCreateTicket } from "@/app/lib/db/tickets";
 import {
@@ -9,13 +10,22 @@ import {
   sendNewMessageAlert,
 } from "@/app/lib/email/send";
 
+function isValidAttachmentUrl(url: string): boolean {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (!supabaseUrl) return false;
+  return url.startsWith(`${supabaseUrl}/storage/v1/object/`);
+}
+
 export async function createTicket(formData: FormData) {
   const userId    = await requireAuth();
   const subject     = (formData.get("subject")    as string)?.trim().slice(0, 200);
   const category    = (formData.get("category")   as string)?.trim();
   const body        = (formData.get("body")        as string)?.trim().slice(0, 10000);
   const projectId   = (formData.get("project_id") as string)?.trim() || null;
-  const attachments = formData.getAll("attachments[]").map((v) => (v as string).trim()).filter(Boolean).slice(0, 10);
+  const attachments = formData.getAll("attachments[]")
+    .map((v) => (v as string).trim())
+    .filter((url) => url && isValidAttachmentUrl(url))
+    .slice(0, 10);
 
   if (!subject || !body) return { error: "Preencha o assunto e a descrição." };
 
@@ -40,7 +50,6 @@ export async function createTicket(formData: FormData) {
 
   if (result.error) return { error: "Erro ao abrir chamado. Tente novamente." };
 
-  // Notifica o time — fire and forget
   sendNewTicketAlert({
     subject,
     category: category || "Geral",
@@ -49,7 +58,7 @@ export async function createTicket(formData: FormData) {
     ticketId:    result.ticketId!,
   });
 
-  revalidatePath("/portal/suporte");
+  revalidatePath("/area-cliente/suporte");
   return { success: true, ticketId: result.ticketId };
 }
 
@@ -57,13 +66,15 @@ export async function sendMessage(formData: FormData) {
   const userId   = await requireAuth();
   const ticketId    = (formData.get("ticket_id") as string)?.trim();
   const body        = (formData.get("body") as string)?.trim().slice(0, 5000);
-  const attachments = formData.getAll("attachments[]").map((v) => (v as string).trim()).filter(Boolean).slice(0, 10);
+  const attachments = formData.getAll("attachments[]")
+    .map((v) => (v as string).trim())
+    .filter((url) => url && isValidAttachmentUrl(url))
+    .slice(0, 10);
 
   if (!ticketId || !body) return { error: "Mensagem não pode estar vazia." };
 
   const supabase = await createClient();
 
-  // Role real do remetente
   const { data: senderProfile } = await supabase
     .from("profiles")
     .select("role, name")
@@ -73,7 +84,6 @@ export async function sendMessage(formData: FormData) {
   const senderRole = (senderProfile?.role as "cliente" | "dev" | "admin") ?? "cliente";
   const senderName = senderProfile?.name ?? "Fropty";
 
-  // Carrega ticket com dados do cliente para notificação
   const { data: ticket } = await supabase
     .from("tickets")
     .select("id, subject, client_id")
@@ -82,7 +92,6 @@ export async function sendMessage(formData: FormData) {
 
   if (!ticket) return { error: "Ticket não encontrado." };
 
-  // Cliente só pode enviar no próprio ticket
   if (senderRole === "cliente" && ticket.client_id !== userId) {
     return { error: "Ticket não encontrado." };
   }
@@ -97,9 +106,7 @@ export async function sendMessage(formData: FormData) {
 
   if (error) return { error: "Erro ao enviar mensagem. Tente novamente." };
 
-  // Notifica o destinatário — fire and forget
   if (senderRole === "cliente") {
-    // Cliente enviou → notifica o time interno
     const adminEmail = process.env.CONTACT_EMAIL;
     if (adminEmail) {
       sendNewMessageAlert({
@@ -113,8 +120,9 @@ export async function sendMessage(formData: FormData) {
       });
     }
   } else {
-    // Dev/admin respondeu → notifica o cliente
-    const { data: clientAuth } = await supabase.auth.admin.getUserById(ticket.client_id);
+    // Usa service client para operação admin (auth.admin requer service role key)
+    const serviceSupabase = createServiceClient();
+    const { data: clientAuth } = await serviceSupabase.auth.admin.getUserById(ticket.client_id);
     const { data: clientProfile } = await supabase
       .from("profiles")
       .select("name")
@@ -135,7 +143,7 @@ export async function sendMessage(formData: FormData) {
     }
   }
 
-  revalidatePath(`/portal/suporte/${ticketId}`);
+  revalidatePath(`/area-cliente/suporte/${ticketId}`);
   revalidatePath(`/dev/tasks/${ticketId}`);
   return { success: true };
 }
