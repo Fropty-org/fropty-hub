@@ -7,10 +7,12 @@ export type Database = {
         Row: {
           id: string;
           name: string;
+          email: string | null;
           role: "cliente" | "admin";
           plan: "sem_plano" | "basico" | "pro";
           plan_renewal: string | null;
           token_balance: number;
+          is_active: boolean;
           stripe_customer_id: string | null;
           stripe_subscription_id: string | null;
           avatar_url: string | null;
@@ -21,10 +23,12 @@ export type Database = {
         Insert: {
           id: string;
           name?: string;
+          email?: string | null;
           role?: "cliente" | "admin";
           plan?: "sem_plano" | "basico" | "pro";
           plan_renewal?: string | null;
           token_balance?: number;
+          is_active?: boolean;
           stripe_customer_id?: string | null;
           stripe_subscription_id?: string | null;
           avatar_url?: string | null;
@@ -32,10 +36,12 @@ export type Database = {
         };
         Update: {
           name?: string;
+          email?: string | null;
           role?: "cliente" | "admin";
           plan?: "sem_plano" | "basico" | "pro";
           plan_renewal?: string | null;
           token_balance?: number;
+          is_active?: boolean;
           stripe_customer_id?: string | null;
           stripe_subscription_id?: string | null;
           avatar_url?: string | null;

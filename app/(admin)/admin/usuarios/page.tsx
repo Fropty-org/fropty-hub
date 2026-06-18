@@ -8,12 +8,6 @@ export const metadata: Metadata = { title: "Usuários — Admin" };
 
 const PAGE_SIZE = 20;
 
-const PLAN_LABEL: Record<string, string> = {
-  sem_plano: "Sem plano",
-  basico:    "Básico",
-  pro:       "Pro",
-};
-
 const ROLE_COLOR: Record<string, string> = {
   cliente: "#3b82f6",
   admin:   "#EF9F27",
