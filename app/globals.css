@@ -259,6 +259,12 @@ body {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  overflow-x: visible;
+}
+
+.portal-sidebar-toggle:hover {
+  background: var(--surface-3, rgba(255,255,255,0.12)) !important;
+  color: var(--text-muted) !important;
 }
 
 /* Close button inside sidebar — hidden on desktop */
@@ -303,6 +309,10 @@ body {
 
   .portal-sidebar-close {
     display: flex;
+  }
+
+  .portal-sidebar-toggle {
+    display: none !important;
   }
 
   .portal-main-content {

@@ -69,9 +69,41 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
         flexShrink: 0,
         position: "relative",
         transition: "width 0.2s ease, padding 0.2s ease",
-        overflow: "hidden",
+        overflow: "visible",
       }}
     >
+      {/* Aba de collapse na borda direita — apenas desktop */}
+      <button
+        onClick={toggleCollapse}
+        title={collapsed ? "Expandir menu" : "Recolher menu"}
+        className="portal-sidebar-toggle"
+        style={{
+          position: "absolute",
+          top: "50%",
+          right: -12,
+          transform: "translateY(-50%)",
+          width: 12,
+          height: 48,
+          borderRadius: "0 6px 6px 0",
+          border: "1px solid var(--border)",
+          borderLeft: "none",
+          background: "var(--surface-2)",
+          cursor: "pointer",
+          color: "var(--text-faint)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 10,
+          padding: 0,
+          transition: "background 0.15s, color 0.15s",
+        }}
+      >
+        <i
+          className={`ti ${collapsed ? "ti-chevron-right" : "ti-chevron-left"}`}
+          style={{ fontSize: 10 }}
+        />
+      </button>
+
       {/* Close button — mobile only */}
       <button
         className="portal-sidebar-close"
@@ -82,7 +114,7 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
       </button>
 
       {/* Logo */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: collapsed ? "center" : "space-between", marginBottom: 28, paddingLeft: collapsed ? 0 : 0 }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 28 }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none", minWidth: 0 }}>
           <Image src="/logo-icon.png" alt="Fropty" width={26} height={26} className="rounded-md" style={{ flexShrink: 0 }} />
           {!collapsed && (
@@ -91,24 +123,6 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
             </span>
           )}
         </Link>
-        {/* Botão collapse — apenas desktop */}
-        <button
-          onClick={toggleCollapse}
-          title={collapsed ? "Expandir menu" : "Recolher menu"}
-          className="portal-sidebar-toggle"
-          style={{
-            width: 24, height: 24, borderRadius: 6,
-            border: "1px solid var(--border)",
-            background: "var(--surface-2)",
-            cursor: "pointer", color: "var(--text-faint)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            flexShrink: 0,
-            marginLeft: collapsed ? 0 : 4,
-            marginTop: collapsed ? 8 : 0,
-          }}
-        >
-          <i className={`ti ${collapsed ? "ti-layout-sidebar-right" : "ti-layout-sidebar-left"}`} style={{ fontSize: 13 }} />
-        </button>
       </div>
 
       {/* User section */}
