@@ -21,7 +21,7 @@ export default async function SuportePage() {
     const [ticketsResult, clientsResult] = await Promise.all([
       supabase
         .from("tickets")
-        .select("*, profiles!tickets_client_id_fkey(name)")
+        .select("*")
         .order("updated_at", { ascending: false }),
       supabase
         .from("profiles")
@@ -34,14 +34,16 @@ export default async function SuportePage() {
     if (ticketsResult.error)  console.error("[portal/suporte/admin] tickets:", ticketsResult.error.message);
     if (clientsResult.error)  console.error("[portal/suporte/admin] clients:", clientsResult.error.message);
 
-    const tickets: Ticket[] = ((ticketsResult.data ?? []) as (TicketRow & { profiles: { name: string } | null })[]).map((t) => ({
+    const clientMap = new Map((clientsResult.data ?? []).map((c) => [c.id, c.name ?? c.id]));
+
+    const tickets: Ticket[] = ((ticketsResult.data ?? []) as TicketRow[]).map((t) => ({
       id:         t.id,
       subject:    t.subject,
       category:   t.category,
       status:     t.status as TicketStatus,
       priority:   t.priority as TicketPriority,
       projectId:  t.project_id ?? undefined,
-      clientName: t.profiles?.name ?? "—",
+      clientName: clientMap.get(t.client_id) ?? "—",
       clientId:   t.client_id,
       createdAt:  t.created_at,
       updatedAt:  t.updated_at,
