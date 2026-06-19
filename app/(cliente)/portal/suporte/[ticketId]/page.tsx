@@ -23,13 +23,20 @@ export default async function TicketDetailPage({ params }: Props) {
   const profile      = await getProfile();
   const { data: { user } } = await supabase.auth.getUser();
 
+  const isAdmin = profile?.role === "admin";
+
+  let ticketQuery = supabase
+    .from("tickets")
+    .select("*")
+    .eq("id", ticketId);
+
+  // Cliente só pode ver os próprios tickets; admin pode ver qualquer um
+  if (!isAdmin) {
+    ticketQuery = ticketQuery.eq("client_id", user!.id);
+  }
+
   const [ticketResult, messagesResult] = await Promise.all([
-    supabase
-      .from("tickets")
-      .select("*")
-      .eq("id", ticketId)
-      .eq("client_id", user!.id)
-      .single(),
+    ticketQuery.single(),
     supabase
       .from("ticket_messages")
       .select("*")

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { getProfile } from "@/app/lib/auth/session";
 import { createClient } from "@/app/lib/supabase/server";
 import { ProjectCard } from "@/app/components/cliente/ProjectCard";
 import { STATUS_MAP } from "@/app/lib/constants/status";
@@ -24,6 +26,9 @@ interface Props {
 }
 
 export default async function ProjetosPage({ searchParams }: Props) {
+  const profile = await getProfile();
+  if (profile?.role === "admin") redirect("/admin/projetos");
+
   const { status: statusParam } = await searchParams;
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();

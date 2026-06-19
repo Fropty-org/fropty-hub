@@ -11,7 +11,9 @@ interface Project {
 
 interface Props {
   projects: Project[];
-  onClose: () => void;
+  onClose:  () => void;
+  isAdmin?: boolean;
+  clients?: { id: string; name: string }[];
 }
 
 const CATEGORIES = ["Bug / Erro", "Nova funcionalidade", "Dúvida", "Performance", "Outros"];
@@ -48,7 +50,7 @@ const labelStyle: React.CSSProperties = {
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
-export function NewTicketForm({ projects, onClose }: Props) {
+export function NewTicketForm({ projects, onClose, isAdmin, clients }: Props) {
   const [loading,   setLoading]   = useState(false);
   const [error,     setError]     = useState("");
   const [success,   setSuccess]   = useState(false);
@@ -137,6 +139,23 @@ export function NewTicketForm({ projects, onClose }: Props) {
 
   return (
     <form ref={formRef} onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+
+      {/* Seletor de cliente — somente admin */}
+      {isAdmin && clients && clients.length > 0 && (
+        <div>
+          <label style={labelStyle}>Cliente *</label>
+          <select
+            name="on_behalf_of"
+            required
+            style={{ ...inputStyle, appearance: "none", cursor: "pointer" }}
+            onFocus={(e) => { e.currentTarget.style.borderColor = "var(--primary)"; }}
+            onBlur={(e)  => { e.currentTarget.style.borderColor = "var(--border)"; }}
+          >
+            <option value="">Selecione o cliente</option>
+            {clients.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+          </select>
+        </div>
+      )}
 
       {/* Assunto */}
       <div>

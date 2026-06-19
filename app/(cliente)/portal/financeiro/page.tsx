@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { getProfile } from "@/app/lib/auth/session";
 import { createClient } from "@/app/lib/supabase/server";
 import { buyTokens, subscribePlan } from "@/app/actions/financeiro";
@@ -20,8 +21,10 @@ interface Props {
 }
 
 export default async function FinanceiroPage({ searchParams }: Props) {
-  const { sucesso }  = await searchParams;
   const profile      = await getProfile();
+  if (profile?.role === "admin") redirect("/admin/financeiro");
+
+  const { sucesso }  = await searchParams;
   const supabase     = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 

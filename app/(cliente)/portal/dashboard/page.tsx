@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { getProfile } from "@/app/lib/auth/session";
 import { createClient } from "@/app/lib/supabase/server";
 import { ProjectCard } from "@/app/components/cliente/ProjectCard";
@@ -17,8 +18,9 @@ export const metadata: Metadata = {
 };
 
 export default async function PortalDashboardPage() {
-  // getProfile() é deduplicado pelo React cache — já foi chamado no layout pai
   const profile  = await getProfile();
+  if (profile?.role === "admin") redirect("/admin/overview");
+
   const supabase = await createClient();
 
   const { data: { user } } = await supabase.auth.getUser();

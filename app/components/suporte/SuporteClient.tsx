@@ -9,11 +9,13 @@ import type { Ticket } from "@/app/lib/types/cliente";
 type FilterMode = "todos" | "abertos" | "fechados";
 
 interface Props {
-  tickets: Ticket[];
+  tickets:  Ticket[];
   projects: { id: string; name: string }[];
+  isAdmin?: boolean;
+  clients?: { id: string; name: string }[];
 }
 
-export function SuporteClient({ tickets, projects }: Props) {
+export function SuporteClient({ tickets, projects, isAdmin, clients }: Props) {
   const [showForm, setShowForm] = useState(false);
   const [search,   setSearch]   = useState("");
   const [filter,   setFilter]   = useState<FilterMode>("todos");
@@ -88,7 +90,9 @@ export function SuporteClient({ tickets, projects }: Props) {
               Suporte
             </h1>
             <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>
-              Abra chamados e acompanhe suas solicitações em tempo real
+              {isAdmin
+                ? "Todos os chamados · Abra em nome de um cliente quando necessário"
+                : "Abra chamados e acompanhe suas solicitações em tempo real"}
             </p>
           </div>
           <button
@@ -276,7 +280,7 @@ export function SuporteClient({ tickets, projects }: Props) {
                 <i className="ti ti-x" style={{ fontSize: 14 }} />
               </button>
             </div>
-            <NewTicketForm projects={projects} onClose={() => setShowForm(false)} />
+            <NewTicketForm projects={projects} onClose={() => setShowForm(false)} isAdmin={isAdmin} clients={clients} />
           </div>
         </div>
       )}
@@ -383,7 +387,7 @@ export function SuporteClient({ tickets, projects }: Props) {
             </div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              {openTickets.map((t) => <TicketCard key={t.id} ticket={t} />)}
+              {openTickets.map((t) => <TicketCard key={t.id} ticket={t} showClient={isAdmin} />)}
             </div>
           )}
         </section>
@@ -408,7 +412,7 @@ export function SuporteClient({ tickets, projects }: Props) {
             </span>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {closedTickets.map((t) => <TicketCard key={t.id} ticket={t} dimmed />)}
+            {closedTickets.map((t) => <TicketCard key={t.id} ticket={t} dimmed showClient={isAdmin} />)}
           </div>
         </section>
       )}
@@ -449,7 +453,7 @@ function StatCard({ label, value, icon, color }: { label: string; value: number;
 }
 
 /* ── TicketCard ────────────────────────────────────────────────── */
-function TicketCard({ ticket, dimmed }: { ticket: Ticket; dimmed?: boolean }) {
+function TicketCard({ ticket, dimmed, showClient }: { ticket: Ticket; dimmed?: boolean; showClient?: boolean }) {
   const statusInfo   = TICKET_STATUS_MAP[ticket.status];
   const priorityInfo = TICKET_PRIORITY_MAP[ticket.priority];
   const updatedDate  = new Date(ticket.updatedAt).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
@@ -494,6 +498,9 @@ function TicketCard({ ticket, dimmed }: { ticket: Ticket; dimmed?: boolean }) {
           {ticket.subject}
         </p>
         <p style={{ margin: 0, fontSize: "11px", color: "var(--text-faint)" }}>
+          {showClient && ticket.clientName && (
+            <span style={{ color: "var(--text-muted)", fontWeight: 600 }}>{ticket.clientName} · </span>
+          )}
           <span>{ticket.category}</span>
           <span className="suporte-ticket-date"> · {updatedDate}</span>
         </p>

@@ -17,11 +17,12 @@ function isValidAttachmentUrl(url: string): boolean {
 }
 
 export async function createTicket(formData: FormData) {
-  const userId    = await requireAuth();
-  const subject     = (formData.get("subject")    as string)?.trim().slice(0, 200);
-  const category    = (formData.get("category")   as string)?.trim();
-  const body        = (formData.get("body")        as string)?.trim().slice(0, 10000);
-  const projectId   = (formData.get("project_id") as string)?.trim() || null;
+  const userId      = await requireAuth();
+  const subject     = (formData.get("subject")       as string)?.trim().slice(0, 200);
+  const category    = (formData.get("category")      as string)?.trim();
+  const body        = (formData.get("body")           as string)?.trim().slice(0, 10000);
+  const projectId   = (formData.get("project_id")    as string)?.trim() || null;
+  const onBehalfOf  = (formData.get("on_behalf_of")  as string)?.trim() || null;
   const attachments = formData.getAll("attachments[]")
     .map((v) => (v as string).trim())
     .filter((url) => url && isValidAttachmentUrl(url))
@@ -30,17 +31,42 @@ export async function createTicket(formData: FormData) {
   if (!subject || !body) return { error: "Preencha o assunto e a descrição." };
 
   const supabase = await createClient();
-  const { data: clientProfile } = await supabase
+
+  const { data: callerProfile } = await supabase
     .from("profiles")
-    .select("name")
+    .select("role, name")
     .eq("id", userId)
     .single();
 
+  const isAdmin = callerProfile?.role === "admin";
+
+  // Admin pode criar em nome de outro cliente; valida que o ID pertence a um cliente ativo
+  let clientId = userId;
+  if (isAdmin && onBehalfOf) {
+    const { data: target } = await supabase
+      .from("profiles")
+      .select("id, role, is_active")
+      .eq("id", onBehalfOf)
+      .eq("role", "cliente")
+      .eq("is_active", true)
+      .single();
+    if (!target) return { error: "Cliente não encontrado ou inativo." };
+    clientId = target.id;
+  }
+
+  const { data: clientProfile } = await supabase
+    .from("profiles")
+    .select("name")
+    .eq("id", clientId)
+    .single();
+
   const { data: authUser } = await supabase.auth.getUser();
-  const clientEmail = authUser.user?.email ?? "";
+  const clientEmail = isAdmin && onBehalfOf
+    ? "" // email do cliente não disponível aqui sem service client — alerta vai só para admin
+    : (authUser.user?.email ?? "");
 
   const result = await dbCreateTicket({
-    clientId:    userId,
+    clientId,
     projectId:   projectId || null,
     subject,
     category:    category || "Geral",

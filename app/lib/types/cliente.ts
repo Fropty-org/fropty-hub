@@ -37,6 +37,8 @@ export interface Ticket {
   priority: TicketPriority;
   projectId?: string;
   projectName?: string;
+  clientName?: string;
+  clientId?: string;
   createdAt: string;
   updatedAt: string;
 }
