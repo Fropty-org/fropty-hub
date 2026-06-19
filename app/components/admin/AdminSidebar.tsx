@@ -13,9 +13,10 @@ const NAV = [
   { id: "usuarios",   href: "/admin/usuarios",   icon: "ti-users",            label: "Usuários" },
   { id: "projetos",   href: "/admin/projetos",   icon: "ti-folder",           label: "Projetos" },
   { id: "financeiro", href: "/admin/financeiro", icon: "ti-credit-card",      label: "Financeiro" },
+  { id: "suporte",    href: "/portal/suporte",   icon: "ti-message-circle",   label: "Suporte" },
   { id: "analytics",  href: "/admin/analytics",  icon: "ti-chart-bar",        label: "Analytics" },
   { id: "audit",      href: "/admin/audit",      icon: "ti-shield-check",     label: "Auditoria" },
-  { id: "perfil",     href: "/portal/perfil",    icon: "ti-user-circle",      label: "Meu Perfil" },
+  { id: "perfil",     href: "/admin/perfil",     icon: "ti-user-circle",      label: "Meu Perfil" },
 ];
 
 const COLLAPSED_W = 56;

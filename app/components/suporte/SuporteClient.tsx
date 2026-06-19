@@ -2,21 +2,19 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { NewTicketForm } from "./NewTicketForm";
 import { TICKET_STATUS_MAP, TICKET_PRIORITY_MAP } from "@/app/lib/constants/status";
 import type { Ticket } from "@/app/lib/types/cliente";
 
 type FilterMode = "todos" | "abertos" | "fechados";
 
 interface Props {
-  tickets:  Ticket[];
-  projects: { id: string; name: string }[];
-  isAdmin?: boolean;
-  clients?: { id: string; name: string }[];
+  tickets:   Ticket[];
+  projects?: { id: string; name: string }[];
+  isAdmin?:  boolean;
+  clients?:  { id: string; name: string }[];
 }
 
-export function SuporteClient({ tickets, projects, isAdmin, clients }: Props) {
-  const [showForm, setShowForm] = useState(false);
+export function SuporteClient({ tickets, isAdmin }: Props) {
   const [search,   setSearch]   = useState("");
   const [filter,   setFilter]   = useState<FilterMode>("todos");
 
@@ -95,8 +93,8 @@ export function SuporteClient({ tickets, projects, isAdmin, clients }: Props) {
                 : "Abra chamados e acompanhe suas solicitações em tempo real"}
             </p>
           </div>
-          <button
-            onClick={() => setShowForm(true)}
+          <Link
+            href="/portal/suporte/novo"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -111,6 +109,7 @@ export function SuporteClient({ tickets, projects, isAdmin, clients }: Props) {
               fontSize: "13px",
               fontFamily: "inherit",
               flexShrink: 0,
+              textDecoration: "none",
               boxShadow: "0 4px 16px rgba(91,87,232,0.35)",
               transition: "opacity 0.15s, transform 0.15s",
             }}
@@ -118,7 +117,7 @@ export function SuporteClient({ tickets, projects, isAdmin, clients }: Props) {
             onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.transform = "translateY(0)"; }}
           >
             <i className="ti ti-plus" style={{ fontSize: 15 }} /> Novo chamado
-          </button>
+          </Link>
         </div>
 
         {/* Stats row */}
@@ -223,68 +222,6 @@ export function SuporteClient({ tickets, projects, isAdmin, clients }: Props) {
         </div>
       </div>
 
-      {/* ── Modal novo chamado ──────────────────────────────────── */}
-      {showForm && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(4,3,22,0.72)",
-            backdropFilter: "blur(6px)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 100,
-            padding: 24,
-          }}
-          onClick={(e) => { if (e.target === e.currentTarget) setShowForm(false); }}
-        >
-          <div
-            className="animate-fade-up"
-            style={{
-              background: "var(--card-bg)",
-              border: "1px solid var(--card-border)",
-              borderRadius: 20,
-              padding: "28px 32px 32px",
-              width: "100%",
-              maxWidth: 560,
-              maxHeight: "90vh",
-              overflowY: "auto",
-            }}
-          >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-              <div>
-                <h2 style={{ margin: "0 0 2px", fontSize: "1.1rem", fontWeight: 800, color: "var(--text)", letterSpacing: "-0.01em" }}>
-                  Abrir chamado
-                </h2>
-                <p style={{ margin: 0, fontSize: "12px", color: "var(--text-faint)" }}>
-                  Descreva o problema — respondemos em até 24h
-                </p>
-              </div>
-              <button
-                onClick={() => setShowForm(false)}
-                style={{
-                  width: 32, height: 32,
-                  borderRadius: 8,
-                  background: "var(--surface-2, rgba(255,255,255,0.06))",
-                  border: "1px solid var(--border)",
-                  cursor: "pointer",
-                  color: "var(--text-faint)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexShrink: 0,
-                  fontFamily: "inherit",
-                }}
-              >
-                <i className="ti ti-x" style={{ fontSize: 14 }} />
-              </button>
-            </div>
-            <NewTicketForm projects={projects} onClose={() => setShowForm(false)} isAdmin={isAdmin} clients={clients} />
-          </div>
-        </div>
-      )}
-
       {/* ── Estado vazio total ──────────────────────────────────── */}
       {tickets.length === 0 && (
         <div
@@ -311,29 +248,34 @@ export function SuporteClient({ tickets, projects, isAdmin, clients }: Props) {
           <p style={{ fontWeight: 700, fontSize: "15px", color: "var(--text)", margin: "0 0 6px" }}>
             Nenhum chamado ainda
           </p>
-          <p style={{ color: "var(--text-faint)", margin: "0 0 24px", fontSize: "13px" }}>
-            Quando precisar de suporte, estamos aqui.
+          <p style={{ color: "var(--text-faint)", margin: isAdmin ? 0 : "0 0 24px", fontSize: "13px" }}>
+            {isAdmin
+              ? "Nenhum cliente abriu chamado. Use “Novo chamado” para abrir em nome de um cliente."
+              : "Quando precisar de suporte, estamos aqui."}
           </p>
-          <button
-            onClick={() => setShowForm(true)}
-            style={{
-              background: "var(--primary)",
-              color: "#fff",
-              border: "none",
-              padding: "10px 22px",
-              borderRadius: 10,
-              fontWeight: 700,
-              cursor: "pointer",
-              fontSize: "13px",
-              fontFamily: "inherit",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 6,
-              boxShadow: "0 4px 16px rgba(91,87,232,0.35)",
-            }}
-          >
-            <i className="ti ti-plus" /> Abrir primeiro chamado
-          </button>
+          {!isAdmin && (
+            <Link
+              href="/portal/suporte/novo"
+              style={{
+                background: "var(--primary)",
+                color: "#fff",
+                border: "none",
+                padding: "10px 22px",
+                borderRadius: 10,
+                fontWeight: 700,
+                cursor: "pointer",
+                fontSize: "13px",
+                fontFamily: "inherit",
+                textDecoration: "none",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                boxShadow: "0 4px 16px rgba(91,87,232,0.35)",
+              }}
+            >
+              <i className="ti ti-plus" /> Abrir primeiro chamado
+            </Link>
+          )}
         </div>
       )}
 

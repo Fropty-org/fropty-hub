@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { createTicket } from "@/app/actions/suporte";
 import { createClient } from "@/app/lib/supabase/browser";
 
@@ -10,10 +11,10 @@ interface Project {
 }
 
 interface Props {
-  projects: Project[];
-  onClose:  () => void;
-  isAdmin?: boolean;
-  clients?: { id: string; name: string }[];
+  projects:  Project[];
+  onClose?:  () => void;
+  isAdmin?:  boolean;
+  clients?:  { id: string; name: string }[];
 }
 
 const CATEGORIES = ["Bug / Erro", "Nova funcionalidade", "Dúvida", "Performance", "Outros"];
@@ -51,6 +52,7 @@ const labelStyle: React.CSSProperties = {
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 export function NewTicketForm({ projects, onClose, isAdmin, clients }: Props) {
+  const router                    = useRouter();
   const [loading,   setLoading]   = useState(false);
   const [error,     setError]     = useState("");
   const [success,   setSuccess]   = useState(false);
@@ -58,6 +60,12 @@ export function NewTicketForm({ projects, onClose, isAdmin, clients }: Props) {
   const [priority,  setPriority]  = useState("media");
   const formRef                   = useRef<HTMLFormElement>(null);
   const fileInputRef              = useRef<HTMLInputElement>(null);
+
+  // Em modo modal, onClose fecha. Em modo página, volta para a lista de chamados.
+  function finish() {
+    if (onClose) onClose();
+    else { router.push("/portal/suporte"); router.refresh(); }
+  }
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const selected = Array.from(e.target.files ?? []);
@@ -109,7 +117,7 @@ export function NewTicketForm({ projects, onClose, isAdmin, clients }: Props) {
 
     setSuccess(true);
     setLoading(false);
-    setTimeout(onClose, 1800);
+    setTimeout(finish, 1800);
   }
 
   if (success) {
@@ -336,7 +344,7 @@ export function NewTicketForm({ projects, onClose, isAdmin, clients }: Props) {
       <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", paddingTop: 4 }}>
         <button
           type="button"
-          onClick={onClose}
+          onClick={finish}
           style={{
             background: "none",
             border: "1px solid var(--border)",

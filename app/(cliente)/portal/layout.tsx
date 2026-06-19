@@ -45,8 +45,9 @@ export default async function PortalLayout({
 
   const portalNav = isAdmin
     ? [
-        { id: "suporte", href: "/portal/suporte", icon: "ti-message-circle", label: "Suporte" },
-        { id: "perfil",  href: "/portal/perfil",  icon: "ti-user-circle",    label: "Meu Perfil" },
+        { id: "painel",  href: "/admin/overview", icon: "ti-layout-dashboard", label: "Painel admin" },
+        { id: "suporte", href: "/portal/suporte", icon: "ti-message-circle",   label: "Suporte" },
+        { id: "perfil",  href: "/admin/perfil",   icon: "ti-user-circle",      label: "Meu Perfil" },
       ]
     : [
         { id: "dashboard",  href: "/portal/dashboard",  icon: "ti-layout-dashboard", label: "Painel" },

@@ -28,11 +28,7 @@ function analyzePassword(password: string): PasswordStrength {
   return { score, issues, ...levels[score] };
 }
 
-interface Props {
-  email: string;
-}
-
-export default function PasswordChangeForm({ email }: Props) {
+export default function PasswordChangeForm() {
   const [isPending, startTransition] = useTransition();
   const [msg, setMsg]                = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [newPwd, setNewPwd]          = useState("");

@@ -4,14 +4,14 @@ import { createClient } from "@/app/lib/supabase/server";
 import ProfileForm from "@/app/components/cliente/ProfileForm";
 import PasswordChangeForm from "@/app/components/cliente/PasswordChangeForm";
 
-export const metadata: Metadata = { title: "Meu Perfil — Fropty" };
+export const metadata: Metadata = { title: "Meu Perfil — Admin Fropty" };
 
-export default async function PerfilPage() {
+export default async function AdminPerfilPage() {
   const profile  = await getProfile();
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  const name  = profile?.name || user?.email?.split("@")[0] || "Cliente";
+  const name  = profile?.name || user?.email?.split("@")[0] || "Admin";
   const email = user?.email ?? "";
 
   return (

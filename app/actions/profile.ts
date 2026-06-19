@@ -40,6 +40,7 @@ export async function updateProfile(formData: FormData): Promise<{ error?: strin
   revalidatePath("/portal/perfil");
   revalidatePath("/portal/dashboard");
   revalidatePath("/admin");
+  revalidatePath("/admin/perfil");
   return { success: "Perfil atualizado!" };
 }
 
