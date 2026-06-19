@@ -65,6 +65,7 @@ export default async function PortalDashboardPage() {
         <h1 style={{ fontSize: "1.75rem", fontWeight: 800, margin: 0, color: "var(--text)" }}>
           {displayName.split(" ")[0]}
         </h1>
+
       </div>
 
       {/* KPIs */}

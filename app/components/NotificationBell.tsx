@@ -22,16 +22,18 @@ const TYPE_COLOR: Record<string, string> = {
 
 function timeAgo(dateStr: string): string {
   const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
-  if (diff < 60)   return "agora";
-  if (diff < 3600) return `${Math.floor(diff / 60)}m atrás`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)}h atrás`;
-  return `${Math.floor(diff / 86400)}d atrás`;
+  if (diff < 60)    return "agora";
+  if (diff < 3600)  return `${Math.floor(diff / 60)}m`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h`;
+  return `${Math.floor(diff / 86400)}d`;
 }
 
 export function NotificationBell({ userId }: { userId: string }) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [open, setOpen]                   = useState(false);
-  const ref                               = useRef<HTMLDivElement>(null);
+  const [dropPos, setDropPos]             = useState({ top: 0, left: 0 });
+  const btnRef                            = useRef<HTMLButtonElement>(null);
+  const dropRef                           = useRef<HTMLDivElement>(null);
   const supabase                          = useMemo(() => createClient(), []);
 
   const unread = notifications.filter((n) => !n.read_at).length;
@@ -44,11 +46,10 @@ export function NotificationBell({ userId }: { userId: string }) {
       .order("created_at", { ascending: false })
       .limit(30);
     if (data) setNotifications(data);
-  }, [userId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [userId, supabase]);
 
   useEffect(() => {
     fetchNotifications();
-
     const channel = supabase
       .channel(`notifications:${userId}`)
       .on(
@@ -57,25 +58,38 @@ export function NotificationBell({ userId }: { userId: string }) {
         (payload) => setNotifications((prev) => [payload.new as Notification, ...prev].slice(0, 30))
       )
       .subscribe();
-
     return () => { supabase.removeChannel(channel); };
-  }, [userId, fetchNotifications]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [userId, fetchNotifications, supabase]);
 
   // Fecha ao clicar fora
   useEffect(() => {
     if (!open) return;
     function handler(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      if (
+        btnRef.current && !btnRef.current.contains(e.target as Node) &&
+        dropRef.current && !dropRef.current.contains(e.target as Node)
+      ) setOpen(false);
     }
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, [open]);
 
+  function handleOpen() {
+    if (!open && btnRef.current) {
+      const rect = btnRef.current.getBoundingClientRect();
+      const dropW = 320;
+      const spaceRight = window.innerWidth - rect.left;
+      const left = spaceRight >= dropW ? rect.left : Math.max(8, rect.right - dropW);
+      setDropPos({ top: rect.bottom + 8, left });
+    }
+    setOpen((o) => !o);
+  }
+
   async function markRead(id: string, link: string | null) {
     setNotifications((prev) => prev.map((n) => n.id === id ? { ...n, read_at: new Date().toISOString() } : n));
     await supabase.from("notifications").update({ read_at: new Date().toISOString() }).eq("id", id);
-    if (link) window.location.href = link;
     setOpen(false);
+    if (link) window.location.href = link;
   }
 
   async function markAllRead() {
@@ -86,10 +100,11 @@ export function NotificationBell({ userId }: { userId: string }) {
   }
 
   return (
-    <div ref={ref} style={{ position: "relative" }}>
+    <>
       <button
-        onClick={() => setOpen((o) => !o)}
-        aria-label="Notificações"
+        ref={btnRef}
+        onClick={handleOpen}
+        aria-label="Notificacoes"
         style={{
           position: "relative",
           width: 32, height: 32, borderRadius: 8,
@@ -108,30 +123,33 @@ export function NotificationBell({ userId }: { userId: string }) {
             background: "#ef4444", color: "#fff",
             fontSize: 9, fontWeight: 800,
             display: "flex", alignItems: "center", justifyContent: "center",
-            lineHeight: 1, padding: "0 3px",
+            lineHeight: 1, padding: "0 3px", pointerEvents: "none",
           }}>
             {unread > 9 ? "9+" : unread}
           </span>
         )}
       </button>
 
+      {/* Dropdown em position:fixed — não é cortado por overflow do sidebar */}
       {open && (
-        <div style={{
-          position: "absolute",
-          top: "calc(100% + 8px)",
-          right: 0,
-          width: 320,
-          background: "var(--card-bg)",
-          border: "1px solid var(--card-border)",
-          borderRadius: 14,
-          boxShadow: "0 8px 32px rgba(0,0,0,0.25)",
-          zIndex: 1000,
-          overflow: "hidden",
-        }}>
-          {/* Header */}
+        <div
+          ref={dropRef}
+          style={{
+            position: "fixed",
+            top: dropPos.top,
+            left: dropPos.left,
+            width: 320,
+            background: "var(--card-bg)",
+            border: "1px solid var(--card-border)",
+            borderRadius: 14,
+            boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
+            zIndex: 9999,
+            overflow: "hidden",
+          }}
+        >
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 16px", borderBottom: "1px solid var(--border)" }}>
             <span style={{ fontSize: "13px", fontWeight: 700, color: "var(--text)" }}>
-              Notificações {unread > 0 && <span style={{ color: "#ef4444" }}>({unread})</span>}
+              Notificacoes{unread > 0 && <span style={{ color: "#ef4444", marginLeft: 4 }}>({unread})</span>}
             </span>
             {unread > 0 && (
               <button onClick={markAllRead} style={{ fontSize: "11px", color: "var(--text-faint)", background: "none", border: "none", cursor: "pointer", fontFamily: "inherit", fontWeight: 600 }}>
@@ -140,12 +158,11 @@ export function NotificationBell({ userId }: { userId: string }) {
             )}
           </div>
 
-          {/* Lista */}
-          <div style={{ maxHeight: 380, overflowY: "auto" }}>
+          <div style={{ maxHeight: 360, overflowY: "auto" }}>
             {notifications.length === 0 ? (
               <p style={{ padding: "28px 16px", textAlign: "center", color: "var(--text-faint)", fontSize: "13px", margin: 0 }}>
-                <i className="ti ti-bell-off" style={{ display: "block", fontSize: 24, marginBottom: 8 }} />
-                Nenhuma notificação
+                <i className="ti ti-bell-off" style={{ display: "block", fontSize: 22, marginBottom: 8 }} />
+                Nenhuma notificacao
               </p>
             ) : (
               notifications.map((n) => (
@@ -153,19 +170,18 @@ export function NotificationBell({ userId }: { userId: string }) {
                   key={n.id}
                   onClick={() => markRead(n.id, n.link)}
                   style={{
-                    display: "flex", gap: 12, padding: "12px 16px",
+                    display: "flex", gap: 12, padding: "11px 16px",
                     borderBottom: "1px solid var(--border)",
                     cursor: n.link ? "pointer" : "default",
                     background: n.read_at ? "transparent" : "rgba(239,159,39,0.04)",
-                    transition: "background 0.1s",
                   }}
                 >
                   <div style={{
-                    width: 34, height: 34, borderRadius: 9, flexShrink: 0,
+                    width: 32, height: 32, borderRadius: 8, flexShrink: 0,
                     background: `${TYPE_COLOR[n.type] ?? "#888"}18`,
                     display: "flex", alignItems: "center", justifyContent: "center",
                   }}>
-                    <i className={`ti ${TYPE_ICON[n.type] ?? "ti-bell"}`} style={{ fontSize: 15, color: TYPE_COLOR[n.type] ?? "#888" }} />
+                    <i className={`ti ${TYPE_ICON[n.type] ?? "ti-bell"}`} style={{ fontSize: 14, color: TYPE_COLOR[n.type] ?? "#888" }} />
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <p style={{ margin: "0 0 2px", fontSize: "12px", fontWeight: n.read_at ? 600 : 700, color: "var(--text)", display: "flex", justifyContent: "space-between", gap: 8 }}>
@@ -177,7 +193,7 @@ export function NotificationBell({ userId }: { userId: string }) {
                     )}
                   </div>
                   {!n.read_at && (
-                    <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#ef4444", flexShrink: 0, alignSelf: "center" }} />
+                    <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#ef4444", flexShrink: 0, alignSelf: "center" }} />
                   )}
                 </div>
               ))
@@ -185,6 +201,6 @@ export function NotificationBell({ userId }: { userId: string }) {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

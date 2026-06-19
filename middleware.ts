@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 const LOGIN_PAGE = "/area-cliente";
-const PROTECTED_PREFIXES = ["/admin", "/area-cliente/"];
+const PROTECTED_PREFIXES = ["/admin", "/area-cliente/", "/portal/"];
 
 // Middleware totalmente stateless: sem Supabase client, sem chamadas de rede.
 // Verifica apenas a presença do cookie de sessão do Supabase (sb-*-auth-token).
@@ -16,6 +16,7 @@ export function middleware(request: NextRequest) {
     url.pathname = "/demo";
     return NextResponse.rewrite(url);
   }
+
   const isLoginPage = path === LOGIN_PAGE;
   const isProtected = PROTECTED_PREFIXES.some((p) => path.startsWith(p));
 
@@ -29,9 +30,10 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // Usuário já autenticado tenta acessar a página de login → manda para o portal
   if (isLoginPage && hasSession) {
     const url = request.nextUrl.clone();
-    url.pathname = "/area-cliente/dashboard";
+    url.pathname = "/portal/dashboard";
     return NextResponse.redirect(url);
   }
 
@@ -41,7 +43,9 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     "/",
+    "/area-cliente",
     "/area-cliente/:path*",
     "/admin/:path*",
+    "/portal/:path*",
   ],
 };
