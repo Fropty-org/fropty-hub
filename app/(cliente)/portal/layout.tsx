@@ -69,7 +69,6 @@ export default async function PortalLayout({
       <ClientSidebar
         user={sidebarUser}
         navItems={portalNav}
-        avatarUrl={profile?.avatar_url ?? null}
         initialTheme={profile?.theme ?? "dark"}
       />
 

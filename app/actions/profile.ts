@@ -26,17 +26,6 @@ function validatePasswordStrength(password: string): string | null {
   return null;
 }
 
-export async function updateAvatarUrl(url: string): Promise<void> {
-  const userId = await requireAuth();
-  const storageBase = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/avatars/`;
-  if (!url || !url.startsWith(storageBase)) return;
-
-  const supabase = await createClient();
-  await supabase.from("profiles").update({ avatar_url: url }).eq("id", userId);
-
-  revalidatePath("/portal");
-  revalidatePath("/portal/dashboard");
-}
 
 export async function updateProfile(formData: FormData): Promise<{ error?: string; success?: string }> {
   const userId = await requireAuth();
