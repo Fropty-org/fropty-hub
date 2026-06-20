@@ -7,7 +7,10 @@ export const runtime = "nodejs";
 function verifySignature(body: string, signature: string | null, secret: string): boolean {
   if (!signature) return false;
   const expected = `sha256=${crypto.createHmac("sha256", secret).update(body).digest("hex")}`;
-  return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected));
+  const a = Buffer.from(signature);
+  const b = Buffer.from(expected);
+  if (a.length !== b.length) return false;
+  return crypto.timingSafeEqual(a, b);
 }
 
 function findProjectId(repoName: string, projects: { id: string; name: string }[]): string | null {

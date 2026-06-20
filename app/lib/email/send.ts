@@ -10,6 +10,15 @@ function getResend() {
 const FROM = process.env.RESEND_FROM_EMAIL ?? "Fropty Apps <noreply@fropty.com>";
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://fropty.com";
 
+function esc(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function baseTemplate(content: string) {
   return `<!DOCTYPE html>
 <html lang="pt-BR">
@@ -59,11 +68,11 @@ export async function sendNewTicketAlert(opts: {
     subject: `[Novo chamado] ${opts.subject}`,
     html: baseTemplate(`
       <p style="margin:0 0 6px;font-size:13px;color:#94a3b8;">Novo chamado aberto</p>
-      <h2 style="margin:0 0 16px;font-size:18px;font-weight:800;color:#F7F8FC;">${opts.subject}</h2>
-      ${tag(opts.category)}
+      <h2 style="margin:0 0 16px;font-size:18px;font-weight:800;color:#F7F8FC;">${esc(opts.subject)}</h2>
+      ${tag(esc(opts.category))}
       <div style="margin-top:16px;font-size:13px;color:#94a3b8;line-height:1.6;">
-        <p style="margin:4px 0;"><strong style="color:#F7F8FC;">Cliente:</strong> ${opts.clientName}</p>
-        <p style="margin:4px 0;"><strong style="color:#F7F8FC;">E-mail:</strong> ${opts.clientEmail}</p>
+        <p style="margin:4px 0;"><strong style="color:#F7F8FC;">Cliente:</strong> ${esc(opts.clientName)}</p>
+        <p style="margin:4px 0;"><strong style="color:#F7F8FC;">E-mail:</strong> ${esc(opts.clientEmail)}</p>
       </div>
       ${btn("Abrir chamado", `${APP_URL}/admin/suporte/${opts.ticketId}`)}
     `),
@@ -90,10 +99,10 @@ export async function sendNewMessageAlert(opts: {
     to:   opts.toEmail,
     subject: `Nova resposta: ${opts.ticketSubject}`,
     html: baseTemplate(`
-      <p style="margin:0 0 6px;font-size:13px;color:#94a3b8;">${opts.fromName} respondeu seu chamado</p>
-      <h2 style="margin:0 0 16px;font-size:18px;font-weight:800;color:#F7F8FC;">${opts.ticketSubject}</h2>
+      <p style="margin:0 0 6px;font-size:13px;color:#94a3b8;">${esc(opts.fromName)} respondeu seu chamado</p>
+      <h2 style="margin:0 0 16px;font-size:18px;font-weight:800;color:#F7F8FC;">${esc(opts.ticketSubject)}</h2>
       <div style="background:rgba(255,255,255,0.05);border-left:3px solid #5B57E8;border-radius:4px;padding:12px 16px;margin:16px 0;">
-        <p style="margin:0;font-size:13px;color:#cbd5e1;font-style:italic;line-height:1.6;">${opts.preview.slice(0, 200)}${opts.preview.length > 200 ? "…" : ""}</p>
+        <p style="margin:0;font-size:13px;color:#cbd5e1;font-style:italic;line-height:1.6;">${esc(opts.preview.slice(0, 200))}${opts.preview.length > 200 ? "…" : ""}</p>
       </div>
       ${btn("Ver conversa", destUrl)}
     `),
@@ -114,7 +123,7 @@ export async function sendLowTokenAlert(opts: {
       <p style="margin:0 0 6px;font-size:13px;color:#EF9F27;">⚠ Atenção</p>
       <h2 style="margin:0 0 12px;font-size:18px;font-weight:800;color:#F7F8FC;">Seus tokens estão acabando</h2>
       <p style="font-size:14px;color:#94a3b8;line-height:1.6;margin:0 0 8px;">
-        Olá, <strong style="color:#F7F8FC;">${opts.toName.split(" ")[0]}</strong>!
+        Olá, <strong style="color:#F7F8FC;">${esc(opts.toName.split(" ")[0])}</strong>!
         Você tem apenas <strong style="color:#EF9F27;">${opts.balance} token${opts.balance !== 1 ? "s" : ""}</strong> disponível${opts.balance !== 1 ? "s" : ""}.
       </p>
       <p style="font-size:14px;color:#94a3b8;line-height:1.6;margin:0;">
@@ -141,7 +150,7 @@ export async function sendPlanConfirmation(opts: {
       <p style="margin:0 0 6px;font-size:13px;color:#22c55e;">✓ Confirmação</p>
       <h2 style="margin:0 0 12px;font-size:18px;font-weight:800;color:#F7F8FC;">Plano ${planLabel} ativado!</h2>
       <p style="font-size:14px;color:#94a3b8;line-height:1.6;margin:0 0 16px;">
-        Olá, <strong style="color:#F7F8FC;">${opts.toName.split(" ")[0]}</strong>!
+        Olá, <strong style="color:#F7F8FC;">${esc(opts.toName.split(" ")[0])}</strong>!
         Seu plano foi ativado com sucesso e <strong style="color:#5B57E8;">${opts.tokens} tokens</strong> foram creditados na sua conta.
       </p>
       ${btn("Acessar minha conta", `${APP_URL}/portal/dashboard`)}
