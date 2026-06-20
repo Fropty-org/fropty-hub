@@ -440,6 +440,11 @@ function TicketCard({ ticket, dimmed, showClient }: { ticket: Ticket; dimmed?: b
           {ticket.subject}
         </p>
         <p style={{ margin: 0, fontSize: "11px", color: "var(--text-faint)" }}>
+          {ticket.ticketNumber && (
+            <span style={{ fontWeight: 700, color: "var(--text-faint)", letterSpacing: "0.04em", marginRight: 4 }}>
+              {`UFT${String(ticket.ticketNumber).padStart(4, "0")}`} ·{" "}
+            </span>
+          )}
           {showClient && ticket.clientName && (
             <span style={{ color: "var(--text-muted)", fontWeight: 600 }}>{ticket.clientName} · </span>
           )}

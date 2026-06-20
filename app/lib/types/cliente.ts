@@ -39,6 +39,7 @@ export interface Ticket {
   projectName?: string;
   clientName?: string;
   clientId?: string;
+  ticketNumber?: number;
   createdAt: string;
   updatedAt: string;
 }

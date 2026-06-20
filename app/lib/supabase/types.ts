@@ -146,6 +146,7 @@ export type Database = {
           category: string;
           status: "aberto" | "em_andamento" | "resolvido" | "fechado";
           priority: "baixa" | "media" | "alta";
+          ticket_number: number;
           created_at: string;
           updated_at: string;
         };

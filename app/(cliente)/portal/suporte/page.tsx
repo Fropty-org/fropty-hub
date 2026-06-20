@@ -17,7 +17,6 @@ export default async function SuportePage() {
   const isAdmin = profile?.role === "admin";
 
   if (isAdmin) {
-    // Admin vê todos os tickets de todos os clientes
     const [ticketsResult, clientsResult] = await Promise.all([
       supabase
         .from("tickets")
@@ -37,16 +36,17 @@ export default async function SuportePage() {
     const clientMap = new Map((clientsResult.data ?? []).map((c) => [c.id, c.name ?? c.id]));
 
     const tickets: Ticket[] = ((ticketsResult.data ?? []) as TicketRow[]).map((t) => ({
-      id:         t.id,
-      subject:    t.subject,
-      category:   t.category,
-      status:     t.status as TicketStatus,
-      priority:   t.priority as TicketPriority,
-      projectId:  t.project_id ?? undefined,
-      clientName: clientMap.get(t.client_id) ?? "—",
-      clientId:   t.client_id,
-      createdAt:  t.created_at,
-      updatedAt:  t.updated_at,
+      id:           t.id,
+      subject:      t.subject,
+      category:     t.category,
+      status:       t.status as TicketStatus,
+      priority:     t.priority as TicketPriority,
+      projectId:    t.project_id ?? undefined,
+      clientName:   clientMap.get(t.client_id) ?? "—",
+      clientId:     t.client_id,
+      ticketNumber: t.ticket_number,
+      createdAt:    t.created_at,
+      updatedAt:    t.updated_at,
     }));
 
     const clients = (clientsResult.data ?? []).map((c) => ({ id: c.id, name: c.name ?? c.id }));
@@ -54,7 +54,6 @@ export default async function SuportePage() {
     return <SuporteClient tickets={tickets} projects={[]} isAdmin clients={clients} />;
   }
 
-  // Cliente vê só os próprios tickets
   const [ticketsResult, projectsResult] = await Promise.all([
     supabase
       .from("tickets")
@@ -72,14 +71,15 @@ export default async function SuportePage() {
   if (projectsResult.error) console.error("[portal/suporte] projects:", projectsResult.error.message);
 
   const tickets: Ticket[] = ((ticketsResult.data ?? []) as TicketRow[]).map((t) => ({
-    id:        t.id,
-    subject:   t.subject,
-    category:  t.category,
-    status:    t.status as TicketStatus,
-    priority:  t.priority as TicketPriority,
-    projectId: t.project_id ?? undefined,
-    createdAt: t.created_at,
-    updatedAt: t.updated_at,
+    id:           t.id,
+    subject:      t.subject,
+    category:     t.category,
+    status:       t.status as TicketStatus,
+    priority:     t.priority as TicketPriority,
+    projectId:    t.project_id ?? undefined,
+    ticketNumber: t.ticket_number,
+    createdAt:    t.created_at,
+    updatedAt:    t.updated_at,
   }));
 
   const projects = ((projectsResult.data ?? []) as Pick<ProjectRow, "id" | "name">[]).map((p) => ({
