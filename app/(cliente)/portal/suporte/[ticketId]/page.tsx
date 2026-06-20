@@ -5,6 +5,7 @@ import { createServiceClient } from "@/app/lib/supabase/service";
 import { getProfile } from "@/app/lib/auth/session";
 import { TicketConversation } from "@/app/components/suporte/TicketConversation";
 import { TicketDetailBack } from "@/app/components/suporte/TicketDetailBack";
+import { AdminTicketActions } from "@/app/components/suporte/AdminTicketActions";
 import { TICKET_STATUS_MAP, TICKET_PRIORITY_MAP } from "@/app/lib/constants/status";
 import type { Ticket, TicketStatus, TicketPriority } from "@/app/lib/types/cliente";
 import type { Database } from "@/app/lib/supabase/types";
@@ -115,6 +116,15 @@ export default async function TicketDetailPage({ params }: Props) {
           <MetaItem icon="ti-refresh" label="Atualizado" value={new Date(ticket.updatedAt).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })} />
         </div>
       </div>
+
+      {/* Ações admin (status, prioridade) */}
+      {isAdmin && (
+        <AdminTicketActions
+          ticketId={ticket.id}
+          currentStatus={ticket.status}
+          currentPriority={ticket.priority}
+        />
+      )}
 
       {/* Conversa com realtime */}
       <TicketConversation

@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/app/lib/supabase/server";
 import { createServiceClient } from "@/app/lib/supabase/service";
-import { requireAuth } from "@/app/lib/auth/require-role";
+import { requireAuth, requireRole } from "@/app/lib/auth/require-role";
 import { dbCreateTicket } from "@/app/lib/db/tickets";
 import {
   sendNewTicketAlert,
@@ -176,5 +176,39 @@ export async function sendMessage(formData: FormData) {
 
   revalidatePath(`/portal/suporte/${ticketId}`);
   revalidatePath(`/admin/suporte/${ticketId}`);
+  return { success: true };
+}
+
+export async function updateTicket(formData: FormData) {
+  await requireRole("admin");
+
+  const ticketId   = (formData.get("ticket_id")  as string)?.trim();
+  const statusRaw  = (formData.get("status")      as string)?.trim();
+  const priorityRaw = (formData.get("priority")   as string)?.trim();
+
+  if (!ticketId) return { error: "ID do chamado inválido." };
+
+  const validStatus   = ["aberto", "em_andamento", "resolvido", "fechado"] as const;
+  const validPriority = ["baixa", "media", "alta"] as const;
+
+  type TicketStatus   = typeof validStatus[number];
+  type TicketPriority = typeof validPriority[number];
+
+  const update: { status?: TicketStatus; priority?: TicketPriority } = {};
+  if (statusRaw   && (validStatus   as readonly string[]).includes(statusRaw))   update.status   = statusRaw   as TicketStatus;
+  if (priorityRaw && (validPriority as readonly string[]).includes(priorityRaw)) update.priority = priorityRaw as TicketPriority;
+
+  if (Object.keys(update).length === 0) return { error: "Nenhum campo para atualizar." };
+
+  const supabase = createServiceClient();
+  const { error } = await supabase
+    .from("tickets")
+    .update(update)
+    .eq("id", ticketId);
+
+  if (error) return { error: "Erro ao atualizar chamado." };
+
+  revalidatePath(`/portal/suporte/${ticketId}`);
+  revalidatePath(`/portal/suporte`);
   return { success: true };
 }
