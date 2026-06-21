@@ -15,9 +15,18 @@ export type QuotePayload = {
 
 export type QuoteResult = { ok: true } | { ok: false; error: string };
 
+function escHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function sanitize(str: unknown, maxLen = 2000): string {
   if (typeof str !== "string") return "";
-  return str.trim().slice(0, maxLen).replace(/<[^>]*>/g, "");
+  return escHtml(str.trim().slice(0, maxLen));
 }
 
 export async function submitQuote(payload: QuotePayload): Promise<QuoteResult> {

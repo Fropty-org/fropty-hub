@@ -6,21 +6,6 @@ import { sendPlanConfirmation } from "@/app/lib/email/send";
 
 export const runtime = "nodejs";
 
-async function isEventProcessed(eventId: string): Promise<boolean> {
-  const supabase = createServiceClient();
-  const { data } = await supabase
-    .from("processed_webhook_events")
-    .select("id")
-    .eq("event_id", eventId)
-    .maybeSingle();
-  return !!data;
-}
-
-async function markEventProcessed(eventId: string): Promise<void> {
-  const supabase = createServiceClient();
-  await supabase.from("processed_webhook_events").insert({ event_id: eventId });
-}
-
 async function creditTokens(userId: string, qty: number, description: string) {
   const supabase = createServiceClient();
   await supabase.from("token_transactions").insert({
@@ -130,9 +115,21 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
-  // Replay protection — rejeita eventos já processados
-  if (await isEventProcessed(event.id)) {
-    return NextResponse.json({ received: true, skipped: "duplicate" });
+  // Replay protection — reserva o event_id ANTES de processar (unique constraint).
+  // Se já foi processado com sucesso → insert conflita → skipped (duplicate).
+  // Se o handler falhar → deleta a reserva no catch → Stripe pode retentar limpo.
+  const supabaseIdempotent = createServiceClient();
+  const { error: dupError } = await supabaseIdempotent
+    .from("processed_webhook_events")
+    .insert({ event_id: event.id });
+
+  if (dupError) {
+    // código 23505 = unique_violation (já processado)
+    if (dupError.code === "23505") {
+      return NextResponse.json({ received: true, skipped: "duplicate" });
+    }
+    console.error("[stripe/webhook] idempotency insert failed:", dupError);
+    return NextResponse.json({ error: "Internal error" }, { status: 500 });
   }
 
   try {
@@ -147,9 +144,10 @@ export async function POST(req: NextRequest) {
         await handleSubscriptionDeleted(event.data.object as Stripe.Subscription);
         break;
     }
-    await markEventProcessed(event.id);
   } catch (err) {
     console.error("[stripe/webhook]", err);
+    // Remove a reserva de idempotência para permitir que o Stripe retente com sucesso.
+    await supabaseIdempotent.from("processed_webhook_events").delete().eq("event_id", event.id);
     return NextResponse.json({ error: "Handler failed" }, { status: 500 });
   }
 

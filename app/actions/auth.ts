@@ -45,52 +45,6 @@ export async function signIn(formData: FormData) {
   }
 }
 
-/**
- * Cadastro de novo cliente.
- * Supabase cria o usuário; o trigger fn_on_auth_user_created cria o perfil com role='cliente'.
- * Se confirmação de e-mail estiver ativa, retorna { success } sem redirecionar.
- */
-export async function signUp(formData: FormData) {
-  const name     = (formData.get("name")     as string)?.trim();
-  const email    = (formData.get("email")    as string)?.trim();
-  const password = (formData.get("password") as string)?.trim();
-  const confirm  = (formData.get("confirm")  as string)?.trim();
-
-  if (!name || !email || !password || !confirm) {
-    return { error: "Preencha todos os campos." };
-  }
-  if (password.length < 8) {
-    return { error: "Senha deve ter pelo menos 8 caracteres." };
-  }
-  if (password !== confirm) {
-    return { error: "As senhas não conferem." };
-  }
-
-  const supabase = await createClient();
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      // name e role são lidos pelo trigger fn_on_auth_user_created
-      data: { name, role: "cliente" as const },
-    },
-  });
-
-  if (error) {
-    if (error.message.toLowerCase().includes("already registered")) {
-      return { error: "E-mail já cadastrado. Faça login." };
-    }
-    return { error: "Erro ao criar conta. Tente novamente." };
-  }
-
-  // Supabase pode exigir confirmação de e-mail (configurável no Dashboard)
-  if (data.session === null) {
-    return { success: "Verifique seu e-mail para ativar a conta." };
-  }
-
-  return { redirectTo: ROLE_HOME["cliente"] };
-}
-
 export async function signOut() {
   const supabase = await createClient();
   await supabase.auth.signOut();
