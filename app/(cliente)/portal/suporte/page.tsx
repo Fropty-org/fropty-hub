@@ -87,5 +87,5 @@ export default async function SuportePage() {
     name: p.name,
   }));
 
-  return <SuporteClient tickets={tickets} projects={projects} />;
+  return <SuporteClient tickets={tickets} projects={projects} tokenBalance={profile?.token_balance ?? 0} />;
 }

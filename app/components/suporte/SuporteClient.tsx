@@ -8,15 +8,55 @@ import type { Ticket } from "@/app/lib/types/cliente";
 type FilterMode = "todos" | "abertos" | "fechados";
 
 interface Props {
-  tickets:   Ticket[];
-  projects?: { id: string; name: string }[];
-  isAdmin?:  boolean;
-  clients?:  { id: string; name: string }[];
+  tickets:      Ticket[];
+  projects?:    { id: string; name: string }[];
+  isAdmin?:     boolean;
+  clients?:     { id: string; name: string }[];
+  tokenBalance?: number;
 }
 
-export function SuporteClient({ tickets, isAdmin }: Props) {
-  const [search,   setSearch]   = useState("");
-  const [filter,   setFilter]   = useState<FilterMode>("todos");
+function NoTokenModal({ onClose }: { onClose: () => void }) {
+  return (
+    <div
+      onClick={onClose}
+      style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: 24 }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 20, padding: "36px 32px", maxWidth: 400, width: "100%", textAlign: "center" }}
+      >
+        <div style={{ width: 52, height: 52, borderRadius: 14, background: "rgba(239,159,39,0.1)", border: "1px solid rgba(239,159,39,0.25)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 18px" }}>
+          <i className="ti ti-coin" style={{ fontSize: 24, color: "#EF9F27" }} />
+        </div>
+        <h3 style={{ margin: "0 0 10px", fontSize: "1.1rem", fontWeight: 800, color: "var(--text)" }}>
+          Tokens insuficientes
+        </h3>
+        <p style={{ margin: "0 0 24px", fontSize: "13px", color: "var(--text-muted)", lineHeight: 1.65 }}>
+          Você precisa de tokens para abrir chamados de suporte. Adquira tokens ou um plano para continuar.
+        </p>
+        <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
+          <Link
+            href="/portal/financeiro"
+            style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "10px 20px", background: "#EF9F27", color: "#fff", fontWeight: 700, fontSize: "13px", borderRadius: 10, textDecoration: "none" }}
+          >
+            <i className="ti ti-coin" style={{ fontSize: 13 }} /> Ver tokens
+          </Link>
+          <button
+            onClick={onClose}
+            style={{ padding: "10px 18px", background: "var(--surface)", color: "var(--text-muted)", fontWeight: 600, fontSize: "13px", borderRadius: 10, border: "1px solid var(--border)", cursor: "pointer", fontFamily: "inherit" }}
+          >
+            Fechar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
+  const [search,       setSearch]       = useState("");
+  const [filter,       setFilter]       = useState<FilterMode>("todos");
+  const [showNoToken,  setShowNoToken]  = useState(false);
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase();
@@ -93,31 +133,59 @@ export function SuporteClient({ tickets, isAdmin }: Props) {
                 : "Abra chamados e acompanhe suas solicitações em tempo real"}
             </p>
           </div>
-          <Link
-            href="/portal/suporte/novo"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 7,
-              background: "var(--primary)",
-              color: "#fff",
-              border: "none",
-              padding: "10px 18px",
-              borderRadius: 10,
-              fontWeight: 700,
-              cursor: "pointer",
-              fontSize: "13px",
-              fontFamily: "inherit",
-              flexShrink: 0,
-              textDecoration: "none",
-              boxShadow: "0 4px 16px rgba(91,87,232,0.35)",
-              transition: "opacity 0.15s, transform 0.15s",
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.9"; e.currentTarget.style.transform = "translateY(-1px)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.transform = "translateY(0)"; }}
-          >
-            <i className="ti ti-plus" style={{ fontSize: 15 }} /> Novo chamado
-          </Link>
+          {!isAdmin && tokenBalance <= 0 ? (
+            <button
+              onClick={() => setShowNoToken(true)}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 7,
+                background: "var(--primary)",
+                color: "#fff",
+                border: "none",
+                padding: "10px 18px",
+                borderRadius: 10,
+                fontWeight: 700,
+                cursor: "pointer",
+                fontSize: "13px",
+                fontFamily: "inherit",
+                flexShrink: 0,
+                boxShadow: "0 4px 16px rgba(91,87,232,0.35)",
+                transition: "opacity 0.15s, transform 0.15s",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.9"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.transform = "translateY(0)"; }}
+            >
+              <i className="ti ti-plus" style={{ fontSize: 15 }} /> Novo chamado
+            </button>
+          ) : (
+            <Link
+              href="/portal/suporte/novo"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 7,
+                background: "var(--primary)",
+                color: "#fff",
+                border: "none",
+                padding: "10px 18px",
+                borderRadius: 10,
+                fontWeight: 700,
+                cursor: "pointer",
+                fontSize: "13px",
+                fontFamily: "inherit",
+                flexShrink: 0,
+                textDecoration: "none",
+                boxShadow: "0 4px 16px rgba(91,87,232,0.35)",
+                transition: "opacity 0.15s, transform 0.15s",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.9"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.transform = "translateY(0)"; }}
+            >
+              <i className="ti ti-plus" style={{ fontSize: 15 }} /> Novo chamado
+            </Link>
+          )}
+          {showNoToken && <NoTokenModal onClose={() => setShowNoToken(false)} />}
         </div>
 
         {/* Stats row */}
