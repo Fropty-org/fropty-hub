@@ -165,18 +165,22 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark" }: 
             <PortalThemeToggle initialTheme={initialTheme} />
           </div>
         ) : (
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 28, padding: "12px", background: "var(--surface-2)", borderRadius: 12 }}>
-            <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#EF9F27", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", fontWeight: 700, color: "#fff", flexShrink: 0 }}>
-              {initials}
+          <div style={{ marginBottom: 28 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px", background: "var(--surface-2)", borderRadius: 12 }}>
+              <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#EF9F27", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", fontWeight: 700, color: "#fff", flexShrink: 0 }}>
+                {initials}
+              </div>
+              <div style={{ overflow: "hidden", flex: 1, minWidth: 0 }}>
+                <p title={name} style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                  {name}
+                </p>
+                <p style={{ margin: 0, fontSize: "11px", color: "#EF9F27" }}>Administrador</p>
+              </div>
             </div>
-            <div style={{ overflow: "hidden", flex: 1 }}>
-              <p style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                {name.split(" ")[0]}
-              </p>
-              <p style={{ margin: 0, fontSize: "11px", color: "#EF9F27" }}>Administrador</p>
+            <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 8, marginTop: 8 }}>
+              <NotificationBell userId={userId} />
+              <PortalThemeToggle initialTheme={initialTheme} />
             </div>
-            <NotificationBell userId={userId} />
-            <PortalThemeToggle initialTheme={initialTheme} />
           </div>
         )}
 

@@ -55,6 +55,20 @@ export default async function FinanceiroPage({ searchParams }: Props) {
   // Token extra: R$150 para quem tem plano (50% off); R$300 sem plano.
   const avulsoUnit   = hasPlan ? 150 : 300;
 
+  // Próximo pagamento: mesmo dia do início do contrato, na primeira ocorrência
+  // futura (mês seguinte). Faz clamp para meses com menos dias (ex.: dia 31).
+  const nextPayment = (() => {
+    if (!contractStart) return null;
+    const start = new Date(`${contractStart}T00:00:00`);
+    const day = start.getDate();
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const build = (y: number, m: number) => new Date(y, m, Math.min(day, new Date(y, m + 1, 0).getDate()));
+    let d = build(today.getFullYear(), today.getMonth());
+    while (d <= today || d < start) d = build(d.getFullYear(), d.getMonth() + 1);
+    return d;
+  })();
+  const nextPaymentLabel = nextPayment?.toLocaleDateString("pt-BR");
+
   const totalCredits = transactions.filter((t) => t.type === "credit").reduce((s, t) => s + t.amount, 0);
   const totalDebits  = transactions.filter((t) => t.type === "debit").reduce((s, t) => s + t.amount, 0);
 
@@ -109,6 +123,12 @@ export default async function FinanceiroPage({ searchParams }: Props) {
           <p style={{ margin: "0 0 4px", fontSize: "2.5rem", fontWeight: 900, color: "var(--text)", lineHeight: 1 }}>
             {tokenBalance}
           </p>
+          {nextPaymentLabel && (
+            <p style={{ margin: "8px 0 0", fontSize: "12px", color: "var(--text-muted)", fontWeight: 600 }}>
+              <i className="ti ti-calendar-event" style={{ marginRight: 5, color: "var(--primary)" }} />
+              Renova em: {nextPaymentLabel}
+            </p>
+          )}
           <p style={{ margin: "6px 0 0", fontSize: "12px", color: "var(--text-faint)" }}>
             1 token = R$150 de suporte
           </p>
@@ -181,8 +201,8 @@ export default async function FinanceiroPage({ searchParams }: Props) {
             {contractStart && (
               <span style={{ fontSize: "12px", color: "var(--text-faint)" }}>
                 <i className="ti ti-calendar-event" style={{ marginRight: 6 }} />
-                Início em {new Date(contractStart).toLocaleDateString("pt-BR")}
-                {planRenewal && ` · próxima renovação ${new Date(planRenewal).toLocaleDateString("pt-BR")}`}
+                Início em {new Date(`${contractStart}T00:00:00`).toLocaleDateString("pt-BR")}
+                {nextPaymentLabel && ` · próximo pagamento ${nextPaymentLabel}`}
               </span>
             )}
           </div>

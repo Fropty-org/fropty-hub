@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { createClient } from "@/app/lib/supabase/server";
-import { adminCreditTokens } from "@/app/actions/admin";
 
 export const metadata: Metadata = { title: "Financeiro — Admin" };
 
@@ -51,7 +50,7 @@ export default async function AdminFinanceiroPage() {
         ))}
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 24 }}>
         {/* Assinantes */}
         <div>
           <h2 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: 14, color: "var(--text)" }}>Assinantes</h2>
@@ -67,24 +66,6 @@ export default async function AdminFinanceiroPage() {
             ))}
             {assinantes.length === 0 && <p style={{ padding: "20px", textAlign: "center", color: "var(--text-faint)", fontSize: "13px", margin: 0 }}>Nenhum assinante ainda.</p>}
           </div>
-        </div>
-
-        {/* Crédito manual */}
-        <div>
-          <h2 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: 14, color: "var(--text)" }}>Creditar tokens manualmente</h2>
-          <form action={adminCreditTokens} style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "20px" }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              <select name="user_id" required style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, color: "var(--text)", padding: "9px 12px", fontSize: "13px", fontFamily: "inherit" }}>
-                <option value="">Selecionar cliente…</option>
-                {assinantes.map((u) => <option key={u.id} value={u.id}>{u.name}</option>)}
-              </select>
-              <input name="amount" type="number" min="1" max="50" defaultValue="1" required style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, color: "var(--text)", padding: "9px 12px", fontSize: "13px", fontFamily: "inherit" }} placeholder="Quantidade de tokens" />
-              <input name="description" defaultValue="Crédito manual — Admin" style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, color: "var(--text)", padding: "9px 12px", fontSize: "13px", fontFamily: "inherit" }} placeholder="Descrição" />
-              <button type="submit" style={{ padding: "10px", borderRadius: 9, border: "none", background: "#22c55e", color: "#fff", fontWeight: 700, fontSize: "13px", cursor: "pointer", fontFamily: "inherit" }}>
-                <i className="ti ti-coins" /> Creditar tokens
-              </button>
-            </div>
-          </form>
         </div>
       </div>
 

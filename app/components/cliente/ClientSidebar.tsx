@@ -141,25 +141,29 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
           <PortalThemeToggle initialTheme={initialTheme} />
         </div>
       ) : (
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24, padding: "10px 12px", background: "var(--surface-2)", borderRadius: 12 }}>
-          <div style={{
-            width: 32, height: 32, borderRadius: "50%",
-            background: "var(--primary)", display: "flex",
-            alignItems: "center", justifyContent: "center",
-            fontSize: "12px", fontWeight: 700, color: "#fff", flexShrink: 0,
-          }}>
-            {user.avatarInitials}
+        <div style={{ marginBottom: 24 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", background: "var(--surface-2)", borderRadius: 12 }}>
+            <div style={{
+              width: 32, height: 32, borderRadius: "50%",
+              background: "var(--primary)", display: "flex",
+              alignItems: "center", justifyContent: "center",
+              fontSize: "12px", fontWeight: 700, color: "#fff", flexShrink: 0,
+            }}>
+              {user.avatarInitials}
+            </div>
+            <div style={{ overflow: "hidden", flex: 1, minWidth: 0 }}>
+              <p title={user.name} style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                {user.name}
+              </p>
+              <p style={{ margin: 0, fontSize: "11px", color: "var(--text-faint)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                {user.plan ? `Plano ${user.plan === "pro" ? "Pro" : "Basico"}` : "Sem plano"}
+              </p>
+            </div>
           </div>
-          <div style={{ overflow: "hidden", flex: 1 }}>
-            <p style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-              {user.name.split(" ")[0]}
-            </p>
-            <p style={{ margin: 0, fontSize: "11px", color: "var(--text-faint)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-              {user.plan ? `Plano ${user.plan === "pro" ? "Pro" : "Basico"}` : "Sem plano"}
-            </p>
+          <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 8, marginTop: 8 }}>
+            <NotificationBell userId={user.id} />
+            <PortalThemeToggle initialTheme={initialTheme} />
           </div>
-          <NotificationBell userId={user.id} />
-          <PortalThemeToggle initialTheme={initialTheme} />
         </div>
       )}
 
