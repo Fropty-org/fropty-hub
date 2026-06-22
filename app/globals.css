@@ -335,3 +335,8 @@ body {
   text-transform: uppercase;
   color: var(--text-muted);
 }
+
+/* ── Logo do portal: alterna conforme o tema ──────────────────── */
+.portal-logo--light { display: none; }
+[data-theme="light"] .portal-logo--dark { display: none; }
+[data-theme="light"] .portal-logo--light { display: inline-block; }
