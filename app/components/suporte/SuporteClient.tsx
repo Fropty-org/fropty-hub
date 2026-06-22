@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { TICKET_STATUS_MAP, TICKET_PRIORITY_MAP } from "@/app/lib/constants/status";
 import type { Ticket } from "@/app/lib/types/cliente";
@@ -16,14 +17,36 @@ interface Props {
 }
 
 function NoTokenModal({ onClose }: { onClose: () => void }) {
-  return (
+  // Renderiza em portal no body para escapar do overflow/transform do layout
+  // do portal (PullToRefresh aplica transform, prendendo o position:fixed).
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = prev; };
+  }, [onClose]);
+
+  if (!mounted) return null;
+
+  return createPortal(
     <div
       onClick={onClose}
-      style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: 24 }}
+      style={{
+        position: "fixed", inset: 0,
+        background: "rgba(4,3,22,0.55)",
+        backdropFilter: "blur(6px)",
+        WebkitBackdropFilter: "blur(6px)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        zIndex: 2000, padding: 24,
+        animation: "fadeIn 0.15s ease",
+      }}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 20, padding: "36px 32px", maxWidth: 400, width: "100%", textAlign: "center" }}
+        style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 20, padding: "36px 32px", maxWidth: 400, width: "100%", textAlign: "center", boxShadow: "0 24px 60px rgba(0,0,0,0.45)" }}
       >
         <div style={{ width: 52, height: 52, borderRadius: 14, background: "rgba(239,159,39,0.1)", border: "1px solid rgba(239,159,39,0.25)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 18px" }}>
           <i className="ti ti-coin" style={{ fontSize: 24, color: "#EF9F27" }} />
@@ -49,7 +72,8 @@ function NoTokenModal({ onClose }: { onClose: () => void }) {
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 

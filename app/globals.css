@@ -340,3 +340,9 @@ body {
 .portal-logo--light { display: none; }
 [data-theme="light"] .portal-logo--dark { display: none; }
 [data-theme="light"] .portal-logo--light { display: inline-block; }
+
+/* Fade-in para overlays/modais */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
