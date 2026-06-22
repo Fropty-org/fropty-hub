@@ -11,7 +11,6 @@ import { NotificationBell } from "@/app/components/NotificationBell";
 const NAV = [
   { id: "overview",   href: "/admin/overview",   icon: "ti-layout-dashboard", label: "Visão Geral" },
   { id: "usuarios",   href: "/admin/usuarios",   icon: "ti-users",            label: "Usuários" },
-  { id: "projetos",   href: "/admin/projetos",   icon: "ti-folder",           label: "Projetos" },
   { id: "financeiro", href: "/admin/financeiro", icon: "ti-credit-card",      label: "Financeiro" },
   { id: "suporte",    href: "/portal/suporte",   icon: "ti-message-circle",   label: "Suporte" },
   { id: "analytics",  href: "/admin/analytics",  icon: "ti-chart-bar",        label: "Analytics" },

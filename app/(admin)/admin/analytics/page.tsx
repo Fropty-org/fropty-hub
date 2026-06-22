@@ -9,21 +9,17 @@ export default async function AdminAnalyticsPage() {
   const [
     { data: mrrData },
     { count: totalClients },
-    { count: totalProjects },
     { count: openTickets },
     { count: resolvedTickets },
     { data: planBreakdown },
-    { data: projectsByStatus },
     { data: recentEvents },
     { data: monthlyTokens },
   ] = await Promise.all([
     supabase.rpc("admin_mrr"),
     supabase.from("profiles").select("*", { count: "exact", head: true }).eq("role", "cliente"),
-    supabase.from("projects").select("*", { count: "exact", head: true }),
-    supabase.from("tickets").select("*", { count: "exact", head: true }).in("status", ["aberto", "em_andamento"]),
+    supabase.from("tickets").select("*", { count: "exact", head: true }).in("status", ["aberto", "em_andamento", "reaberto"]),
     supabase.from("tickets").select("*", { count: "exact", head: true }).in("status", ["resolvido", "fechado"]),
     supabase.from("profiles").select("plan").eq("role", "cliente"),
-    supabase.from("projects").select("status"),
     supabase.from("project_events").select("source, event_type, created_at").order("created_at", { ascending: false }).limit(20),
     supabase.from("token_transactions").select("amount, type, created_at").gte("created_at", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()),
   ]);
@@ -37,34 +33,21 @@ export default async function AdminAnalyticsPage() {
     if (pl in planCounts) planCounts[pl]++;
   });
 
-  // Distribuição de status de projetos
-  const statusCounts: Record<string, number> = {};
-  (projectsByStatus ?? []).forEach((p) => {
-    statusCounts[p.status] = (statusCounts[p.status] ?? 0) + 1;
-  });
-
   // Tokens emitidos vs gastos nos últimos 30 dias
   const tokensIn  = (monthlyTokens ?? []).filter((t) => t.type === "credit").reduce((s, t) => s + t.amount, 0);
   const tokensOut = (monthlyTokens ?? []).filter((t) => t.type === "debit").reduce((s, t) => s + t.amount, 0);
 
-  const resolvedRate = (totalProjects ?? 0) > 0
-    ? Math.round(((resolvedTickets ?? 0) / Math.max(1, (openTickets ?? 0) + (resolvedTickets ?? 0))) * 100)
+  const totalTickets = (openTickets ?? 0) + (resolvedTickets ?? 0);
+  const resolvedRate = totalTickets > 0
+    ? Math.round(((resolvedTickets ?? 0) / totalTickets) * 100)
     : 0;
 
   const kpis = [
     { label: "MRR",                value: `R$${mrr.toFixed(2).replace(".", ",")}`, icon: "ti-trending-up",    color: "#22c55e", sub: `${planCounts.basico} básico · ${planCounts.pro} pro` },
     { label: "Clientes ativos",    value: totalClients ?? 0,   icon: "ti-users",          color: "#3b82f6",        sub: `${planCounts.sem_plano} sem plano` },
-    { label: "Projetos",           value: totalProjects ?? 0,  icon: "ti-folder",         color: "var(--primary)", sub: `${statusCounts["em_desenvolvimento"] ?? 0} em desenvolvimento` },
+    { label: "Tickets abertos",    value: openTickets ?? 0,    icon: "ti-message-circle", color: "var(--primary)", sub: `${resolvedTickets ?? 0} resolvidos/fechados` },
     { label: "Taxa de resolução",  value: `${resolvedRate}%`,  icon: "ti-circle-check",   color: "#EF9F27",        sub: `${openTickets ?? 0} abertos · ${resolvedTickets ?? 0} resolvidos` },
   ];
-
-  const STATUS_LABEL: Record<string, string> = {
-    aguardando:         "Aguardando",
-    em_desenvolvimento: "Em Dev",
-    revisao:            "Revisão",
-    entregue:           "Entregue",
-    manutencao:         "Manutenção",
-  };
 
   const SOURCE_COLOR: Record<string, string> = {
     github: "#e2e8f0",
@@ -143,21 +126,7 @@ export default async function AdminAnalyticsPage() {
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
-        {/* Status dos projetos */}
-        <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "22px" }}>
-          <h2 style={{ margin: "0 0 18px", fontSize: "0.95rem", fontWeight: 700, color: "var(--text)" }}>Projetos por status</h2>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {Object.entries(statusCounts).map(([status, count]) => (
-              <div key={status} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "13px" }}>
-                <span style={{ color: "var(--text-muted)" }}>{STATUS_LABEL[status] ?? status}</span>
-                <span style={{ fontWeight: 700, color: "var(--text)" }}>{count}</span>
-              </div>
-            ))}
-            {Object.keys(statusCounts).length === 0 && <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)", textAlign: "center" }}>Nenhum projeto.</p>}
-          </div>
-        </div>
-
+      <div>
         {/* Eventos recentes */}
         <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "22px" }}>
           <h2 style={{ margin: "0 0 18px", fontSize: "0.95rem", fontWeight: 700, color: "var(--text)" }}>Eventos recentes</h2>
