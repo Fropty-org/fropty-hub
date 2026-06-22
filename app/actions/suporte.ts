@@ -14,12 +14,13 @@ import {
   sendResolutionFeedbackToTeam,
 } from "@/app/lib/email/send";
 
-// Os anexos são paths relativos do bucket no formato "<uid>/<uuid>.<ext>".
-// Valida o formato e garante que o path pertence à pasta do próprio usuário
-// (a policy do storage já força isso no upload; aqui é defesa em profundidade).
-function isValidAttachmentPath(path: string, ownerId: string): boolean {
+// Os anexos são paths relativos do bucket no formato "<pasta>/<uuid>.<ext>".
+// A pasta é o uid do usuário (criação do chamado) ou o id do ticket (respostas).
+// Valida o formato e garante o prefixo esperado (a policy do storage já força
+// isso no upload; aqui é defesa em profundidade).
+function isValidAttachmentPath(path: string, prefix: string): boolean {
   if (path.includes("..") || path.startsWith("/")) return false;
-  return /^[0-9a-fA-F-]{36}\/[^/]+\.[A-Za-z0-9]+$/.test(path) && path.startsWith(`${ownerId}/`);
+  return /^[^/]+\/[^/]+\.[A-Za-z0-9]+$/.test(path) && path.startsWith(`${prefix}/`);
 }
 
 export async function createTicket(formData: FormData) {
@@ -144,7 +145,7 @@ export async function sendMessage(formData: FormData) {
   const body        = (formData.get("body") as string)?.trim().slice(0, 5000);
   const attachments = formData.getAll("attachments[]")
     .map((v) => (v as string).trim())
-    .filter((p) => p && isValidAttachmentPath(p, userId))
+    .filter((p) => p && isValidAttachmentPath(p, ticketId))
     .slice(0, 10);
 
   if (!ticketId || !body) return { error: "Mensagem não pode estar vazia." };
