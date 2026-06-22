@@ -18,10 +18,12 @@ export const metadata: Metadata = { title: "Chamado" };
 
 interface Props {
   params: Promise<{ ticketId: string }>;
+  searchParams: Promise<{ novo?: string }>;
 }
 
-export default async function TicketDetailPage({ params }: Props) {
+export default async function TicketDetailPage({ params, searchParams }: Props) {
   const { ticketId } = await params;
+  const { novo } = await searchParams;
   const supabase     = await createClient();
   const profile      = await getProfile();
   const { data: { user } } = await supabase.auth.getUser();
@@ -82,6 +84,14 @@ export default async function TicketDetailPage({ params }: Props) {
 
       {/* Breadcrumb */}
       <TicketDetailBack subject={ticket.subject} ticketLabel={ticketLabel} />
+
+      {/* Confirmação de chamado recém-aberto */}
+      {!isAdmin && novo && (
+        <div style={{ background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.3)", borderRadius: 12, padding: "12px 16px", marginBottom: 16, display: "flex", alignItems: "center", gap: 10, fontSize: "13px", color: "#22c55e", fontWeight: 600 }}>
+          <i className="ti ti-circle-check" style={{ fontSize: 18 }} />
+          Chamado aberto com sucesso! Nossa equipe responderá em breve.
+        </div>
+      )}
 
       {/* Header do ticket */}
       <div

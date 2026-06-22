@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { createClient } from "@/app/lib/supabase/server";
 import { createServiceClient } from "@/app/lib/supabase/service";
 import { requireAuth, requireRole } from "@/app/lib/auth/require-role";
@@ -129,7 +130,10 @@ export async function createTicket(formData: FormData) {
   }
 
   revalidatePath("/portal/suporte");
-  return { success: true, ticketId: result.ticketId };
+  // Navega direto para o chamado recém-criado. Evita que a página /novo
+  // re-renderize com saldo zerado e pisque a tela de "tokens insuficientes" —
+  // além de já mostrar ao cliente o UFT aberto (confirmação clara).
+  redirect(`/portal/suporte/${result.ticketId}?novo=1`);
 }
 
 export async function sendMessage(formData: FormData) {
