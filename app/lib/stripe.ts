@@ -22,9 +22,14 @@ export const stripe = new Proxy({} as Stripe, {
 // Preços em centavos (BRL)
 export const STRIPE_PRICES = {
   token_avulso: {
-    unit_amount: 30000, // R$300,00
+    unit_amount: 30000, // R$300,00 — token avulso para quem NÃO tem plano
     currency: "brl",
     name: "Token Fropty (avulso)",
+  },
+  token_avulso_assinante: {
+    unit_amount: 15000, // R$150,00 — token extra para quem TEM plano (50% off)
+    currency: "brl",
+    name: "Token Fropty extra (assinante)",
   },
   basico: {
     unit_amount: 4990, // R$49,90/mês
@@ -42,7 +47,8 @@ export type StripePriceKey = keyof typeof STRIPE_PRICES;
 
 // Tokens concedidos por evento de pagamento
 export const TOKENS_PER_PURCHASE: Record<StripePriceKey, number> = {
-  token_avulso: 1,
-  basico:       4,
-  pro:          8,
+  token_avulso:           1,
+  token_avulso_assinante: 1,
+  basico:                 4,
+  pro:                    8,
 };

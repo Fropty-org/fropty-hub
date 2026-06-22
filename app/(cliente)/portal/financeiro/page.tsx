@@ -51,7 +51,9 @@ export default async function FinanceiroPage({ searchParams }: Props) {
   const services      = profile?.services ?? [];
   const contractStart = profile?.contract_start ?? null;
   const planInfo     = plan !== "sem_plano" ? PLAN_INFO[plan] : null;
-  const hasSubscription = !!profile?.stripe_subscription_id;
+  const hasPlan      = plan === "basico" || plan === "pro";
+  // Token extra: R$150 para quem tem plano (50% off); R$300 sem plano.
+  const avulsoUnit   = hasPlan ? 150 : 300;
 
   const totalCredits = transactions.filter((t) => t.type === "credit").reduce((s, t) => s + t.amount, 0);
   const totalDebits  = transactions.filter((t) => t.type === "debit").reduce((s, t) => s + t.amount, 0);
@@ -206,16 +208,17 @@ export default async function FinanceiroPage({ searchParams }: Props) {
         </div>
       )}
 
-      {/* Planos de assinatura (só mostra se não tem plano) */}
-      {!hasSubscription && (
+      {/* Planos: sem plano → assinar Básico/Pro; no Básico → migrar para Pro; no Pro → nada a oferecer */}
+      {plan !== "pro" && (
         <div style={{ marginBottom: 32 }}>
           <h2 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: 14, color: "var(--text)", display: "flex", alignItems: "center", gap: 8 }}>
             <i className="ti ti-sparkles" style={{ color: "var(--primary)" }} />
-            Assinar plano mensal
+            {plan === "basico" ? "Migrar para o Plano Pro" : "Assinar plano mensal"}
           </h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 14 }}>
-            {(["basico", "pro"] as const).map((p) => {
+            {(plan === "basico" ? (["pro"] as const) : (["basico", "pro"] as const)).map((p) => {
               const info = PLAN_INFO[p];
+              const isUpgrade = plan === "basico" && p === "pro";
               return (
                 <form key={p} action={subscribePlan}>
                   <input type="hidden" name="plan" value={p} />
@@ -244,7 +247,7 @@ export default async function FinanceiroPage({ searchParams }: Props) {
                           letterSpacing: "0.06em",
                         }}
                       >
-                        Popular
+                        {isUpgrade ? "Upgrade" : "Popular"}
                       </span>
                     )}
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
@@ -279,7 +282,7 @@ export default async function FinanceiroPage({ searchParams }: Props) {
                         fontFamily: "inherit",
                       }}
                     >
-                      Assinar Plano {info.label}
+                      {isUpgrade ? "Migrar para o Pro" : `Assinar Plano ${info.label}`}
                     </button>
                   </div>
                 </form>
@@ -305,7 +308,7 @@ export default async function FinanceiroPage({ searchParams }: Props) {
               Comprar tokens avulsos
             </p>
             <p style={{ margin: 0, fontSize: "12px", color: "var(--text-faint)" }}>
-              R$300/token · sem fidelidade · entregue imediatamente
+              R${avulsoUnit}/token{hasPlan ? " (preço de assinante)" : ""} · sem fidelidade · entregue imediatamente
             </p>
           </div>
           <form action={buyTokens} style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -325,7 +328,7 @@ export default async function FinanceiroPage({ searchParams }: Props) {
             >
               {[1, 2, 3, 5, 10].map((n) => (
                 <option key={n} value={n}>
-                  {n} token{n > 1 ? "s" : ""} — R${(n * 300).toLocaleString("pt-BR")}
+                  {n} token{n > 1 ? "s" : ""} — R${(n * avulsoUnit).toLocaleString("pt-BR")}
                 </option>
               ))}
             </select>

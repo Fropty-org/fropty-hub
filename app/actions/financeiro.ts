@@ -44,7 +44,7 @@ export async function buyTokens(formData: FormData): Promise<void> {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("name, stripe_customer_id")
+    .select("name, plan, stripe_customer_id")
     .eq("id", user.id)
     .single();
 
@@ -54,7 +54,9 @@ export async function buyTokens(formData: FormData): Promise<void> {
     profile?.name ?? user.email!,
   );
 
-  const price = STRIPE_PRICES.token_avulso;
+  // Quem tem plano paga R$150/token extra (50% off); sem plano, R$300.
+  const hasPlan = profile?.plan === "basico" || profile?.plan === "pro";
+  const price = hasPlan ? STRIPE_PRICES.token_avulso_assinante : STRIPE_PRICES.token_avulso;
 
   const session = await stripe.checkout.sessions.create({
     customer:   customerId,

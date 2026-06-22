@@ -3,16 +3,12 @@ import Link from "next/link";
 import { createClient } from "@/app/lib/supabase/server";
 import { getProfile } from "@/app/lib/auth/session";
 import { NewTicketForm } from "@/app/components/suporte/NewTicketForm";
-import type { Database } from "@/app/lib/supabase/types";
-
-type ProjectRow = Database["public"]["Tables"]["projects"]["Row"];
 
 export const metadata: Metadata = { title: "Novo chamado — Fropty" };
 
 export default async function NovoChamadoPage() {
   const supabase = await createClient();
   const profile  = await getProfile();
-  const { data: { user } } = await supabase.auth.getUser();
   const isAdmin = profile?.role === "admin";
 
   // Clientes sem tokens não podem abrir chamados
@@ -47,7 +43,8 @@ export default async function NovoChamadoPage() {
     );
   }
 
-  let projects: { id: string; name: string }[] = [];
+  // Cliente: chamados não são mais vinculados a "projetos" no novo modelo.
+  const projects: { id: string; name: string }[] = [];
   let clients:  { id: string; name: string }[] = [];
 
   if (isAdmin) {
@@ -58,13 +55,6 @@ export default async function NovoChamadoPage() {
       .eq("is_active", true)
       .order("name");
     clients = (data ?? []).map((c) => ({ id: c.id, name: c.name ?? c.id }));
-  } else {
-    const { data } = await supabase
-      .from("projects")
-      .select("id, name")
-      .eq("client_id", user!.id)
-      .order("created_at", { ascending: false });
-    projects = ((data ?? []) as Pick<ProjectRow, "id" | "name">[]).map((p) => ({ id: p.id, name: p.name }));
   }
 
   return (
