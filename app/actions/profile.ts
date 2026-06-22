@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/app/lib/supabase/server";
 import { requireAuth } from "@/app/lib/auth/require-role";
+import { isWeakPasswordError, SENTINEL_PASSWORD_MESSAGE } from "@/app/lib/auth/password-error";
 
 const PASSWORD_MIN_LENGTH = 10;
 const PASSWORD_REGEX = {
@@ -78,7 +79,10 @@ export async function changePassword(formData: FormData): Promise<{ error?: stri
 
   // Atualiza para a nova senha
   const { error: updateError } = await supabase.auth.updateUser({ password: newPassword });
-  if (updateError) return { error: "Não foi possível alterar a senha. Tente novamente." };
+  if (updateError) {
+    if (isWeakPasswordError(updateError)) return { error: SENTINEL_PASSWORD_MESSAGE };
+    return { error: "Não foi possível alterar a senha. Tente novamente." };
+  }
 
   return { success: "Senha alterada com sucesso!" };
 }

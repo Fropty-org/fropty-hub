@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/app/lib/supabase/server";
 import { ROLE_HOME, DEFAULT_ROLE, type UserRole } from "@/app/lib/auth/roles";
+import { isWeakPasswordError, SENTINEL_PASSWORD_MESSAGE } from "@/app/lib/auth/password-error";
 
 /**
  * Login por email/senha.
@@ -76,7 +77,10 @@ export async function updatePassword(formData: FormData) {
   const supabase = await createClient();
   const { error } = await supabase.auth.updateUser({ password });
 
-  if (error) return { error: "Não foi possível atualizar a senha. O link pode ter expirado." };
+  if (error) {
+    if (isWeakPasswordError(error)) return { error: SENTINEL_PASSWORD_MESSAGE };
+    return { error: "Não foi possível atualizar a senha. O link pode ter expirado." };
+  }
 
   redirect("/portal/dashboard");
 }
