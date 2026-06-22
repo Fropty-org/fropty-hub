@@ -14,10 +14,12 @@ import {
   sendResolutionFeedbackToTeam,
 } from "@/app/lib/email/send";
 
-function isValidAttachmentUrl(url: string): boolean {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  if (!supabaseUrl) return false;
-  return url.startsWith(`${supabaseUrl}/storage/v1/object/`);
+// Os anexos são paths relativos do bucket no formato "<uid>/<uuid>.<ext>".
+// Valida o formato e garante que o path pertence à pasta do próprio usuário
+// (a policy do storage já força isso no upload; aqui é defesa em profundidade).
+function isValidAttachmentPath(path: string, ownerId: string): boolean {
+  if (path.includes("..") || path.startsWith("/")) return false;
+  return /^[0-9a-fA-F-]{36}\/[^/]+\.[A-Za-z0-9]+$/.test(path) && path.startsWith(`${ownerId}/`);
 }
 
 export async function createTicket(formData: FormData) {
@@ -30,7 +32,7 @@ export async function createTicket(formData: FormData) {
   const priority    = (["baixa", "media", "alta"].includes(priorityRaw) ? priorityRaw : "media") as "baixa" | "media" | "alta";
   const attachments = formData.getAll("attachments[]")
     .map((v) => (v as string).trim())
-    .filter((url) => url && isValidAttachmentUrl(url))
+    .filter((p) => p && isValidAttachmentPath(p, userId))
     .slice(0, 10);
 
   if (!subject || !body) return { error: "Preencha o assunto e a descrição." };
@@ -142,7 +144,7 @@ export async function sendMessage(formData: FormData) {
   const body        = (formData.get("body") as string)?.trim().slice(0, 5000);
   const attachments = formData.getAll("attachments[]")
     .map((v) => (v as string).trim())
-    .filter((url) => url && isValidAttachmentUrl(url))
+    .filter((p) => p && isValidAttachmentPath(p, userId))
     .slice(0, 10);
 
   if (!ticketId || !body) return { error: "Mensagem não pode estar vazia." };

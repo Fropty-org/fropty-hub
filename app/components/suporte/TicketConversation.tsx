@@ -117,7 +117,7 @@ export function TicketConversation({
       const paths: string[] = [];
       for (const file of files) {
         const ext  = file.name.split(".").pop() ?? "bin";
-        const path = `${crypto.randomUUID()}.${ext}`;
+        const path = `${currentUserId}/${crypto.randomUUID()}.${ext}`;
         const { error: uploadErr } = await supabase.storage
           .from("ticket-attachments")
           .upload(path, file, { upsert: false });

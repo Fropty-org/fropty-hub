@@ -84,10 +84,13 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
 
     if (files.length > 0) {
       const supabase = createClient();
+      // A policy do storage exige que o arquivo fique numa pasta com o uid do usuário
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { setError("Sessão expirada. Faça login novamente."); setLoading(false); return; }
       const paths: string[] = [];
       for (const file of files) {
         const ext  = file.name.split(".").pop() ?? "bin";
-        const path = `${crypto.randomUUID()}.${ext}`;
+        const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
         const { error: uploadError } = await supabase.storage
           .from("ticket-attachments")
           .upload(path, file, { upsert: false });
