@@ -1,13 +1,3 @@
-import type { ProjectStatus } from "@/app/lib/types/cliente";
-
-export const STATUS_MAP: Record<ProjectStatus, { label: string; color: string; icon: string }> = {
-  aguardando:         { label: "Aguardando início",  color: "#94a3b8", icon: "ti-clock" },
-  em_desenvolvimento: { label: "Em desenvolvimento", color: "#3b82f6", icon: "ti-code" },
-  revisao:            { label: "Em revisão",          color: "#EF9F27", icon: "ti-eye" },
-  entregue:           { label: "Entregue",            color: "#22c55e", icon: "ti-circle-check" },
-  manutencao:         { label: "Em manutenção",       color: "var(--primary)", icon: "ti-tools" },
-};
-
 export type TicketStatus = "aberto" | "em_andamento" | "resolvido" | "fechado" | "reaberto";
 export type TicketPriority = "baixa" | "media" | "alta";
 

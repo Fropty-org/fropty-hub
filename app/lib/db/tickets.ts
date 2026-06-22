@@ -5,7 +5,6 @@ type TicketPriority = "baixa" | "media" | "alta";
 
 interface CreateTicketInput {
   clientId:    string;
-  projectId:   string | null;
   subject:     string;
   category:    string;
   body:        string;
@@ -24,7 +23,6 @@ export async function dbCreateTicket(input: CreateTicketInput) {
     .from("tickets")
     .insert({
       client_id:  input.clientId,
-      project_id: input.projectId,
       subject:    input.subject,
       category:   input.category,
       status:     "aberto" as const,

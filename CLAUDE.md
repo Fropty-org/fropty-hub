@@ -49,8 +49,8 @@ Next.js 15 (App Router) + React 19 + Tailwind CSS 4. Supabase para auth e banco 
 
 - `overview` — métricas gerais
 - `usuarios` — lista de usuários + formulário de convite (`InviteForm.tsx`)
-- `projetos`, `financeiro`, `analytics`, `audit`
-- Sidebar: `AdminSidebar.tsx`
+- `financeiro`, `analytics`, `audit`
+- Sidebar: `AdminSidebar.tsx`. **Sem** item "Projetos" (contexto de projetos removido).
 
 ### Componentes públicos (`app/components/`)
 
@@ -75,7 +75,7 @@ Projeto ID: `rflnhzpepbnhanuxpqag`
 
 Tabelas principais:
 - `profiles` — `id, name, email, role, plan, token_balance, services (text[]), contract_start (date), is_active, avatar_url, theme, ...`
-- `projects` — `id, client_id, name, description, status, progress, addons, preview_url, ...`
+- `tickets` / `ticket_messages` — chamados de suporte (UFT) e conversa
 - `token_transactions` — `id, client_id, amount, type (credit|debit), description, ...`
 - `audit_log` — registro de ações admin
 
@@ -89,7 +89,6 @@ Tabelas principais:
 - `adminUpdateUserPlan` — atualiza plano do usuário
 - `adminUpdateUserRole` — muda role (cliente ↔ admin)
 - `adminRevokeAccess` / `adminRestoreAccess` — bane/desbane usuário
-- `adminCreateProject` / `adminUpdateProject` — gerencia projetos
 
 ## Conventions
 

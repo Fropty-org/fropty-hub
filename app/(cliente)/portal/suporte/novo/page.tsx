@@ -43,8 +43,6 @@ export default async function NovoChamadoPage() {
     );
   }
 
-  // Cliente: chamados não são mais vinculados a "projetos" no novo modelo.
-  const projects: { id: string; name: string }[] = [];
   let clients:  { id: string; name: string }[] = [];
 
   if (isAdmin) {
@@ -114,7 +112,7 @@ export default async function NovoChamadoPage() {
           padding: "28px 28px 32px",
         }}
       >
-        <NewTicketForm projects={projects} isAdmin={isAdmin} clients={clients} />
+        <NewTicketForm isAdmin={isAdmin} clients={clients} />
       </div>
     </div>
   );

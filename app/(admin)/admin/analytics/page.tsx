@@ -12,7 +12,6 @@ export default async function AdminAnalyticsPage() {
     { count: openTickets },
     { count: resolvedTickets },
     { data: planBreakdown },
-    { data: recentEvents },
     { data: monthlyTokens },
   ] = await Promise.all([
     supabase.rpc("admin_mrr"),
@@ -20,7 +19,6 @@ export default async function AdminAnalyticsPage() {
     supabase.from("tickets").select("*", { count: "exact", head: true }).in("status", ["aberto", "em_andamento", "reaberto"]),
     supabase.from("tickets").select("*", { count: "exact", head: true }).in("status", ["resolvido", "fechado"]),
     supabase.from("profiles").select("plan").eq("role", "cliente"),
-    supabase.from("project_events").select("source, event_type, created_at").order("created_at", { ascending: false }).limit(20),
     supabase.from("token_transactions").select("amount, type, created_at").gte("created_at", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()),
   ]);
 
@@ -48,12 +46,6 @@ export default async function AdminAnalyticsPage() {
     { label: "Tickets abertos",    value: openTickets ?? 0,    icon: "ti-message-circle", color: "var(--primary)", sub: `${resolvedTickets ?? 0} resolvidos/fechados` },
     { label: "Taxa de resolução",  value: `${resolvedRate}%`,  icon: "ti-circle-check",   color: "#EF9F27",        sub: `${openTickets ?? 0} abertos · ${resolvedTickets ?? 0} resolvidos` },
   ];
-
-  const SOURCE_COLOR: Record<string, string> = {
-    github: "#e2e8f0",
-    vercel: "#3b82f6",
-    fropty: "var(--primary)",
-  };
 
   return (
     <div style={{ padding: "40px 32px", maxWidth: 1000, margin: "0 auto" }}>
@@ -122,24 +114,6 @@ export default async function AdminAnalyticsPage() {
                 {tokensIn - tokensOut >= 0 ? "+" : ""}{tokensIn - tokensOut}
               </span>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        {/* Eventos recentes */}
-        <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "22px" }}>
-          <h2 style={{ margin: "0 0 18px", fontSize: "0.95rem", fontWeight: 700, color: "var(--text)" }}>Eventos recentes</h2>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {(recentEvents ?? []).slice(0, 8).map((ev) => (
-              <div key={ev.created_at + ev.event_type} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "12px" }}>
-                <span style={{ width: 6, height: 6, borderRadius: "50%", background: SOURCE_COLOR[ev.source] ?? "#94a3b8", flexShrink: 0 }} />
-                <span style={{ color: "var(--text-muted)", fontWeight: 600, flexShrink: 0 }}>{ev.source}</span>
-                <span style={{ color: "var(--text-faint)", flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{ev.event_type}</span>
-                <span style={{ color: "var(--text-faint)", flexShrink: 0 }}>{new Date(ev.created_at).toLocaleDateString("pt-BR")}</span>
-              </div>
-            ))}
-            {!recentEvents?.length && <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)", textAlign: "center" }}>Nenhum evento.</p>}
           </div>
         </div>
       </div>

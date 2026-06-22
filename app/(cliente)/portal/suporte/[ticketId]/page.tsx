@@ -57,7 +57,6 @@ export default async function TicketDetailPage({ params }: Props) {
     category:     row.category,
     status:       row.status as TicketStatus,
     priority:     row.priority as TicketPriority,
-    projectId:    row.project_id ?? undefined,
     createdAt:    row.created_at,
     updatedAt:    row.updated_at,
     ticketNumber: row.ticket_number,

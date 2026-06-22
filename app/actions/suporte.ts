@@ -24,7 +24,6 @@ export async function createTicket(formData: FormData) {
   const subject     = (formData.get("subject")       as string)?.trim().slice(0, 200);
   const category    = (formData.get("category")      as string)?.trim();
   const body        = (formData.get("body")           as string)?.trim().slice(0, 10000);
-  const projectId   = (formData.get("project_id")    as string)?.trim() || null;
   const onBehalfOf  = (formData.get("on_behalf_of")  as string)?.trim() || null;
   const priorityRaw = ((formData.get("priority")     as string) ?? "").trim();
   const priority    = (["baixa", "media", "alta"].includes(priorityRaw) ? priorityRaw : "media") as "baixa" | "media" | "alta";
@@ -82,7 +81,6 @@ export async function createTicket(formData: FormData) {
 
   const result = await dbCreateTicket({
     clientId,
-    projectId:   projectId || null,
     subject,
     category:    category || "Geral",
     body,

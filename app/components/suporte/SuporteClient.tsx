@@ -10,7 +10,6 @@ type FilterMode = "todos" | "abertos" | "fechados";
 
 interface Props {
   tickets:      Ticket[];
-  projects?:    { id: string; name: string }[];
   isAdmin?:     boolean;
   clients?:     { id: string; name: string }[];
   tokenBalance?: number;

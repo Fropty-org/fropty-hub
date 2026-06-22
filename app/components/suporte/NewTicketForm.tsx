@@ -5,13 +5,7 @@ import { useRouter } from "next/navigation";
 import { createTicket } from "@/app/actions/suporte";
 import { createClient } from "@/app/lib/supabase/browser";
 
-interface Project {
-  id: string;
-  name: string;
-}
-
 interface Props {
-  projects:  Project[];
   onClose?:  () => void;
   isAdmin?:  boolean;
   clients?:  { id: string; name: string }[];
@@ -51,7 +45,7 @@ const labelStyle: React.CSSProperties = {
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
-export function NewTicketForm({ projects, onClose, isAdmin, clients }: Props) {
+export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
   const router                    = useRouter();
   const [loading,   setLoading]   = useState(false);
   const [error,     setError]     = useState("");
@@ -178,33 +172,17 @@ export function NewTicketForm({ projects, onClose, isAdmin, clients }: Props) {
         />
       </div>
 
-      {/* Categoria + Projeto */}
-      <div style={{ display: "grid", gridTemplateColumns: projects.length > 0 ? "1fr 1fr" : "1fr", gap: 12 }}>
-        <div>
-          <label style={labelStyle}>Categoria</label>
-          <select
-            name="category"
-            style={{ ...inputStyle, appearance: "none", cursor: "pointer" }}
-            onFocus={(e) => { e.currentTarget.style.borderColor = "var(--primary)"; }}
-            onBlur={(e)  => { e.currentTarget.style.borderColor = "var(--border)"; }}
-          >
-            {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
-          </select>
-        </div>
-        {projects.length > 0 && (
-          <div>
-            <label style={labelStyle}>Projeto</label>
-            <select
-              name="project_id"
-              style={{ ...inputStyle, appearance: "none", cursor: "pointer" }}
-              onFocus={(e) => { e.currentTarget.style.borderColor = "var(--primary)"; }}
-              onBlur={(e)  => { e.currentTarget.style.borderColor = "var(--border)"; }}
-            >
-              <option value="">Nenhum</option>
-              {projects.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
-            </select>
-          </div>
-        )}
+      {/* Categoria */}
+      <div>
+        <label style={labelStyle}>Categoria</label>
+        <select
+          name="category"
+          style={{ ...inputStyle, appearance: "none", cursor: "pointer" }}
+          onFocus={(e) => { e.currentTarget.style.borderColor = "var(--primary)"; }}
+          onBlur={(e)  => { e.currentTarget.style.borderColor = "var(--border)"; }}
+        >
+          {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+        </select>
       </div>
 
       {/* Prioridade */}

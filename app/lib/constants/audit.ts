@@ -18,8 +18,6 @@ export const AUDIT_ACTIONS: Record<string, AuditActionInfo> = {
   credit_tokens:     { label: "Crédito de tokens",      icon: "ti-coins",        color: "#EF9F27", severity: "normal" },
   set_token_balance: { label: "Saldo de tokens definido", icon: "ti-coins",      color: "#EF9F27", severity: "high" },
   update_plan:       { label: "Plano alterado",         icon: "ti-credit-card",  color: "#3b82f6", severity: "normal" },
-  create_project:    { label: "Projeto criado",         icon: "ti-folder-plus",  color: "#22c55e", severity: "normal" },
-  update_project:    { label: "Projeto atualizado",     icon: "ti-folder",       color: "#3b82f6", severity: "normal" },
 };
 
 export function auditActionInfo(action: string): AuditActionInfo {

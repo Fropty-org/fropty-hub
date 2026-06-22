@@ -55,19 +55,14 @@ export async function queryAuditLogs(
   // Resolve nomes de admins e alvos em lote
   const adminIds   = [...new Set(logs.map((l) => l.admin_id).filter(Boolean))];
   const userIds    = [...new Set(logs.filter((l) => l.target_type === "user").map((l) => l.target_id).filter(Boolean))] as string[];
-  const projectIds = [...new Set(logs.filter((l) => l.target_type === "project").map((l) => l.target_id).filter(Boolean))] as string[];
 
   const allProfileIds = [...new Set([...adminIds, ...userIds])];
 
   const profilesData = allProfileIds.length
     ? (await supabase.from("profiles").select("id, name").in("id", allProfileIds)).data ?? []
     : [];
-  const projectsData = projectIds.length
-    ? (await supabase.from("projects").select("id, name").in("id", projectIds)).data ?? []
-    : [];
 
   const profileMap = new Map(profilesData.map((p) => [p.id, p.name]));
-  const projectMap = new Map(projectsData.map((p) => [p.id, p.name]));
 
   // Busca textual aplicada após resolução (cobre nome do alvo e metadata)
   const q = filters.q?.toLowerCase().trim();
@@ -79,8 +74,6 @@ export async function queryAuditLogs(
         ?? (l.metadata as Record<string, unknown> | null)?.name as string
         ?? (l.metadata as Record<string, unknown> | null)?.email as string
         ?? null;
-    } else if (l.target_type === "project") {
-      targetName = (l.target_id && projectMap.get(l.target_id)) ?? null;
     }
     return {
       id:          l.id,

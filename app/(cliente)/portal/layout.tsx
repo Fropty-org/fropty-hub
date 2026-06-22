@@ -61,7 +61,6 @@ export default async function PortalLayout({
     plan:           profile?.plan ?? undefined,
     planRenewal:    profile?.plan_renewal ?? undefined,
     tokenBalance:   profile?.token_balance ?? 0,
-    projects:       [],
     tokenHistory:   [],
   };
 
