@@ -4,18 +4,29 @@ import { useState, useTransition } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { updatePassword } from "@/app/actions/auth";
+import { SentinelScan } from "@/app/components/auth/SentinelScan";
 
 export default function NovaSenhaPage() {
   const [error, setError]     = useState<string | null>(null);
+  const [scanning, setScanning] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
+    setScanning(true);
     const formData = new FormData(e.currentTarget);
     startTransition(async () => {
-      const result = await updatePassword(formData);
-      if (result && "error" in result) setError(result.error ?? null);
+      // Roda a validação real e mantém o "scanner" por ~2,4s para a percepção
+      const [result] = await Promise.all([
+        updatePassword(formData),
+        new Promise((r) => setTimeout(r, 2400)),
+      ]);
+      // Em caso de sucesso a action redireciona (overlay permanece até navegar)
+      if (result && "error" in result) {
+        setError(result.error ?? null);
+        setScanning(false);
+      }
     });
   }
 
@@ -30,11 +41,13 @@ export default function NovaSenhaPage() {
       padding: "24px 16px",
     }}>
       <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 36, textDecoration: "none" }}>
-        <Image src="/logo-icon.png" alt="Fropty Apps" width={32} height={32} style={{ borderRadius: 8 }} />
+        <Image src="/logo-icon.png" alt="Fropty" width={32} height={32} style={{ borderRadius: 8 }} />
         <span style={{ fontSize: 18, fontWeight: 800, color: "var(--text)", fontFamily: "var(--font-plus-jakarta), sans-serif" }}>
-          Fropty<span style={{ color: "var(--primary)" }}>Apps</span>
+          Fropty
         </span>
       </Link>
+
+      <SentinelScan active={scanning} />
 
       <div style={{
         width: "100%", maxWidth: 400,

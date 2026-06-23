@@ -5,7 +5,7 @@
 // mensagem branda em nome do FroptySentinel.
 
 export const SENTINEL_PASSWORD_MESSAGE =
-  "O serviço FroptySentinel não identificou esta senha como segura. Por favor, crie outra senha.";
+  "O serviço FroptySentinel classificou a senha como não segura e protegeu sua entrada. Por favor crie outra senha.";
 
 export function isWeakPasswordError(
   error: { code?: string; message?: string } | null | undefined,

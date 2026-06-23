@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, useTransition } from "react";
+import { SentinelScan } from "@/app/components/auth/SentinelScan";
 
 interface PasswordStrength {
   score: number; // 0-4
@@ -32,6 +33,7 @@ export default function PasswordChangeForm() {
   const [isPending, startTransition] = useTransition();
   const [msg, setMsg]                = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [newPwd, setNewPwd]          = useState("");
+  const [scanning, setScanning]      = useState(false);
   const formRef                      = useRef<HTMLFormElement>(null);
 
   const strength = newPwd ? analyzePassword(newPwd) : null;
@@ -58,10 +60,15 @@ export default function PasswordChangeForm() {
       return;
     }
 
+    setScanning(true);
     startTransition(async () => {
       // Importação dinâmica para não vazar credenciais no bundle server
       const { changePassword } = await import("@/app/actions/profile");
-      const result = await changePassword(fd);
+      const [result] = await Promise.all([
+        changePassword(fd),
+        new Promise((r) => setTimeout(r, 2400)),
+      ]);
+      setScanning(false);
       if (result.success) {
         setMsg({ type: "success", text: result.success });
         formRef.current?.reset();
@@ -74,6 +81,7 @@ export default function PasswordChangeForm() {
 
   return (
     <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "28px 28px 24px" }}>
+      <SentinelScan active={scanning} />
       <h2 style={{ margin: "0 0 20px", fontSize: "1rem", fontWeight: 700, color: "var(--text)" }}>
         <i className="ti ti-lock" style={{ marginRight: 8 }} />
         Alterar senha
