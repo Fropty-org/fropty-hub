@@ -87,12 +87,12 @@ export async function sendWelcomeEmail(opts: {
     to:   opts.toEmail,
     subject: `Sua conta está pronta, ${opts.toName.split(" ")[0]}!`,
     html: baseTemplate(`
-      <p style="margin:0 0 8px;font-size:13px;color:#94a3b8;">Bem-vindo à Fropty Apps</p>
+      <p style="margin:0 0 8px;font-size:13px;color:#94a3b8;">Bem-vindo à Fropty</p>
       <h2 style="margin:0 0 16px;font-size:20px;font-weight:800;color:#F7F8FC;line-height:1.3;">
         Que bom ter você com a gente, ${opts.toName.split(" ")[0]}!
       </h2>
       <p style="font-size:14px;color:#94a3b8;line-height:1.7;margin:0 0 20px;">
-        Sua conta foi criada e está pronta para usar. Ficamos muito felizes que você tenha escolhido a Fropty Apps para transformar sua ideia em realidade.
+        Sua senha foi criada e sua conta está pronta para usar. Ficamos muito felizes que você tenha escolhido a Fropty.
       </p>
 
       <!-- Resumo da conta -->
@@ -118,7 +118,7 @@ export async function sendWelcomeEmail(opts: {
       </div>
 
       <p style="font-size:13px;color:#94a3b8;line-height:1.7;margin:0 0 4px;">
-        Acesse o portal para acompanhar seus projetos, abrir chamados de suporte e muito mais. Qualquer dúvida, estamos aqui.
+        Acesse o portal para acompanhar seus serviços, abrir chamados de suporte e muito mais. Qualquer dúvida, estamos aqui.
       </p>
       ${btn("Acessar meu portal", `${APP_URL}/portal/dashboard`)}
     `),

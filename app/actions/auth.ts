@@ -2,9 +2,11 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/app/lib/supabase/server";
+import { createServiceClient } from "@/app/lib/supabase/service";
 import { ROLE_HOME, DEFAULT_ROLE, type UserRole } from "@/app/lib/auth/roles";
 import { isWeakPasswordError, SENTINEL_PASSWORD_MESSAGE } from "@/app/lib/auth/password-error";
 import { isPwnedPassword } from "@/app/lib/auth/pwned";
+import { sendWelcomeEmail } from "@/app/lib/email/send";
 
 /**
  * Login por email/senha.
@@ -78,11 +80,33 @@ export async function updatePassword(formData: FormData) {
   if (await isPwnedPassword(password)) return { error: SENTINEL_PASSWORD_MESSAGE };
 
   const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
   const { error } = await supabase.auth.updateUser({ password });
 
   if (error) {
     if (isWeakPasswordError(error)) return { error: SENTINEL_PASSWORD_MESSAGE };
     return { error: "Não foi possível atualizar a senha. O link pode ter expirado." };
+  }
+
+  // Boas-vindas: enviado uma única vez, agora que a senha foi de fato criada.
+  // Um reset de senha de cliente já ativo (welcomed_at preenchido) não reenvia.
+  if (user) {
+    const service = createServiceClient();
+    const { data: profile } = await service
+      .from("profiles")
+      .select("name, plan, token_balance, welcomed_at")
+      .eq("id", user.id)
+      .single();
+
+    if (profile && !profile.welcomed_at) {
+      sendWelcomeEmail({
+        toEmail:      user.email ?? "",
+        toName:       profile.name || user.email?.split("@")[0] || "Cliente",
+        plan:         profile.plan ?? "sem_plano",
+        tokenBalance: profile.token_balance ?? 0,
+      });
+      await service.from("profiles").update({ welcomed_at: new Date().toISOString() }).eq("id", user.id);
+    }
   }
 
   redirect("/portal/dashboard");

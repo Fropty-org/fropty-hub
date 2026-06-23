@@ -40,6 +40,7 @@ export type Database = {
           token_balance: number;
           services: string[];
           contract_start: string | null;
+          welcomed_at: string | null;
           is_active: boolean;
           stripe_customer_id: string | null;
           stripe_subscription_id: string | null;
@@ -73,6 +74,7 @@ export type Database = {
           token_balance?: number;
           services?: string[];
           contract_start?: string | null;
+          welcomed_at?: string | null;
           is_active?: boolean;
           stripe_customer_id?: string | null;
           stripe_subscription_id?: string | null;
