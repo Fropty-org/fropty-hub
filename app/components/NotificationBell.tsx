@@ -78,9 +78,12 @@ export function NotificationBell({ userId }: { userId: string }) {
     if (!open && btnRef.current) {
       const rect = btnRef.current.getBoundingClientRect();
       const dropW = 320;
-      const spaceRight = window.innerWidth - rect.left;
-      const left = spaceRight >= dropW ? rect.left : Math.max(8, rect.right - dropW);
-      setDropPos({ top: rect.bottom + 8, left });
+      const dropH = 420; // altura aproximada (header + lista)
+      const left = Math.max(8, Math.min(rect.right - dropW, window.innerWidth - dropW - 8));
+      // Abre para cima quando não há espaço abaixo (ex.: botão flutuante no rodapé)
+      const openUp = rect.bottom + dropH > window.innerHeight;
+      const top = openUp ? Math.max(8, rect.top - dropH - 8) : rect.bottom + 8;
+      setDropPos({ top, left });
     }
     setOpen((o) => !o);
   }

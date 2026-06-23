@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { useTransition, useState, useEffect } from "react";
 import { signOut } from "@/app/actions/auth";
 import { PortalThemeToggle } from "@/app/components/cliente/PortalThemeToggle";
-import { NotificationBell } from "@/app/components/NotificationBell";
 
 const NAV = [
   { id: "overview",   href: "/admin/overview",   icon: "ti-layout-dashboard", label: "Visão Geral" },
@@ -161,8 +160,6 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark" }: 
             }}>
               {initials}
             </div>
-            <NotificationBell userId={userId} />
-            <PortalThemeToggle initialTheme={initialTheme} />
           </div>
         ) : (
           <div style={{ marginBottom: 28 }}>
@@ -208,14 +205,6 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark" }: 
             );
           })}
         </nav>
-
-        {/* Utilidades: notificações + tema (linha própria, com folga) */}
-        {!collapsed && (
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, padding: "12px 0", marginTop: 8, borderTop: "1px solid var(--border)" }}>
-            <NotificationBell userId={userId} />
-            <PortalThemeToggle initialTheme={initialTheme} />
-          </div>
-        )}
 
         <button
           onClick={() => startTransition(async () => {

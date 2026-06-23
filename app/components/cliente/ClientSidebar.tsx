@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { useTransition, useState, useEffect } from "react";
 import { signOut } from "../../actions/auth";
 import { PortalThemeToggle } from "./PortalThemeToggle";
-import { NotificationBell } from "@/app/components/NotificationBell";
 import type { ClientUser } from "../../lib/types/cliente";
 
 interface NavItem {
@@ -137,8 +136,6 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
           }}>
             {user.avatarInitials}
           </div>
-          <NotificationBell userId={user.id} />
-          <PortalThemeToggle initialTheme={initialTheme} />
         </div>
       ) : (
         <div style={{ marginBottom: 24 }}>
@@ -210,14 +207,6 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
           );
         })}
       </nav>
-
-      {/* Utilidades: notificações + tema (linha própria, com folga) */}
-      {!collapsed && (
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, padding: "12px 0", marginTop: 8, borderTop: "1px solid var(--border)" }}>
-          <NotificationBell userId={user.id} />
-          <PortalThemeToggle initialTheme={initialTheme} />
-        </div>
-      )}
 
       {/* Logout */}
       <button

@@ -5,6 +5,7 @@ import { ClientSidebar } from "@/app/components/cliente/ClientSidebar";
 import { AdminSidebar } from "@/app/components/admin/AdminSidebar";
 import { UserAvatarMenu } from "@/app/components/auth/UserAvatarMenu";
 import { PullToRefresh } from "@/app/components/PullToRefresh";
+import { PortalFloatingControls } from "@/app/components/PortalFloatingControls";
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -100,6 +101,9 @@ export default async function PortalLayout({
       <main className="portal-main-content" style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
         <PullToRefresh>{children}</PullToRefresh>
       </main>
+
+      {/* Notificações + tema flutuantes no canto inferior direito */}
+      <PortalFloatingControls userId={profile?.id ?? ""} initialTheme={profile?.theme ?? "dark"} />
     </div>
   );
 }
