@@ -19,8 +19,8 @@ const siteUrl = "https://fropty.com";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Fropty Apps — Seu app sob medida",
-    template: "%s | Fropty Apps",
+    default: "Fropty — Seu app sob medida",
+    template: "%s | Fropty",
   },
   description:
     "Transforme sua ideia em um app de verdade. Prévia gratuita, app completo a partir de R$499 e manutenção mensal com tokens de suporte.",
@@ -32,21 +32,21 @@ export const metadata: Metadata = {
     "app mobile",
     "fropty",
   ],
-  authors: [{ name: "Fropty Apps", url: siteUrl }],
-  creator: "Fropty Apps",
+  authors: [{ name: "Fropty", url: siteUrl }],
+  creator: "Fropty",
   openGraph: {
     type: "website",
     locale: "pt_BR",
     url: siteUrl,
-    siteName: "Fropty Apps",
-    title: "Fropty Apps — Seu app sob medida",
+    siteName: "Fropty",
+    title: "Fropty — Seu app sob medida",
     description:
       "Transforme sua ideia em um app de verdade. Prévia gratuita, app completo a partir de R$499 e manutenção mensal com tokens de suporte.",
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Fropty Apps" }],
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Fropty" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Fropty Apps — Seu app sob medida",
+    title: "Fropty — Seu app sob medida",
     description:
       "Transforme sua ideia em um app de verdade. Prévia gratuita, app completo a partir de R$499.",
     creator: "@froptyapps",
@@ -65,7 +65,7 @@ const schemaOrg = {
     {
       "@type": "Organization",
       "@id": `${siteUrl}/#organization`,
-      name: "Fropty Apps",
+      name: "Fropty",
       url: siteUrl,
       description:
         "Serviço de desenvolvimento de apps sob medida. Prévia gratuita, app completo a partir de R$499 e manutenção mensal com tokens de suporte.",
@@ -79,13 +79,13 @@ const schemaOrg = {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       url: siteUrl,
-      name: "Fropty Apps",
+      name: "Fropty",
       publisher: { "@id": `${siteUrl}/#organization` },
       inLanguage: "pt-BR",
     },
     {
       "@type": "Product",
-      name: "App sob medida — Fropty Apps",
+      name: "App sob medida — Fropty",
       description: "Desenvolvimento de aplicativo personalizado com prévia gratuita.",
       brand: { "@id": `${siteUrl}/#organization` },
       offers: {
