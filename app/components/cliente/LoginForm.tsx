@@ -12,17 +12,12 @@ export function LoginForm() {
     setError("");
     setLoading(true);
 
+    // signIn redireciona no servidor em caso de sucesso; aqui só tratamos erro.
     const result = await signIn(new FormData(e.currentTarget));
 
     if (result?.error) {
       setError(result.error);
       setLoading(false);
-      return;
-    }
-    // Sucesso: navega para a home do papel. Full reload garante que o cookie
-    // de sessão recém-criado seja enviado e o middleware aplique o redirect.
-    if (result?.redirectTo) {
-      window.location.href = result.redirectTo;
     }
   }
 

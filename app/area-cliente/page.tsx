@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { signIn } from "@/app/actions/auth";
@@ -10,7 +10,6 @@ import { createClient } from "@/app/lib/supabase/browser";
 type Mode = "login" | "reset";
 
 export default function AreaClientePage() {
-  const router       = useRouter();
   const searchParams = useSearchParams();
   const [mode, setMode]       = useState<Mode>("login");
   const [error, setError]     = useState<string | null>(() =>
@@ -53,11 +52,9 @@ export default function AreaClientePage() {
         setSuccess("Se esse e-mail estiver cadastrado, você receberá o link em breve.");
         return;
       }
+      // signIn redireciona no servidor em caso de sucesso; aqui só tratamos erro.
       const result = await signIn(formData);
-      if (!result) return;
-      if ("error"      in result) { setError(result.error ?? null); return; }
-      if ("success"    in result) { setSuccess(result.success as string); return; }
-      if ("redirectTo" in result) { router.push(result.redirectTo as string); }
+      if (result?.error) setError(result.error);
     });
   }
 
