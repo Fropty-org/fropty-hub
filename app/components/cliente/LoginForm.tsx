@@ -17,8 +17,13 @@ export function LoginForm() {
     if (result?.error) {
       setError(result.error);
       setLoading(false);
+      return;
     }
-    // Se ok, a Server Action redireciona — loading permanece true
+    // Sucesso: navega para a home do papel. Full reload garante que o cookie
+    // de sessão recém-criado seja enviado e o middleware aplique o redirect.
+    if (result?.redirectTo) {
+      window.location.href = result.redirectTo;
+    }
   }
 
   const inputStyle: React.CSSProperties = {
