@@ -24,6 +24,7 @@ export async function signIn(_prevState: LoginState, formData: FormData): Promis
   try {
     const email    = (formData.get("email")    as string)?.trim();
     const password = (formData.get("password") as string)?.trim();
+    console.error("[signIn] called", { hasEmail: !!email, hasPassword: !!password });
 
     if (!email || !password) {
       return { error: "Preencha email e senha." };
@@ -31,6 +32,7 @@ export async function signIn(_prevState: LoginState, formData: FormData): Promis
 
     const supabase = await createClient();
     const { data: { user }, error } = await supabase.auth.signInWithPassword({ email, password });
+    console.error("[signIn] auth", { ok: !error, errMsg: error?.message ?? null, userId: user?.id ?? null });
 
     if (error) return { error: "Email ou senha incorretos." };
 
@@ -39,6 +41,7 @@ export async function signIn(_prevState: LoginState, formData: FormData): Promis
       .select("role, is_active")
       .eq("id", user!.id)
       .single();
+    console.error("[signIn] profile", { role: profile?.role ?? null, is_active: profile?.is_active ?? null });
 
     if (profile?.is_active === false) {
       await supabase.auth.signOut();
@@ -53,6 +56,7 @@ export async function signIn(_prevState: LoginState, formData: FormData): Promis
     return { error: "Erro interno. Tente novamente mais tarde." };
   }
   // FORA do try/catch: redirect() lança NEXT_REDIRECT (não é erro real).
+  console.error("[signIn] redirecting to", target);
   redirect(target);
 }
 
