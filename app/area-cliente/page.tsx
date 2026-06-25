@@ -1,27 +1,30 @@
 "use client";
 
-import { useState, useTransition, useEffect, useActionState } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { signIn } from "@/app/actions/auth";
 import { createClient } from "@/app/lib/supabase/browser";
 
 type Mode = "login" | "reset";
 
+// Mensagens de erro vindas do redirect do /api/login (?error=...)
+const LOGIN_ERRORS: Record<string, string> = {
+  credenciais: "Email ou senha incorretos.",
+  "acesso-revogado": "Seu acesso foi revogado. Entre em contato com o suporte.",
+  interno: "Erro interno. Tente novamente mais tarde.",
+};
+
 export default function AreaClientePage() {
   const searchParams = useSearchParams();
   const [mode, setMode]       = useState<Mode>("login");
-  // Login: envio NATIVO do form via useActionState. signIn faz redirect() no
-  // servidor em caso de sucesso (confiável) e devolve { error } em caso de falha.
-  const [loginState, loginAction, loginPending] = useActionState(signIn, null);
-  const [error, setError]     = useState<string | null>(() =>
-    searchParams.get("error") === "acesso-revogado"
-      ? "Seu acesso foi revogado. Entre em contato com o suporte."
-      : null
-  );
+  const [error, setError]     = useState<string | null>(() => {
+    const code = searchParams.get("error");
+    return code ? LOGIN_ERRORS[code] ?? null : null;
+  });
   const [success, setSuccess] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const [loginSubmitting, setLoginSubmitting] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
 
   useEffect(() => {
@@ -55,9 +58,7 @@ export default function AreaClientePage() {
     });
   }
 
-  // Erro exibido na tela: prioriza o erro do login (server action) e cai no
-  // erro local (reset / acesso revogado).
-  const shownError = (mode === "login" ? loginState?.error : null) ?? error;
+  const shownError = error;
 
   return (
     <div style={{
@@ -125,7 +126,14 @@ export default function AreaClientePage() {
 
         <form
           {...(mode === "login"
-            ? { action: loginAction }
+            ? {
+                // POST NATIVO para o route handler. action é uma string (não
+                // uma função), então o React não intercepta — o browser envia
+                // o form e segue o 303 no nível HTTP. Funciona até sem JS.
+                method: "post" as const,
+                action: "/api/login",
+                onSubmit: () => setLoginSubmitting(true),
+              }
             : { onSubmit: handleResetSubmit })}
           style={{ display: "flex", flexDirection: "column", gap: 14 }}
         >
@@ -163,15 +171,15 @@ export default function AreaClientePage() {
             </div>
           )}
 
-          <button type="submit" disabled={mode === "login" ? loginPending : isPending} style={{
+          <button type="submit" disabled={mode === "login" ? loginSubmitting : isPending} style={{
             marginTop: 4, padding: "12px 0", borderRadius: 12, border: "none",
-            background: (mode === "login" ? loginPending : isPending) ? "var(--border)" : "var(--primary)",
-            color: (mode === "login" ? loginPending : isPending) ? "var(--text-muted)" : "#fff",
-            fontWeight: 700, fontSize: 15, cursor: (mode === "login" ? loginPending : isPending) ? "not-allowed" : "pointer",
+            background: (mode === "login" ? loginSubmitting : isPending) ? "var(--border)" : "var(--primary)",
+            color: (mode === "login" ? loginSubmitting : isPending) ? "var(--text-muted)" : "#fff",
+            fontWeight: 700, fontSize: 15, cursor: (mode === "login" ? loginSubmitting : isPending) ? "not-allowed" : "pointer",
             fontFamily: "inherit", transition: "all 0.2s",
             display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
           }}>
-            {(mode === "login" ? loginPending : isPending) ? (
+            {(mode === "login" ? loginSubmitting : isPending) ? (
               <><i className="ti ti-loader-2" style={{ fontSize: 16, animation: "spin 1s linear infinite" }} />Aguarde…</>
             ) : mode === "login" ? "Entrar na conta" : "Enviar link de recuperação"}
           </button>
