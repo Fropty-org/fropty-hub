@@ -20,7 +20,7 @@ export default function NotFound() {
         WebkitBackgroundClip: "text",
         WebkitTextFillColor: "transparent",
         marginBottom: 16,
-        fontFamily: "var(--font-plus-jakarta), sans-serif",
+        fontFamily: "var(--font-dm-sans), sans-serif",
       }}>404</div>
       <h1 style={{ fontSize: "1.5rem", fontWeight: 800, color: "var(--text)", margin: "0 0 8px" }}>
         Página não encontrada

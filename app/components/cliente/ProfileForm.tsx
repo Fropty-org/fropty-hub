@@ -2,6 +2,7 @@
 
 import { useRef, useState, useTransition } from "react";
 import { updateProfile } from "@/app/actions/profile";
+import { User, Save, CheckCircle, XCircle } from "lucide-react";
 
 interface Props {
   name:  string;
@@ -26,7 +27,7 @@ export default function ProfileForm({ name, email }: Props) {
   return (
     <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "28px 28px 24px" }}>
       <h2 style={{ margin: "0 0 20px", fontSize: "1rem", fontWeight: 700, color: "var(--text)" }}>
-        <i className="ti ti-user" style={{ marginRight: 8 }} />
+        <User size={14} style={{ marginRight: 8 }} />
         Dados pessoais
       </h2>
       <form ref={formRef} onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: 420 }}>
@@ -64,12 +65,12 @@ export default function ProfileForm({ name, email }: Props) {
             disabled={isPending}
             style={{ padding: "10px 22px", borderRadius: 9, border: "none", background: "#185FA5", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: isPending ? "not-allowed" : "pointer", fontFamily: "inherit", opacity: isPending ? 0.7 : 1 }}
           >
-            <i className="ti ti-device-floppy" style={{ marginRight: 6 }} />
+            <Save size={14} style={{ marginRight: 6 }} />
             {isPending ? "Salvando…" : "Salvar alterações"}
           </button>
           {msg && (
             <p style={{ margin: 0, fontSize: "13px", fontWeight: 600, color: msg.type === "success" ? "#22c55e" : "#ef4444" }}>
-              <i className={`ti ${msg.type === "success" ? "ti-circle-check" : "ti-circle-x"}`} style={{ marginRight: 5 }} />
+              {msg.type === "success" ? <CheckCircle size={14} style={{ marginRight: 5 }} /> : <XCircle size={14} style={{ marginRight: 5 }} />}
               {msg.text}
             </p>
           )}

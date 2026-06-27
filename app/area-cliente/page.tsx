@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { createClient } from "@/app/lib/supabase/browser";
+import { Sun, Moon, ArrowLeft, AlertCircle, CheckCircle, Loader2 } from "lucide-react";
 
 type Mode = "login" | "reset";
 
@@ -28,15 +29,15 @@ export default function AreaClientePage() {
   const [theme, setTheme] = useState<"dark" | "light">("dark");
 
   useEffect(() => {
-    const saved = (localStorage.getItem("theme") as "dark" | "light") || "dark";
+    const saved = (localStorage.getItem("fropty-theme") ?? localStorage.getItem("theme") ?? "dark") as "dark" | "light";
     setTheme(saved);
   }, []);
 
   function toggleTheme() {
     const next = theme === "dark" ? "light" : "dark";
     setTheme(next);
-    document.documentElement.setAttribute("data-theme", next);
-    localStorage.setItem("theme", next);
+    document.documentElement.classList.toggle("dark", next === "dark");
+    localStorage.setItem("fropty-theme", next);
   }
 
   function changeMode(m: Mode) { setMode(m); setError(null); setSuccess(null); }
@@ -82,12 +83,12 @@ export default function AreaClientePage() {
           fontSize: 18, zIndex: 50,
         }}
       >
-        <i className={`ti ${theme === "dark" ? "ti-sun" : "ti-moon"}`} />
+        {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
       </button>
 
       <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 36, textDecoration: "none" }}>
         <Image src="/hub-logo.png" alt="FroptyHub" width={32} height={32} style={{ borderRadius: 8 }} />
-        <span style={{ fontSize: 18, fontWeight: 800, color: "var(--text)", fontFamily: "var(--font-plus-jakarta), sans-serif" }}>
+        <span style={{ fontSize: 18, fontWeight: 800, color: "var(--text)", fontFamily: "var(--font-dm-sans), sans-serif" }}>
           Fropty<span style={{ color: "var(--primary)" }}>Hub</span>
         </span>
       </Link>
@@ -101,7 +102,7 @@ export default function AreaClientePage() {
       }}>
         {mode === "login" && (
           <div style={{ marginBottom: 24 }}>
-            <h2 style={{ fontSize: "1.2rem", fontWeight: 800, color: "var(--text)", margin: "0 0 6px", fontFamily: "var(--font-plus-jakarta), sans-serif" }}>
+            <h2 style={{ fontSize: "1.2rem", fontWeight: 800, color: "var(--text)", margin: "0 0 6px", fontFamily: "var(--font-dm-sans), sans-serif" }}>
               Área do cliente
             </h2>
             <p style={{ fontSize: 13, color: "var(--text-muted)", margin: 0 }}>
@@ -113,9 +114,9 @@ export default function AreaClientePage() {
         {mode === "reset" && (
           <div style={{ marginBottom: 24 }}>
             <button onClick={() => changeMode("login")} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)", padding: 0, display: "flex", alignItems: "center", gap: 6, fontSize: 13, marginBottom: 16, fontFamily: "inherit" }}>
-              <i className="ti ti-arrow-left" style={{ fontSize: 14 }} /> Voltar ao login
+              <ArrowLeft size={14} /> Voltar ao login
             </button>
-            <h2 style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--text)", margin: "0 0 6px", fontFamily: "var(--font-plus-jakarta), sans-serif" }}>
+            <h2 style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--text)", margin: "0 0 6px", fontFamily: "var(--font-dm-sans), sans-serif" }}>
               Recuperar senha
             </h2>
             <p style={{ fontSize: 13, color: "var(--text-muted)", margin: 0 }}>
@@ -161,13 +162,13 @@ export default function AreaClientePage() {
 
           {shownError && (
             <div style={{ padding: "10px 14px", borderRadius: 10, background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.25)", color: "#ef4444", fontSize: 13, display: "flex", alignItems: "center", gap: 8 }}>
-              <i className="ti ti-alert-circle" style={{ fontSize: 15, flexShrink: 0 }} />{shownError}
+              <AlertCircle size={15} style={{ flexShrink: 0 }} />{shownError}
             </div>
           )}
 
           {success && (
             <div style={{ padding: "10px 14px", borderRadius: 10, background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.25)", color: "#22c55e", fontSize: 13, display: "flex", alignItems: "center", gap: 8 }}>
-              <i className="ti ti-circle-check" style={{ fontSize: 15, flexShrink: 0 }} />{success}
+              <CheckCircle size={15} style={{ flexShrink: 0 }} />{success}
             </div>
           )}
 
@@ -180,7 +181,7 @@ export default function AreaClientePage() {
             display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
           }}>
             {(mode === "login" ? loginSubmitting : isPending) ? (
-              <><i className="ti ti-loader-2" style={{ fontSize: 16, animation: "spin 1s linear infinite" }} />Aguarde…</>
+              <><Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} />Aguarde…</>
             ) : mode === "login" ? "Entrar na conta" : "Enviar link de recuperação"}
           </button>
         </form>

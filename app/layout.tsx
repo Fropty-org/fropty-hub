@@ -1,16 +1,11 @@
 import type { Metadata } from "next";
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { DM_Sans } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
-  display: "swap",
-});
-
-const plusJakarta = Plus_Jakarta_Sans({
-  variable: "--font-plus-jakarta",
-  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
 
@@ -104,27 +99,27 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pt-BR" data-theme="dark">
+    <html lang="pt-BR">
       <head>
         <link rel="icon" type="image/png" href="/logo-icon.png" />
         <link rel="apple-touch-icon" href="/logo-icon.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="Fropty" />
+        <meta name="apple-mobile-web-app-title" content="Fropty Hub" />
         <meta name="theme-color" content="#040316" />
         <meta name="mobile-web-app-capable" content="yes" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaOrg) }}
         />
-        {/* Theme init — runs before paint to avoid flash */}
+        {/* Theme init — runs before paint to avoid flash (padrão ecossistema Fropty) */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){var t=localStorage.getItem('theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();`,
+            __html: `(function(){var t=localStorage.getItem('fropty-theme')||localStorage.getItem('theme')||'dark';if(t==='dark')document.documentElement.classList.add('dark');})();`,
           }}
         />
       </head>
-      <body className={`${inter.variable} ${plusJakarta.variable} antialiased`}>
+      <body className={`${dmSans.variable} antialiased`}>
         {children}
       </body>
     </html>

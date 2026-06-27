@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/app/lib/supabase/server";
 import { UserRowActions } from "@/app/components/admin/UserRowActions";
 import InviteForm from "./InviteForm";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export const metadata: Metadata = { title: "Usuários — Admin" };
 
@@ -96,7 +97,7 @@ export default async function AdminUsuariosPage({ searchParams }: Props) {
               href={`/admin/usuarios?page=${page - 1}`}
               style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "8px 16px", borderRadius: 9, border: "1px solid var(--border)", background: "var(--card-bg)", color: "var(--text-muted)", fontSize: "13px", fontWeight: 600, textDecoration: "none" }}
             >
-              <i className="ti ti-chevron-left" style={{ fontSize: 14 }} /> Anterior
+              <ChevronLeft size={14} /> Anterior
             </Link>
           )}
           <span style={{ fontSize: "13px", color: "var(--text-faint)", padding: "0 8px" }}>
@@ -107,7 +108,7 @@ export default async function AdminUsuariosPage({ searchParams }: Props) {
               href={`/admin/usuarios?page=${page + 1}`}
               style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "8px 16px", borderRadius: 9, border: "1px solid var(--border)", background: "var(--card-bg)", color: "var(--text-muted)", fontSize: "13px", fontWeight: 600, textDecoration: "none" }}
             >
-              Próxima <i className="ti ti-chevron-right" style={{ fontSize: 14 }} />
+              Próxima <ChevronRight size={14} />
             </Link>
           )}
         </div>

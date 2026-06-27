@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { WHATSAPP_URL, SITE_URL } from "../lib/config";
+import { Headphones, ArrowRight, MessageCircle, Mail, Settings, LucideIcon } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Contato",
@@ -17,9 +18,9 @@ export const metadata: Metadata = {
   },
 };
 
-const CHANNELS = [
+const CHANNELS: { Icon: LucideIcon; color: string; title: string; desc: string; label: string; href: string; external: boolean }[] = [
   {
-    icon: "ti-brand-whatsapp",
+    Icon: MessageCircle,
     color: "#22c55e",
     title: "WhatsApp",
     desc: "Resposta mais rápida. Fale diretamente com nossa equipe.",
@@ -28,7 +29,7 @@ const CHANNELS = [
     external: true,
   },
   {
-    icon: "ti-mail",
+    Icon: Mail,
     color: "var(--primary)",
     title: "E-mail",
     desc: "Para dúvidas detalhadas ou envio de arquivos e referências.",
@@ -37,7 +38,7 @@ const CHANNELS = [
     external: false,
   },
   {
-    icon: "ti-settings",
+    Icon: Settings,
     color: "var(--accent)",
     title: "Configurador",
     desc: "A forma mais rápida de receber um orçamento personalizado.",
@@ -55,7 +56,7 @@ export default function ContatoPage() {
       <section style={{ padding: "80px 24px 100px", textAlign: "center" }}>
         <div style={{ maxWidth: 680, margin: "0 auto" }}>
           <span className="section-chip" style={{ marginBottom: 24, display: "inline-flex" }}>
-            <i className="ti ti-headset" /> Contato
+            <Headphones size={12} /> Contato
           </span>
           <h1 style={{ fontSize: "clamp(1.8rem, 4vw, 2.75rem)", fontWeight: 800, marginBottom: 16, letterSpacing: "-0.02em" }}>
             Fale com a gente
@@ -65,7 +66,7 @@ export default function ContatoPage() {
           </p>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 20, textAlign: "left" }}>
-            {CHANNELS.map(({ icon, color, title, desc, label, href, external }) => (
+            {CHANNELS.map(({ Icon, color, title, desc, label, href, external }) => (
               <div
                 key={title}
                 style={{
@@ -89,7 +90,7 @@ export default function ContatoPage() {
                     justifyContent: "center",
                   }}
                 >
-                  <i className={`ti ${icon}`} style={{ fontSize: 24, color }} />
+                  <Icon size={24} style={{ color }} />
                 </div>
                 <div>
                   <h3 style={{ fontWeight: 700, marginBottom: 6, fontSize: "1.05rem" }}>{title}</h3>
@@ -111,7 +112,7 @@ export default function ContatoPage() {
                   }}
                 >
                   {label}
-                  <i className="ti ti-arrow-right" style={{ fontSize: 14 }} />
+                  <ArrowRight size={14} />
                 </Link>
               </div>
             ))}

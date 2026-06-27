@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/app/lib/supabase/server";
 import { getProfile } from "@/app/lib/auth/session";
+import { ArrowLeft, ClipboardCheck } from "lucide-react";
 import { ResolutionReview } from "@/app/components/suporte/ResolutionReview";
 import type { Database } from "@/app/lib/supabase/types";
 
@@ -45,14 +46,14 @@ export default async function AvaliarPage({ params }: Props) {
           href={`/portal/suporte/${ticketId}`}
           style={{ color: "var(--text-faint)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 5, padding: "5px 10px 5px 8px", borderRadius: 8, border: "1px solid var(--card-border)", background: "var(--card-bg)", fontWeight: 600 }}
         >
-          <i className="ti ti-arrow-left" style={{ fontSize: 13 }} /> Voltar ao chamado
+          <ArrowLeft size={13} /> Voltar ao chamado
         </Link>
       </div>
 
       <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 20, padding: "32px 28px" }}>
         {/* Ícone */}
         <div style={{ width: 56, height: 56, borderRadius: 16, background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.25)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
-          <i className="ti ti-clipboard-check" style={{ fontSize: 26, color: "#22c55e" }} />
+          <ClipboardCheck size={26} style={{ color: "#22c55e" }} />
         </div>
 
         {ref && <p style={{ margin: "0 0 4px", fontSize: "11px", fontWeight: 700, color: "var(--text-faint)", letterSpacing: "0.05em" }}>{ref}</p>}

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getProfile } from "@/app/lib/auth/session";
 import { createClient } from "@/app/lib/supabase/server";
 import { buyTokens, subscribePlan } from "@/app/actions/financeiro";
+import { CheckCircle, Coins, CalendarDays, Badge, BarChart2, FileText, Sparkles, CreditCard, ReceiptX, Package } from "lucide-react";
 import { TokenChart } from "@/app/components/cliente/TokenChart";
 import { getService } from "@/app/lib/constants/services";
 import type { TokenTransaction } from "@/app/lib/types/cliente";
@@ -92,7 +93,7 @@ export default async function FinanceiroPage({ searchParams }: Props) {
             fontWeight: 600,
           }}
         >
-          <i className="ti ti-circle-check" style={{ fontSize: 20 }} />
+          <CheckCircle size={20} />
           {sucesso === "tokens"
             ? "Tokens adquiridos com sucesso! O saldo será atualizado em instantes."
             : "Assinatura ativada! Seus tokens do mês já estão disponíveis."}
@@ -116,7 +117,7 @@ export default async function FinanceiroPage({ searchParams }: Props) {
         <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 16, padding: "24px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
             <div style={{ width: 40, height: 40, borderRadius: 10, background: "rgba(239,159,39,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <i className="ti ti-coins" style={{ fontSize: 22, color: "#EF9F27" }} />
+              <Coins size={22} style={{ color: "#EF9F27" }} />
             </div>
             <p style={{ margin: 0, fontSize: "13px", fontWeight: 600, color: "var(--text-muted)" }}>Saldo de tokens</p>
           </div>
@@ -125,7 +126,7 @@ export default async function FinanceiroPage({ searchParams }: Props) {
           </p>
           {nextPaymentLabel && (
             <p style={{ margin: "8px 0 0", fontSize: "12px", color: "var(--text-muted)", fontWeight: 600 }}>
-              <i className="ti ti-calendar-event" style={{ marginRight: 5, color: "var(--primary)" }} />
+              <CalendarDays size={14} style={{ marginRight: 5, color: "var(--primary)" }} />
               Renova em: {nextPaymentLabel}
             </p>
           )}
@@ -138,7 +139,7 @@ export default async function FinanceiroPage({ searchParams }: Props) {
         <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 16, padding: "24px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
             <div style={{ width: 40, height: 40, borderRadius: 10, background: "rgba(91,87,232,0.12)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <i className="ti ti-badge" style={{ fontSize: 22, color: "var(--primary)" }} />
+              <Badge size={22} style={{ color: "var(--primary)" }} />
             </div>
             <p style={{ margin: 0, fontSize: "13px", fontWeight: 600, color: "var(--text-muted)" }}>Plano ativo</p>
           </div>
@@ -168,7 +169,7 @@ export default async function FinanceiroPage({ searchParams }: Props) {
         <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 16, padding: "24px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
             <div style={{ width: 40, height: 40, borderRadius: 10, background: "rgba(34,197,94,0.12)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <i className="ti ti-chart-bar" style={{ fontSize: 22, color: "#22c55e" }} />
+              <BarChart2 size={22} style={{ color: "#22c55e" }} />
             </div>
             <p style={{ margin: 0, fontSize: "13px", fontWeight: 600, color: "var(--text-muted)" }}>Resumo</p>
           </div>
@@ -195,12 +196,12 @@ export default async function FinanceiroPage({ searchParams }: Props) {
         <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 16, padding: "24px", marginBottom: 32 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", marginBottom: services.length > 0 ? 18 : 0 }}>
             <h2 style={{ fontSize: "1rem", fontWeight: 700, margin: 0, color: "var(--text)", display: "flex", alignItems: "center", gap: 8 }}>
-              <i className="ti ti-file-text" style={{ color: "var(--primary)" }} />
+              <FileText size={14} style={{ color: "var(--primary)" }} />
               Meu contrato
             </h2>
             {contractStart && (
               <span style={{ fontSize: "12px", color: "var(--text-faint)" }}>
-                <i className="ti ti-calendar-event" style={{ marginRight: 6 }} />
+                <CalendarDays size={13} style={{ marginRight: 6 }} />
                 Início em {new Date(`${contractStart}T00:00:00`).toLocaleDateString("pt-BR")}
                 {nextPaymentLabel && ` · próximo pagamento ${nextPaymentLabel}`}
               </span>
@@ -211,14 +212,13 @@ export default async function FinanceiroPage({ searchParams }: Props) {
               {services.map((id) => {
                 const svc = getService(id);
                 const label = svc?.label ?? id;
-                const icon  = svc?.icon ?? "ti-package";
                 const color = svc?.color ?? "var(--primary)";
                 return (
                   <span
                     key={id}
                     style={{ display: "inline-flex", alignItems: "center", gap: 7, background: `${color}14`, border: `1px solid ${color}33`, borderRadius: 999, padding: "6px 12px", fontSize: "12px", fontWeight: 700, color }}
                   >
-                    <i className={`ti ${icon}`} style={{ fontSize: 14 }} />
+                    {svc?.Icon ? <svc.Icon size={14} /> : <Package size={14} />}
                     {label}
                   </span>
                 );
@@ -232,7 +232,7 @@ export default async function FinanceiroPage({ searchParams }: Props) {
       {plan !== "pro" && (
         <div style={{ marginBottom: 32 }}>
           <h2 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: 14, color: "var(--text)", display: "flex", alignItems: "center", gap: 8 }}>
-            <i className="ti ti-sparkles" style={{ color: "var(--primary)" }} />
+            <Sparkles size={14} style={{ color: "var(--primary)" }} />
             {plan === "basico" ? "Migrar para o Plano Pro" : "Assinar plano mensal"}
           </h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 14 }}>
@@ -369,7 +369,7 @@ export default async function FinanceiroPage({ searchParams }: Props) {
                 gap: 6,
               }}
             >
-              <i className="ti ti-credit-card" /> Comprar
+              <CreditCard size={14} /> Comprar
             </button>
           </form>
         </div>
@@ -385,7 +385,7 @@ export default async function FinanceiroPage({ searchParams }: Props) {
 
       {transactions.length === 0 ? (
         <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "40px 24px", textAlign: "center" }}>
-          <i className="ti ti-receipt-off" style={{ fontSize: 36, color: "var(--text-faint)", display: "block", marginBottom: 10 }} />
+          <ReceiptX size={36} style={{ color: "var(--text-faint)", display: "block", marginBottom: 10 }} />
           <p style={{ color: "var(--text-muted)", margin: 0, fontSize: "14px" }}>Nenhuma movimentação ainda.</p>
         </div>
       ) : (

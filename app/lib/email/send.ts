@@ -31,7 +31,7 @@ function baseTemplate(content: string) {
   return `<!DOCTYPE html>
 <html lang="pt-BR">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FroptyHub</title></head>
-<body style="margin:0;padding:0;background:#040316;font-family:'Inter',sans-serif;">
+<body style="margin:0;padding:0;background:#040316;font-family:'DM Sans',Arial,sans-serif;">
   <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;margin:32px auto;">
     <tr><td style="padding:0 24px 32px;">
       <!-- Logo -->

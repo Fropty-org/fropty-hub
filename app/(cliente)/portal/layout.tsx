@@ -46,10 +46,10 @@ export default async function PortalLayout({
   const isAdmin = profile?.role === "admin";
 
   const portalNav = [
-    { id: "dashboard",  href: "/portal/dashboard",  icon: "ti-layout-dashboard", label: "Painel" },
-    { id: "suporte",    href: "/portal/suporte",    icon: "ti-message-circle",   label: "Suporte", badge: openTickets ?? 0 },
-    { id: "financeiro", href: "/portal/financeiro", icon: "ti-credit-card",      label: "Financeiro" },
-    { id: "perfil",     href: "/portal/perfil",     icon: "ti-user-circle",      label: "Meu Perfil" },
+    { id: "dashboard",  href: "/portal/dashboard",  icon: "LayoutDashboard", label: "Painel" },
+    { id: "suporte",    href: "/portal/suporte",    icon: "MessageCircle",   label: "Suporte", badge: openTickets ?? 0 },
+    { id: "financeiro", href: "/portal/financeiro", icon: "CreditCard",      label: "Financeiro" },
+    { id: "perfil",     href: "/portal/perfil",     icon: "UserCircle",      label: "Meu Perfil" },
   ];
 
   // Objeto compatível com ClientUser (campos mínimos necessários)

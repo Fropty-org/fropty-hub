@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
+import { Info, Target, Star, Heart, ShieldCheck, Zap, Headphones, LucideIcon } from "lucide-react";
 import { SITE_URL } from "../lib/config";
 
 export const metadata: Metadata = {
@@ -19,10 +20,10 @@ export const metadata: Metadata = {
 };
 
 const VALUES = [
-  { icon: "ti-heart", title: "Foco no cliente", text: "Cada app é construído com atenção às necessidades reais do seu negócio, não a templates prontos." },
-  { icon: "ti-shield-check", title: "Transparência total", text: "Você vê o progresso em tempo real. Sem surpresas no prazo, no preço ou no que será entregue." },
-  { icon: "ti-bolt", title: "Entrega rápida", text: "Prévia funcional em dias, não meses. Iteramos rápido para que você teste e valide logo de cara." },
-  { icon: "ti-headset", title: "Suporte contínuo", text: "Após a entrega, os planos de manutenção garantem que seu app evolua junto com o seu negócio." },
+  { Icon: Heart, title: "Foco no cliente", text: "Cada app é construído com atenção às necessidades reais do seu negócio, não a templates prontos." },
+  { Icon: ShieldCheck, title: "Transparência total", text: "Você vê o progresso em tempo real. Sem surpresas no prazo, no preço ou no que será entregue." },
+  { Icon: Zap, title: "Entrega rápida", text: "Prévia funcional em dias, não meses. Iteramos rápido para que você teste e valide logo de cara." },
+  { Icon: Headphones, title: "Suporte contínuo", text: "Após a entrega, os planos de manutenção garantem que seu app evolua junto com o seu negócio." },
 ];
 
 export default function SobrePage() {
@@ -34,7 +35,7 @@ export default function SobrePage() {
       <section style={{ padding: "80px 24px 60px", textAlign: "center" }}>
         <div style={{ maxWidth: 640, margin: "0 auto" }}>
           <span className="section-chip" style={{ marginBottom: 24, display: "inline-flex" }}>
-            <i className="ti ti-info-circle" /> Sobre nós
+            <Info size={12} /> Sobre nós
           </span>
           <h1
             style={{
@@ -74,7 +75,7 @@ export default function SobrePage() {
         >
           <div>
             <span className="section-chip" style={{ marginBottom: 20, display: "inline-flex" }}>
-              <i className="ti ti-target" /> Nossa missão
+              <Target size={12} /> Nossa missão
             </span>
             <p style={{ fontSize: "1.05rem", color: "var(--text-muted)", lineHeight: 1.8, margin: 0 }}>
               Democratizar o desenvolvimento de software. Qualquer pessoa com uma boa ideia — seja um
@@ -103,14 +104,14 @@ export default function SobrePage() {
         <div style={{ maxWidth: 900, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 48 }}>
             <span className="section-chip" style={{ marginBottom: 16, display: "inline-flex" }}>
-              <i className="ti ti-star" /> Nossos valores
+              <Star size={12} /> Nossos valores
             </span>
             <h2 style={{ fontSize: "1.75rem", fontWeight: 700, margin: "12px 0 0" }}>
               O que nos guia em cada projeto
             </h2>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 20 }}>
-            {VALUES.map(({ icon, title, text }) => (
+            {VALUES.map(({ Icon, title, text }) => (
               <div
                 key={title}
                 style={{
@@ -132,7 +133,7 @@ export default function SobrePage() {
                     marginBottom: 16,
                   }}
                 >
-                  <i className={`ti ${icon}`} style={{ fontSize: 22, color: "var(--primary)" }} />
+                  <Icon size={22} style={{ color: "var(--primary)" }} />
                 </div>
                 <h3 style={{ fontWeight: 700, marginBottom: 8, fontSize: "1rem" }}>{title}</h3>
                 <p style={{ fontSize: "0.9rem", color: "var(--text-muted)", lineHeight: 1.6, margin: 0 }}>{text}</p>

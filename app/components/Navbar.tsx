@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ThemeToggle } from "./ThemeToggle";
 import { MobileNav } from "./MobileNav";
+import { LogIn } from "lucide-react";
 
 const NAV_LINKS = [
   { href: "/#planos",    label: "Planos" },
@@ -52,7 +53,7 @@ export function Navbar() {
               gap: 6,
             }}
           >
-            <i className="ti ti-login-2" style={{ fontSize: 14 }} />
+            <LogIn size={14} />
             Entrar
           </Link>
           <Link

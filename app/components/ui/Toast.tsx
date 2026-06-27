@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { CheckCircle, XCircle, Info, AlertTriangle, X } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 type ToastType = "success" | "error" | "info" | "warning";
 
@@ -11,11 +13,11 @@ interface ToastProps {
   onClose: () => void;
 }
 
-const icons: Record<ToastType, string> = {
-  success: "ti-circle-check",
-  error: "ti-circle-x",
-  info: "ti-info-circle",
-  warning: "ti-alert-triangle",
+const icons: Record<ToastType, LucideIcon> = {
+  success: CheckCircle,
+  error: XCircle,
+  info: Info,
+  warning: AlertTriangle,
 };
 
 const colors: Record<ToastType, string> = {
@@ -58,10 +60,7 @@ export function Toast({ message, type = "info", duration = 4000, onClose }: Toas
         transition: "transform 0.3s ease, opacity 0.3s ease",
       }}
     >
-      <i
-        className={`ti ${icons[type]}`}
-        style={{ fontSize: "20px", color: colors[type], flexShrink: 0 }}
-      />
+      {(() => { const Icon = icons[type]; return <Icon size={20} style={{ color: colors[type], flexShrink: 0 }} />; })()}
       <p style={{ margin: 0, fontSize: "14px", color: "var(--text)", lineHeight: 1.4 }}>{message}</p>
       <button
         onClick={() => { setVisible(false); setTimeout(onClose, 300); }}
@@ -75,7 +74,7 @@ export function Toast({ message, type = "info", duration = 4000, onClose }: Toas
           flexShrink: 0,
         }}
       >
-        <i className="ti ti-x" style={{ fontSize: "16px" }} />
+        <X size={16} />
       </button>
     </div>
   );

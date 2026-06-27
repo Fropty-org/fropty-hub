@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { createClient } from "@/app/lib/supabase/server";
+import { TrendingUp, Users, ArrowDownLeft, ArrowUpRight } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 export const metadata: Metadata = { title: "Financeiro — Admin" };
 
@@ -32,16 +34,16 @@ export default async function AdminFinanceiroPage() {
 
       {/* KPIs */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16, marginBottom: 32 }}>
-        {[
-          { label: "MRR",         value: `R$${mrr.toFixed(2).replace(".", ",")}`, icon: "ti-trending-up", color: "#22c55e" },
-          { label: "Assinantes",  value: assinantes.length,  icon: "ti-users",          color: "var(--primary)" },
-          { label: "Tokens emitidos (últimos 30 tx)", value: totalCredits, icon: "ti-arrow-down-left", color: "#EF9F27" },
-          { label: "Tokens gastos (últimos 30 tx)", value: totalDebits, icon: "ti-arrow-up-right", color: "#ef4444" },
-        ].map((k) => (
+        {([
+          { label: "MRR",         value: `R$${mrr.toFixed(2).replace(".", ",")}`, Icon: TrendingUp,    color: "#22c55e" },
+          { label: "Assinantes",  value: assinantes.length,  Icon: Users,           color: "var(--primary)" },
+          { label: "Tokens emitidos (últimos 30 tx)", value: totalCredits, Icon: ArrowDownLeft, color: "#EF9F27" },
+          { label: "Tokens gastos (últimos 30 tx)", value: totalDebits, Icon: ArrowUpRight,  color: "#ef4444" },
+        ] as { label: string; value: string | number; Icon: LucideIcon; color: string }[]).map((k) => (
           <div key={k.label} style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 16, padding: "22px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
               <div style={{ width: 38, height: 38, borderRadius: 10, background: `${k.color}15`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <i className={`ti ${k.icon}`} style={{ fontSize: 20, color: k.color }} />
+                <k.Icon size={20} style={{ color: k.color }} />
               </div>
               <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--text-muted)" }}>{k.label}</span>
             </div>

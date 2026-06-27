@@ -3,14 +3,15 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { createClient } from "@/app/lib/supabase/browser";
 import type { Database } from "@/app/lib/supabase/types";
+import { Bell, BellOff, Ticket, CheckCircle, MessageCircle, UserPlus, type LucideIcon } from "lucide-react";
 
 type Notification = Database["public"]["Tables"]["notifications"]["Row"];
 
-const TYPE_ICON: Record<string, string> = {
-  ticket_opened:  "ti-ticket",
-  ticket_updated: "ti-circle-check",
-  ticket_message: "ti-message-circle",
-  client_joined:  "ti-user-plus",
+const TYPE_ICON: Record<string, LucideIcon> = {
+  ticket_opened:  Ticket,
+  ticket_updated: CheckCircle,
+  ticket_message: MessageCircle,
+  client_joined:  UserPlus,
 };
 
 const TYPE_COLOR: Record<string, string> = {
@@ -122,7 +123,7 @@ export function NotificationBell({ userId }: { userId: string }) {
           flexShrink: 0, transition: "background 0.15s",
         }}
       >
-        <i className="ti ti-bell" style={{ fontSize: 17 }} />
+        <Bell size={17} />
         {unread > 0 && (
           <span style={{
             position: "absolute", top: 2, right: 2,
@@ -169,7 +170,7 @@ export function NotificationBell({ userId }: { userId: string }) {
           <div style={{ maxHeight: 360, overflowY: "auto" }}>
             {notifications.length === 0 ? (
               <p style={{ padding: "28px 16px", textAlign: "center", color: "var(--text-faint)", fontSize: "13px", margin: 0 }}>
-                <i className="ti ti-bell-off" style={{ display: "block", fontSize: 22, marginBottom: 8 }} />
+                <BellOff size={22} style={{ display: "block", marginBottom: 8 }} />
                 Nenhuma notificacao
               </p>
             ) : (
@@ -189,7 +190,7 @@ export function NotificationBell({ userId }: { userId: string }) {
                     background: `${TYPE_COLOR[n.type] ?? "#888"}18`,
                     display: "flex", alignItems: "center", justifyContent: "center",
                   }}>
-                    <i className={`ti ${TYPE_ICON[n.type] ?? "ti-bell"}`} style={{ fontSize: 14, color: TYPE_COLOR[n.type] ?? "#888" }} />
+                    {(() => { const Icon = TYPE_ICON[n.type] ?? Bell; return <Icon size={14} style={{ color: TYPE_COLOR[n.type] ?? "#888" }} />; })()}
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <p style={{ margin: "0 0 2px", fontSize: "12px", fontWeight: n.read_at ? 600 : 700, color: "var(--text)", display: "flex", justifyContent: "space-between", gap: 8 }}>

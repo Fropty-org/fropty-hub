@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getProfile } from "@/app/lib/auth/session";
 import { createClient } from "@/app/lib/supabase/server";
+import { CalendarDays, LayoutGrid, Coins, MessageCircle, MessagePlus, CreditCard } from "lucide-react";
 import { OnboardingBanner } from "@/app/components/cliente/OnboardingBanner";
 import { WHATSAPP_URL } from "@/app/lib/config";
 import { getService } from "@/app/lib/constants/services";
@@ -59,10 +60,10 @@ export default async function PortalDashboardPage() {
         }}
       >
         {[
-          { icon: "ti-apps",          label: "Serviços ativos",    value: services.length,  color: "var(--primary)" },
-          { icon: "ti-coins",         label: "Tokens disponíveis", value: tokenBalance,     color: "#EF9F27" },
-          { icon: "ti-message-circle",label: "Chamados abertos",   value: openTickets ?? 0, color: "#22c55e" },
-        ].map(({ icon, label, value, color }) => (
+          { Icon: LayoutGrid,    label: "Serviços ativos",    value: services.length,  color: "var(--primary)" },
+          { Icon: Coins,         label: "Tokens disponíveis", value: tokenBalance,     color: "#EF9F27" },
+          { Icon: MessageCircle, label: "Chamados abertos",   value: openTickets ?? 0, color: "#22c55e" },
+        ].map(({ Icon, label, value, color }) => (
           <div
             key={label}
             style={{
@@ -87,7 +88,7 @@ export default async function PortalDashboardPage() {
                 flexShrink: 0,
               }}
             >
-              <i className={`ti ${icon}`} style={{ fontSize: 20, color }} />
+              <Icon size={20} style={{ color }} />
             </div>
             <div>
               <p style={{ margin: 0, fontSize: "22px", fontWeight: 800, color: "var(--text)" }}>{value}</p>
@@ -126,9 +127,9 @@ export default async function PortalDashboardPage() {
           >
             {services.map((id) => {
               const svc = getService(id);
-              const label = svc?.label ?? id;
-              const icon  = svc?.icon ?? "ti-package";
-              const color = svc?.color ?? "var(--primary)";
+              const label   = svc?.label ?? id;
+              const SvcIcon = svc?.Icon;
+              const color   = svc?.color ?? "var(--primary)";
               return (
                 <div
                   key={id}
@@ -143,7 +144,7 @@ export default async function PortalDashboardPage() {
                   }}
                 >
                   <div style={{ width: 38, height: 38, borderRadius: 10, background: `${color}1f`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                    <i className={`ti ${icon}`} style={{ fontSize: 19, color }} />
+                    {SvcIcon && <SvcIcon size={19} style={{ color }} />}
                   </div>
                   <div style={{ minWidth: 0 }}>
                     <p style={{ margin: 0, fontSize: "14px", fontWeight: 700, color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{label}</p>
@@ -156,7 +157,7 @@ export default async function PortalDashboardPage() {
 
           {contractStart && (
             <p style={{ margin: "-20px 0 36px", fontSize: "12px", color: "var(--text-faint)" }}>
-              <i className="ti ti-calendar-event" style={{ marginRight: 6 }} />
+              <CalendarDays size={14} style={{ marginRight: 6 }} />
               Contrato iniciado em {new Date(contractStart).toLocaleDateString("pt-BR")}
             </p>
           )}
@@ -170,10 +171,10 @@ export default async function PortalDashboardPage() {
         </h2>
         <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
           {[
-            { href: "/portal/suporte/novo", icon: "ti-message-plus",     color: "var(--primary)", label: "Abrir chamado" },
-            { href: "/portal/financeiro",   icon: "ti-credit-card",      color: "#EF9F27",        label: "Financeiro" },
-            { href: WHATSAPP_URL,           icon: "ti-brand-whatsapp",   color: "#22c55e",        label: "Falar no WhatsApp", external: true },
-          ].map(({ href, icon, color, label, external }) => (
+            { href: "/portal/suporte/novo", Icon: MessagePlus,    color: "var(--primary)", label: "Abrir chamado" },
+            { href: "/portal/financeiro",   Icon: CreditCard,     color: "#EF9F27",        label: "Financeiro" },
+            { href: WHATSAPP_URL,           Icon: MessageCircle,  color: "#22c55e",        label: "Falar no WhatsApp", external: true },
+          ].map(({ href, Icon, color, label, external }) => (
             <Link
               key={href}
               href={href}
@@ -194,7 +195,7 @@ export default async function PortalDashboardPage() {
                 transition: "border-color 0.15s",
               }}
             >
-              <i className={`ti ${icon}`} style={{ color }} /> {label}
+              <Icon size={16} style={{ color }} /> {label}
             </Link>
           ))}
         </div>

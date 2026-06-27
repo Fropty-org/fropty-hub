@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useTransition, useCallback } from "react";
 import { createClient } from "@/app/lib/supabase/browser";
 import { sendMessage } from "@/app/actions/suporte";
+import { Loader2, Image as ImageIcon, File, X, Lock, AlertCircle, Paperclip } from "lucide-react";
 import type { Database } from "@/app/lib/supabase/types";
 import type { TicketStatus } from "@/app/lib/types/cliente";
 
@@ -18,10 +19,12 @@ interface Props {
   clientName?:     string;
 }
 
+import { User, Headphones } from "lucide-react";
+
 // Identidade visual de cada papel na conversa
 const ROLE_META = {
-  cliente: { fallback: "Cliente",       color: "#3b82f6", icon: "ti-user" },
-  equipe:  { fallback: "Equipe Fropty", color: "var(--primary)", icon: "ti-headset" },
+  cliente: { fallback: "Cliente",       color: "#3b82f6", Icon: User },
+  equipe:  { fallback: "Equipe Fropty", color: "var(--primary)", Icon: Headphones },
 };
 
 export function TicketConversation({
@@ -228,7 +231,7 @@ export function TicketConversation({
               background: `${meta.color}1f`, border: `1px solid ${meta.color}40`,
               display: "flex", alignItems: "center", justifyContent: "center",
             }}>
-              <i className={`ti ${meta.icon}`} style={{ fontSize: 13, color: meta.color }} />
+              <meta.Icon size={13} style={{ color: meta.color }} />
             </div>
           );
 
@@ -258,7 +261,7 @@ export function TicketConversation({
                 {avatar}
                 <span style={{ fontWeight: 700, color: meta.color }}>{senderLabel}</span>
                 <span>{time}</span>
-                {isOpt && <i className="ti ti-loader-2" style={{ fontSize: 11, animation: "spin 1s linear infinite" }} />}
+                {isOpt && <Loader2 size={11} style={{ animation: "spin 1s linear infinite" }} />}
               </div>
 
               {/* Bubble */}
@@ -302,7 +305,7 @@ export function TicketConversation({
                             opacity: url ? 1 : 0.5,
                           }}
                         >
-                          <i className={`ti ${isImg ? "ti-photo" : "ti-file"}`} style={{ fontSize: 13 }} />
+                          {isImg ? <ImageIcon size={13} /> : <File size={13} />}
                           {name.length > 28 ? name.slice(0, 25) + "…" : name}
                         </a>
                       );
@@ -334,14 +337,14 @@ export function TicketConversation({
             gap: 8,
           }}
         >
-          <i className="ti ti-lock" />
+          <Lock size={14} />
           Este chamado está encerrado.
         </div>
       ) : (
         <div className="conv-reply" style={{ padding: "16px 20px" }}>
           {error && (
             <p style={{ margin: "0 0 10px", fontSize: "12px", color: "#ef4444", display: "flex", alignItems: "center", gap: 5 }}>
-              <i className="ti ti-alert-circle" /> {error}
+              <AlertCircle size={14} /> {error}
             </p>
           )}
 
@@ -363,14 +366,14 @@ export function TicketConversation({
                     color: "var(--text-muted)",
                   }}
                 >
-                  <i className="ti ti-file" style={{ fontSize: 12 }} />
+                  <File size={12} />
                   <span style={{ maxWidth: 120, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{f.name}</span>
                   <button
                     type="button"
                     onClick={() => setFiles((prev) => prev.filter((_, j) => j !== i))}
                     style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-faint)", padding: 0, display: "flex", fontFamily: "inherit" }}
                   >
-                    <i className="ti ti-x" style={{ fontSize: 11 }} />
+                    <X size={11} />
                   </button>
                 </div>
               ))}
@@ -421,7 +424,7 @@ export function TicketConversation({
                 opacity: files.length >= 5 ? 0.4 : 1,
               }}
             >
-              <i className="ti ti-paperclip" style={{ fontSize: 16 }} />
+              <Paperclip size={16} />
             </button>
 
             <textarea

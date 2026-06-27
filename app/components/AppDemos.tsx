@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { Lock, RefreshCw, ChevronLeft, ChevronRight, Smartphone, LayoutDashboard, Monitor } from "lucide-react";
 import { ConsultorioApp } from "./demos/ConsultorioApp";
 import { OficinaApp } from "./demos/OficinaApp";
 import { DocesApp } from "./demos/DocesApp";
@@ -109,10 +110,10 @@ function DesktopFrame({ children, accent }: { children: React.ReactNode; accent:
           <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#28c840" }} />
         </div>
         <div style={{ flex: 1, height: 20, background: "#1a2035", borderRadius: 5, display: "flex", alignItems: "center", padding: "0 10px", gap: 4 }}>
-          <i className="ti ti-lock" style={{ fontSize: 9, color: "#64748b" }} />
+          <Lock size={9} style={{ color: "#64748b" }} />
           <span style={{ fontSize: 9, color: "#64748b" }}>app.fropty.com</span>
         </div>
-        <i className="ti ti-refresh" style={{ fontSize: 11, color: "#64748b" }} />
+        <RefreshCw size={11} style={{ color: "#64748b" }} />
       </div>
       <div style={{ height: 360, background: "#f8fafc", overflow: "hidden", display: "flex", flexDirection: "column" }}>
         {children}
@@ -143,7 +144,7 @@ function DashboardFrame({ children, accent }: { children: React.ReactNode; accen
           <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#28c840" }} />
         </div>
         <div style={{ flex: 1, height: 18, background: "#0d1117", borderRadius: 5, display: "flex", alignItems: "center", padding: "0 10px", gap: 4 }}>
-          <i className="ti ti-lock" style={{ fontSize: 9, color: "#334155" }} />
+          <Lock size={9} style={{ color: "#334155" }} />
           <span style={{ fontSize: 9, color: "#334155" }}>dashboard.fropty.com</span>
         </div>
         <div style={{ width: 8, height: 8, borderRadius: "50%", background: accent, opacity: 0.7 }} />
@@ -287,7 +288,7 @@ function Carousel({ items, type }: {
           zIndex: 10,
         }}
       >
-        <i className="ti ti-chevron-left" style={{ fontSize: 18 }} />
+        <ChevronLeft size={18} />
       </button>
       <button
         onClick={next}
@@ -307,7 +308,7 @@ function Carousel({ items, type }: {
           zIndex: 10,
         }}
       >
-        <i className="ti ti-chevron-right" style={{ fontSize: 18 }} />
+        <ChevronRight size={18} />
       </button>
 
       {/* Dots */}
@@ -353,14 +354,14 @@ export default function AppDemos() {
         {/* Header */}
         <div style={{ textAlign: "center", marginBottom: 32 }}>
           <span className="section-chip" style={{ marginBottom: 16, display: "inline-flex" }}>
-            <i className="ti ti-device-mobile" style={{ fontSize: 13 }} />
+            <Smartphone size={13} />
             Exemplos reais
           </span>
           <h2 style={{
             fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
             fontWeight: 800, lineHeight: 1.1,
             color: "var(--text)",
-            fontFamily: "var(--font-plus-jakarta), sans-serif",
+            fontFamily: "var(--font-dm-sans), sans-serif",
             margin: "0 0 12px",
           }}>
             Veja o que é possível
@@ -374,10 +375,10 @@ export default function AppDemos() {
         <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
           <div style={{ position: "relative", display: "inline-flex", borderBottom: "1px solid var(--border)" }}>
             {([
-              { v: "mobile",    label: "Mobile",      icon: "ti-device-mobile"  },
-              { v: "desktop",   label: "Computador",  icon: "ti-device-laptop"  },
-              { v: "dashboard", label: "Dashboard",   icon: "ti-layout-dashboard" },
-            ] as const).map(({ v, label, icon }) => (
+              { v: "mobile",    label: "Mobile",      Icon: Smartphone      },
+              { v: "desktop",   label: "Computador",  Icon: Monitor         },
+              { v: "dashboard", label: "Dashboard",   Icon: LayoutDashboard },
+            ] as const).map(({ v, label, Icon }) => (
               <button
                 key={v}
                 onClick={() => setView(v)}
@@ -390,7 +391,7 @@ export default function AppDemos() {
                   display: "flex", alignItems: "center", gap: 6,
                 }}
               >
-                <i className={`ti ${icon}`} style={{ fontSize: 15 }} />
+                <Icon size={15} />
                 {label}
               </button>
             ))}

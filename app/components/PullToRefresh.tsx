@@ -2,6 +2,7 @@
 
 import { useRef, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 const THRESHOLD    = 72;  // px necessários para acionar o refresh
 const MAX_PULL     = 100; // px máximo de arrasto visual
@@ -78,7 +79,7 @@ export function PullToRefresh({ children }: { children: React.ReactNode }) {
         }}
       >
         {refreshing ? (
-          <i className="ti ti-loader-2" style={{ fontSize: 18, color: "var(--primary)", animation: "spin 0.7s linear infinite" }} />
+          <Loader2 size={18} style={{ color: "var(--primary)", animation: "spin 0.7s linear infinite" }} />
         ) : (
           <svg width="18" height="18" viewBox="0 0 18 18" style={{ transform: `rotate(${progress * 180}deg)`, transition: "transform 0.1s", color: ready ? "var(--primary)" : "var(--text-faint)" }}>
             <path d="M9 3v10M5 9l4 4 4-4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none" />

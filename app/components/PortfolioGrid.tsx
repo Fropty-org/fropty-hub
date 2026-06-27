@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { PORTFOLIO, CATEGORIES, type Category } from "../lib/data/portfolio";
+import { ArrowRight, Frown } from "lucide-react";
 
 export function PortfolioGrid() {
   const [active, setActive] = useState<Category>("todos");
@@ -17,7 +18,7 @@ export function PortfolioGrid() {
 
         {/* Filter tabs */}
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center", marginBottom: 40 }}>
-          {CATEGORIES.map(({ id, label, icon }) => {
+          {CATEGORIES.map(({ id, label, Icon }) => {
             const isActive = active === id;
             return (
               <button
@@ -38,7 +39,7 @@ export function PortfolioGrid() {
                   color: isActive ? "var(--primary)" : "var(--text-muted)",
                 }}
               >
-                <i className={`ti ${icon}`} style={{ fontSize: 14 }} />
+                <Icon size={14} />
                 {label}
               </button>
             );
@@ -102,7 +103,7 @@ export function PortfolioGrid() {
                   flexShrink: 0,
                 }}
               >
-                <i className={`ti ${item.icon}`} style={{ fontSize: 26, color: item.color }} />
+                <item.Icon size={26} style={{ color: item.color }} />
               </div>
 
               {/* Content */}
@@ -148,7 +149,7 @@ export function PortfolioGrid() {
                 }}
               >
                 Quero algo assim
-                <i className="ti ti-arrow-right" style={{ fontSize: 13 }} />
+                <ArrowRight size={13} />
               </Link>
             </div>
           ))}
@@ -156,7 +157,7 @@ export function PortfolioGrid() {
 
         {filtered.length === 0 && (
           <div style={{ textAlign: "center", padding: "60px 0", color: "var(--text-faint)" }}>
-            <i className="ti ti-mood-empty" style={{ fontSize: 40, display: "block", marginBottom: 12 }} />
+            <Frown size={40} style={{ display: "block", marginBottom: 12 }} />
             <p style={{ margin: 0 }}>Nenhum projeto nesta categoria ainda.</p>
           </div>
         )}

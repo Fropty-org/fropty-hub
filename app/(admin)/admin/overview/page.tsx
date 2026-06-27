@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { createClient } from "@/app/lib/supabase/server";
+import { Users, MessageCircle, DollarSign, ChevronRight } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 export const metadata: Metadata = { title: "Visão Geral — Admin" };
 
@@ -27,10 +29,10 @@ export default async function AdminOverviewPage() {
 
   const mrr = (mrrData as unknown as number) ?? 0;
 
-  const kpis = [
-    { label: "Clientes",        value: totalClients ?? 0, icon: "ti-users",          color: "#3b82f6"  },
-    { label: "Tickets abertos", value: openTickets ?? 0,  icon: "ti-message-circle", color: "#EF9F27"  },
-    { label: "MRR",             value: `R$${mrr.toFixed(2).replace(".", ",")}`, icon: "ti-currency-dollar", color: "#22c55e" },
+  const kpis: { label: string; value: string | number; Icon: LucideIcon; color: string }[] = [
+    { label: "Clientes",        value: totalClients ?? 0, Icon: Users,          color: "#3b82f6"  },
+    { label: "Tickets abertos", value: openTickets ?? 0,  Icon: MessageCircle,  color: "#EF9F27"  },
+    { label: "MRR",             value: `R$${mrr.toFixed(2).replace(".", ",")}`, Icon: DollarSign, color: "#22c55e" },
   ];
 
   return (
@@ -46,7 +48,7 @@ export default async function AdminOverviewPage() {
           <div key={k.label} style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 16, padding: "22px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
               <div style={{ width: 38, height: 38, borderRadius: 10, background: `${k.color}15`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <i className={`ti ${k.icon}`} style={{ fontSize: 20, color: k.color }} />
+                <k.Icon size={20} style={{ color: k.color }} />
               </div>
               <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--text-muted)" }}>{k.label}</span>
             </div>
@@ -83,7 +85,7 @@ export default async function AdminOverviewPage() {
                 <span style={{ fontSize: "11px", fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: "rgba(239,68,68,0.1)", color: "#ef4444", border: "1px solid #ef444430" }}>
                   alta
                 </span>
-                <i className="ti ti-chevron-right" style={{ fontSize: 14, color: "var(--text-faint)" }} />
+                <ChevronRight size={14} style={{ color: "var(--text-faint)" }} />
               </span>
             </Link>
           );

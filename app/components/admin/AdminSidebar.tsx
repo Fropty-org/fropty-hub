@@ -6,15 +6,20 @@ import { usePathname } from "next/navigation";
 import { useTransition, useState, useEffect } from "react";
 import { signOut } from "@/app/actions/auth";
 import { PortalThemeToggle } from "@/app/components/cliente/PortalThemeToggle";
+import {
+  LayoutDashboard, Users, CreditCard, MessageCircle, BarChart2, ShieldCheck, UserCircle,
+  ChevronRight, ChevronLeft, X, Menu, LogOut, Loader2,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
-const NAV = [
-  { id: "overview",   href: "/admin/overview",   icon: "ti-layout-dashboard", label: "Visão Geral" },
-  { id: "usuarios",   href: "/admin/usuarios",   icon: "ti-users",            label: "Usuários" },
-  { id: "financeiro", href: "/admin/financeiro", icon: "ti-credit-card",      label: "Financeiro" },
-  { id: "suporte",    href: "/portal/suporte",   icon: "ti-message-circle",   label: "Suporte" },
-  { id: "analytics",  href: "/admin/analytics",  icon: "ti-chart-bar",        label: "Analytics" },
-  { id: "audit",      href: "/admin/audit",      icon: "ti-shield-check",     label: "Auditoria" },
-  { id: "perfil",     href: "/admin/perfil",     icon: "ti-user-circle",      label: "Meu Perfil" },
+const NAV: { id: string; href: string; Icon: LucideIcon; label: string }[] = [
+  { id: "overview",   href: "/admin/overview",   Icon: LayoutDashboard, label: "Visão Geral" },
+  { id: "usuarios",   href: "/admin/usuarios",   Icon: Users,           label: "Usuários" },
+  { id: "financeiro", href: "/admin/financeiro", Icon: CreditCard,      label: "Financeiro" },
+  { id: "suporte",    href: "/portal/suporte",   Icon: MessageCircle,   label: "Suporte" },
+  { id: "analytics",  href: "/admin/analytics",  Icon: BarChart2,       label: "Analytics" },
+  { id: "audit",      href: "/admin/audit",      Icon: ShieldCheck,     label: "Auditoria" },
+  { id: "perfil",     href: "/admin/perfil",     Icon: UserCircle,      label: "Meu Perfil" },
 ];
 
 const COLLAPSED_W = 56;
@@ -61,7 +66,7 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark" }: 
             flexShrink: 0,
           }}
         >
-          <i className="ti ti-menu-2" style={{ fontSize: 18 }} />
+          <Menu size={18} />
         </button>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: 7, textDecoration: "none", flex: 1 }}>
           <Image src="/logo-icon.png" alt="Fropty" width={22} height={22} className="rounded-md portal-logo--dark" />
@@ -122,10 +127,7 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark" }: 
             transition: "background 0.15s, color 0.15s",
           }}
         >
-          <i
-            className={`ti ${collapsed ? "ti-chevron-right" : "ti-chevron-left"}`}
-            style={{ fontSize: 10 }}
-          />
+          {collapsed ? <ChevronRight size={10} /> : <ChevronLeft size={10} />}
         </button>
 
         <button
@@ -133,7 +135,7 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark" }: 
           onClick={() => setMobileOpen(false)}
           aria-label="Fechar menu"
         >
-          <i className="ti ti-x" />
+          <X size={14} />
         </button>
 
         {/* Logo */}
@@ -178,7 +180,7 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark" }: 
         )}
 
         <nav style={{ display: "flex", flexDirection: "column", gap: 4, flex: 1 }}>
-          {NAV.map(({ id, href, icon, label }) => {
+          {NAV.map(({ id, href, Icon, label }) => {
             const isActive = pathname.startsWith(href);
             return (
               <Link
@@ -199,7 +201,7 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark" }: 
                   transition: "background 0.15s, color 0.15s",
                 }}
               >
-                <i className={`ti ${icon}`} style={{ fontSize: collapsed ? 18 : 16, flexShrink: 0 }} />
+                <Icon size={collapsed ? 18 : 16} style={{ flexShrink: 0 }} />
                 {!collapsed && label}
               </Link>
             );
@@ -226,7 +228,7 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark" }: 
             fontFamily: "inherit", width: "100%", textAlign: "left",
           }}
         >
-          <i className={`ti ${pending ? "ti-loader-2" : "ti-logout"}`} style={{ fontSize: collapsed ? 18 : 16 }} />
+          {pending ? <Loader2 size={collapsed ? 18 : 16} style={{ animation: "spin 1s linear infinite" }} /> : <LogOut size={collapsed ? 18 : 16} />}
           {!collapsed && (pending ? "Saindo..." : "Sair")}
         </button>
       </aside>

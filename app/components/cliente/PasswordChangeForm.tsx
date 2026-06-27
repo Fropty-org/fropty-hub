@@ -2,6 +2,7 @@
 
 import { useRef, useState, useTransition } from "react";
 import { SentinelScan } from "@/app/components/auth/SentinelScan";
+import { Lock, Info, CheckCircle, XCircle } from "lucide-react";
 
 interface PasswordStrength {
   score: number; // 0-4
@@ -83,7 +84,7 @@ export default function PasswordChangeForm() {
     <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "28px 28px 24px" }}>
       <SentinelScan active={scanning} />
       <h2 style={{ margin: "0 0 20px", fontSize: "1rem", fontWeight: 700, color: "var(--text)" }}>
-        <i className="ti ti-lock" style={{ marginRight: 8 }} />
+        <Lock size={14} style={{ marginRight: 8 }} />
         Alterar senha
       </h2>
 
@@ -165,7 +166,7 @@ export default function PasswordChangeForm() {
 
         {/* Política */}
         <p style={{ margin: 0, fontSize: "11px", color: "var(--text-faint)", background: "var(--surface)", borderRadius: 8, padding: "10px 12px", lineHeight: 1.7 }}>
-          <i className="ti ti-info-circle" style={{ marginRight: 5 }} />
+          <Info size={14} style={{ marginRight: 5 }} />
           A senha deve ter no mínimo 10 caracteres, com letras maiúsculas e minúsculas, um número e um caractere especial.
         </p>
 
@@ -182,12 +183,12 @@ export default function PasswordChangeForm() {
               opacity: (isPending || (!!newPwd && !!strength && strength.issues.length > 0)) ? 0.6 : 1,
             }}
           >
-            <i className="ti ti-lock-check" style={{ marginRight: 6 }} />
+            <Lock size={14} style={{ marginRight: 6 }} />
             {isPending ? "Alterando…" : "Alterar senha"}
           </button>
           {msg && (
             <p style={{ margin: 0, fontSize: "13px", fontWeight: 600, color: msg.type === "success" ? "#22c55e" : "#ef4444" }}>
-              <i className={`ti ${msg.type === "success" ? "ti-circle-check" : "ti-circle-x"}`} style={{ marginRight: 5 }} />
+              {msg.type === "success" ? <CheckCircle size={14} style={{ marginRight: 5 }} /> : <XCircle size={14} style={{ marginRight: 5 }} />}
               {msg.text}
             </p>
           )}

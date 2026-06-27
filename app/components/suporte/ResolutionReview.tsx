@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { respondResolution } from "@/app/actions/suporte";
+import { AlertCircle, Loader2, CheckCircle, XCircle, Send } from "lucide-react";
 
 interface Props {
   ticketId: string;
@@ -33,7 +34,7 @@ export function ResolutionReview({ ticketId }: Props) {
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       {error && (
         <p style={{ margin: 0, fontSize: "13px", color: "#ef4444", display: "flex", alignItems: "center", gap: 6 }}>
-          <i className="ti ti-alert-circle" /> {error}
+          <AlertCircle size={14} /> {error}
         </p>
       )}
 
@@ -50,7 +51,7 @@ export function ResolutionReview({ ticketId }: Props) {
               cursor: pending ? "wait" : "pointer", fontFamily: "inherit",
             }}
           >
-            <i className={`ti ${pending ? "ti-loader-2" : "ti-circle-check"}`} style={{ fontSize: 20, animation: pending ? "spin 1s linear infinite" : "none" }} />
+            {pending ? <Loader2 size={20} style={{ animation: "spin 1s linear infinite" }} /> : <CheckCircle size={20} />}
             Sim, problema resolvido
           </button>
           <button
@@ -64,7 +65,7 @@ export function ResolutionReview({ ticketId }: Props) {
               cursor: "pointer", fontFamily: "inherit",
             }}
           >
-            <i className="ti ti-circle-x" style={{ fontSize: 20 }} />
+            <XCircle size={20} />
             Não, ainda não resolveu
           </button>
         </div>
@@ -99,7 +100,7 @@ export function ResolutionReview({ ticketId }: Props) {
               disabled={pending}
               style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 20px", borderRadius: 10, border: "none", background: "#ef4444", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: pending ? "wait" : "pointer", fontFamily: "inherit" }}
             >
-              <i className={`ti ${pending ? "ti-loader-2" : "ti-send"}`} style={{ fontSize: 14, animation: pending ? "spin 1s linear infinite" : "none" }} />
+              {pending ? <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }} /> : <Send size={14} />}
               Reabrir chamado
             </button>
           </div>

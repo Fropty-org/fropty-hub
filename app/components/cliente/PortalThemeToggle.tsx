@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useTransition } from "react";
+import { Sun, Moon } from "lucide-react";
 import { updateTheme } from "@/app/actions/profile";
 
 type Theme = "dark" | "light";
@@ -16,16 +17,16 @@ export function PortalThemeToggle({ initialTheme }: Props) {
   const [, startTransition] = useTransition();
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", initialTheme);
-    localStorage.setItem("theme", initialTheme);
+    document.documentElement.classList.toggle("dark", initialTheme === "dark");
+    localStorage.setItem("fropty-theme", initialTheme);
     setMounted(true);
   }, [initialTheme]);
 
   function toggle() {
     const next: Theme = theme === "dark" ? "light" : "dark";
     setTheme(next);
-    document.documentElement.setAttribute("data-theme", next);
-    localStorage.setItem("theme", next);
+    document.documentElement.classList.toggle("dark", next === "dark");
+    localStorage.setItem("fropty-theme", next);
     startTransition(() => updateTheme(next));
   }
 
@@ -50,7 +51,7 @@ export function PortalThemeToggle({ initialTheme }: Props) {
         transition: "background 0.2s",
       }}
     >
-      <i className={`ti ${theme === "dark" ? "ti-sun" : "ti-moon"}`} style={{ fontSize: 15 }} />
+      {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
     </button>
   );
 }

@@ -1,9 +1,13 @@
 import { HTMLAttributes } from "react";
+import type { LucideIcon } from "lucide-react";
 
 type BadgeVariant = "default" | "success" | "warning" | "danger" | "info" | "brand";
 
 interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
   variant?: BadgeVariant;
+  /** Pass a Lucide component: Icon={CheckCircle} */
+  Icon?: LucideIcon;
+  /** @deprecated Use Icon prop instead */
   icon?: string;
 }
 
@@ -16,7 +20,7 @@ const colors: Record<BadgeVariant, { bg: string; color: string; border: string }
   info:    { bg: "rgba(59,130,246,0.12)", color: "#60a5fa", border: "rgba(59,130,246,0.3)" },
 };
 
-export function Badge({ variant = "default", icon, children, style, ...props }: BadgeProps) {
+export function Badge({ variant = "default", Icon, icon, children, style, ...props }: BadgeProps) {
   const { bg, color, border } = colors[variant];
 
   return (
@@ -38,7 +42,7 @@ export function Badge({ variant = "default", icon, children, style, ...props }: 
       }}
       {...props}
     >
-      {icon && <i className={`ti ${icon}`} style={{ fontSize: "12px" }} />}
+      {Icon && <Icon size={12} />}
       {children}
     </span>
   );

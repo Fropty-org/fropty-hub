@@ -3,6 +3,7 @@ import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { PortfolioGrid } from "../components/PortfolioGrid";
 import { SITE_URL } from "../lib/config";
+import { LayoutGrid, Rocket } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Portfólio",
@@ -25,7 +26,7 @@ export default function PortfolioPage() {
       <section style={{ padding: "80px 24px 40px", textAlign: "center" }}>
         <div style={{ maxWidth: 640, margin: "0 auto" }}>
           <span className="section-chip" style={{ marginBottom: 24, display: "inline-flex" }}>
-            <i className="ti ti-layout-grid" /> Portfólio
+            <LayoutGrid size={12} /> Portfólio
           </span>
           <h1
             style={{
@@ -80,7 +81,7 @@ export default function PortfolioPage() {
               fontSize: "0.95rem",
             }}
           >
-            <i className="ti ti-rocket" />
+            <Rocket size={14} />
             Configurar meu app
           </a>
         </div>

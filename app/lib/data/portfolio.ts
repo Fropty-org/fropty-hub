@@ -1,3 +1,9 @@
+import {
+  LayoutGrid, Activity, ShoppingBag, Briefcase, School, BarChart2,
+  Stethoscope, ShoppingCart, Wrench, Dumbbell, BookOpen, Bike, Coins, Building2,
+  type LucideIcon,
+} from "lucide-react";
+
 export type Category = "todos" | "saude" | "comercio" | "servicos" | "educacao" | "gestao";
 
 export interface PortfolioItem {
@@ -6,19 +12,21 @@ export interface PortfolioItem {
   category: Category;
   description: string;
   tags: string[];
+  /** @deprecated Use Icon instead */
   icon: string;
+  Icon: LucideIcon;
   color: string;
   addons: string[];
   highlight?: boolean;
 }
 
-export const CATEGORIES: { id: Category; label: string; icon: string }[] = [
-  { id: "todos",    label: "Todos",      icon: "ti-layout-grid" },
-  { id: "saude",    label: "Saúde",      icon: "ti-heart-rate-monitor" },
-  { id: "comercio", label: "Comércio",   icon: "ti-shopping-bag" },
-  { id: "servicos", label: "Serviços",   icon: "ti-briefcase" },
-  { id: "educacao", label: "Educação",   icon: "ti-school" },
-  { id: "gestao",   label: "Gestão",     icon: "ti-chart-bar" },
+export const CATEGORIES: { id: Category; label: string; /** @deprecated */ icon: string; Icon: LucideIcon }[] = [
+  { id: "todos",    label: "Todos",      icon: "ti-layout-grid",         Icon: LayoutGrid },
+  { id: "saude",    label: "Saúde",      icon: "ti-heart-rate-monitor",  Icon: Activity },
+  { id: "comercio", label: "Comércio",   icon: "ti-shopping-bag",        Icon: ShoppingBag },
+  { id: "servicos", label: "Serviços",   icon: "ti-briefcase",           Icon: Briefcase },
+  { id: "educacao", label: "Educação",   icon: "ti-school",              Icon: School },
+  { id: "gestao",   label: "Gestão",     icon: "ti-chart-bar",           Icon: BarChart2 },
 ];
 
 export const PORTFOLIO: PortfolioItem[] = [
@@ -29,6 +37,7 @@ export const PORTFOLIO: PortfolioItem[] = [
     description: "App de agendamento online com confirmação por WhatsApp, prontuário digital e painel para recepcionistas.",
     tags: ["Agendamento", "WhatsApp", "Painel admin"],
     icon: "ti-stethoscope",
+    Icon: Stethoscope,
     color: "#22c55e",
     addons: ["Integração WhatsApp", "Painel administrativo", "Notificações push"],
     highlight: true,
@@ -40,6 +49,7 @@ export const PORTFOLIO: PortfolioItem[] = [
     description: "Catálogo digital com carrinho de compras, integração de pagamento e gestão de estoque simplificada.",
     tags: ["E-commerce", "Estoque", "Pagamentos"],
     icon: "ti-shopping-cart",
+    Icon: ShoppingCart,
     color: "#f97316",
     addons: ["Login com Google", "Relatórios e exportação", "Backup automático"],
   },
@@ -50,6 +60,7 @@ export const PORTFOLIO: PortfolioItem[] = [
     description: "Agenda de clientes, orçamentos digitais, controle de pagamentos e histórico de serviços realizados.",
     tags: ["Agenda", "Orçamentos", "Financeiro"],
     icon: "ti-tool",
+    Icon: Wrench,
     color: "var(--primary)",
     addons: ["Notificações push", "Relatórios e exportação"],
   },
@@ -60,6 +71,7 @@ export const PORTFOLIO: PortfolioItem[] = [
     description: "Controle de matrículas, frequência de alunos, planos mensais e integração com catraca via QR code.",
     tags: ["Matrículas", "Frequência", "QR code"],
     icon: "ti-barbell",
+    Icon: Dumbbell,
     color: "#a855f7",
     addons: ["Login com Google", "Painel administrativo", "Backup automático"],
   },
@@ -70,6 +82,7 @@ export const PORTFOLIO: PortfolioItem[] = [
     description: "Comunicados para pais, lançamento de notas, agenda escolar e chat entre professores e responsáveis.",
     tags: ["Comunicados", "Notas", "Chat"],
     icon: "ti-book",
+    Icon: BookOpen,
     color: "#3b82f6",
     addons: ["Notificações push", "Membro administrativo adicional"],
     highlight: true,
@@ -81,6 +94,7 @@ export const PORTFOLIO: PortfolioItem[] = [
     description: "Cardápio digital, pedidos em tempo real, rastreamento de entregadores e painel do restaurante.",
     tags: ["Delivery", "Tempo real", "Rastreamento"],
     icon: "ti-bike",
+    Icon: Bike,
     color: "#ef4444",
     addons: ["Painel administrativo", "Notificações push", "WhatsApp"],
   },
@@ -91,6 +105,7 @@ export const PORTFOLIO: PortfolioItem[] = [
     description: "Lançamento de receitas e despesas, relatórios por categoria, metas mensais e exportação em Excel.",
     tags: ["Finanças", "Relatórios", "Metas"],
     icon: "ti-coins",
+    Icon: Coins,
     color: "#EF9F27",
     addons: ["Relatórios e exportação", "Backup automático", "Login com Google"],
   },
@@ -101,6 +116,7 @@ export const PORTFOLIO: PortfolioItem[] = [
     description: "Catálogo de imóveis com filtros avançados, agendamento de visitas e gestão de propostas.",
     tags: ["Imóveis", "Filtros", "Visitas"],
     icon: "ti-building",
+    Icon: Building2,
     color: "#06b6d4",
     addons: ["Painel administrativo", "Relatórios e exportação"],
   },

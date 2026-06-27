@@ -1,4 +1,5 @@
 import type { TokenTransaction } from "@/app/lib/types/cliente";
+import { BarChart2 } from "lucide-react";
 
 interface Props {
   transactions: TokenTransaction[];
@@ -45,7 +46,7 @@ export function TokenChart({ transactions }: Props) {
     >
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
         <h2 style={{ margin: 0, fontSize: "1rem", fontWeight: 700, color: "var(--text)", display: "flex", alignItems: "center", gap: 8 }}>
-          <i className="ti ti-chart-bar" style={{ color: "var(--primary)" }} /> Consumo por mês
+          <BarChart2 size={14} style={{ color: "var(--primary)" }} /> Consumo por mês
         </h2>
         <div style={{ display: "flex", gap: 14, fontSize: "11px", color: "var(--text-faint)" }}>
           <span style={{ display: "flex", alignItems: "center", gap: 5 }}>

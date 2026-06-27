@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import type { BlogPost } from "../../lib/blog/posts";
+import { ArrowRight } from "lucide-react";
 
 export function RelatedPostCard({ post }: { post: BlogPost }) {
   return (
@@ -26,7 +27,7 @@ export function RelatedPostCard({ post }: { post: BlogPost }) {
           {post.description.slice(0, 80)}…
         </p>
         <span style={{ fontSize: "12px", fontWeight: 700, color: "var(--primary)", display: "inline-flex", alignItems: "center", gap: 4 }}>
-          Ler <i className="ti ti-arrow-right" style={{ fontSize: 12 }} />
+          Ler <ArrowRight size={12} />
         </span>
       </div>
     </Link>

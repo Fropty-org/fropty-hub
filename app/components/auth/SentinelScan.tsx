@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
+import { Lock } from "lucide-react";
 
 /**
  * Overlay "scanner" do FroptySentinel exibido enquanto a senha é validada
@@ -45,7 +46,7 @@ export function SentinelScan({ active }: { active: boolean }) {
           <div style={{ height: "100%", background: "linear-gradient(90deg, #ef4444, #b91c1c)", borderRadius: 99, animation: "sentinelScan 2.4s ease-in-out forwards" }} />
         </div>
         <p style={{ margin: "12px 0 0", fontSize: "11px", color: "var(--text-faint)" }}>
-          <i className="ti ti-lock" style={{ marginRight: 5 }} />
+          <Lock size={14} style={{ marginRight: 5 }} />
           Analisando força e exposição em vazamentos conhecidos
         </p>
       </div>

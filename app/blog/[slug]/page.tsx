@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import fs from "node:fs";
 import path from "node:path";
+import { ArrowLeft, Rocket } from "lucide-react";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { Navbar } from "../../components/Navbar";
 import { Footer } from "../../components/Footer";
@@ -93,7 +94,7 @@ export default async function BlogPostPage({ params }: Props) {
           href="/blog"
           style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "13px", color: "var(--text-faint)", textDecoration: "none", marginBottom: 32 }}
         >
-          <i className="ti ti-arrow-left" /> Blog
+          <ArrowLeft size={14} /> Blog
         </Link>
 
         {/* Header */}
@@ -153,7 +154,7 @@ export default async function BlogPostPage({ params }: Props) {
               fontSize: "0.9rem",
             }}
           >
-            <i className="ti ti-rocket" /> Configurar meu app
+            <Rocket size={14} /> Configurar meu app
           </Link>
         </div>
       </article>

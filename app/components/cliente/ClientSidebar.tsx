@@ -7,6 +7,10 @@ import { useTransition, useState, useEffect } from "react";
 import { signOut } from "../../actions/auth";
 import { PortalThemeToggle } from "./PortalThemeToggle";
 import type { ClientUser } from "../../lib/types/cliente";
+import {
+  LayoutDashboard, MessageCircle, CreditCard, UserCircle,
+  ChevronRight, ChevronLeft, X, Menu, LogOut, Loader2,
+} from "lucide-react";
 
 interface NavItem {
   id: string;
@@ -23,11 +27,21 @@ interface Props {
 }
 
 const DEFAULT_NAV: NavItem[] = [
-  { id: "dashboard", href: "/portal/dashboard", icon: "ti-layout-dashboard", label: "Painel" },
-  { id: "suporte",   href: "/portal/suporte",   icon: "ti-message-circle",   label: "Suporte" },
-  { id: "financeiro",href: "/portal/financeiro",icon: "ti-credit-card",      label: "Financeiro" },
-  { id: "perfil",    href: "/portal/perfil",    icon: "ti-user-circle",      label: "Meu Perfil" },
+  { id: "dashboard", href: "/portal/dashboard", icon: "LayoutDashboard", label: "Painel" },
+  { id: "suporte",   href: "/portal/suporte",   icon: "MessageCircle",   label: "Suporte" },
+  { id: "financeiro",href: "/portal/financeiro",icon: "CreditCard",      label: "Financeiro" },
+  { id: "perfil",    href: "/portal/perfil",    icon: "UserCircle",      label: "Meu Perfil" },
 ];
+
+const LUCIDE_NAV_ICONS: Record<string, React.ComponentType<{ size?: number }>> = {
+  LayoutDashboard, MessageCircle, CreditCard, UserCircle,
+};
+
+function NavIcon({ name, size = 18 }: { name: string; size?: number }) {
+  const Icon = LUCIDE_NAV_ICONS[name];
+  if (!Icon) return null;
+  return <Icon size={size} />;
+}
 
 const COLLAPSED_W = 56;
 const EXPANDED_W  = 220;
@@ -96,10 +110,7 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
           transition: "background 0.15s, color 0.15s",
         }}
       >
-        <i
-          className={`ti ${collapsed ? "ti-chevron-right" : "ti-chevron-left"}`}
-          style={{ fontSize: 10 }}
-        />
+        {collapsed ? <ChevronRight size={10} /> : <ChevronLeft size={10} />}
       </button>
 
       {/* Close button — mobile only */}
@@ -108,7 +119,7 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
         onClick={() => setMobileOpen(false)}
         aria-label="Fechar menu"
       >
-        <i className="ti ti-x" />
+        <X size={14} />
       </button>
 
       {/* Logo */}
@@ -183,7 +194,7 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
                 position: "relative",
               }}
             >
-              <i className={`ti ${icon}`} style={{ fontSize: 18, flexShrink: 0 }} />
+              <NavIcon name={icon} size={18} />
               {!collapsed && <span style={{ flex: 1 }}>{label}</span>}
               {!collapsed && badge != null && badge > 0 && (
                 <span style={{
@@ -228,7 +239,7 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
           fontFamily: "inherit", width: "100%", textAlign: "left",
         }}
       >
-        <i className={`ti ${pending ? "ti-loader-2" : "ti-logout"}`} style={{ fontSize: collapsed ? 18 : 16 }} />
+        {pending ? <Loader2 size={collapsed ? 18 : 16} style={{ animation: "spin 1s linear infinite" }} /> : <LogOut size={collapsed ? 18 : 16} />}
         {!collapsed && (pending ? "Saindo..." : "Sair")}
       </button>
     </aside>
@@ -249,7 +260,7 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
             flexShrink: 0,
           }}
         >
-          <i className="ti ti-menu-2" style={{ fontSize: 18 }} />
+          <Menu size={18} />
         </button>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: 7, textDecoration: "none", flex: 1 }}>
           <Image src="/hub-logo.png" alt="FroptyHub" width={22} height={22} className="rounded-md" />

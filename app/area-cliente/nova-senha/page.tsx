@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { updatePassword } from "@/app/actions/auth";
 import { SentinelScan } from "@/app/components/auth/SentinelScan";
+import { AlertCircle } from "lucide-react";
 
 export default function NovaSenhaPage() {
   const [error, setError]     = useState<string | null>(null);
@@ -42,7 +43,7 @@ export default function NovaSenhaPage() {
     }}>
       <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 36, textDecoration: "none" }}>
         <Image src="/hub-logo.png" alt="FroptyHub" width={32} height={32} style={{ borderRadius: 8 }} />
-        <span style={{ fontSize: 18, fontWeight: 800, color: "var(--text)", fontFamily: "var(--font-plus-jakarta), sans-serif" }}>
+        <span style={{ fontSize: 18, fontWeight: 800, color: "var(--text)", fontFamily: "var(--font-dm-sans), sans-serif" }}>
           Fropty<span style={{ color: "var(--primary)" }}>Hub</span>
         </span>
       </Link>
@@ -58,7 +59,7 @@ export default function NovaSenhaPage() {
         boxShadow: "0 24px 64px rgba(0,0,0,0.2)",
       }}>
         <div style={{ marginBottom: 24 }}>
-          <h1 style={{ fontSize: "1.25rem", fontWeight: 800, color: "var(--text)", margin: "0 0 6px", fontFamily: "var(--font-plus-jakarta), sans-serif" }}>
+          <h1 style={{ fontSize: "1.25rem", fontWeight: 800, color: "var(--text)", margin: "0 0 6px", fontFamily: "var(--font-dm-sans), sans-serif" }}>
             Criar nova senha
           </h1>
           <p style={{ fontSize: 13, color: "var(--text-muted)", margin: 0 }}>
@@ -80,7 +81,7 @@ export default function NovaSenhaPage() {
 
           {error && (
             <div style={{ padding: "10px 14px", borderRadius: 10, background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.25)", color: "#ef4444", fontSize: 13, display: "flex", alignItems: "center", gap: 8 }}>
-              <i className="ti ti-alert-circle" style={{ fontSize: 15 }} />{error}
+              <AlertCircle size={15} />{error}
             </div>
           )}
 

@@ -1,6 +1,15 @@
 import Link from "next/link";
 import Image from "next/image";
 import { WHATSAPP_URL, CONTACT_EMAIL } from "../lib/config";
+import { Instagram, Facebook, MessageCircle, Mail } from "lucide-react";
+
+function TikTokIcon({ size = 17 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z" />
+    </svg>
+  );
+}
 
 export function Footer() {
   return (
@@ -23,11 +32,11 @@ export function Footer() {
             {/* Redes sociais */}
             <div className="mt-5 flex gap-2">
               {[
-                { href: "https://instagram.com/froptyapps", icon: "ti-brand-instagram", label: "Instagram" },
-                { href: "https://facebook.com/froptyapps",  icon: "ti-brand-facebook",  label: "Facebook"  },
-                { href: "https://tiktok.com/@froptyapps",   icon: "ti-brand-tiktok",    label: "TikTok"    },
-                { href: "https://wa.me/5519983317645",      icon: "ti-brand-whatsapp",  label: "WhatsApp"  },
-              ].map(({ href, icon, label }) => (
+                { href: "https://instagram.com/froptyapps", Icon: Instagram,     label: "Instagram" },
+                { href: "https://facebook.com/froptyapps",  Icon: Facebook,      label: "Facebook"  },
+                { href: "https://tiktok.com/@froptyapps",   Icon: TikTokIcon,    label: "TikTok"    },
+                { href: "https://wa.me/5519983317645",      Icon: MessageCircle, label: "WhatsApp"  },
+              ].map(({ href, Icon, label }) => (
                 <a
                   key={label}
                   href={href}
@@ -36,7 +45,7 @@ export function Footer() {
                   aria-label={label}
                   className="social-icon-btn"
                 >
-                  <i className={`ti ${icon}`} style={{ fontSize: 17 }} />
+                  <Icon size={17} />
                 </a>
               ))}
             </div>
@@ -84,13 +93,13 @@ export function Footer() {
               <li>
                 <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer"
                   className="nav-link flex items-center gap-2">
-                  <i className="ti ti-brand-whatsapp text-base" style={{ color: "#22c55e" }} />
+                  <MessageCircle size={16} style={{ color: "#22c55e" }} />
                   WhatsApp
                 </a>
               </li>
               <li>
                 <a href={`mailto:${CONTACT_EMAIL}`} className="nav-link flex items-center gap-2">
-                  <i className="ti ti-mail text-base" style={{ color: "var(--primary)" }} />
+                  <Mail size={16} style={{ color: "var(--primary)" }} />
                   {CONTACT_EMAIL}
                 </a>
               </li>

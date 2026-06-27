@@ -113,9 +113,9 @@ export default function DemoPage() {
   const { toasts, addToast, dismissToast } = useToasts();
 
   useEffect(() => {
-    const saved = (localStorage.getItem("theme") as "dark" | "light") || "dark";
+    const saved = ((localStorage.getItem("fropty-theme") ?? localStorage.getItem("theme")) as "dark" | "light") || "dark";
     setTheme(saved);
-    document.documentElement.setAttribute("data-theme", saved);
+    document.documentElement.classList.toggle("dark", saved === "dark");
     const savedSeg = localStorage.getItem("fropty_demo_segment") as Segment | null;
     if (savedSeg) setSegment(savedSeg);
   }, []);
@@ -123,8 +123,8 @@ export default function DemoPage() {
   function toggleTheme() {
     const next = theme === "dark" ? "light" : "dark";
     setTheme(next);
-    document.documentElement.setAttribute("data-theme", next);
-    localStorage.setItem("theme", next);
+    document.documentElement.classList.toggle("dark", next === "dark");
+    localStorage.setItem("fropty-theme", next);
   }
 
   function handleLogin(r: Role) {

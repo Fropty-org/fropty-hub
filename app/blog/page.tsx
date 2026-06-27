@@ -3,6 +3,7 @@ import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { allPosts } from "../lib/blog/posts";
 import { PostCard } from "../components/blog/PostCard";
+import { Pencil } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -19,7 +20,7 @@ export default function BlogPage() {
       <section style={{ padding: "80px 24px 40px", textAlign: "center" }}>
         <div style={{ maxWidth: 600, margin: "0 auto" }}>
           <span className="section-chip" style={{ marginBottom: 24, display: "inline-flex" }}>
-            <i className="ti ti-pencil" /> Blog
+            <Pencil size={12} /> Blog
           </span>
           <h1 style={{ fontSize: "clamp(1.8rem, 4vw, 2.75rem)", fontWeight: 800, letterSpacing: "-0.02em", marginBottom: 16 }}>
             Conteúdo para quem quer crescer

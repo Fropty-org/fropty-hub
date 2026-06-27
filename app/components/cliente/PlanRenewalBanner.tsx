@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { AlertTriangle, Clock, CheckCircle, CreditCard, type LucideIcon } from "lucide-react";
 
 interface Props {
   plan: "basico" | "pro";
@@ -22,7 +23,7 @@ export function PlanRenewalBanner({ plan, renewalDate }: Props) {
   const color = isUrgent ? "#ef4444" : isWarning ? "#EF9F27" : "#22c55e";
   const bg    = isUrgent ? "rgba(239,68,68,0.08)"   : isWarning ? "rgba(239,159,39,0.08)" : "rgba(34,197,94,0.06)";
   const border= isUrgent ? "rgba(239,68,68,0.25)"   : isWarning ? "rgba(239,159,39,0.25)" : "rgba(34,197,94,0.2)";
-  const icon  = isUrgent ? "ti-alert-triangle"       : isWarning ? "ti-clock"              : "ti-circle-check";
+  const StatusIcon: LucideIcon = isUrgent ? AlertTriangle : isWarning ? Clock : CheckCircle;
 
   const renewalStr = renewal.toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" });
 
@@ -36,7 +37,7 @@ export function PlanRenewalBanner({ plan, renewalDate }: Props) {
     }}>
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12, flexWrap: "wrap", marginBottom: 12 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <i className={`ti ${icon}`} style={{ fontSize: 20, color }} />
+          <StatusIcon size={20} style={{ color }} />
           <div>
             <p style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text)" }}>
               Plano {PLAN_LABEL[plan]} — renovação em {daysLeft === 0 ? "hoje" : `${daysLeft} dia${daysLeft !== 1 ? "s" : ""}`}
@@ -56,7 +57,7 @@ export function PlanRenewalBanner({ plan, renewalDate }: Props) {
             flexShrink: 0,
           }}
         >
-          <i className="ti ti-credit-card" style={{ fontSize: 13 }} />
+          <CreditCard size={13} />
           {daysLeft <= 3 ? "Renovar agora" : "Ver plano"}
         </Link>
       </div>

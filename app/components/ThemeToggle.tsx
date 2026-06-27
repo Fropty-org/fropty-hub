@@ -1,27 +1,29 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Sun, Moon } from "lucide-react";
 
 type Theme = "dark" | "light";
+
+const STORAGE_KEY = "fropty-theme";
 
 export function ThemeToggle() {
   const [theme, setTheme] = useState<Theme>("dark");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem("theme") as string | null;
-    // Migrar "mid" legado → "dark"
+    const saved = localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem("theme");
     const initial: Theme = saved === "light" ? "light" : "dark";
     setTheme(initial);
-    document.documentElement.setAttribute("data-theme", initial);
+    document.documentElement.classList.toggle("dark", initial === "dark");
     setMounted(true);
   }, []);
 
   function toggle() {
     const next: Theme = theme === "dark" ? "light" : "dark";
     setTheme(next);
-    document.documentElement.setAttribute("data-theme", next);
-    localStorage.setItem("theme", next);
+    document.documentElement.classList.toggle("dark", next === "dark");
+    localStorage.setItem(STORAGE_KEY, next);
   }
 
   if (!mounted) return null;
@@ -46,10 +48,7 @@ export function ThemeToggle() {
         transition: "background 0.2s, color 0.2s, border-color 0.2s",
       }}
     >
-      <i
-        className={`ti ${theme === "dark" ? "ti-sun" : "ti-moon"}`}
-        style={{ fontSize: 16 }}
-      />
+      {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
     </button>
   );
 }

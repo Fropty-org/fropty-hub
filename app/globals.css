@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "@tabler/icons-webfont/dist/tabler-icons.min.css";
 
 /* ── Brand scale (immutable) ──────────────────────────────────── */
 :root {
@@ -17,35 +16,25 @@
   --brand-accent: #EF9F27;
 }
 
-/* ── TEMA ESCURO (default) ────────────────────────────────────── */
-:root,
-[data-theme="dark"] {
-  --dot-color: rgba(255,255,255,0.055);
-  --bg:           #040316;
-  --bg-alt:       #0A093F;
-  --surface:      #110E67;
-  --surface-2:    #181490;
-  --border:       rgba(255,255,255,0.1);
-  --border-hover: rgba(91,87,232,0.5);
-  --text:         #F7F8FC;
-  --text-muted:   #94a3b8;
-  --text-faint:   #475569;
-  --card-bg:      #181490;
-  --card-border:  rgba(255,255,255,0.08);
-  --nav-bg:       rgba(4,3,22,0.92);
-  --input-bg:     #0A093F;
-  --primary:      var(--brand-500);
-  --primary-dark: var(--brand-700);
-  --accent:       var(--brand-accent);
-  --cta-bg:       var(--brand-500);
-  --cta-text:     #ffffff;
-  --hero-overlay: linear-gradient(110deg, rgba(4,3,22,0.95) 0%, rgba(4,3,22,0.78) 42%, rgba(4,3,22,0.25) 80%, transparent 100%);
-  --hero-text:    #F7F8FC;
-  --hero-muted:   rgba(247,248,252,0.65);
+/* ── Radius scale (ecossistema Fropty) ───────────────────────── */
+:root {
+  --r-sm:   6px;
+  --r-md:   10px;
+  --r-lg:   14px;
+  --r-xl:   20px;
+  --r-full: 100px;
 }
 
-/* ── TEMA CLARO ──────────────────────────────────────────────── */
-[data-theme="light"] {
+/* ── Status tokens (theme-independent) ──────────────────────── */
+:root {
+  --c-success: #22c55e;
+  --c-warning: #f59e0b;
+  --c-danger:  #DC2626;
+  --c-info:    #3B82F6;
+}
+
+/* ── TEMA CLARO (default / sem .dark) ────────────────────────── */
+:root {
   --dot-color: rgba(17,17,24,0.07);
   --bg:           #F2F2F2;
   --bg-alt:       #E8E8EC;
@@ -68,11 +57,55 @@
   --hero-overlay: linear-gradient(110deg, rgba(242,242,242,0.97) 0%, rgba(242,242,242,0.88) 42%, rgba(242,242,242,0.45) 75%, transparent 100%);
   --hero-text:    #111118;
   --hero-muted:   rgba(17,17,24,0.62);
+
+  /* ── Canonical Fropty tokens (ecossistema) ── */
+  --s:  var(--surface);
+  --s2: var(--surface-2);
+  --t:  var(--text);
+  --t2: var(--text-muted);
+  --t3: var(--text-faint);
+  --bd: var(--border);
+  --bd2: var(--border-hover);
+}
+
+/* ── TEMA ESCURO (.dark class no <html>) ─────────────────────── */
+.dark {
+  --dot-color: rgba(255,255,255,0.055);
+  --bg:           #040316;
+  --bg-alt:       #0A093F;
+  --surface:      #110E67;
+  --surface-2:    #181490;
+  --border:       rgba(255,255,255,0.1);
+  --border-hover: rgba(91,87,232,0.5);
+  --text:         #F7F8FC;
+  --text-muted:   #94a3b8;
+  --text-faint:   #475569;
+  --card-bg:      #181490;
+  --card-border:  rgba(255,255,255,0.08);
+  --nav-bg:       rgba(4,3,22,0.92);
+  --input-bg:     #0A093F;
+  --primary:      var(--brand-500);
+  --primary-dark: var(--brand-700);
+  --accent:       var(--brand-accent);
+  --cta-bg:       var(--brand-500);
+  --cta-text:     #ffffff;
+  --hero-overlay: linear-gradient(110deg, rgba(4,3,22,0.95) 0%, rgba(4,3,22,0.78) 42%, rgba(4,3,22,0.25) 80%, transparent 100%);
+  --hero-text:    #F7F8FC;
+  --hero-muted:   rgba(247,248,252,0.65);
+
+  /* ── Canonical Fropty tokens (ecossistema) ── */
+  --s:  var(--surface);
+  --s2: var(--surface-2);
+  --t:  var(--text);
+  --t2: var(--text-muted);
+  --t3: var(--text-faint);
+  --bd: var(--border);
+  --bd2: var(--border-hover);
 }
 
 @theme inline {
-  --font-sans: var(--font-inter);
-  --font-display: var(--font-plus-jakarta);
+  --font-sans: var(--font-dm-sans);
+  --font-display: var(--font-dm-sans);
   --color-primary: var(--brand-500);
   --color-accent: #ef9f27;
 }
@@ -80,7 +113,7 @@
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+  font-family: var(--font-dm-sans), 'DM Sans', Arial, Helvetica, sans-serif;
   transition: background 0.3s ease, color 0.3s ease;
 }
 
@@ -338,8 +371,8 @@ body {
 
 /* ── Logo do portal: alterna conforme o tema ──────────────────── */
 .portal-logo--light { display: none; }
-[data-theme="light"] .portal-logo--dark { display: none; }
-[data-theme="light"] .portal-logo--light { display: inline-block; }
+:root:not(.dark) .portal-logo--dark { display: none; }
+:root:not(.dark) .portal-logo--light { display: inline-block; }
 
 /* Fade-in para overlays/modais */
 @keyframes fadeIn {

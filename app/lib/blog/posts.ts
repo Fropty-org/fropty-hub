@@ -1,3 +1,5 @@
+import { Coins, Eye, Wrench, type LucideIcon } from "lucide-react";
+
 export interface BlogPost {
   slug: string;
   title: string;
@@ -5,7 +7,9 @@ export interface BlogPost {
   date: string;
   category: string;
   readTime: number; // minutos
-  coverIcon: string; // tabler icon
+  /** @deprecated Use CoverIcon instead */
+  coverIcon: string;
+  CoverIcon: LucideIcon;
   coverColor: string;
 }
 
@@ -18,6 +22,7 @@ export const allPosts: BlogPost[] = [
     category: "Mercado",
     readTime: 6,
     coverIcon: "ti-coins",
+    CoverIcon: Coins,
     coverColor: "#EF9F27",
   },
   {
@@ -28,6 +33,7 @@ export const allPosts: BlogPost[] = [
     category: "Fropty",
     readTime: 4,
     coverIcon: "ti-eye",
+    CoverIcon: Eye,
     coverColor: "var(--primary)",
   },
   {
@@ -38,6 +44,7 @@ export const allPosts: BlogPost[] = [
     category: "Produto",
     readTime: 5,
     coverIcon: "ti-tools",
+    CoverIcon: Wrench,
     coverColor: "#22c55e",
   },
 ];

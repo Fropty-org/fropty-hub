@@ -131,13 +131,15 @@ export const faqs: Faq[] = [
   },
 ];
 
-export type PreviewAddon = { icon: string; label: string };
+import { Lock, Wrench, MessageCircle, Bell, BarChart2, Globe, type LucideIcon } from "lucide-react";
+
+export type PreviewAddon = { Icon: LucideIcon; label: string };
 
 export const previewAddons: PreviewAddon[] = [
-  { icon: "lock", label: "Login" },
-  { icon: "tool", label: "Admin" },
-  { icon: "brand-whatsapp", label: "WhatsApp" },
-  { icon: "bell", label: "Push" },
-  { icon: "chart-bar", label: "Relatórios" },
-  { icon: "world", label: "Domínio" },
+  { Icon: Lock,          label: "Login" },
+  { Icon: Wrench,        label: "Admin" },
+  { Icon: MessageCircle, label: "WhatsApp" },
+  { Icon: Bell,          label: "Push" },
+  { Icon: BarChart2,     label: "Relatórios" },
+  { Icon: Globe,         label: "Domínio" },
 ];

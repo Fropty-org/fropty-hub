@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import Link from "next/link";
 import { TICKET_STATUS_MAP, TICKET_PRIORITY_MAP } from "@/app/lib/constants/status";
 import type { Ticket } from "@/app/lib/types/cliente";
+import { Coins, Headphones, Plus, Search, X, Circle, CheckCircle, Smile, History, ChevronRight, Ticket as TicketIcon, AlertTriangle, LucideIcon } from "lucide-react";
 
 type FilterMode = "todos" | "abertos" | "fechados";
 
@@ -48,7 +49,7 @@ function NoTokenModal({ onClose }: { onClose: () => void }) {
         style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 20, padding: "36px 32px", maxWidth: 400, width: "100%", textAlign: "center", boxShadow: "0 24px 60px rgba(0,0,0,0.45)" }}
       >
         <div style={{ width: 52, height: 52, borderRadius: 14, background: "rgba(239,159,39,0.1)", border: "1px solid rgba(239,159,39,0.25)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 18px" }}>
-          <i className="ti ti-coin" style={{ fontSize: 24, color: "#EF9F27" }} />
+          <Coins size={24} style={{ color: "#EF9F27" }} />
         </div>
         <h3 style={{ margin: "0 0 10px", fontSize: "1.1rem", fontWeight: 800, color: "var(--text)" }}>
           Tokens insuficientes
@@ -61,7 +62,7 @@ function NoTokenModal({ onClose }: { onClose: () => void }) {
             href="/portal/financeiro"
             style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "10px 20px", background: "#EF9F27", color: "#fff", fontWeight: 700, fontSize: "13px", borderRadius: 10, textDecoration: "none" }}
           >
-            <i className="ti ti-coin" style={{ fontSize: 13 }} /> Ver tokens
+            <Coins size={13} /> Ver tokens
           </Link>
           <button
             onClick={onClose}
@@ -144,7 +145,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
         <div className="suporte-header-row" style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
           <div>
             <span className="section-chip" style={{ marginBottom: 12 }}>
-              <i className="ti ti-headset" style={{ fontSize: 11 }} />
+              <Headphones size={11} />
               Service Desk
             </span>
             <h1 style={{ fontSize: "1.6rem", fontWeight: 800, margin: "0 0 4px", color: "var(--text)", letterSpacing: "-0.02em" }}>
@@ -179,7 +180,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
               onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.9"; e.currentTarget.style.transform = "translateY(-1px)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.transform = "translateY(0)"; }}
             >
-              <i className="ti ti-plus" style={{ fontSize: 15 }} /> Novo chamado
+              <Plus size={15} /> Novo chamado
             </button>
           ) : (
             <Link
@@ -205,7 +206,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
               onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.9"; e.currentTarget.style.transform = "translateY(-1px)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.transform = "translateY(0)"; }}
             >
-              <i className="ti ti-plus" style={{ fontSize: 15 }} /> Novo chamado
+              <Plus size={15} /> Novo chamado
             </Link>
           )}
           {showNoToken && <NoTokenModal onClose={() => setShowNoToken(false)} />}
@@ -216,27 +217,27 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
           <StatCard
             label="Total de chamados"
             value={tickets.length}
-            icon="ti-ticket"
+            Icon={TicketIcon}
             color="var(--primary)"
           />
           <StatCard
             label="Em aberto"
             value={totalOpen}
-            icon="ti-circle-dot"
+            Icon={Circle}
             color="#3b82f6"
           />
           {totalHigh > 0 ? (
             <StatCard
               label="Alta prioridade"
               value={totalHigh}
-              icon="ti-alert-triangle"
+              Icon={AlertTriangle}
               color="#ef4444"
             />
           ) : (
             <StatCard
               label="Resolvidos"
               value={totalResolved}
-              icon="ti-circle-check"
+              Icon={CheckCircle}
               color="#22c55e"
             />
           )}
@@ -261,7 +262,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
           onFocusCapture={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = "var(--border-hover)"; }}
           onBlurCapture={(e)  => { (e.currentTarget as HTMLDivElement).style.borderColor = "var(--card-border)"; }}
         >
-          <i className="ti ti-search" style={{ color: "var(--text-faint)", fontSize: 15, flexShrink: 0 }} />
+          <Search size={15} style={{ color: "var(--text-faint)", flexShrink: 0 }} />
           <input
             type="text"
             value={search}
@@ -282,7 +283,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
               onClick={() => setSearch("")}
               style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-faint)", padding: 0, display: "flex", fontFamily: "inherit" }}
             >
-              <i className="ti ti-x" style={{ fontSize: 13 }} />
+              <X size={13} />
             </button>
           )}
         </div>
@@ -334,7 +335,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
             justifyContent: "center",
             margin: "0 auto 16px",
           }}>
-            <i className="ti ti-headset" style={{ fontSize: 28, color: "var(--primary)" }} />
+            <Headphones size={28} style={{ color: "var(--primary)" }} />
           </div>
           <p style={{ fontWeight: 700, fontSize: "15px", color: "var(--text)", margin: "0 0 6px" }}>
             Nenhum chamado ainda
@@ -364,7 +365,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
                 boxShadow: "0 4px 16px rgba(91,87,232,0.35)",
               }}
             >
-              <i className="ti ti-plus" /> Abrir primeiro chamado
+              <Plus size={14} /> Abrir primeiro chamado
             </Link>
           )}
         </div>
@@ -375,7 +376,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
         <section style={{ marginBottom: 32 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
             <span className="section-chip">
-              <i className="ti ti-circle-dot" style={{ fontSize: 11, color: "#3b82f6" }} />
+              <Circle size={11} style={{ color: "#3b82f6" }} />
               Abertos
             </span>
             {openTickets.length > 0 && (
@@ -412,7 +413,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
                 justifyContent: "center",
                 flexShrink: 0,
               }}>
-                <i className="ti ti-mood-happy" style={{ fontSize: 20, color: "#22c55e" }} />
+                <Smile size={20} style={{ color: "#22c55e" }} />
               </div>
               <p style={{ color: "var(--text-muted)", margin: 0, fontSize: "14px", fontWeight: 500 }}>
                 Tudo resolvido — nenhum chamado em aberto.
@@ -431,7 +432,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
         <section>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
             <span className="section-chip">
-              <i className="ti ti-history" style={{ fontSize: 11 }} />
+              <History size={11} />
               Histórico
             </span>
             <span style={{
@@ -454,7 +455,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
 }
 
 /* ── StatCard ──────────────────────────────────────────────────── */
-function StatCard({ label, value, icon, color }: { label: string; value: number; icon: string; color: string }) {
+function StatCard({ label, value, Icon, color }: { label: string; value: number; Icon: LucideIcon; color: string }) {
   return (
     <div style={{
       background: "rgba(255,255,255,0.03)",
@@ -475,7 +476,7 @@ function StatCard({ label, value, icon, color }: { label: string; value: number;
         justifyContent: "center",
         flexShrink: 0,
       }}>
-        <i className={`ti ${icon}`} style={{ fontSize: 16, color }} />
+        <Icon size={16} style={{ color }} />
       </div>
       <div>
         <p style={{ margin: 0, fontSize: "20px", fontWeight: 800, color: "var(--text)", lineHeight: 1 }}>{value}</p>
@@ -522,7 +523,7 @@ function TicketCard({ ticket, dimmed, showClient }: { ticket: Ticket; dimmed?: b
         justifyContent: "center",
         flexShrink: 0,
       }}>
-        <i className={`ti ${statusInfo.icon}`} style={{ color: statusInfo.color, fontSize: 15 }} />
+        <statusInfo.Icon size={15} style={{ color: statusInfo.color }} />
       </div>
 
       {/* Info principal */}
@@ -562,7 +563,7 @@ function TicketCard({ ticket, dimmed, showClient }: { ticket: Ticket; dimmed?: b
         }}>
           {priorityInfo.label}
         </span>
-        <i className="ti ti-chevron-right" style={{ fontSize: 13, color: "var(--text-faint)", marginLeft: 2 }} />
+        <ChevronRight size={13} style={{ color: "var(--text-faint)", marginLeft: 2 }} />
       </div>
     </Link>
   );

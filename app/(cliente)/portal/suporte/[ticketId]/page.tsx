@@ -8,6 +8,8 @@ import { TicketConversation } from "@/app/components/suporte/TicketConversation"
 import { TicketDetailBack } from "@/app/components/suporte/TicketDetailBack";
 import { AdminTicketActions } from "@/app/components/suporte/AdminTicketActions";
 import { SlaBars } from "@/app/components/suporte/SlaBars";
+import { CheckCircle, ClipboardCheck, Tag, Flag, Calendar, RefreshCw } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { TICKET_STATUS_MAP, TICKET_PRIORITY_MAP } from "@/app/lib/constants/status";
 import type { Ticket, TicketStatus, TicketPriority } from "@/app/lib/types/cliente";
 import type { Database } from "@/app/lib/supabase/types";
@@ -89,7 +91,7 @@ export default async function TicketDetailPage({ params, searchParams }: Props) 
       {/* Confirmação de chamado recém-aberto */}
       {!isAdmin && novo && (
         <div style={{ background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.3)", borderRadius: 12, padding: "12px 16px", marginBottom: 16, display: "flex", alignItems: "center", gap: 10, fontSize: "13px", color: "#22c55e", fontWeight: 600 }}>
-          <i className="ti ti-circle-check" style={{ fontSize: 18 }} />
+          <CheckCircle size={18} />
           Chamado aberto com sucesso! Nossa equipe responderá em breve.
         </div>
       )}
@@ -121,7 +123,7 @@ export default async function TicketDetailPage({ params, searchParams }: Props) 
               border: `1px solid ${statusInfo.color}28`,
               display: "inline-flex", alignItems: "center", gap: 5,
             }}>
-              <i className={`ti ${statusInfo.icon}`} style={{ fontSize: 10 }} />
+              <statusInfo.Icon size={10} />
               {statusInfo.label}
             </span>
           </div>
@@ -129,10 +131,10 @@ export default async function TicketDetailPage({ params, searchParams }: Props) 
 
         {/* Metadata grid */}
         <div className="ticket-meta-grid" style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
-          <MetaItem icon="ti-tag" label="Categoria" value={ticket.category} />
-          <MetaItem icon="ti-flag" label="Prioridade" value={priorityInfo.label} color={priorityInfo.color} />
-          <MetaItem icon="ti-calendar" label="Aberto em" value={new Date(ticket.createdAt).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" })} />
-          <MetaItem icon="ti-refresh" label="Atualizado" value={new Date(ticket.updatedAt).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })} />
+          <MetaItem Icon={Tag} label="Categoria" value={ticket.category} />
+          <MetaItem Icon={Flag} label="Prioridade" value={priorityInfo.label} color={priorityInfo.color} />
+          <MetaItem Icon={Calendar} label="Aberto em" value={new Date(ticket.createdAt).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" })} />
+          <MetaItem Icon={RefreshCw} label="Atualizado" value={new Date(ticket.updatedAt).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })} />
         </div>
       </div>
 
@@ -158,7 +160,7 @@ export default async function TicketDetailPage({ params, searchParams }: Props) 
       {!isAdmin && ticket.status === "resolvido" && (
         <div style={{ background: "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.3)", borderRadius: 16, padding: "20px 22px", marginBottom: 20, display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
           <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(34,197,94,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-            <i className="ti ti-clipboard-check" style={{ fontSize: 22, color: "#22c55e" }} />
+            <ClipboardCheck size={22} style={{ color: "#22c55e" }} />
           </div>
           <div style={{ flex: 1, minWidth: 200 }}>
             <p style={{ margin: "0 0 2px", fontSize: "14px", fontWeight: 800, color: "var(--text)" }}>Marcamos como resolvido</p>
@@ -168,7 +170,7 @@ export default async function TicketDetailPage({ params, searchParams }: Props) 
             href={`/portal/suporte/${ticket.id}/avaliar`}
             style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 20px", borderRadius: 10, background: "#22c55e", color: "#fff", fontSize: "13px", fontWeight: 700, textDecoration: "none", whiteSpace: "nowrap" }}
           >
-            <i className="ti ti-clipboard-check" style={{ fontSize: 15 }} /> Avaliar solução
+            <ClipboardCheck size={15} /> Avaliar solução
           </Link>
         </div>
       )}
@@ -187,10 +189,10 @@ export default async function TicketDetailPage({ params, searchParams }: Props) 
   );
 }
 
-function MetaItem({ icon, label, value, color }: { icon: string; label: string; value: string; color?: string }) {
+function MetaItem({ Icon, label, value, color }: { Icon: LucideIcon; label: string; value: string; color?: string }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-      <i className={`ti ${icon}`} style={{ fontSize: 13, color: "var(--text-faint)", flexShrink: 0 }} />
+      <Icon size={13} style={{ color: "var(--text-faint)", flexShrink: 0 }} />
       <span style={{ fontSize: "11px", color: "var(--text-faint)" }}>{label}:</span>
       <span style={{ fontSize: "12px", fontWeight: 700, color: color ?? "var(--text-muted)" }}>{value}</span>
     </div>

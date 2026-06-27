@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ChevronRight, HelpCircle, Globe, Target, Smartphone, BarChart2, UserCheck, LucideIcon } from "lucide-react";
 
 const WA_MAIN = "5519983317645";
 const WA_ALT  = "5511986911295";
@@ -9,46 +10,46 @@ function waUrl(number: string, msg: string) {
   return `https://wa.me/${number}?text=${encodeURIComponent(msg)}`;
 }
 
-const MENU_ITEMS = [
+const MENU_ITEMS: { label: string; sub: string; Icon: LucideIcon; msg: string; num: string }[] = [
   {
     label: "Dúvidas e Suporte",
     sub:   "Atendimento geral",
-    icon:  "ti-help-circle",
+    Icon:  HelpCircle,
     msg:   "Olá! Tenho uma dúvida sobre os serviços da Fropty Apps.",
     num:   WA_MAIN,
   },
   {
     label: "Site Institucional",
     sub:   "Site profissional completo para sua empresa",
-    icon:  "ti-world",
+    Icon:  Globe,
     msg:   "Olá! Tenho interesse em um Site Institucional pela Fropty Apps.",
     num:   WA_MAIN,
   },
   {
     label: "Landing Page",
     sub:   "Página focada em vendas e captura de leads",
-    icon:  "ti-target",
+    Icon:  Target,
     msg:   "Olá! Tenho interesse em uma Landing Page pela Fropty Apps.",
     num:   WA_MAIN,
   },
   {
     label: "App Mobile / SaaS",
     sub:   "Desenvolvimento de apps e sistemas sob medida",
-    icon:  "ti-device-mobile",
+    Icon:  Smartphone,
     msg:   "Olá! Tenho interesse em desenvolver um App ou Sistema pela Fropty Apps.",
     num:   WA_MAIN,
   },
   {
     label: "Gestão de Tráfego",
     sub:   "Anúncios no Google, Meta e TikTok Ads",
-    icon:  "ti-chart-bar",
+    Icon:  BarChart2,
     msg:   "Olá! Tenho interesse em Gestão de Tráfego Pago pela Fropty Apps.",
     num:   WA_ALT,
   },
   {
     label: "Já sou cliente",
     sub:   "Suporte e atendimento especializado",
-    icon:  "ti-user-check",
+    Icon:  UserCheck,
     msg:   "Olá! Preciso de suporte — já sou cliente Fropty Apps.",
     num:   WA_ALT,
   },
@@ -110,7 +111,7 @@ export function WhatsAppFloat() {
                     display: "flex", alignItems: "center", justifyContent: "center",
                   }}
                 >
-                  <i className={`ti ${item.icon}`} style={{ fontSize: 17, color: "var(--primary)" }} />
+                  <item.Icon size={17} style={{ color: "var(--primary)" }} />
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{ color: "var(--text)", fontWeight: 600, fontSize: 13, margin: 0, lineHeight: 1.2 }}>
@@ -120,7 +121,7 @@ export function WhatsAppFloat() {
                     {item.sub}
                   </p>
                 </div>
-                <i className="ti ti-chevron-right" style={{ color: "var(--text-faint)", fontSize: 15, flexShrink: 0 }} />
+                <ChevronRight size={15} style={{ color: "var(--text-faint)", flexShrink: 0 }} />
               </a>
             ))}
           </div>

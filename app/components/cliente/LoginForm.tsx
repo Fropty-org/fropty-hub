@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { signIn } from "@/app/actions/auth";
+import { AlertCircle, Loader2, LogIn } from "lucide-react";
 
 export function LoginForm() {
   // Envio nativo do form: signIn redireciona no servidor em caso de sucesso.
@@ -55,7 +56,7 @@ export function LoginForm() {
 
       {error && (
         <p style={{ margin: 0, fontSize: "13px", color: "#ef4444", display: "flex", alignItems: "center", gap: 6 }}>
-          <i className="ti ti-alert-circle" /> {error}
+          <AlertCircle size={14} /> {error}
         </p>
       )}
 
@@ -81,8 +82,8 @@ export function LoginForm() {
         }}
       >
         {loading
-          ? <><i className="ti ti-loader-2" style={{ animation: "spin 1s linear infinite" }} /> Entrando...</>
-          : <><i className="ti ti-login" /> Entrar na minha conta</>
+          ? <><Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} /> Entrando...</>
+          : <><LogIn size={16} /> Entrar na minha conta</>
         }
       </button>
     </form>

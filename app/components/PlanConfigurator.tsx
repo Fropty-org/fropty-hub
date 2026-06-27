@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { submitQuote } from "@/app/actions/submitQuote";
 import { SERVICE_TYPES, ADDONS, MAINTENANCE, type MaintenancePlan } from "@/app/lib/data/configurador";
+import { CheckCircle, Layers, Info, Plus, Check, Wrench, AlertCircle, Receipt, Loader2, ArrowRight } from "lucide-react";
 
 export interface PlanSummary {
   name: string;
@@ -18,7 +19,7 @@ function formatPrice(val: number): string {
   return val.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
-const FONT = "var(--font-plus-jakarta), var(--font-inter), sans-serif";
+const FONT = "var(--font-dm-sans), sans-serif";
 
 export default function PlanConfigurator() {
   const [serviceId, setServiceId] = useState<string>("app_mobile");
@@ -90,7 +91,7 @@ export default function PlanConfigurator() {
             display: "flex", alignItems: "center", justifyContent: "center",
           }}
         >
-          <i className="ti ti-circle-check" style={{ fontSize: 36, color: "var(--primary)" }} />
+          <CheckCircle size={36} style={{ color: "var(--primary)" }} />
         </div>
         <h2 style={{ fontSize: 24, fontWeight: 800, color: "var(--text)", marginBottom: 10 }}>
           Orçamento enviado!
@@ -113,7 +114,7 @@ export default function PlanConfigurator() {
           {/* Tipo de projeto */}
           <div>
             <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-              <i className="ti ti-layers-difference" style={{ fontSize: 16, color: "var(--primary)" }} />
+              <Layers size={16} style={{ color: "var(--primary)" }} />
               Que tipo de projeto você precisa?
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 200px), 1fr))", gap: 10 }}>
@@ -141,7 +142,7 @@ export default function PlanConfigurator() {
                       display: "flex", alignItems: "center", justifyContent: "center",
                       flexShrink: 0, transition: "all 0.18s",
                     }}>
-                      <i className={`ti ti-${svc.icon}`} style={{ fontSize: 17, color: active ? "#fff" : "var(--primary)" }} />
+                      <svc.Icon size={17} color={active ? "#fff" : "var(--primary)"} />
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)", marginBottom: 2 }}>{svc.label}</div>
@@ -168,7 +169,7 @@ export default function PlanConfigurator() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16 }}>
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", display: "flex", alignItems: "center", gap: 8 }}>
-                  <i className={`ti ti-${service.icon}`} style={{ fontSize: 18, color: "var(--primary)" }} />
+                  <service.Icon size={16} color="var(--primary)" />
                   {service.label} completo
                 </div>
                 <div style={{ fontSize: 13, color: "var(--text-muted)", marginTop: 4, lineHeight: 1.5 }}>
@@ -187,7 +188,7 @@ export default function PlanConfigurator() {
                 display: "flex", alignItems: "center", gap: 6,
               }}
             >
-              <i className="ti ti-info-circle" style={{ fontSize: 14, color: "var(--primary)", flexShrink: 0 }} />
+              <Info size={14} style={{ color: "var(--primary)", flexShrink: 0 }} />
               O plano base não inclui backup automático. Recomendamos o add-on de backup.
             </div>
           </div>
@@ -196,7 +197,7 @@ export default function PlanConfigurator() {
           <div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
               <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
-                <i className="ti ti-plus" style={{ fontSize: 16, color: "var(--primary)" }} />
+                <Plus size={16} style={{ color: "var(--primary)" }} />
                 Adicione recursos ao seu projeto
               </div>
               <button
@@ -239,7 +240,7 @@ export default function PlanConfigurator() {
                       display: "flex", alignItems: "center", justifyContent: "center",
                       flexShrink: 0, transition: "all 0.18s",
                     }}>
-                      <i className={`ti ti-${addon.icon}`} style={{ fontSize: 18, color: active ? "#fff" : "var(--primary)" }} />
+                      <addon.Icon size={18} color={active ? "#fff" : "var(--primary)"} />
                     </div>
 
                     <div style={{ flex: 1, minWidth: 0 }}>
@@ -263,7 +264,7 @@ export default function PlanConfigurator() {
                             display: "flex", alignItems: "flex-start", gap: 4,
                           }}
                         >
-                          <i className="ti ti-info-circle" style={{ fontSize: 12, color: "var(--primary)", flexShrink: 0, marginTop: 1 }} />
+                          <Info size={12} style={{ color: "var(--primary)", flexShrink: 0, marginTop: 1 }} />
                           {addon.disclaimer}
                         </div>
                       )}
@@ -277,7 +278,7 @@ export default function PlanConfigurator() {
                       display: "flex", alignItems: "center", justifyContent: "center",
                       transition: "all 0.18s",
                     }}>
-                      {active && <i className="ti ti-check" style={{ color: "#fff", fontSize: 11 }} />}
+                      {active && <Check size={11} style={{ color: "#fff" }} />}
                     </div>
                   </div>
                 );
@@ -288,7 +289,7 @@ export default function PlanConfigurator() {
           {/* Manutenção */}
           <div>
             <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-              <i className="ti ti-tool" style={{ fontSize: 16, color: "var(--primary)" }} />
+              <Wrench size={16} style={{ color: "var(--primary)" }} />
               Plano de manutenção mensal
               <span
                 style={{
@@ -393,7 +394,7 @@ export default function PlanConfigurator() {
                 display: "flex", gap: 10, alignItems: "flex-start",
               }}
             >
-              <i className="ti ti-info-circle" style={{ color: "var(--primary)", fontSize: 18, flexShrink: 0, marginTop: 1 }} />
+              <Info size={18} style={{ color: "var(--primary)", flexShrink: 0, marginTop: 1 }} />
               <div>
                 <p style={{ fontSize: 12, color: "var(--text-muted)", lineHeight: 1.6, margin: 0 }}>
                   <strong style={{ color: "var(--text)" }}>Fidelidade mínima: 3 meses.</strong>{" "}
@@ -416,7 +417,7 @@ export default function PlanConfigurator() {
                 display: "flex", gap: 10, alignItems: "flex-start",
               }}
             >
-              <i className="ti ti-alert-circle" style={{ color: "var(--primary)", fontSize: 20, flexShrink: 0, marginTop: 1 }} />
+              <AlertCircle size={20} style={{ color: "var(--primary)", flexShrink: 0, marginTop: 1 }} />
               <div>
                 <p style={{ fontSize: 13, color: "var(--text)", fontWeight: 700, margin: "0 0 4px" }}>
                   Sem plano, sem suporte após a entrega.
@@ -440,7 +441,7 @@ export default function PlanConfigurator() {
           >
             {/* Cabeçalho resumo */}
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 18 }}>
-              <i className="ti ti-receipt" style={{ fontSize: 16, color: "var(--primary)" }} />
+              <Receipt size={16} style={{ color: "var(--primary)" }} />
               <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text-muted)" }}>
                 Resumo do orçamento
               </span>
@@ -455,7 +456,7 @@ export default function PlanConfigurator() {
                 display: "flex", alignItems: "center", gap: 8,
               }}
             >
-              <i className={`ti ti-${service.icon}`} style={{ fontSize: 16, color: "var(--primary)", flexShrink: 0 }} />
+              <service.Icon size={16} color="var(--primary)" style={{ flexShrink: 0 }} />
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 12, fontWeight: 700, color: "var(--text)" }}>{service.label}</div>
                 <div style={{ fontSize: 11, color: "var(--text-muted)" }}>{service.desc}</div>
@@ -473,7 +474,7 @@ export default function PlanConfigurator() {
               {selectedAddons.filter(a => a.type === "once").map(a => (
                 <div key={a.id} style={{ display: "flex", justifyContent: "space-between", fontSize: 13 }}>
                   <span style={{ color: "var(--text-muted)", display: "flex", alignItems: "center", gap: 4 }}>
-                    <i className={`ti ti-${a.icon}`} style={{ fontSize: 12, color: "var(--primary)" }} />
+                    <a.Icon size={12} />
                     {a.label}
                   </span>
                   <span style={{ color: "var(--text)", fontWeight: 600 }}>+ {formatPrice(a.price)}</span>
@@ -591,7 +592,7 @@ export default function PlanConfigurator() {
                     display: "flex", gap: 6, alignItems: "flex-start",
                   }}
                 >
-                  <i className="ti ti-alert-circle" style={{ color: "var(--primary)", fontSize: 14, flexShrink: 0, marginTop: 1 }} />
+                  <AlertCircle size={14} style={{ color: "var(--primary)", flexShrink: 0, marginTop: 1 }} />
                   {submitError}
                 </div>
               )}
@@ -616,13 +617,13 @@ export default function PlanConfigurator() {
               >
                 {isPending ? (
                   <>
-                    <i className="ti ti-loader-2" style={{ animation: "spin 1s linear infinite" }} />
+                    <Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} />
                     Enviando...
                   </>
                 ) : (
                   <>
                     Solicitar orçamento
-                    <i className="ti ti-arrow-right" style={{ fontSize: 14 }} />
+                    <ArrowRight size={14} />
                   </>
                 )}
               </button>

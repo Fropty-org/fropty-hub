@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useTransition } from "react";
 import { signOut } from "@/app/actions/auth";
 import { ROLE_LABEL, type UserRole } from "@/app/lib/auth/roles";
+import { ChevronUp, ChevronDown, LogOut, Loader2 } from "lucide-react";
 
 interface Props {
   name: string;
@@ -79,10 +80,7 @@ export function UserAvatarMenu({ name, email, initials, role, plan }: Props) {
             {planLabel}
           </p>
         </div>
-        <i
-          className={`ti ${open ? "ti-chevron-up" : "ti-chevron-down"}`}
-          style={{ fontSize: 14, color: "var(--text-faint)", flexShrink: 0 }}
-        />
+        {open ? <ChevronUp size={14} style={{ color: "var(--text-faint)", flexShrink: 0 }} /> : <ChevronDown size={14} style={{ color: "var(--text-faint)", flexShrink: 0 }} />}
       </button>
 
       {open && (
@@ -145,7 +143,7 @@ export function UserAvatarMenu({ name, email, initials, role, plan }: Props) {
               opacity: pending ? 0.6 : 1,
             }}
           >
-            <i className={`ti ${pending ? "ti-loader-2" : "ti-logout"}`} style={{ fontSize: 16 }} />
+            {pending ? <Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} /> : <LogOut size={16} />}
             {pending ? "Saindo..." : "Sair da conta"}
           </button>
         </div>

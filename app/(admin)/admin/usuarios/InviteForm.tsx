@@ -3,6 +3,7 @@
 import { useRef, useState, useTransition } from "react";
 import { adminInviteClient } from "@/app/actions/admin";
 import { SERVICES } from "@/app/lib/constants/services";
+import { MailForward, Send, CheckCircle, XCircle } from "lucide-react";
 
 export default function InviteForm() {
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
@@ -26,7 +27,7 @@ export default function InviteForm() {
   return (
     <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "24px 24px 20px", marginBottom: 28 }}>
       <h2 style={{ fontSize: "1rem", fontWeight: 700, margin: "0 0 16px", color: "var(--text)" }}>
-        <i className="ti ti-mail-forward" style={{ marginRight: 7 }} />
+        <MailForward size={15} style={{ marginRight: 7 }} />
         Convidar novo cliente
       </h2>
       <form ref={formRef} onSubmit={handleSubmit} style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "flex-end" }}>
@@ -90,7 +91,7 @@ export default function InviteForm() {
                 style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 999, padding: "6px 12px", fontSize: "12px", fontWeight: 600, color: "var(--text-muted)", cursor: "pointer", userSelect: "none" }}
               >
                 <input type="checkbox" name="services" value={s.id} style={{ accentColor: s.color, cursor: "pointer" }} />
-                <i className={`ti ${s.icon}`} style={{ color: s.color, fontSize: 14 }} />
+                <s.Icon size={14} style={{ color: s.color }} />
                 {s.label}
               </label>
             ))}
@@ -102,13 +103,13 @@ export default function InviteForm() {
           disabled={isPending}
           style={{ padding: "8px 18px", borderRadius: 8, border: "none", background: "#185FA5", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: isPending ? "not-allowed" : "pointer", fontFamily: "inherit", opacity: isPending ? 0.7 : 1, alignSelf: "flex-end", height: 38 }}
         >
-          <i className="ti ti-send" style={{ marginRight: 6 }} />
+          <Send size={14} style={{ marginRight: 6 }} />
           {isPending ? "Enviando…" : "Convidar"}
         </button>
       </form>
       {message && (
         <p style={{ margin: "12px 0 0", fontSize: "13px", color: message.type === "success" ? "#22c55e" : "#ef4444", fontWeight: 600 }}>
-          <i className={`ti ${message.type === "success" ? "ti-circle-check" : "ti-circle-x"}`} style={{ marginRight: 6 }} />
+          {message.type === "success" ? <CheckCircle size={14} style={{ marginRight: 6 }} /> : <XCircle size={14} style={{ marginRight: 6 }} />}
           {message.text}
         </p>
       )}

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import type { BlogPost } from "../../lib/blog/posts";
+import { ArrowRight } from "lucide-react";
 
 export function PostCard({ post }: { post: BlogPost }) {
   return (
@@ -31,7 +32,7 @@ export function PostCard({ post }: { post: BlogPost }) {
             flexShrink: 0,
           }}
         >
-          <i className={`ti ${post.coverIcon}`} style={{ fontSize: 26, color: post.coverColor }} />
+          <post.CoverIcon size={26} style={{ color: post.coverColor }} />
         </div>
 
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -51,7 +52,7 @@ export function PostCard({ post }: { post: BlogPost }) {
             {post.description}
           </p>
           <span style={{ fontSize: "13px", fontWeight: 700, color: "var(--primary)", display: "inline-flex", alignItems: "center", gap: 4 }}>
-            Ler artigo <i className="ti ti-arrow-right" style={{ fontSize: 13 }} />
+            Ler artigo <ArrowRight size={13} />
           </span>
         </div>
       </article>

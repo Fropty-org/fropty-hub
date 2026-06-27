@@ -1,21 +1,22 @@
 "use client";
 
 import { useState } from "react";
+import { Palette, Zap, Coins, Puzzle, Hand, Headphones, Gift, Clock, MessageSquare, ShieldCheck, Send, CheckCircle, AlertCircle, Loader2, ArrowRight, type LucideIcon } from "lucide-react";
 
 const PRIORITIES = [
-  { label: "Visual bonito",               icon: "ti-palette" },
-  { label: "Rapidez na entrega",          icon: "ti-bolt" },
-  { label: "Preço baixo",                 icon: "ti-coin" },
-  { label: "Funcionalidades completas",   icon: "ti-puzzle" },
-  { label: "Facilidade de uso",           icon: "ti-hand-finger" },
-  { label: "Suporte contínuo",            icon: "ti-headset" },
+  { label: "Visual bonito",               Icon: Palette },
+  { label: "Rapidez na entrega",          Icon: Zap },
+  { label: "Preço baixo",                 Icon: Coins },
+  { label: "Funcionalidades completas",   Icon: Puzzle },
+  { label: "Facilidade de uso",           Icon: Hand },
+  { label: "Suporte contínuo",            Icon: Headphones },
 ];
 
 const BENEFITS = [
-  { icon: "ti-gift",         text: "Prévia 100% gratuita — sem compromisso" },
-  { icon: "ti-clock",        text: "Resposta em até 48 horas úteis" },
-  { icon: "ti-message",      text: "Atendimento direto com nossa equipe" },
-  { icon: "ti-shield-check", text: "Sem spam, sem surpresas" },
+  { Icon: Gift,        text: "Prévia 100% gratuita — sem compromisso" },
+  { Icon: Clock,       text: "Resposta em até 48 horas úteis" },
+  { Icon: MessageSquare, text: "Atendimento direto com nossa equipe" },
+  { Icon: ShieldCheck, text: "Sem spam, sem surpresas" },
 ];
 
 export function QuoteSection() {
@@ -69,7 +70,7 @@ export function QuoteSection() {
         {/* Header */}
         <div className="mb-12 flex justify-center">
           <span className="section-chip">
-            <i className="ti ti-send" /> Orçamento
+            <Send size={12} /> Orçamento
           </span>
         </div>
 
@@ -81,7 +82,7 @@ export function QuoteSection() {
               className="font-bold tracking-tight"
               style={{
                 color: "var(--text)",
-                fontFamily: "var(--font-plus-jakarta), sans-serif",
+                fontFamily: "var(--font-dm-sans), sans-serif",
                 fontSize: "clamp(2rem, 4.5vw, 3rem)",
                 lineHeight: 1.1,
               }}
@@ -94,7 +95,7 @@ export function QuoteSection() {
             </p>
 
             <ul className="mt-8 space-y-4">
-              {BENEFITS.map(({ icon, text }) => (
+              {BENEFITS.map(({ Icon, text }) => (
                 <li key={text} className="flex items-start gap-3">
                   <div
                     style={{
@@ -103,7 +104,7 @@ export function QuoteSection() {
                       display: "flex", alignItems: "center", justifyContent: "center",
                     }}
                   >
-                    <i className={`ti ${icon}`} style={{ fontSize: 18, color: "var(--primary)" }} />
+                    <Icon size={18} style={{ color: "var(--primary)" }} />
                   </div>
                   <span className="pt-1.5 text-sm" style={{ color: "var(--text-muted)" }}>{text}</span>
                 </li>
@@ -143,7 +144,7 @@ export function QuoteSection() {
             {status === "success" ? (
               <div className="flex flex-col items-center py-12 text-center gap-4">
                 <div style={{ width: 72, height: 72, borderRadius: "50%", background: "rgba(91,87,232,0.12)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <i className="ti ti-circle-check" style={{ fontSize: 36, color: "var(--primary)" }} />
+                  <CheckCircle size={36} style={{ color: "var(--primary)" }} />
                 </div>
                 <h3 className="text-xl font-bold" style={{ color: "var(--text)" }}>Pedido enviado!</h3>
                 <p style={{ color: "var(--text-muted)", maxWidth: 320 }}>
@@ -247,7 +248,7 @@ export function QuoteSection() {
                     O que importa mais para você?
                   </p>
                   <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                    {PRIORITIES.map(({ label, icon }) => {
+                    {PRIORITIES.map(({ label, Icon }) => {
                       const isChecked = checked.has(label);
                       return (
                         <label
@@ -267,7 +268,7 @@ export function QuoteSection() {
                             onChange={() => togglePriority(label)}
                             className="sr-only"
                           />
-                          <i className={`ti ${icon}`} style={{ fontSize: 14, flexShrink: 0 }} />
+                          <Icon size={14} style={{ flexShrink: 0 }} />
                           {label}
                         </label>
                       );
@@ -277,7 +278,7 @@ export function QuoteSection() {
 
                 {status === "error" && (
                   <div className="flex items-center gap-2 rounded-xl px-4 py-3 text-sm" style={{ background: "rgba(91,87,232,0.08)", border: "1px solid rgba(91,87,232,0.2)", color: "var(--text-muted)" }}>
-                    <i className="ti ti-alert-circle" style={{ color: "var(--primary)", fontSize: 16 }} />
+                    <AlertCircle size={16} style={{ color: "var(--primary)" }} />
                     Ops, algo deu errado. Tente novamente em instantes.
                   </div>
                 )}
@@ -293,13 +294,13 @@ export function QuoteSection() {
                 >
                   {status === "sending" ? (
                     <span className="flex items-center justify-center gap-2">
-                      <i className="ti ti-loader-2" style={{ animation: "spin 1s linear infinite" }} />
+                      <Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} />
                       Enviando...
                     </span>
                   ) : (
                     <span className="flex items-center justify-center gap-2">
                       Enviar pedido de orçamento
-                      <i className="ti ti-arrow-right" style={{ fontSize: 16 }} />
+                      <ArrowRight size={16} />
                     </span>
                   )}
                 </button>

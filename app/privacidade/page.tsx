@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Política de Privacidade — Fropty Apps",
@@ -28,7 +29,7 @@ export default function PrivacidadePage() {
             href="/"
             className="flex items-center gap-2 text-sm text-slate-400 transition hover:text-white"
           >
-            <i className="ti ti-arrow-left text-base" />
+            <ArrowLeft size={16} />
             Voltar
           </Link>
           <span className="text-base font-bold tracking-tight text-white">

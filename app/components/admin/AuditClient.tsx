@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Download, Loader2, Search, X, ClipboardX, ChevronLeft, ChevronRight } from "lucide-react";
 import { AUDIT_ACTIONS, auditActionInfo, formatAuditMeta } from "@/app/lib/constants/audit";
 import type { ResolvedAuditLog } from "@/app/lib/db/audit";
 
@@ -99,7 +100,7 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
             fontFamily: "inherit", opacity: (exporting || rows.length === 0) ? 0.6 : 1,
           }}
         >
-          <i className={`ti ${exporting ? "ti-loader-2" : "ti-download"}`} style={{ fontSize: 15 }} />
+          {exporting ? <Loader2 size={15} style={{ animation: "spin 1s linear infinite" }} /> : <Download size={15} />}
           {exporting ? "Exportando…" : "Exportar CSV"}
         </button>
       </div>
@@ -110,7 +111,7 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
           onSubmit={(e) => { e.preventDefault(); applyFilter({ q: search }); }}
           style={{ flex: 1, minWidth: 200, display: "flex", alignItems: "center", gap: 8, background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 10, padding: "8px 14px" }}
         >
-          <i className="ti ti-search" style={{ color: "var(--text-faint)", fontSize: 15, flexShrink: 0 }} />
+          <Search size={15} style={{ color: "var(--text-faint)", flexShrink: 0 }} />
           <input
             type="text"
             value={search}
@@ -145,7 +146,7 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
 
         {hasActiveFilters && (
           <button onClick={clearFilters} style={{ background: "none", border: "1px solid var(--border)", borderRadius: 9, padding: "8px 12px", fontSize: "12px", fontWeight: 600, color: "var(--text-faint)", cursor: "pointer", fontFamily: "inherit" }}>
-            <i className="ti ti-x" style={{ marginRight: 4 }} /> Limpar
+            <X size={14} style={{ marginRight: 4 }} /> Limpar
           </button>
         )}
       </div>
@@ -168,7 +169,7 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
 
               <div style={{ display: "flex", gap: 12 }}>
                 <div style={{ width: 32, height: 32, borderRadius: 9, flexShrink: 0, background: `${info.color}18`, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
-                  <i className={`ti ${info.icon}`} style={{ fontSize: 16, color: info.color }} />
+                  <info.Icon size={16} style={{ color: info.color }} />
                   {SEV_DOT[info.severity] !== "transparent" && (
                     <span style={{ position: "absolute", top: -3, right: -3, width: 9, height: 9, borderRadius: "50%", background: SEV_DOT[info.severity], border: "2px solid var(--card-bg)" }} />
                   )}
@@ -202,7 +203,7 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
 
         {rows.length === 0 && (
           <p style={{ padding: "48px", textAlign: "center", color: "var(--text-faint)", fontSize: "13px", margin: 0 }}>
-            <i className="ti ti-clipboard-off" style={{ display: "block", fontSize: 26, marginBottom: 10 }} />
+            <ClipboardX size={26} style={{ display: "block", marginBottom: 10 }} />
             {hasActiveFilters ? "Nenhuma ação encontrada com esses filtros." : "Nenhuma ação registrada ainda."}
           </p>
         )}
@@ -216,7 +217,7 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
             onClick={() => applyFilter({ page: String(page - 1) })}
             style={pagerStyle(page <= 0)}
           >
-            <i className="ti ti-chevron-left" /> Anterior
+            <ChevronLeft size={14} /> Anterior
           </button>
           <span style={{ fontSize: "12px", color: "var(--text-faint)", fontWeight: 600 }}>
             Página {page + 1} de {totalPages}
@@ -226,7 +227,7 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
             onClick={() => applyFilter({ page: String(page + 1) })}
             style={pagerStyle(page >= totalPages - 1)}
           >
-            Próxima <i className="ti ti-chevron-right" />
+            Próxima <ChevronRight size={14} />
           </button>
         </div>
       )}

@@ -1,6 +1,7 @@
 "use client";
 
 import { forwardRef, ButtonHTMLAttributes } from "react";
+import { Loader2, type LucideIcon } from "lucide-react";
 
 type Variant = "primary" | "secondary" | "ghost" | "danger";
 type Size = "sm" | "md" | "lg";
@@ -9,8 +10,8 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
   size?: Size;
   loading?: boolean;
-  icon?: string; // tabler icon class, e.g. "ti-send"
-  iconRight?: string;
+  Icon?: LucideIcon;
+  IconRight?: LucideIcon;
 }
 
 const variantStyles: Record<Variant, React.CSSProperties> = {
@@ -48,8 +49,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       variant = "primary",
       size = "md",
       loading = false,
-      icon,
-      iconRight,
+      Icon,
+      IconRight,
       children,
       disabled,
       style,
@@ -87,12 +88,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {loading ? (
-          <i className="ti ti-loader-2" style={{ animation: "spin 1s linear infinite" }} />
+          <Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} />
         ) : (
-          icon && <i className={`ti ${icon}`} />
+          Icon && <Icon size={16} />
         )}
         {children}
-        {!loading && iconRight && <i className={`ti ${iconRight}`} />}
+        {!loading && IconRight && <IconRight size={16} />}
       </button>
     );
   }

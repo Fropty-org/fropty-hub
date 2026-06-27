@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useToast } from "@/app/components/ui/Toast";
+import { Lock, LockOpen } from "lucide-react";
 import {
   adminSetTokenBalance,
   adminUpdateUserPlan,
@@ -141,7 +142,7 @@ export function UserRowActions({ userId, name, role: roleInit, plan: planInit, t
             title="Bloquear o acesso deste cliente ao portal"
             style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "5px 10px", borderRadius: 7, border: "1px solid rgba(239,68,68,0.35)", background: "rgba(239,68,68,0.08)", color: "#ef4444", fontSize: "11px", fontWeight: 700, cursor: pending ? "wait" : "pointer", fontFamily: "inherit" }}
           >
-            <i className="ti ti-lock" style={{ fontSize: 13 }} /> Bloquear
+            <Lock size={13} /> Bloquear
           </button>
         ) : (
           <button
@@ -149,7 +150,7 @@ export function UserRowActions({ userId, name, role: roleInit, plan: planInit, t
             title="Liberar novamente o acesso deste cliente"
             style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "5px 10px", borderRadius: 7, border: "1px solid rgba(34,197,94,0.35)", background: "rgba(34,197,94,0.08)", color: "#22c55e", fontSize: "11px", fontWeight: 700, cursor: pending ? "wait" : "pointer", fontFamily: "inherit" }}
           >
-            <i className="ti ti-lock-open" style={{ fontSize: 13 }} /> Desbloquear
+            <LockOpen size={13} /> Desbloquear
           </button>
         )}
       </div>

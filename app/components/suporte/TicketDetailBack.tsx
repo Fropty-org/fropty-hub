@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ArrowLeft, ChevronRight } from "lucide-react";
 
 interface Props {
   subject: string;
@@ -36,14 +37,14 @@ export function TicketDetailBack({ subject, ticketLabel }: Props) {
           el.style.color = "var(--text-faint)";
         }}
       >
-        <i className="ti ti-arrow-left" style={{ fontSize: 13 }} />
+        <ArrowLeft size={13} />
         Suporte
       </Link>
-      <i className="ti ti-chevron-right" style={{ color: "var(--text-faint)", fontSize: 12 }} />
+      <ChevronRight size={12} style={{ color: "var(--text-faint)" }} />
       {ticketLabel && (
         <>
           <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--text-faint)", letterSpacing: "0.04em" }}>{ticketLabel}</span>
-          <i className="ti ti-chevron-right" style={{ color: "var(--text-faint)", fontSize: 12 }} />
+          <ChevronRight size={12} style={{ color: "var(--text-faint)" }} />
         </>
       )}
       <span

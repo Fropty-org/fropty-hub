@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { createClient } from "@/app/lib/supabase/server";
+import { TrendingUp, Users, MessageCircle, CheckCircle } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 export const metadata: Metadata = { title: "Analytics — Admin" };
 
@@ -40,11 +42,11 @@ export default async function AdminAnalyticsPage() {
     ? Math.round(((resolvedTickets ?? 0) / totalTickets) * 100)
     : 0;
 
-  const kpis = [
-    { label: "MRR",                value: `R$${mrr.toFixed(2).replace(".", ",")}`, icon: "ti-trending-up",    color: "#22c55e", sub: `${planCounts.basico} básico · ${planCounts.pro} pro` },
-    { label: "Clientes ativos",    value: totalClients ?? 0,   icon: "ti-users",          color: "#3b82f6",        sub: `${planCounts.sem_plano} sem plano` },
-    { label: "Tickets abertos",    value: openTickets ?? 0,    icon: "ti-message-circle", color: "var(--primary)", sub: `${resolvedTickets ?? 0} resolvidos/fechados` },
-    { label: "Taxa de resolução",  value: `${resolvedRate}%`,  icon: "ti-circle-check",   color: "#EF9F27",        sub: `${openTickets ?? 0} abertos · ${resolvedTickets ?? 0} resolvidos` },
+  const kpis: { label: string; value: string | number; Icon: LucideIcon; color: string; sub: string }[] = [
+    { label: "MRR",                value: `R$${mrr.toFixed(2).replace(".", ",")}`, Icon: TrendingUp,    color: "#22c55e", sub: `${planCounts.basico} básico · ${planCounts.pro} pro` },
+    { label: "Clientes ativos",    value: totalClients ?? 0,   Icon: Users,          color: "#3b82f6",        sub: `${planCounts.sem_plano} sem plano` },
+    { label: "Tickets abertos",    value: openTickets ?? 0,    Icon: MessageCircle,  color: "var(--primary)", sub: `${resolvedTickets ?? 0} resolvidos/fechados` },
+    { label: "Taxa de resolução",  value: `${resolvedRate}%`,  Icon: CheckCircle,    color: "#EF9F27",        sub: `${openTickets ?? 0} abertos · ${resolvedTickets ?? 0} resolvidos` },
   ];
 
   return (
@@ -60,7 +62,7 @@ export default async function AdminAnalyticsPage() {
           <div key={k.label} style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 16, padding: "22px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
               <div style={{ width: 38, height: 38, borderRadius: 10, background: `${k.color}15`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <i className={`ti ${k.icon}`} style={{ fontSize: 20, color: k.color }} />
+                <k.Icon size={20} style={{ color: k.color }} />
               </div>
               <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--text-muted)" }}>{k.label}</span>
             </div>

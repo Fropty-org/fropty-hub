@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { createTicket } from "@/app/actions/suporte";
+import { CheckCircle, Paperclip, File, X, AlertCircle, Loader2, Send, ArrowDown, ArrowRight, ArrowUp, LucideIcon } from "lucide-react";
 import { createClient } from "@/app/lib/supabase/browser";
 
 interface Props {
@@ -13,10 +14,10 @@ interface Props {
 
 const CATEGORIES = ["Bug / Erro", "Nova funcionalidade", "Dúvida", "Performance", "Outros"];
 
-const PRIORITIES: { value: string; label: string; color: string; icon: string; desc: string }[] = [
-  { value: "baixa", label: "Baixa",  color: "#94a3b8", icon: "ti-arrow-down",  desc: "Não urgente" },
-  { value: "media", label: "Média",  color: "#EF9F27", icon: "ti-arrow-right", desc: "Impacto moderado" },
-  { value: "alta",  label: "Alta",   color: "#ef4444", icon: "ti-arrow-up",    desc: "Bloqueando uso" },
+const PRIORITIES: { value: string; label: string; color: string; Icon: LucideIcon; desc: string }[] = [
+  { value: "baixa", label: "Baixa",  color: "#94a3b8", Icon: ArrowDown,  desc: "Não urgente" },
+  { value: "media", label: "Média",  color: "#EF9F27", Icon: ArrowRight, desc: "Impacto moderado" },
+  { value: "alta",  label: "Alta",   color: "#ef4444", Icon: ArrowUp,    desc: "Bloqueando uso" },
 ];
 
 const inputStyle: React.CSSProperties = {
@@ -130,7 +131,7 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
           justifyContent: "center",
           margin: "0 auto 16px",
         }}>
-          <i className="ti ti-circle-check" style={{ fontSize: 30, color: "#22c55e" }} />
+          <CheckCircle size={30} style={{ color: "#22c55e" }} />
         </div>
         <p style={{ fontWeight: 800, fontSize: "1rem", color: "var(--text)", margin: "0 0 6px" }}>
           Chamado aberto!
@@ -212,7 +213,7 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
                 transition: "all 0.15s",
               }}
             >
-              <i className={`ti ${p.icon}`} style={{ fontSize: 16, color: priority === p.value ? p.color : "var(--text-faint)" }} />
+              <p.Icon size={16} style={{ color: priority === p.value ? p.color : "var(--text-faint)" }} />
               <span style={{ fontSize: "12px", fontWeight: 700, color: priority === p.value ? p.color : "var(--text-muted)" }}>
                 {p.label}
               </span>
@@ -269,7 +270,7 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
             onMouseEnter={(e) => { e.currentTarget.style.borderColor = "var(--primary)"; e.currentTarget.style.color = "var(--primary)"; }}
             onMouseLeave={(e) => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.color = "var(--text-muted)"; }}
           >
-            <i className="ti ti-paperclip" style={{ fontSize: 14 }} /> Adicionar arquivo
+            <Paperclip size={14} /> Adicionar arquivo
           </button>
         )}
         {files.length > 0 && (
@@ -289,7 +290,7 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
                   color: "var(--text-muted)",
                 }}
               >
-                <i className="ti ti-file" style={{ fontSize: 14, flexShrink: 0, color: "var(--primary)" }} />
+                <File size={14} style={{ flexShrink: 0, color: "var(--primary)" }} />
                 <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{f.name}</span>
                 <span style={{ color: "var(--text-faint)", flexShrink: 0, fontSize: "11px" }}>
                   {(f.size / 1024).toFixed(0)} KB
@@ -299,7 +300,7 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
                   onClick={() => removeFile(i)}
                   style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-faint)", padding: 0, display: "flex", fontFamily: "inherit" }}
                 >
-                  <i className="ti ti-x" style={{ fontSize: 13 }} />
+                  <X size={13} />
                 </button>
               </div>
             ))}
@@ -317,7 +318,7 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
           background: "rgba(239,68,68,0.08)",
           border: "1px solid rgba(239,68,68,0.2)",
         }}>
-          <i className="ti ti-alert-circle" style={{ color: "#ef4444", fontSize: 14, flexShrink: 0 }} />
+          <AlertCircle size={14} style={{ color: "#ef4444", flexShrink: 0 }} />
           <p style={{ margin: 0, fontSize: "12px", color: "#ef4444" }}>{error}</p>
         </div>
       )}
@@ -365,8 +366,8 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
           }}
         >
           {loading
-            ? <><i className="ti ti-loader-2" style={{ animation: "spin 1s linear infinite" }} /> Enviando...</>
-            : <><i className="ti ti-send" /> Abrir chamado</>
+            ? <><Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} /> Enviando...</>
+            : <><Send size={16} /> Abrir chamado</>
           }
         </button>
       </div>

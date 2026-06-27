@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { CheckCircle } from "lucide-react";
 
 const priorities = [
   "Visual bonito",
@@ -48,7 +49,7 @@ export default function QuoteForm() {
   if (status === "success") {
     return (
       <div className="mt-6 rounded-2xl border border-green-800/50 bg-green-900/20 p-8 text-center">
-        <i className="ti ti-circle-check" style={{ fontSize: "48px", color: "#4ade80" }} />
+        <CheckCircle size={48} style={{ color: "#4ade80" }} />
         <h3 className="mt-3 text-xl font-semibold text-green-400">
           Pedido enviado!
         </h3>

@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
+import { AlertTriangle } from "lucide-react";
 
 export default function Error({
   error,
@@ -35,7 +36,7 @@ export default function Error({
         justifyContent: "center",
         marginBottom: 20,
       }}>
-        <i className="ti ti-alert-triangle" style={{ fontSize: 24, color: "#ef4444" }} />
+        <AlertTriangle size={24} style={{ color: "#ef4444" }} />
       </div>
       <h1 style={{ fontSize: "1.4rem", fontWeight: 800, color: "var(--text)", margin: "0 0 8px" }}>
         Algo deu errado

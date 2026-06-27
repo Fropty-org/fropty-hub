@@ -3,6 +3,7 @@
 import { useTransition, useState } from "react";
 import { useRouter } from "next/navigation";
 import { updateTicket } from "@/app/actions/suporte";
+import { Settings, AlertCircle, Loader2, Check, Save, LucideIcon } from "lucide-react";
 import { TICKET_STATUS_MAP, TICKET_PRIORITY_MAP } from "@/app/lib/constants/status";
 import type { TicketStatus, TicketPriority } from "@/app/lib/constants/status";
 
@@ -64,7 +65,7 @@ export function AdminTicketActions({ ticketId, currentStatus, currentPriority }:
       }}
     >
       <p style={{ margin: 0, fontSize: "11px", fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-        <i className="ti ti-settings" style={{ marginRight: 6 }} />
+        <Settings size={14} style={{ marginRight: 6 }} />
         Ações do chamado
       </p>
 
@@ -92,7 +93,7 @@ export function AdminTicketActions({ ticketId, currentStatus, currentPriority }:
                     transition: "all 0.15s",
                   }}
                 >
-                  <i className={`ti ${info.icon}`} style={{ fontSize: 11 }} />
+                  <info.Icon size={11} />
                   {info.label}
                 </button>
               );
@@ -153,7 +154,7 @@ export function AdminTicketActions({ ticketId, currentStatus, currentPriority }:
 
       {error && (
         <p style={{ margin: 0, fontSize: "12px", color: "#ef4444", display: "flex", alignItems: "center", gap: 5 }}>
-          <i className="ti ti-alert-circle" /> {error}
+          <AlertCircle size={14} /> {error}
         </p>
       )}
 
@@ -176,9 +177,7 @@ export function AdminTicketActions({ ticketId, currentStatus, currentPriority }:
             transition: "background 0.2s",
           }}
         >
-          <i className={`ti ${pending ? "ti-loader-2" : saved ? "ti-check" : "ti-device-floppy"}`}
-            style={{ fontSize: 14, animation: pending ? "spin 1s linear infinite" : "none" }}
-          />
+          {pending ? <Loader2 size={13} style={{ animation: "spin 1s linear infinite" }} /> : saved ? <Check size={13} /> : <Save size={13} />}
           {pending ? "Salvando…" : saved ? "Salvo!" : "Salvar alterações"}
         </button>
       </div>

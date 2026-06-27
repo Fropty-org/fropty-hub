@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/app/lib/supabase/server";
 import { getProfile } from "@/app/lib/auth/session";
 import { NewTicketForm } from "@/app/components/suporte/NewTicketForm";
+import { ArrowLeft, Coins, ChevronRight, Headphones } from "lucide-react";
 
 export const metadata: Metadata = { title: "Novo chamado — Fropty" };
 
@@ -17,12 +18,12 @@ export default async function NovoChamadoPage() {
       <div style={{ padding: "36px 32px", maxWidth: 720, margin: "0 auto" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20, fontSize: "12px" }}>
           <Link href="/portal/suporte" style={{ color: "var(--text-faint)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 5, padding: "5px 10px 5px 8px", borderRadius: 8, border: "1px solid var(--card-border)", background: "var(--card-bg)", fontWeight: 600 }}>
-            <i className="ti ti-arrow-left" style={{ fontSize: 13 }} /> Suporte
+            <ArrowLeft size={13} /> Suporte
           </Link>
         </div>
         <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 20, padding: "48px 32px", textAlign: "center" }}>
           <div style={{ width: 56, height: 56, borderRadius: 16, background: "rgba(239,159,39,0.1)", border: "1px solid rgba(239,159,39,0.2)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
-            <i className="ti ti-coin" style={{ fontSize: 26, color: "#EF9F27" }} />
+            <Coins size={26} style={{ color: "#EF9F27" }} />
           </div>
           <h2 style={{ fontSize: "1.2rem", fontWeight: 800, margin: "0 0 8px", color: "var(--text)" }}>
             Tokens insuficientes
@@ -32,7 +33,7 @@ export default async function NovoChamadoPage() {
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <Link href="/portal/financeiro" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "10px 22px", background: "#EF9F27", color: "#fff", fontWeight: 700, fontSize: "13px", borderRadius: 10, textDecoration: "none" }}>
-              <i className="ti ti-coin" style={{ fontSize: 14 }} /> Ver planos e tokens
+              <Coins size={14} /> Ver planos e tokens
             </Link>
             <Link href="/portal/suporte" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "10px 22px", background: "var(--surface)", color: "var(--text-muted)", fontWeight: 600, fontSize: "13px", borderRadius: 10, textDecoration: "none", border: "1px solid var(--border)" }}>
               Voltar ao suporte
@@ -80,17 +81,17 @@ export default async function NovoChamadoPage() {
             fontWeight: 600,
           }}
         >
-          <i className="ti ti-arrow-left" style={{ fontSize: 13 }} />
+          <ArrowLeft size={13} />
           Suporte
         </Link>
-        <i className="ti ti-chevron-right" style={{ color: "var(--text-faint)", fontSize: 12 }} />
+        <ChevronRight size={12} style={{ color: "var(--text-faint)" }} />
         <span style={{ color: "var(--text-muted)" }}>Novo chamado</span>
       </div>
 
       {/* Header */}
       <div style={{ marginBottom: 28 }}>
         <span className="section-chip" style={{ marginBottom: 12 }}>
-          <i className="ti ti-headset" style={{ fontSize: 11 }} />
+          <Headphones size={11} />
           Service Desk
         </span>
         <h1 style={{ fontSize: "1.6rem", fontWeight: 800, margin: "0 0 4px", color: "var(--text)", letterSpacing: "-0.02em" }}>

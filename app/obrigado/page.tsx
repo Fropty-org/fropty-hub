@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import { CheckCircle, Mail } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Pedido enviado!",
@@ -42,7 +43,7 @@ export default function ObrigadoPage() {
             margin: "0 auto 24px",
           }}
         >
-          <i className="ti ti-check" style={{ fontSize: 32, color: "#22c55e" }} />
+          <CheckCircle size={32} style={{ color: "#22c55e" }} />
         </div>
 
         <h1 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: 12 }}>
@@ -64,7 +65,7 @@ export default function ObrigadoPage() {
           }}
         >
           <p style={{ margin: 0, fontSize: "0.9rem", color: "var(--text-muted)", lineHeight: 1.6 }}>
-            <i className="ti ti-mail" style={{ color: "var(--primary)", marginRight: 8 }} />
+            <Mail size={16} style={{ color: "var(--primary)", marginRight: 8 }} />
             Você receberá uma cópia do pedido no email informado.
             Verifique também a caixa de spam, caso não chegue em alguns minutos.
           </p>

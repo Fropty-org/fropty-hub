@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { WHATSAPP_URL } from "@/app/lib/config";
+import { Coins } from "lucide-react";
 
 interface Props {
   name: string;
@@ -48,7 +49,7 @@ export function OnboardingBanner({ name, tokenBalance }: Props) {
       {/* Header */}
       <div style={{ marginBottom: 24 }}>
         <p style={{ margin: "0 0 4px", fontSize: 13, color: "var(--text-faint)" }}>Primeiros passos</p>
-        <h2 style={{ margin: 0, fontSize: "1.25rem", fontWeight: 800, color: "var(--text)", fontFamily: "var(--font-plus-jakarta), sans-serif" }}>
+        <h2 style={{ margin: 0, fontSize: "1.25rem", fontWeight: 800, color: "var(--text)", fontFamily: "var(--font-dm-sans), sans-serif" }}>
           Bem-vindo, {name.split(" ")[0]}! Vamos começar?
         </h2>
       </div>
@@ -109,7 +110,7 @@ export function OnboardingBanner({ name, tokenBalance }: Props) {
           display: "flex", alignItems: "center", gap: 10,
           fontSize: 12, color: "#EF9F27",
         }}>
-          <i className="ti ti-coins" style={{ fontSize: 15, flexShrink: 0 }} />
+          <Coins size={15} style={{ flexShrink: 0 }} />
           <span>
             Você ainda não tem tokens. Tokens são usados para abrir chamados de suporte.{" "}
             <Link href="/portal/financeiro" style={{ color: "#EF9F27", fontWeight: 700 }}>Ver financeiro →</Link>

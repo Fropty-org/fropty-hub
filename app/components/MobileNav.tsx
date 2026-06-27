@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { X, Menu, LogIn } from "lucide-react";
 
 const links = [
   { href: "#planos",   label: "Planos" },
@@ -20,7 +21,7 @@ export function MobileNav() {
         aria-label={open ? "Fechar menu" : "Abrir menu"}
         style={{ color: "var(--text)", background: "none", border: "none", cursor: "pointer", padding: 4 }}
       >
-        <i className={`ti ${open ? "ti-x" : "ti-menu-2"} text-xl`} />
+        {open ? <X size={20} /> : <Menu size={20} />}
       </button>
 
       {open && (
@@ -37,7 +38,7 @@ export function MobileNav() {
               aria-label="Fechar menu"
               style={{ color: "var(--text)", background: "none", border: "none", cursor: "pointer", padding: 4 }}
             >
-              <i className="ti ti-x text-xl" />
+              <X size={20} />
             </button>
           </div>
 
@@ -60,7 +61,7 @@ export function MobileNav() {
                 className="rounded-xl px-4 py-4 text-center text-base font-semibold transition"
                 style={{ border: "1px solid var(--border)", color: "var(--text-muted)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}
               >
-                <i className="ti ti-login-2" style={{ fontSize: 16 }} />
+                <LogIn size={16} />
                 Entrar na conta
               </Link>
               <Link
