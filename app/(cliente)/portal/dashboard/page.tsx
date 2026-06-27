@@ -5,9 +5,11 @@ import { getProfile } from "@/app/lib/auth/session";
 import { createClient } from "@/app/lib/supabase/server";
 import { CalendarDays, LayoutGrid, Coins, MessageCircle, MessagePlus, CreditCard } from "lucide-react";
 import { OnboardingBanner } from "@/app/components/cliente/OnboardingBanner";
+import { OnboardingChecklist } from "@/app/components/cliente/OnboardingChecklist";
 import { WHATSAPP_URL } from "@/app/lib/config";
 import { getService } from "@/app/lib/constants/services";
 import { PlanRenewalBanner } from "@/app/components/cliente/PlanRenewalBanner";
+import { getOnboardingSteps } from "@/app/lib/onboarding";
 
 export const metadata: Metadata = {
   title: "Meu Painel",
@@ -36,6 +38,11 @@ export default async function PortalDashboardPage() {
   const services       = profile?.services ?? [];
   const contractStart  = profile?.contract_start ?? null;
   const hasServices    = services.length > 0;
+
+  // Onboarding checklist
+  const showOnboarding = profile && !profile.onboarding_completed;
+  const onboardingSteps = showOnboarding ? await getOnboardingSteps(profile, supabase) : null;
+  const hasIncompleteSteps = onboardingSteps ? onboardingSteps.some((s) => !s.completed) : false;
 
   return (
     <div style={{ padding: "40px 32px", maxWidth: 900, margin: "0 auto" }}>
@@ -97,6 +104,11 @@ export default async function PortalDashboardPage() {
           </div>
         ))}
       </div>
+
+      {/* Onboarding checklist — exibido enquanto não for dispensado */}
+      {showOnboarding && onboardingSteps && hasIncompleteSteps && (
+        <OnboardingChecklist steps={onboardingSteps} />
+      )}
 
       {/* Banner de renovação de plano */}
       {profile?.plan && profile.plan !== "sem_plano" && profile.plan_renewal && (

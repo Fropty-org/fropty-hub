@@ -7,19 +7,25 @@ import { useTransition, useState, useEffect } from "react";
 import { signOut } from "@/app/actions/auth";
 import { PortalThemeToggle } from "@/app/components/cliente/PortalThemeToggle";
 import {
-  LayoutDashboard, Users, CreditCard, MessageCircle, BarChart2, ShieldCheck, UserCircle,
+  LayoutDashboard, Users, CreditCard, MessageCircle, BarChart2, ShieldCheck, UserCircle, BookOpen, Map, MessageSquarePlus,
+  FolderKanban, FileSignature,
   ChevronRight, ChevronLeft, X, Menu, LogOut, Loader2,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 const NAV: { id: string; href: string; Icon: LucideIcon; label: string }[] = [
-  { id: "overview",   href: "/admin/overview",   Icon: LayoutDashboard, label: "Visão Geral" },
-  { id: "usuarios",   href: "/admin/usuarios",   Icon: Users,           label: "Usuários" },
-  { id: "financeiro", href: "/admin/financeiro", Icon: CreditCard,      label: "Financeiro" },
-  { id: "suporte",    href: "/portal/suporte",   Icon: MessageCircle,   label: "Suporte" },
-  { id: "analytics",  href: "/admin/analytics",  Icon: BarChart2,       label: "Analytics" },
-  { id: "audit",      href: "/admin/audit",      Icon: ShieldCheck,     label: "Auditoria" },
-  { id: "perfil",     href: "/admin/perfil",     Icon: UserCircle,      label: "Meu Perfil" },
+  { id: "overview",          href: "/admin/overview",          Icon: LayoutDashboard,   label: "Visão Geral" },
+  { id: "usuarios",          href: "/admin/usuarios",          Icon: Users,             label: "Usuários" },
+  { id: "projetos",          href: "/admin/projetos",          Icon: FolderKanban,      label: "Projetos" },
+  { id: "contratos",         href: "/admin/contratos",         Icon: FileSignature,     label: "Contratos" },
+  { id: "financeiro",        href: "/admin/financeiro",        Icon: CreditCard,        label: "Financeiro" },
+  { id: "suporte",           href: "/portal/suporte",          Icon: MessageCircle,     label: "Suporte" },
+  { id: "roadmap",           href: "/admin/roadmap",           Icon: Map,               label: "Roadmap" },
+  { id: "feedback",          href: "/admin/feedback",          Icon: MessageSquarePlus, label: "Feedback" },
+  { id: "base-conhecimento", href: "/admin/base-conhecimento", Icon: BookOpen,          label: "Base de Conhecimento" },
+  { id: "analytics",         href: "/admin/analytics",         Icon: BarChart2,         label: "Analytics" },
+  { id: "audit",             href: "/admin/audit",             Icon: ShieldCheck,       label: "Auditoria" },
+  { id: "perfil",            href: "/admin/perfil",            Icon: UserCircle,        label: "Meu Perfil" },
 ];
 
 const COLLAPSED_W = 56;

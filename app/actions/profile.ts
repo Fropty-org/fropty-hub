@@ -90,6 +90,13 @@ export async function changePassword(formData: FormData): Promise<{ error?: stri
   return { success: "Senha alterada com sucesso!" };
 }
 
+export async function dismissOnboarding(): Promise<void> {
+  const userId = await requireAuth();
+  const supabase = await createClient();
+  await supabase.from("profiles").update({ onboarding_completed: true }).eq("id", userId);
+  revalidatePath("/portal/dashboard");
+}
+
 export async function updateTheme(theme: "dark" | "light"): Promise<void> {
   const userId = await requireAuth();
   if (theme !== "dark" && theme !== "light") return;

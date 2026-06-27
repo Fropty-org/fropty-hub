@@ -8,7 +8,8 @@ import { signOut } from "../../actions/auth";
 import { PortalThemeToggle } from "./PortalThemeToggle";
 import type { ClientUser } from "../../lib/types/cliente";
 import {
-  LayoutDashboard, MessageCircle, CreditCard, UserCircle,
+  LayoutDashboard, MessageCircle, CreditCard, UserCircle, BookOpen, Map, MessageSquarePlus,
+  FolderKanban, FileSignature,
   ChevronRight, ChevronLeft, X, Menu, LogOut, Loader2,
 } from "lucide-react";
 
@@ -27,14 +28,20 @@ interface Props {
 }
 
 const DEFAULT_NAV: NavItem[] = [
-  { id: "dashboard", href: "/portal/dashboard", icon: "LayoutDashboard", label: "Painel" },
-  { id: "suporte",   href: "/portal/suporte",   icon: "MessageCircle",   label: "Suporte" },
-  { id: "financeiro",href: "/portal/financeiro",icon: "CreditCard",      label: "Financeiro" },
-  { id: "perfil",    href: "/portal/perfil",    icon: "UserCircle",      label: "Meu Perfil" },
+  { id: "dashboard",        href: "/portal/dashboard",        icon: "LayoutDashboard",    label: "Painel" },
+  { id: "suporte",          href: "/portal/suporte",          icon: "MessageCircle",      label: "Suporte" },
+  { id: "projetos",         href: "/portal/projetos",         icon: "FolderKanban",       label: "Projetos" },
+  { id: "contratos",        href: "/portal/contratos",        icon: "FileSignature",      label: "Contratos" },
+  { id: "financeiro",       href: "/portal/financeiro",       icon: "CreditCard",         label: "Financeiro" },
+  { id: "roadmap",          href: "/portal/roadmap",          icon: "Map",                label: "Roadmap" },
+  { id: "feedback",         href: "/portal/feedback",         icon: "MessageSquarePlus",  label: "Feedback" },
+  { id: "base-conhecimento",href: "/portal/base-conhecimento",icon: "BookOpen",           label: "Base de Conhecimento" },
+  { id: "perfil",           href: "/portal/perfil",           icon: "UserCircle",         label: "Meu Perfil" },
 ];
 
 const LUCIDE_NAV_ICONS: Record<string, React.ComponentType<{ size?: number }>> = {
-  LayoutDashboard, MessageCircle, CreditCard, UserCircle,
+  LayoutDashboard, MessageCircle, CreditCard, UserCircle, BookOpen, Map, MessageSquarePlus,
+  FolderKanban, FileSignature,
 };
 
 function NavIcon({ name, size = 18 }: { name: string; size?: number }) {
