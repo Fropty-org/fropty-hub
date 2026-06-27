@@ -41,7 +41,7 @@ export default async function FinanceiroPage({ searchParams }: Props) {
     id:          t.id,
     date:        t.created_at,
     description: t.description,
-    type:        t.type,
+    type:        t.type as "credit" | "debit",
     amount:      t.amount,
     balance:     t.balance,
   }));
@@ -51,7 +51,7 @@ export default async function FinanceiroPage({ searchParams }: Props) {
   const tokenBalance  = profile?.token_balance ?? 0;
   const services      = profile?.services ?? [];
   const contractStart = profile?.contract_start ?? null;
-  const planInfo     = plan !== "sem_plano" ? PLAN_INFO[plan] : null;
+  const planInfo     = plan !== "sem_plano" ? PLAN_INFO[plan as keyof typeof PLAN_INFO] : null;
   const hasPlan      = plan === "basico" || plan === "pro";
   // Token extra: R$150 para quem tem plano (50% off); R$300 sem plano.
   const avulsoUnit   = hasPlan ? 150 : 300;

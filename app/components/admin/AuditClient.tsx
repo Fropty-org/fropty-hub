@@ -161,7 +161,7 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
 
         {rows.map((log, i) => {
           const info = auditActionInfo(log.action);
-          const date = new Date(log.created_at).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", year: "2-digit", hour: "2-digit", minute: "2-digit" });
+          const date = new Date(log.created_at ?? "").toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", year: "2-digit", hour: "2-digit", minute: "2-digit" });
           const meta = formatAuditMeta(log.metadata);
           return (
             <div key={log.id} className="audit-row" style={{ display: "grid", gridTemplateColumns: "150px 1fr 130px", padding: "14px 20px", borderBottom: i < rows.length - 1 ? "1px solid var(--border)" : "none", alignItems: "flex-start", fontSize: "13px", gap: 8 }}>

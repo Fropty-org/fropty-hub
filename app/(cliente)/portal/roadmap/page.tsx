@@ -10,7 +10,7 @@ const STATUS_SECTIONS: {
   status: RoadmapStatus;
   label: string;
   color: string;
-  Icon: React.ComponentType<{ size?: number }>;
+  Icon: React.ComponentType<{ size?: number; style?: React.CSSProperties }>;
   highlight?: boolean;
 }[] = [
   { status: "em_desenvolvimento", label: "Em Desenvolvimento", color: "var(--primary)", Icon: Rocket,        highlight: true },

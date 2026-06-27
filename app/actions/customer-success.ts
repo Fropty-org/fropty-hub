@@ -44,7 +44,7 @@ export async function getClientsWithHealth(): Promise<ClientWithHealth[]> {
     id: p.id,
     email: p.email ?? "",
     full_name: p.name,
-    plan: p.plan,
+    plan: p.plan ?? "sem_plano",
     token_balance: p.token_balance,
     health: scoreMap.get(p.id) ?? null,
   }));
@@ -78,7 +78,7 @@ export async function getClientHealth(clientId: string): Promise<ClientWithHealt
     id: profile.id,
     email: profile.email ?? "",
     full_name: profile.name,
-    plan: profile.plan,
+    plan: profile.plan ?? "sem_plano",
     token_balance: profile.token_balance,
     health: (score as HealthScore | null) ?? null,
   };
@@ -189,7 +189,7 @@ export async function getClientsWithoutHealth(): Promise<ClientWithHealth[]> {
       id: p.id,
       email: p.email ?? "",
       full_name: p.name,
-      plan: p.plan,
+      plan: p.plan ?? "sem_plano",
       token_balance: p.token_balance,
       health: null,
     }));

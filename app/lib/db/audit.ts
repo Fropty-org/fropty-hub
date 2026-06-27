@@ -12,7 +12,7 @@ export interface AuditFilters {
 
 export interface ResolvedAuditLog {
   id:          string;
-  created_at:  string;
+  created_at:  string | null;
   action:      string;
   target_type: string | null;
   target_id:   string | null;
@@ -119,7 +119,7 @@ export async function logAdminAction(opts: {
       action:      opts.action,
       target_type: opts.targetType ?? null,
       target_id:   opts.targetId   ?? null,
-      metadata:    opts.metadata   ?? null,
+      metadata:    (opts.metadata ?? null) as import("@/app/lib/supabase/types").Json | null,
     });
   } catch {
     // Auditoria nunca bloqueia o fluxo principal

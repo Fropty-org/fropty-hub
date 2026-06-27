@@ -19,7 +19,7 @@ export async function exportAuditCsv(filters: AuditFilters): Promise<{ csv: stri
   const header = ["Data", "Ação", "Severidade", "Admin", "Alvo", "Detalhes"];
   const lines = rows.map((r) => {
     const info = auditActionInfo(r.action);
-    const date = new Date(r.created_at).toLocaleString("pt-BR");
+    const date = new Date(r.created_at ?? "").toLocaleString("pt-BR");
     const meta = formatAuditMeta(r.metadata).map((m) => `${m.label}: ${m.value}`).join(" | ");
     return [
       date,

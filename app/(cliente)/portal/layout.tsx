@@ -62,7 +62,7 @@ export default async function PortalLayout({
     email,
     avatarInitials: initials,
     role:           "cliente" as const,
-    plan:           profile?.plan ?? undefined,
+    plan:           (profile?.plan ?? undefined) as "sem_plano" | "basico" | "pro" | undefined,
     planRenewal:    profile?.plan_renewal ?? undefined,
     tokenBalance:   profile?.token_balance ?? 0,
     tokenHistory:   [],
@@ -77,13 +77,13 @@ export default async function PortalLayout({
           name={displayName}
           initials={initials}
           userId={profile?.id ?? ""}
-          initialTheme={profile?.theme ?? "dark"}
+          initialTheme={(profile?.theme ?? "dark") as "dark" | "light"}
         />
       ) : (
         <ClientSidebar
           user={sidebarUser}
           navItems={portalNav}
-          initialTheme={profile?.theme ?? "dark"}
+          initialTheme={(profile?.theme ?? "dark") as "dark" | "light"}
         />
       )}
 
@@ -97,7 +97,7 @@ export default async function PortalLayout({
           email={email}
           initials={initials}
           role="cliente"
-          plan={profile?.plan}
+          plan={profile?.plan as "sem_plano" | "basico" | "pro" | undefined}
         />
       </div>
 
@@ -106,7 +106,7 @@ export default async function PortalLayout({
       </main>
 
       {/* Notificações + tema flutuantes no canto inferior direito */}
-      <PortalFloatingControls userId={profile?.id ?? ""} initialTheme={profile?.theme ?? "dark"} />
+      <PortalFloatingControls userId={profile?.id ?? ""} initialTheme={(profile?.theme ?? "dark") as "dark" | "light"} />
     </div>
   );
 }
