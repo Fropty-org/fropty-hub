@@ -77,7 +77,7 @@ export default async function AdminUsuariosPage({ searchParams }: Props) {
             <UserRowActions
               userId={u.id}
               name={u.name ?? ""}
-              role={u.role}
+              role={u.role as "cliente" | "admin"}
               plan={u.plan ?? "sem_plano"}
               tokenBalance={u.token_balance ?? 0}
               isActive={u.is_active !== false}
