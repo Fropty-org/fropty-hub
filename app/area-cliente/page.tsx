@@ -27,13 +27,6 @@ function GoogleIcon() {
   );
 }
 
-function AppleIcon({ color }: { color: string }) {
-  return (
-    <svg width="16" height="18" viewBox="0 0 814 1000" fill={color}>
-      <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-37.3-142.9-91.7C73.8 760.1 0 603.9 0 455.6c0-212.3 139.3-325.5 276.8-325.5 73.5 0 134.8 48.5 181.3 48.5 44.5 0 114.2-51.3 196.2-51.3 31.4 0 143.3 2.9 214.4 110.9zM650.2 57.5c34.5-41.5 60.3-99.5 60.3-157.5 0-8.1-.6-16.3-2-23.8-57.3 2.2-125.2 38.3-166.2 84.2-31.2 34.9-60.9 95.9-60.9 154.7 0 8.7 1.4 17.4 2 20.2 3.5.6 9.2 1.4 14.9 1.4 51.3 0 115.1-34.3 151.9-79.2z"/>
-    </svg>
-  );
-}
 
 export default function AreaClientePage() {
   const searchParams = useSearchParams();
@@ -45,7 +38,7 @@ export default function AreaClientePage() {
   const [success, setSuccess] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const [loginSubmitting, setLoginSubmitting] = useState(false);
-  const [oauthLoading, setOauthLoading] = useState<"google" | "apple" | null>(null);
+  const [oauthLoading, setOauthLoading] = useState<"google" | null>(null);
   const [theme, setTheme]     = useState<"dark" | "light">("dark");
   const [showPwd, setShowPwd] = useState(false);
 
@@ -64,7 +57,7 @@ export default function AreaClientePage() {
 
   function changeMode(m: Mode) { setMode(m); setError(null); setSuccess(null); }
 
-  async function handleOAuth(provider: "google" | "apple") {
+  async function handleOAuth(provider: "google") {
     setOauthLoading(provider);
     setError(null);
     const supabase = createClient();
@@ -241,18 +234,7 @@ export default function AreaClientePage() {
                 Continuar com Google
               </button>
 
-              {/* Apple */}
-              <button
-                type="button"
-                onClick={() => handleOAuth("apple")}
-                disabled={!!oauthLoading}
-                style={{ width: "100%", padding: "12px 0", borderRadius: 10, border: `1px solid ${border}`, background: "transparent", color: txtMain, fontWeight: 600, fontSize: 14, cursor: oauthLoading ? "not-allowed" : "pointer", fontFamily: "inherit", display: "flex", alignItems: "center", justifyContent: "center", gap: 10, transition: "background 0.15s", opacity: oauthLoading === "apple" ? 0.6 : 1 }}
-                onMouseEnter={e => { if (!oauthLoading) e.currentTarget.style.background = dark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.03)"; }}
-                onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
-              >
-                {oauthLoading === "apple" ? <Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} /> : <AppleIcon color={txtMain} />}
-                Continuar com Apple
-              </button>
+              {/* Apple — habilitado quando credenciais Apple Developer forem configuradas */}
             </>
           )}
         </div>
