@@ -101,7 +101,6 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <head>
-        <link rel="icon" type="image/svg+xml" href="/icon.svg" />
         <link rel="icon" type="image/png" href="/logo-icon.png" sizes="32x32" />
         <link rel="apple-touch-icon" href="/logo-icon.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />

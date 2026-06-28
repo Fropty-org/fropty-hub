@@ -3,6 +3,7 @@
 import { useState, useTransition, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { createClient } from "@/app/lib/supabase/browser";
 import { ShineBorder } from "@/app/components/ShineBorder";
 import { RainbowButton } from "@/app/components/RainbowButton";
@@ -15,44 +16,6 @@ const LOGIN_ERRORS: Record<string, string> = {
   "acesso-revogado": "Seu acesso foi revogado. Entre em contato com o suporte.",
   interno:           "Erro interno. Tente novamente mais tarde.",
 };
-
-/* ── Logo Fropty Hub ── */
-function FroptyHubMark({ size = 44 }: { size?: number }) {
-  const id = "fh-grad-login";
-  return (
-    <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id={id} x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%"   stopColor="#e040fb" />
-          <stop offset="20%"  stopColor="#9333ea" />
-          <stop offset="40%"  stopColor="#5B57E8" />
-          <stop offset="60%"  stopColor="#06b6d4" />
-          <stop offset="80%"  stopColor="#22c55e" />
-          <stop offset="100%" stopColor="#f97316" />
-        </linearGradient>
-      </defs>
-      {/* Hexagonal ring — outer hex minus inner hex (evenodd) */}
-      <path
-        fill={`url(#${id})`}
-        fillRule="evenodd"
-        d="M50,3 L93,26.5 L93,73.5 L50,97 L7,73.5 L7,26.5 Z
-           M50,22 L78,37.5 L78,63.5 L50,78 L22,63.5 L22,37.5 Z"
-      />
-      {/* FH monogram centered */}
-      <text
-        x="50" y="56"
-        textAnchor="middle"
-        fontSize="26"
-        fontWeight="800"
-        fontFamily="system-ui, -apple-system, sans-serif"
-        fill={`url(#${id})`}
-        letterSpacing="-1"
-      >
-        FH
-      </text>
-    </svg>
-  );
-}
 
 /* ── Ícones SVG ── */
 function GoogleIcon() {
@@ -162,7 +125,7 @@ export default function AreaClientePage() {
 
         {/* Logo */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 28 }}>
-          <FroptyHubMark size={44} />
+          <Image src="/logo-icon.png" alt="Fropty Hub" width={44} height={44} style={{ objectFit: "contain" }} />
           <span style={{ fontSize: 20, fontWeight: 800, letterSpacing: "-0.03em" }}>
             <span style={{ color: txtMain }}>Fropty </span>
             <span style={{
