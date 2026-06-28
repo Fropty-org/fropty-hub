@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { createClient } from "@/app/lib/supabase/browser";
 import { ShineBorder } from "@/app/components/ShineBorder";
+import { RainbowButton } from "@/app/components/RainbowButton";
 import { Sun, Moon, ArrowLeft, AlertCircle, CheckCircle, Loader2, Eye, EyeOff } from "lucide-react";
 
 type Mode = "login" | "reset";
@@ -223,12 +224,16 @@ export default function AreaClientePage() {
             )}
 
             {/* Submit */}
-            <button
-              type="submit" disabled={isLoading}
-              style={{ marginTop: 2, padding: "13px 0", borderRadius: 10, border: "none", background: isLoading ? (dark ? "#2a2a2a" : "#d1d5db") : btnBg, color: isLoading ? txtMuted : btnTxt, fontWeight: 700, fontSize: 15, cursor: isLoading ? "not-allowed" : "pointer", fontFamily: "inherit", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, transition: "background 0.15s" }}
+            <RainbowButton
+              type="submit"
+              disabled={isLoading}
+              size="lg"
+              style={{ width: "100%", marginTop: 2, fontFamily: "inherit" }}
             >
-              {isLoading ? <><Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} /> Aguarde…</> : mode === "login" ? "Entrar" : "Enviar link de recuperação"}
-            </button>
+              {isLoading
+                ? <><Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} /> Aguarde…</>
+                : mode === "login" ? "Entrar" : "Enviar link de recuperação"}
+            </RainbowButton>
           </form>
 
           {/* Divider OR */}
@@ -241,17 +246,19 @@ export default function AreaClientePage() {
               </div>
 
               {/* Google */}
-              <button
+              <RainbowButton
                 type="button"
+                variant="outline"
+                size="lg"
                 onClick={() => handleOAuth("google")}
                 disabled={!!oauthLoading}
-                style={{ width: "100%", padding: "12px 0", borderRadius: 10, border: `1px solid ${border}`, background: "transparent", color: txtMain, fontWeight: 600, fontSize: 14, cursor: oauthLoading ? "not-allowed" : "pointer", fontFamily: "inherit", display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 10, transition: "background 0.15s", opacity: oauthLoading === "google" ? 0.6 : 1 }}
-                onMouseEnter={e => { if (!oauthLoading) e.currentTarget.style.background = dark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.03)"; }}
-                onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
+                style={{ width: "100%", fontFamily: "inherit" }}
               >
-                {oauthLoading === "google" ? <Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} /> : <GoogleIcon />}
+                {oauthLoading === "google"
+                  ? <Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} />
+                  : <GoogleIcon />}
                 Continuar com Google
-              </button>
+              </RainbowButton>
 
               {/* Apple — habilitado quando credenciais Apple Developer forem configuradas */}
             </>

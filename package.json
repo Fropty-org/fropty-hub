@@ -12,15 +12,19 @@
     "test:e2e:debug": "playwright test --debug"
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.3.0",
     "@supabase/ssr": "^0.12.0",
     "@supabase/supabase-js": "^2.108.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "lucide-react": "^0.511.0",
     "next": "15.5.19",
     "next-mdx-remote": "^6.0.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "resend": "^6.12.4",
-    "stripe": "^22.2.1"
+    "stripe": "^22.2.1",
+    "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
