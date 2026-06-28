@@ -35,11 +35,11 @@
 :root {
   --c-success: #22c55e;
   --c-warning: #f59e0b;
-  --c-danger:  #ef4444;
+  --c-danger:  #DC2626;
   --c-info:    #3B82F6;
   --c-success-bg: rgba(34, 197, 94, 0.10);
   --c-warning-bg: rgba(245, 158, 11, 0.10);
-  --c-danger-bg:  rgba(239, 68, 68, 0.10);
+  --c-danger-bg:  rgba(220, 38, 38, 0.10);
   --c-info-bg:    rgba(59, 130, 246, 0.10);
 }
 
@@ -56,44 +56,45 @@
    TEMA CLARO — padrão (sem .dark)
    ══════════════════════════════════════════════════════════════════ */
 :root {
-  /* Backgrounds */
-  --bg:           #F2F2F4;
-  --bg-alt:       #E8E8EC;
+  /* Backgrounds — valores canônicos Fropty (off-white quente, igual fropty-site) */
+  --bg:           #f5f4f0;
+  --bg-alt:       #eeede8;
+  --bg2:          #eeede8;
 
   /* Surfaces */
   --surface:      #ffffff;
-  --surface-2:    #F7F7F9;
-  --surface-3:    #EEEEF2;
+  --surface-2:    #f0efe9;
+  --surface-3:    #eeede8;
 
-  /* Borders */
-  --border:       #E2E2E8;
-  --border-2:     #D4D4DC;
+  /* Borders — tons quentes canônicos */
+  --border:       #d8d6d0;
+  --border-2:     #c8c6bf;
   --border-hover: rgba(91, 87, 232, 0.45);
   --border-focus: rgba(91, 87, 232, 0.70);
 
-  /* Text */
-  --text:         #111118;
-  --text-muted:   #555566;
-  --text-faint:   #9999aa;
+  /* Text — canônico neutro puro */
+  --text:         #111111;
+  --text-muted:   #666666;
+  --text-faint:   #aaaaaa;
 
   /* Cards */
   --card-bg:      #ffffff;
-  --card-border:  #E2E2E8;
+  --card-border:  #d8d6d0;
 
   /* Nav */
-  --nav-bg:       rgba(242, 242, 244, 0.94);
-  --nav-border:   rgba(226, 226, 232, 0.80);
+  --nav-bg:       rgba(245, 244, 240, 0.94);
+  --nav-border:   rgba(216, 214, 208, 0.80);
 
   /* Sidebar */
   --sidebar-bg:   #ffffff;
-  --sidebar-border: #E2E2E8;
+  --sidebar-border: #d8d6d0;
   --sidebar-item-hover: rgba(91, 87, 232, 0.06);
   --sidebar-item-active: rgba(91, 87, 232, 0.10);
   --sidebar-item-active-text: var(--brand-500);
 
   /* Inputs */
-  --input-bg:     #F7F7F9;
-  --input-border: #D4D4DC;
+  --input-bg:     #f0efe9;
+  --input-border: #c8c6bf;
   --input-focus:  rgba(91, 87, 232, 0.20);
 
   /* Brand / Primary */
@@ -101,14 +102,15 @@
   --primary-hover: var(--brand-600);
   --primary-text: #ffffff;
   --accent:       var(--brand-accent);
+  --ac:           var(--brand-500);
 
   /* Hero / CTA */
-  --cta-bg:       #111118;
+  --cta-bg:       #111111;
   --cta-text:     #ffffff;
-  --hero-overlay: linear-gradient(110deg, rgba(242,242,244,0.97) 0%, rgba(242,242,244,0.88) 42%, rgba(242,242,244,0.45) 75%, transparent 100%);
+  --hero-overlay: linear-gradient(110deg, rgba(245,244,240,0.97) 0%, rgba(245,244,240,0.88) 42%, rgba(245,244,240,0.45) 75%, transparent 100%);
 
   /* Dots pattern */
-  --dot-color: rgba(17, 17, 24, 0.07);
+  --dot-color: rgba(0, 0, 0, 0.18);
 
   /* Shadows (light-mode calibrated) */
   --shadow-card: 0 1px 4px rgba(0,0,0,0.06), 0 0 0 1px var(--card-border);
@@ -132,44 +134,45 @@
    Accent: brand-500 apenas como cor de destaque / primary
    ══════════════════════════════════════════════════════════════════ */
 .dark {
-  /* Backgrounds */
-  --bg:           #0d0d12;
-  --bg-alt:       #111118;
+  /* Backgrounds — valores canônicos Fropty (preto quente neutro, igual fropty-site) */
+  --bg:           #0d0d0d;
+  --bg-alt:       #111111;
+  --bg2:          #111111;
 
   /* Surfaces */
-  --surface:      #18181f;
-  --surface-2:    #1e1e26;
-  --surface-3:    #24242e;
+  --surface:      #181818;
+  --surface-2:    #1e1e1e;
+  --surface-3:    #252525;
 
-  /* Borders */
-  --border:       rgba(255, 255, 255, 0.07);
-  --border-2:     rgba(255, 255, 255, 0.11);
+  /* Borders — sólidos canônicos (não rgba) */
+  --border:       #262626;
+  --border-2:     #333333;
   --border-hover: rgba(91, 87, 232, 0.45);
   --border-focus: rgba(91, 87, 232, 0.70);
 
-  /* Text */
-  --text:         #f0f0f8;
-  --text-muted:   #8b8c9e;
-  --text-faint:   #4a4b60;
+  /* Text — canônico neutro puro */
+  --text:         #f0f0f0;
+  --text-muted:   #999999;
+  --text-faint:   #585858;
 
   /* Cards */
-  --card-bg:      #18181f;
-  --card-border:  rgba(255, 255, 255, 0.07);
+  --card-bg:      #181818;
+  --card-border:  #262626;
 
   /* Nav */
-  --nav-bg:       rgba(13, 13, 18, 0.92);
-  --nav-border:   rgba(255, 255, 255, 0.07);
+  --nav-bg:       rgba(13, 13, 13, 0.92);
+  --nav-border:   #262626;
 
   /* Sidebar */
-  --sidebar-bg:   #111117;
-  --sidebar-border: rgba(255, 255, 255, 0.07);
+  --sidebar-bg:   #111111;
+  --sidebar-border: #262626;
   --sidebar-item-hover: rgba(255, 255, 255, 0.05);
   --sidebar-item-active: rgba(91, 87, 232, 0.18);
   --sidebar-item-active-text: var(--brand-400);
 
   /* Inputs */
-  --input-bg:     #1e1e26;
-  --input-border: rgba(255, 255, 255, 0.10);
+  --input-bg:     #1e1e1e;
+  --input-border: #333333;
   --input-focus:  rgba(91, 87, 232, 0.25);
 
   /* Brand / Primary */
@@ -177,14 +180,15 @@
   --primary-hover: var(--brand-400);
   --primary-text: #ffffff;
   --accent:       var(--brand-accent);
+  --ac:           var(--brand-400);
 
   /* Hero / CTA */
   --cta-bg:       var(--brand-500);
   --cta-text:     #ffffff;
-  --hero-overlay: linear-gradient(110deg, rgba(13,13,18,0.96) 0%, rgba(13,13,18,0.80) 42%, rgba(13,13,18,0.30) 80%, transparent 100%);
+  --hero-overlay: linear-gradient(110deg, rgba(13,13,13,0.96) 0%, rgba(13,13,13,0.80) 42%, rgba(13,13,13,0.30) 80%, transparent 100%);
 
   /* Dots pattern */
-  --dot-color: rgba(255, 255, 255, 0.04);
+  --dot-color: rgba(255, 255, 255, 0.18);
 
   /* Shadows (dark-mode calibrated) */
   --shadow-card: 0 1px 4px rgba(0,0,0,0.4), 0 0 0 1px var(--card-border);
@@ -404,10 +408,10 @@ a { color: inherit; text-decoration: none; }
 .hub-btn-danger {
   background: var(--c-danger-bg);
   color:      var(--c-danger);
-  border:     1px solid rgba(239, 68, 68, 0.20);
+  border:     1px solid rgba(220, 38, 38, 0.20);
 }
 .hub-btn-danger:hover {
-  background: rgba(239, 68, 68, 0.18);
+  background: rgba(220, 38, 38, 0.18);
 }
 
 .hub-btn-sm {
