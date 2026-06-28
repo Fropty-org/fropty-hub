@@ -401,3 +401,48 @@ export async function respondResolution(formData: FormData) {
   revalidatePath(`/portal/suporte/${ticketId}/avaliar`);
   return { success: true };
 }
+
+export async function getTicketDetail(ticketId: string) {
+  const userId  = await requireAuth();
+  const supabase = await createClient();
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role, name")
+    .eq("id", userId)
+    .single();
+
+  const isAdmin = profile?.role === "admin";
+
+  const { data: ticket } = await supabase
+    .from("tickets")
+    .select("id, subject, category, status, priority, client_id, ticket_number, created_at, updated_at, profiles:client_id(name)")
+    .eq("id", ticketId)
+    .single();
+
+  if (!ticket) return null;
+  if (!isAdmin && ticket.client_id !== userId) return null;
+
+  const { data: messages } = await supabase
+    .from("ticket_messages")
+    .select("*")
+    .eq("ticket_id", ticketId)
+    .order("created_at", { ascending: true });
+
+  const clientName = isAdmin
+    ? ((ticket.profiles as { name?: string } | null)?.name ?? "Cliente")
+    : (profile?.name ?? "");
+
+  return {
+    ticket: {
+      ...ticket,
+      ticket_number: (ticket as Record<string, unknown>).ticket_number as number | undefined,
+      client_name: clientName,
+    },
+    messages: messages ?? [],
+    currentUserId:   userId,
+    currentUserName: profile?.name ?? "",
+    isAdmin,
+    senderRole: (isAdmin ? "admin" : "cliente") as "admin" | "cliente",
+  };
+}

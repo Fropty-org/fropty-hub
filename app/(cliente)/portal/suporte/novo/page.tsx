@@ -17,11 +17,11 @@ export default async function NovoChamadoPage() {
     return (
       <div style={{ padding: "36px 32px", maxWidth: 720, margin: "0 auto" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20, fontSize: "12px" }}>
-          <Link href="/portal/suporte" style={{ color: "var(--text-faint)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 5, padding: "5px 10px 5px 8px", borderRadius: 8, border: "1px solid var(--card-border)", background: "var(--card-bg)", fontWeight: 600 }}>
+          <Link href="/portal/suporte" style={{ color: "var(--text-faint)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 5, padding: "5px 10px 5px 8px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--surface)", fontWeight: 600 }}>
             <ArrowLeft size={13} /> Suporte
           </Link>
         </div>
-        <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 20, padding: "48px 32px", textAlign: "center" }}>
+        <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 20, padding: "48px 32px", textAlign: "center" }}>
           <div style={{ width: 56, height: 56, borderRadius: 16, background: "rgba(239,159,39,0.1)", border: "1px solid rgba(239,159,39,0.2)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
             <Coins size={26} style={{ color: "#EF9F27" }} />
           </div>
@@ -76,8 +76,8 @@ export default async function NovoChamadoPage() {
             gap: 5,
             padding: "5px 10px 5px 8px",
             borderRadius: 8,
-            border: "1px solid var(--card-border)",
-            background: "var(--card-bg)",
+            border: "1px solid var(--border)",
+            background: "var(--surface)",
             fontWeight: 600,
           }}
         >
@@ -107,8 +107,8 @@ export default async function NovoChamadoPage() {
       {/* Formulário em card */}
       <div
         style={{
-          background: "var(--card-bg)",
-          border: "1px solid var(--card-border)",
+          background: "var(--surface)",
+          border: "1px solid var(--border)",
           borderRadius: 20,
           padding: "28px 28px 32px",
         }}

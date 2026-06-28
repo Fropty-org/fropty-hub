@@ -77,9 +77,9 @@
   --text-muted:   #666666;
   --text-faint:   #aaaaaa;
 
-  /* Cards */
-  --card-bg:      #ffffff;
-  --card-border:  #d8d6d0;
+  /* Cards — aliases canônicos (sempre igual a surface/border) */
+  --card-bg:      var(--surface);
+  --card-border:  var(--border);
 
   /* Nav */
   --nav-bg:       rgba(245, 244, 240, 0.94);
@@ -155,9 +155,9 @@
   --text-muted:   #999999;
   --text-faint:   #585858;
 
-  /* Cards */
-  --card-bg:      #181818;
-  --card-border:  #262626;
+  /* Cards — aliases canônicos */
+  --card-bg:      var(--surface);
+  --card-border:  var(--border);
 
   /* Nav */
   --nav-bg:       rgba(13, 13, 13, 0.92);
