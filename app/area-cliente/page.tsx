@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { createClient } from "@/app/lib/supabase/browser";
-import { Sun, Moon, ArrowLeft, AlertCircle, CheckCircle, Loader2, Lock, Mail } from "lucide-react";
+import { Sun, Moon, ArrowLeft, AlertCircle, CheckCircle, Loader2, Lock, KeyRound } from "lucide-react";
 
 type Mode = "login" | "reset";
 
@@ -26,6 +26,7 @@ export default function AreaClientePage() {
   const [isPending, startTransition] = useTransition();
   const [loginSubmitting, setLoginSubmitting] = useState(false);
   const [theme, setTheme]       = useState<"dark" | "light">("dark");
+  const [showPwd, setShowPwd]   = useState(false);
 
   useEffect(() => {
     const saved = (localStorage.getItem("fropty-theme") ?? "dark") as "dark" | "light";
@@ -59,208 +60,226 @@ export default function AreaClientePage() {
   }
 
   const isLoading = mode === "login" ? loginSubmitting : isPending;
+  const dark = theme === "dark";
+
+  /* ── tokens manuais para não depender do :root (página pré-auth) ── */
+  const bg        = dark ? "#0f0f0f" : "#f4f4f5";
+  const cardBg    = dark ? "#1a1a1a" : "#ffffff";
+  const border    = dark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.10)";
+  const inputBg   = dark ? "#111111" : "#f9f9f9";
+  const txtMain   = dark ? "#f0f0f0" : "#111111";
+  const txtMuted  = dark ? "#9a9a9a" : "#6b7280";
+  const txtFaint  = dark ? "#555555" : "#9ca3af";
+  const btnBg     = dark ? "#ffffff" : "#111111";
+  const btnTxt    = dark ? "#111111" : "#ffffff";
+  const iconBox   = dark ? "#1e1e1e" : "#ebebeb";
+  const primary   = "#5B57E8";
 
   return (
     <div style={{
       minHeight: "100dvh",
-      background: "var(--bg)",
+      background: bg,
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
       padding: "24px 16px",
-      position: "relative",
-      overflow: "hidden",
+      transition: "background 0.2s",
     }}>
-
-      {/* ── Glow decorativo ── */}
-      <div style={{
-        position: "fixed", top: "10%", left: "50%",
-        transform: "translateX(-50%)",
-        width: 600, height: 300,
-        background: "radial-gradient(ellipse, rgba(91,87,232,0.12) 0%, transparent 70%)",
-        pointerEvents: "none", zIndex: 0,
-      }} />
 
       {/* ── Theme toggle ── */}
       <button
         onClick={toggleTheme}
-        title={theme === "dark" ? "Modo claro" : "Modo escuro"}
+        title={dark ? "Modo claro" : "Modo escuro"}
         style={{
           position: "fixed", top: 16, right: 16,
-          width: 36, height: 36, borderRadius: "var(--r-md)",
-          border: "1px solid var(--border)", background: "var(--surface)",
-          color: "var(--text-faint)", cursor: "pointer",
+          width: 36, height: 36, borderRadius: 10,
+          border: `1px solid ${border}`, background: cardBg,
+          color: txtMuted, cursor: "pointer",
           display: "flex", alignItems: "center", justifyContent: "center",
-          zIndex: 50, transition: "color 0.15s",
+          zIndex: 50,
         }}
-        onMouseEnter={e => (e.currentTarget.style.color = "var(--text)")}
-        onMouseLeave={e => (e.currentTarget.style.color = "var(--text-faint)")}
       >
-        {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
+        {dark ? <Sun size={15} /> : <Moon size={15} />}
       </button>
 
-      {/* ── Logo ── */}
-      <Link href="/" style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 32, textDecoration: "none", position: "relative", zIndex: 1 }}>
-        <div style={{ width: 36, height: 36, borderRadius: "var(--r-md)", background: "var(--primary)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "var(--shadow-brand)" }}>
-          <Image src="/hub-logo.png" alt="FroptyHub" width={22} height={22} style={{ borderRadius: 4 }} />
+      {/* ── Conteúdo ── */}
+      <div style={{ width: "100%", maxWidth: 380 }}>
+
+        {/* Logo */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 28 }}>
+          <div style={{ width: 38, height: 38, borderRadius: 10, background: primary, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Image src="/hub-logo.png" alt="FroptyHub" width={24} height={24} style={{ borderRadius: 4 }} />
+          </div>
+          <span style={{ fontSize: 20, fontWeight: 800, color: txtMain, letterSpacing: "-0.03em" }}>
+            FroptyHub
+          </span>
         </div>
-        <span style={{ fontSize: 19, fontWeight: 800, color: "var(--text)", letterSpacing: "-0.03em" }}>
-          Fropty<span style={{ color: "var(--primary)" }}>Hub</span>
-        </span>
-      </Link>
 
-      {/* ── Card ── */}
-      <div style={{
-        width: "100%", maxWidth: 400,
-        background: "var(--surface)",
-        border: "1px solid var(--border)",
-        borderRadius: 20,
-        padding: "32px 28px",
-        boxShadow: "var(--shadow-xl)",
-        position: "relative", zIndex: 1,
-      }}>
-
-        {/* Header do card */}
+        {/* Título */}
         {mode === "login" ? (
-          <div style={{ marginBottom: 26 }}>
-            <h1 style={{ fontSize: "1.25rem", fontWeight: 800, color: "var(--text)", margin: "0 0 5px", letterSpacing: "-0.03em" }}>
-              Entrar na conta
+          <div style={{ textAlign: "center", marginBottom: 32 }}>
+            <h1 style={{ margin: "0 0 8px", fontSize: "1.5rem", fontWeight: 800, color: txtMain, letterSpacing: "-0.03em" }}>
+              Entrar na sua conta
             </h1>
-            <p style={{ fontSize: 13, color: "var(--text-faint)", margin: 0 }}>
-              Acesse seus serviços, chamados e tokens Fropty.
+            <p style={{ margin: 0, fontSize: 14, color: txtMuted, lineHeight: 1.5 }}>
+              Bem-vindo de volta! Insira seus dados.
             </p>
           </div>
         ) : (
-          <div style={{ marginBottom: 26 }}>
+          <div style={{ textAlign: "center", marginBottom: 32 }}>
             <button
               onClick={() => changeMode("login")}
-              style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)", padding: 0, display: "flex", alignItems: "center", gap: 5, fontSize: 12, marginBottom: 16, fontFamily: "inherit", fontWeight: 600 }}
+              style={{ background: "none", border: "none", cursor: "pointer", color: txtMuted, padding: "0 0 16px", display: "flex", alignItems: "center", gap: 5, fontSize: 12, margin: "0 auto", fontFamily: "inherit", fontWeight: 600 }}
             >
-              <ArrowLeft size={13} /> Voltar ao login
+              <ArrowLeft size={13} /> Voltar
             </button>
-            <h1 style={{ fontSize: "1.15rem", fontWeight: 800, color: "var(--text)", margin: "0 0 5px", letterSpacing: "-0.03em" }}>
+            <h1 style={{ margin: "0 0 8px", fontSize: "1.4rem", fontWeight: 800, color: txtMain, letterSpacing: "-0.03em" }}>
               Recuperar senha
             </h1>
-            <p style={{ fontSize: 13, color: "var(--text-faint)", margin: 0 }}>
+            <p style={{ margin: 0, fontSize: 14, color: txtMuted }}>
               Enviaremos um link para criar uma nova senha.
             </p>
           </div>
         )}
 
-        {/* Divider */}
-        <div style={{ height: 1, background: "var(--border)", marginBottom: 24 }} />
-
-        <form
-          {...(mode === "login"
-            ? { method: "post" as const, action: "/api/login", onSubmit: () => setLoginSubmitting(true) }
-            : { onSubmit: handleResetSubmit })}
-          style={{ display: "flex", flexDirection: "column", gap: 16 }}
-        >
-          {/* E-mail */}
-          <div>
-            <label style={labelStyle}>E-mail</label>
-            <div style={{ position: "relative" }}>
-              <Mail size={14} style={{ position: "absolute", left: 13, top: "50%", transform: "translateY(-50%)", color: "var(--text-faint)", pointerEvents: "none" }} />
-              <input
-                name="email" type="email" required
-                autoComplete="email"
-                placeholder="seu@email.com"
-                style={{ ...inputStyle, paddingLeft: 38 }}
-              />
-            </div>
-          </div>
-
-          {/* Senha */}
-          {mode === "login" && (
-            <div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 7 }}>
-                <label style={{ ...labelStyle, marginBottom: 0 }}>Senha</label>
-                <button
-                  type="button"
-                  onClick={() => changeMode("reset")}
-                  style={{ fontSize: 11, fontWeight: 700, color: "var(--primary)", background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "inherit" }}
-                >
-                  Esqueci a senha
-                </button>
-              </div>
-              <div style={{ position: "relative" }}>
-                <Lock size={14} style={{ position: "absolute", left: 13, top: "50%", transform: "translateY(-50%)", color: "var(--text-faint)", pointerEvents: "none" }} />
-                <input
-                  name="password" type="password" required
-                  autoComplete="current-password"
-                  placeholder="••••••••••"
-                  style={{ ...inputStyle, paddingLeft: 38 }}
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Erro */}
-          {error && (
-            <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 13px", borderRadius: "var(--r-md)", background: "var(--c-danger-bg)", border: "1px solid rgba(220,38,38,0.22)", color: "var(--c-danger)", fontSize: 12.5 }}>
-              <AlertCircle size={14} style={{ flexShrink: 0 }} /> {error}
-            </div>
-          )}
-
-          {/* Sucesso */}
-          {success && (
-            <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 13px", borderRadius: "var(--r-md)", background: "var(--c-success-bg)", border: "1px solid rgba(34,197,94,0.22)", color: "var(--c-success)", fontSize: 12.5 }}>
-              <CheckCircle size={14} style={{ flexShrink: 0 }} /> {success}
-            </div>
-          )}
-
-          {/* Submit */}
-          <button
-            type="submit"
-            disabled={isLoading}
-            style={{
-              marginTop: 4, padding: "12px 0", borderRadius: "var(--r-md)", border: "none",
-              background: isLoading ? "var(--border)" : "var(--primary)",
-              color: isLoading ? "var(--text-muted)" : "#fff",
-              fontWeight: 700, fontSize: 14, cursor: isLoading ? "not-allowed" : "pointer",
-              fontFamily: "inherit", transition: "background 0.15s, box-shadow 0.15s",
-              display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-              boxShadow: isLoading ? "none" : "var(--shadow-brand)",
-            }}
+        {/* Card */}
+        <div style={{
+          background: cardBg,
+          border: `1px solid ${border}`,
+          borderRadius: 16,
+          padding: "28px 24px",
+          boxShadow: dark
+            ? "0 8px 40px rgba(0,0,0,0.5)"
+            : "0 4px 24px rgba(0,0,0,0.07)",
+        }}>
+          <form
+            {...(mode === "login"
+              ? { method: "post" as const, action: "/api/login", onSubmit: () => setLoginSubmitting(true) }
+              : { onSubmit: handleResetSubmit })}
+            style={{ display: "flex", flexDirection: "column", gap: 18 }}
           >
-            {isLoading
-              ? <><Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} /> Aguarde…</>
-              : mode === "login" ? "Entrar na conta" : "Enviar link de recuperação"
-            }
-          </button>
-        </form>
-      </div>
 
-      {/* ── Footer ── */}
-      <p style={{ marginTop: 24, fontSize: 11.5, color: "var(--text-faint)", textAlign: "center", position: "relative", zIndex: 1 }}>
-        Ao continuar você concorda com os{" "}
-        <Link href="/termos" style={{ color: "var(--text-muted)", textDecoration: "underline" }}>Termos de Uso</Link>
-        {" "}e{" "}
-        <Link href="/privacidade" style={{ color: "var(--text-muted)", textDecoration: "underline" }}>Privacidade</Link>.
-      </p>
+            {/* E-mail */}
+            <div>
+              <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: txtMain, marginBottom: 8 }}>
+                E-mail
+              </label>
+              <div style={{ position: "relative" }}>
+                <input
+                  name="email" type="email" required
+                  autoComplete="email"
+                  placeholder="voce@email.com"
+                  style={{
+                    width: "100%", padding: "11px 44px 11px 14px", boxSizing: "border-box",
+                    borderRadius: 10, border: `1px solid ${border}`,
+                    background: inputBg, color: txtMain, fontSize: 14,
+                    fontFamily: "inherit",
+                  }}
+                />
+                <div style={{
+                  position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)",
+                  width: 26, height: 26, borderRadius: 7, background: iconBox,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                }}>
+                  <KeyRound size={13} style={{ color: txtFaint }} />
+                </div>
+              </div>
+            </div>
+
+            {/* Senha */}
+            {mode === "login" && (
+              <div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                  <label style={{ fontSize: 13, fontWeight: 600, color: txtMain }}>Senha</label>
+                  <button
+                    type="button"
+                    onClick={() => changeMode("reset")}
+                    style={{ fontSize: 12, fontWeight: 600, color: primary, background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "inherit" }}
+                  >
+                    Esqueceu?
+                  </button>
+                </div>
+                <div style={{ position: "relative" }}>
+                  <input
+                    name="password"
+                    type={showPwd ? "text" : "password"}
+                    required
+                    autoComplete="current-password"
+                    placeholder="••••••••••"
+                    style={{
+                      width: "100%", padding: "11px 44px 11px 14px", boxSizing: "border-box",
+                      borderRadius: 10, border: `1px solid ${border}`,
+                      background: inputBg, color: txtMain, fontSize: 14,
+                      fontFamily: "inherit",
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPwd(p => !p)}
+                    style={{
+                      position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)",
+                      width: 26, height: 26, borderRadius: 7, background: iconBox,
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      border: "none", cursor: "pointer", padding: 0,
+                    }}
+                  >
+                    <Lock size={13} style={{ color: txtFaint }} />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Erro */}
+            {error && (
+              <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 13px", borderRadius: 10, background: dark ? "rgba(220,38,38,0.12)" : "rgba(220,38,38,0.08)", border: "1px solid rgba(220,38,38,0.22)", color: "#DC2626", fontSize: 13 }}>
+                <AlertCircle size={14} style={{ flexShrink: 0 }} /> {error}
+              </div>
+            )}
+
+            {/* Sucesso */}
+            {success && (
+              <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 13px", borderRadius: 10, background: dark ? "rgba(34,197,94,0.10)" : "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.22)", color: "#16a34a", fontSize: 13 }}>
+                <CheckCircle size={14} style={{ flexShrink: 0 }} /> {success}
+              </div>
+            )}
+
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              style={{
+                marginTop: 2, padding: "13px 0", borderRadius: 10, border: "none",
+                background: isLoading ? (dark ? "#2a2a2a" : "#d1d5db") : btnBg,
+                color: isLoading ? txtMuted : btnTxt,
+                fontWeight: 700, fontSize: 15, cursor: isLoading ? "not-allowed" : "pointer",
+                fontFamily: "inherit",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                transition: "background 0.15s",
+              }}
+            >
+              {isLoading
+                ? <><Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} /> Aguarde…</>
+                : mode === "login" ? "Entrar" : "Enviar link de recuperação"
+              }
+            </button>
+          </form>
+        </div>
+
+        {/* Footer */}
+        <p style={{ marginTop: 20, fontSize: 12, color: txtFaint, textAlign: "center" }}>
+          Ao continuar você concorda com os{" "}
+          <Link href="/termos" style={{ color: txtMuted, textDecoration: "underline" }}>Termos</Link>
+          {" "}e{" "}
+          <Link href="/privacidade" style={{ color: txtMuted, textDecoration: "underline" }}>Privacidade</Link>.
+        </p>
+      </div>
 
       <style>{`
         @keyframes spin { to { transform: rotate(360deg); } }
-        input::placeholder { color: var(--text-faint); }
-        input:focus { outline: none !important; border-color: var(--primary) !important; box-shadow: 0 0 0 3px rgba(91,87,232,0.14); }
+        input::placeholder { color: ${txtFaint}; }
+        input:focus { outline: none; border-color: ${primary} !important; box-shadow: 0 0 0 3px rgba(91,87,232,0.15); }
       `}</style>
     </div>
   );
 }
-
-const labelStyle: React.CSSProperties = {
-  display: "block", fontSize: 11, fontWeight: 700,
-  color: "var(--text-faint)", marginBottom: 7,
-  textTransform: "uppercase", letterSpacing: "0.06em",
-};
-
-const inputStyle: React.CSSProperties = {
-  width: "100%", padding: "10px 14px",
-  borderRadius: "var(--r-md)",
-  border: "1px solid var(--border)",
-  background: "var(--surface-2)",
-  color: "var(--text)", fontSize: 13.5,
-  fontFamily: "inherit", boxSizing: "border-box",
-  transition: "border-color 0.15s, box-shadow 0.15s",
-};
