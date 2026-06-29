@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTransition, useState, useEffect } from "react";
+import { useTransition, useState, useEffect, useRef } from "react";
 import { signOut } from "@/app/actions/auth";
 import { PortalThemeToggle } from "@/app/components/cliente/PortalThemeToggle";
 import {
   LayoutDashboard, Users, CreditCard, MessageCircle, BarChart2, ShieldCheck,
   UserCircle, BookOpen, Map, MessageSquarePlus, FolderKanban, FileSignature,
   HeartPulse, Menu, LogOut, Loader2, PanelLeftClose, PanelLeftOpen, Shield,
+  ChevronUp,
 } from "lucide-react";
 import { NotificationBell } from "@/app/components/NotificationBell";
 import Image from "next/image";
@@ -48,6 +49,16 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark" }: 
   const [pending, startTrans] = useTransition();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [collapsed,  setCollapsed]  = useState(false);
+  const [menuOpen,   setMenuOpen]   = useState(false);
+  const footerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function onOutside(e: MouseEvent) {
+      if (footerRef.current && !footerRef.current.contains(e.target as Node)) setMenuOpen(false);
+    }
+    if (menuOpen) document.addEventListener("mousedown", onOutside);
+    return () => document.removeEventListener("mousedown", onOutside);
+  }, [menuOpen]);
 
   useEffect(() => {
     const saved = localStorage.getItem("hub-admin-sidebar-collapsed");
@@ -212,106 +223,104 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark" }: 
           ))}
         </nav>
 
-        {/* ── Footer: theme + user + logout ── */}
-        <div style={{ flexShrink: 0, marginTop: 8 }}>
-          <div style={{ height: 1, background: "var(--border)", marginBottom: 8 }} />
+        {/* ── Footer: user trigger + dropdown ── */}
+        <div ref={footerRef} style={{ flexShrink: 0, marginTop: 8, position: "relative" }}>
+          <div style={{ height: 1, background: "var(--border)", marginBottom: 6 }} />
 
-          {/* Theme row */}
-          {!collapsed && (
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "4px 10px", marginBottom: 4 }}>
-              <span style={{ fontSize: "12px", color: "var(--text-faint)", fontWeight: 500 }}>Tema</span>
-              <PortalThemeToggle initialTheme={initialTheme} />
+          {/* Dropdown popover */}
+          {menuOpen && (
+            <div style={{
+              position: "absolute", bottom: "calc(100% + 8px)",
+              left: collapsed ? -8 : 0, right: 0,
+              minWidth: 210,
+              background: "var(--surface)", border: "1px solid var(--border)",
+              borderRadius: "var(--r-lg)", boxShadow: "0 8px 32px rgba(0,0,0,0.25)",
+              overflow: "hidden", zIndex: 200,
+            }}>
+              {/* User card header */}
+              <div style={{ padding: "12px 14px 10px", display: "flex", alignItems: "center", gap: 10, borderBottom: "1px solid var(--border)" }}>
+                <div style={{ width: 36, height: 36, borderRadius: "50%", background: "var(--surface-2)", border: "1.5px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", fontWeight: 800, color: "var(--text)", flexShrink: 0 }}>
+                  {initials}
+                </div>
+                <div style={{ overflow: "hidden" }}>
+                  <p style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{name}</p>
+                  <p style={{ margin: 0, fontSize: "10.5px", color: "var(--text-faint)", display: "flex", alignItems: "center", gap: 3 }}>
+                    <Shield size={8} style={{ color: "var(--primary)" }} /> Administrador
+                  </p>
+                </div>
+              </div>
+
+              {/* Items */}
+              <div style={{ padding: "6px" }}>
+                <Link href="/admin/perfil" onClick={() => setMenuOpen(false)} style={dropItem}>
+                  <UserCircle size={14} /> Meu Perfil
+                </Link>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "7px 10px", borderRadius: "var(--r-md)" }}>
+                  <span style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "13px", color: "var(--text-muted)", fontWeight: 500 }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                    Tema
+                  </span>
+                  <PortalThemeToggle initialTheme={initialTheme} />
+                </div>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "7px 10px", borderRadius: "var(--r-md)" }}>
+                  <span style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "13px", color: "var(--text-muted)", fontWeight: 500 }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                    Notificações
+                  </span>
+                  <NotificationBell userId={userId} />
+                </div>
+              </div>
+
+              <div style={{ height: 1, background: "var(--border)" }} />
+
+              <div style={{ padding: "6px" }}>
+                <button
+                  onClick={handleSignOut}
+                  disabled={pending}
+                  style={{ width: "100%", display: "flex", alignItems: "center", gap: 8, padding: "7px 10px", borderRadius: "var(--r-md)", fontSize: "13px", fontWeight: 500, color: "var(--c-danger)", background: "none", border: "none", cursor: pending ? "not-allowed" : "pointer", fontFamily: "inherit", opacity: pending ? 0.5 : 1 }}
+                  onMouseEnter={e => (e.currentTarget.style.background = "rgba(220,38,38,0.07)")}
+                  onMouseLeave={e => (e.currentTarget.style.background = "none")}
+                >
+                  {pending ? <Loader2 size={13} style={{ animation: "spin 0.8s linear infinite" }} /> : <LogOut size={13} />}
+                  {pending ? "Saindo…" : "Sair"}
+                </button>
+              </div>
             </div>
           )}
 
-          {/* User row — Aceternity pattern */}
-          <div style={{
-            display: "flex", alignItems: "center",
-            justifyContent: collapsed ? "center" : "space-between",
-            padding: collapsed ? "6px 0" : "7px 10px",
-            borderRadius: "var(--r-md)",
-            gap: 8,
-          }}>
-            {/* Avatar — neutral, sem laranja */}
-            <div
-              title={collapsed ? name : undefined}
-              style={{
-                width: 30, height: 30, borderRadius: "50%", flexShrink: 0,
-                background: "var(--surface-2)",
-                border: "1.5px solid var(--border)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: "12px", fontWeight: 700, color: "var(--text)",
-                position: "relative",
-              }}
-            >
+          {/* User trigger button */}
+          <button
+            onClick={() => setMenuOpen(o => !o)}
+            title={collapsed ? name : undefined}
+            style={{
+              width: "100%", display: "flex", alignItems: "center",
+              justifyContent: collapsed ? "center" : "flex-start",
+              gap: 8, padding: collapsed ? "6px 0" : "7px 10px",
+              borderRadius: "var(--r-md)", background: menuOpen ? "var(--surface-2)" : "transparent",
+              border: "none", cursor: "pointer", color: "var(--text)", fontFamily: "inherit",
+              transition: "background 0.12s",
+            }}
+            onMouseEnter={e => { if (!menuOpen) (e.currentTarget as HTMLButtonElement).style.background = "var(--sidebar-item-hover)"; }}
+            onMouseLeave={e => { if (!menuOpen) (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
+          >
+            <div style={{ width: 30, height: 30, borderRadius: "50%", flexShrink: 0, background: "var(--surface-2)", border: "1.5px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 700, color: "var(--text)", position: "relative" }}>
               {initials}
-              {/* Detalhe sutil de admin: pequeno badge Shield */}
-              <span style={{
-                position: "absolute", bottom: -2, right: -2,
-                width: 12, height: 12, borderRadius: "50%",
-                background: "var(--sidebar-bg)", border: "1px solid var(--border)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
+              <span style={{ position: "absolute", bottom: -2, right: -2, width: 12, height: 12, borderRadius: "50%", background: "var(--sidebar-bg)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <Shield size={7} style={{ color: "var(--primary)", opacity: 0.8 }} />
               </span>
             </div>
-
-            {/* Name + admin label — expanded */}
             {!collapsed && (
-              <div style={{ flex: 1, overflow: "hidden", minWidth: 0 }}>
-                <p style={{
-                  margin: 0, fontSize: "12.5px", fontWeight: 600, color: "var(--text)",
-                  whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
-                }}>
-                  {name}
-                </p>
-                <p style={{
-                  margin: 0, fontSize: "10px", fontWeight: 600,
-                  color: "var(--text-faint)", letterSpacing: "0.04em",
-                  display: "flex", alignItems: "center", gap: 3,
-                }}>
-                  <Shield size={8} style={{ color: "var(--primary)", opacity: 0.7 }} />
-                  Administrador
-                </p>
-              </div>
+              <>
+                <div style={{ flex: 1, overflow: "hidden", minWidth: 0, textAlign: "left" }}>
+                  <p style={{ margin: 0, fontSize: "12.5px", fontWeight: 600, color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{name}</p>
+                  <p style={{ margin: 0, fontSize: "10px", fontWeight: 600, color: "var(--text-faint)", display: "flex", alignItems: "center", gap: 3 }}>
+                    <Shield size={8} style={{ color: "var(--primary)", opacity: 0.7 }} /> Administrador
+                  </p>
+                </div>
+                <ChevronUp size={12} style={{ flexShrink: 0, color: "var(--text-faint)", transform: menuOpen ? "rotate(0deg)" : "rotate(180deg)", transition: "transform 0.2s" }} />
+              </>
             )}
-
-            {/* Notification bell — expanded */}
-            {!collapsed && (
-              <div style={{ flexShrink: 0 }}>
-                <NotificationBell userId={userId} />
-              </div>
-            )}
-
-            {/* Logout — expanded */}
-            {!collapsed && (
-              <button
-                onClick={handleSignOut}
-                disabled={pending}
-                title="Sair"
-                style={{
-                  width: 28, height: 28, borderRadius: "var(--r-sm)",
-                  border: "1px solid var(--border)", background: "var(--surface-2)",
-                  cursor: pending ? "not-allowed" : "pointer",
-                  color: "var(--text-faint)", opacity: pending ? 0.5 : 1,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  flexShrink: 0, transition: "color 0.12s, border-color 0.12s",
-                }}
-                onMouseEnter={e => {
-                  (e.currentTarget as HTMLButtonElement).style.color = "var(--c-danger)";
-                  (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--c-danger)";
-                }}
-                onMouseLeave={e => {
-                  (e.currentTarget as HTMLButtonElement).style.color = "var(--text-faint)";
-                  (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--border)";
-                }}
-              >
-                {pending
-                  ? <Loader2 size={13} style={{ animation: "spin 0.8s linear infinite" }} />
-                  : <LogOut size={13} />}
-              </button>
-            )}
-          </div>
+          </button>
         </div>
       </div>
     </aside>
@@ -341,3 +350,10 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark" }: 
     </>
   );
 }
+
+const dropItem: React.CSSProperties = {
+  display: "flex", alignItems: "center", gap: 8,
+  padding: "7px 10px", borderRadius: "var(--r-md)",
+  fontSize: "13px", fontWeight: 500, color: "var(--text-muted)",
+  textDecoration: "none", transition: "background 0.1s",
+};

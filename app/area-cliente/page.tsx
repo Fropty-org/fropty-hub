@@ -182,7 +182,7 @@ export default function AreaClientePage() {
               <div style={{ position: "relative" }}>
                 <input name="email" type="email" required autoComplete="email" placeholder="voce@email.com" style={inputStyle} />
                 <div style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", width: 26, height: 26, borderRadius: 7, background: iconBox, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={txtFaint} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={txtFaint} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                 </div>
               </div>
             </div>

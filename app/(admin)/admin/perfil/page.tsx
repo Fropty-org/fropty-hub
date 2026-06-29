@@ -11,14 +11,26 @@ export default async function AdminPerfilPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  const name  = profile?.name || user?.email?.split("@")[0] || "Admin";
-  const email = user?.email ?? "";
+  const name     = profile?.name || user?.email?.split("@")[0] || "Admin";
+  const email    = user?.email ?? "";
+  const initials = name.slice(0, 2).toUpperCase();
 
   return (
     <div style={{ padding: "40px 32px", maxWidth: 700, margin: "0 auto" }}>
-      <div style={{ marginBottom: 32 }}>
-        <h1 style={{ fontSize: "1.75rem", fontWeight: 800, margin: "0 0 4px", color: "var(--text)" }}>Meu Perfil</h1>
-        <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>Gerencie seu nome e segurança da conta.</p>
+
+      {/* Avatar header */}
+      <div style={{ display: "flex", alignItems: "center", gap: 18, marginBottom: 32, padding: "24px", background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 16 }}>
+        <div style={{ width: 64, height: 64, borderRadius: "50%", background: "var(--surface-2)", border: "2px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "22px", fontWeight: 800, color: "var(--text)", flexShrink: 0 }}>
+          {initials}
+        </div>
+        <div>
+          <h1 style={{ margin: 0, fontSize: "1.25rem", fontWeight: 800, color: "var(--text)", letterSpacing: "-0.02em" }}>{name}</h1>
+          <p style={{ margin: "3px 0 8px", fontSize: "13px", color: "var(--text-faint)" }}>{email}</p>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "3px 10px", borderRadius: 999, background: "var(--surface-2)", border: "1px solid var(--border)", fontSize: "11px", fontWeight: 700, color: "var(--text-faint)", letterSpacing: "0.04em" }}>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--primary)" }}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Administrador
+          </span>
+        </div>
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
