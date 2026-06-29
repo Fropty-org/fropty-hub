@@ -123,44 +123,6 @@ export default function AreaClientePage() {
 
       <div style={{ width: "100%", maxWidth: 380 }}>
 
-        {/* Logo */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 28 }}>
-          <Image src="/logo-icon.png" alt="Fropty Hub" width={44} height={44} style={{ objectFit: "contain" }} />
-          <span style={{ fontSize: 20, fontWeight: 800, letterSpacing: "-0.03em" }}>
-            <span style={{ color: txtMain }}>Fropty </span>
-            <span style={{
-              background: "linear-gradient(90deg, #9333ea, #3b82f6, #22c55e, #f97316)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}>Hub</span>
-          </span>
-        </div>
-
-        {/* Título */}
-        {mode === "login" ? (
-          <div style={{ textAlign: "center", marginBottom: 28 }}>
-            <h1 style={{ margin: "0 0 8px", fontSize: "1.45rem", fontWeight: 800, color: txtMain, letterSpacing: "-0.03em" }}>
-              Entrar na sua conta
-            </h1>
-            <p style={{ margin: 0, fontSize: 14, color: txtMuted }}>
-              Bem-vindo de volta! Insira seus dados.
-            </p>
-          </div>
-        ) : (
-          <div style={{ textAlign: "center", marginBottom: 28 }}>
-            <button onClick={() => changeMode("login")} style={{ background: "none", border: "none", cursor: "pointer", color: txtMuted, padding: "0 0 14px", display: "flex", alignItems: "center", gap: 5, fontSize: 12, margin: "0 auto", fontFamily: "inherit", fontWeight: 600 }}>
-              <ArrowLeft size={13} /> Voltar
-            </button>
-            <h1 style={{ margin: "0 0 8px", fontSize: "1.35rem", fontWeight: 800, color: txtMain, letterSpacing: "-0.03em" }}>
-              Recuperar senha
-            </h1>
-            <p style={{ margin: 0, fontSize: 14, color: txtMuted }}>
-              Enviaremos um link para criar uma nova senha.
-            </p>
-          </div>
-        )}
-
         {/* Card */}
         <ShineBorder
           borderRadius={16}
@@ -169,6 +131,39 @@ export default function AreaClientePage() {
           shineColor={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
         >
         <div style={{ background: cardBg, borderRadius: 16, padding: "28px 24px", boxShadow: dark ? "0 8px 40px rgba(0,0,0,0.5)" : "0 4px 24px rgba(0,0,0,0.07)" }}>
+
+          {/* Logo dentro do card */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 24 }}>
+            <Image src="/logo-icon.png" alt="Fropty Hub" width={36} height={36} style={{ objectFit: "contain" }} />
+            <span style={{ fontSize: 18, fontWeight: 800, letterSpacing: "-0.03em" }}>
+              <span style={{ color: txtMain }}>Fropty </span>
+              <span style={{ background: "linear-gradient(90deg, #9333ea, #3b82f6, #22c55e, #f97316)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Hub</span>
+            </span>
+          </div>
+
+          {/* Título */}
+          {mode === "login" ? (
+            <div style={{ textAlign: "center", marginBottom: 24 }}>
+              <h1 style={{ margin: "0 0 6px", fontSize: "1.3rem", fontWeight: 800, color: txtMain, letterSpacing: "-0.03em" }}>
+                Entrar na sua conta
+              </h1>
+              <p style={{ margin: 0, fontSize: 13.5, color: txtMuted }}>
+                Bem-vindo de volta! Insira seus dados.
+              </p>
+            </div>
+          ) : (
+            <div style={{ textAlign: "center", marginBottom: 24 }}>
+              <button onClick={() => changeMode("login")} style={{ background: "none", border: "none", cursor: "pointer", color: txtMuted, padding: "0 0 12px", display: "flex", alignItems: "center", gap: 5, fontSize: 12, margin: "0 auto", fontFamily: "inherit", fontWeight: 600 }}>
+                <ArrowLeft size={13} /> Voltar
+              </button>
+              <h1 style={{ margin: "0 0 6px", fontSize: "1.2rem", fontWeight: 800, color: txtMain, letterSpacing: "-0.03em" }}>
+                Recuperar senha
+              </h1>
+              <p style={{ margin: 0, fontSize: 13.5, color: txtMuted }}>
+                Enviaremos um link para criar uma nova senha.
+              </p>
+            </div>
+          )}
           <form
             {...(mode === "login"
               ? { method: "post" as const, action: "/api/login", onSubmit: () => setLoginSubmitting(true) }
@@ -218,16 +213,15 @@ export default function AreaClientePage() {
             )}
 
             {/* Submit */}
-            <RainbowButton
+            <button
               type="submit"
               disabled={isLoading}
-              size="lg"
-              style={{ width: "100%", marginTop: 2, fontFamily: "inherit" }}
+              style={{ width: "100%", marginTop: 2, padding: "12px 0", borderRadius: 10, border: "none", background: dark ? "#ffffff" : "#111111", color: dark ? "#111111" : "#ffffff", fontSize: 14, fontWeight: 700, fontFamily: "inherit", cursor: isLoading ? "not-allowed" : "pointer", opacity: isLoading ? 0.7 : 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, transition: "opacity 0.15s" }}
             >
               {isLoading
                 ? <><Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} /> Aguarde…</>
                 : mode === "login" ? "Entrar" : "Enviar link de recuperação"}
-            </RainbowButton>
+            </button>
           </form>
 
           {/* Divider OR */}
@@ -240,19 +234,19 @@ export default function AreaClientePage() {
               </div>
 
               {/* Google */}
-              <RainbowButton
+              <button
                 type="button"
-                variant="outline"
-                size="lg"
                 onClick={() => handleOAuth("google")}
                 disabled={!!oauthLoading}
-                style={{ width: "100%", fontFamily: "inherit" }}
+                style={{ width: "100%", padding: "11px 0", borderRadius: 10, border: `1px solid ${border}`, background: "transparent", color: txtMain, fontSize: 14, fontWeight: 600, fontFamily: "inherit", cursor: oauthLoading ? "not-allowed" : "pointer", opacity: oauthLoading ? 0.7 : 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 10, transition: "opacity 0.15s, background 0.15s" }}
+                onMouseEnter={e => { if (!oauthLoading) (e.currentTarget as HTMLButtonElement).style.background = dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.04)"; }}
+                onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = "transparent"}
               >
                 {oauthLoading === "google"
                   ? <Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} />
                   : <GoogleIcon />}
                 Continuar com Google
-              </RainbowButton>
+              </button>
 
               {/* Apple — habilitado quando credenciais Apple Developer forem configuradas */}
             </>
