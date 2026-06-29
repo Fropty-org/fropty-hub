@@ -3,7 +3,7 @@ import { createClient } from "@/app/lib/supabase/server";
 import { TrendingUp, Users, ArrowDownLeft, ArrowUpRight } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-export const metadata: Metadata = { title: "Financeiro â€” Admin" };
+export const metadata: Metadata = { title: "Financeiro "” Admin" };
 
 export default async function AdminFinanceiroPage() {
   const supabase = await createClient();
@@ -28,15 +28,15 @@ export default async function AdminFinanceiroPage() {
   const kpis: { label: string; value: string | number; sub?: string; Icon: LucideIcon; color: string }[] = [
     { label: "MRR",                           value: `R$${mrr.toFixed(2).replace(".", ",")}`, sub: "receita recorrente mensal", Icon: TrendingUp,    color: "#22c55e" },
     { label: "Assinantes",                    value: assinantes.length,  sub: "planos ativos",                              Icon: Users,           color: "var(--primary)" },
-    { label: "Tokens emitidos",               value: totalCredits,       sub: "Ãºltimas 30 transaÃ§Ãµes",                      Icon: ArrowDownLeft,   color: "#EF9F27" },
-    { label: "Tokens consumidos",             value: totalDebits,        sub: "Ãºltimas 30 transaÃ§Ãµes",                      Icon: ArrowUpRight,    color: "#ef4444" },
+    { label: "Tokens emitidos",               value: totalCredits,       sub: "últimas 30 transações",                      Icon: ArrowDownLeft,   color: "#EF9F27" },
+    { label: "Tokens consumidos",             value: totalDebits,        sub: "últimas 30 transações",                      Icon: ArrowUpRight,    color: "#ef4444" },
   ];
 
   return (
     <div style={{ padding: "40px 32px", maxWidth: 1400, margin: "0 auto" }}>
       <div style={{ marginBottom: 28 }}>
         <h1 style={{ fontSize: "1.5rem", fontWeight: 800, margin: "0 0 4px", color: "var(--text)", letterSpacing: "-0.02em" }}>Financeiro</h1>
-        <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>Receita, assinantes e movimentaÃ§Ã£o de tokens</p>
+        <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>Receita, assinantes e movimentação de tokens</p>
       </div>
 
       {/* KPI strip */}
@@ -75,7 +75,7 @@ export default async function AdminFinanceiroPage() {
                     <td style={{ padding: "11px 16px", fontSize: "13px", fontWeight: 600, color: "var(--text)" }}>{u.name}</td>
                     <td style={{ padding: "11px 16px" }}>
                       <span style={{ fontSize: "11px", fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: u.plan === "pro" ? "rgba(91,87,232,0.12)" : "rgba(34,197,94,0.12)", color: u.plan === "pro" ? "var(--primary)" : "#22c55e" }}>
-                        {u.plan === "pro" ? "Pro" : "BÃ¡sico"}
+                        {u.plan === "pro" ? "Pro" : "Básico"}
                       </span>
                     </td>
                     <td style={{ padding: "11px 16px", fontSize: "12px", fontWeight: 700, color: "#EF9F27" }}>{u.token_balance}</td>
@@ -89,14 +89,14 @@ export default async function AdminFinanceiroPage() {
           </div>
         </div>
 
-        {/* Ãšltimas movimentaÃ§Ãµes */}
+        {/* Últimas movimentações */}
         <div>
-          <h2 style={{ fontSize: "1rem", fontWeight: 700, margin: "0 0 14px", color: "var(--text)" }}>Ãšltimas movimentaÃ§Ãµes</h2>
+          <h2 style={{ fontSize: "1rem", fontWeight: 700, margin: "0 0 14px", color: "var(--text)" }}>Últimas movimentações</h2>
           <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, overflow: "hidden" }}>
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
                 <tr style={{ borderBottom: "1px solid var(--border)" }}>
-                  {["DescriÃ§Ã£o", "Tipo", "Tokens", "Data"].map((h) => (
+                  {["Descrição", "Tipo", "Tokens", "Data"].map((h) => (
                     <th key={h} style={{ padding: "10px 16px", textAlign: "left", fontSize: "11px", fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.05em" }}>{h}</th>
                   ))}
                 </tr>
@@ -107,11 +107,11 @@ export default async function AdminFinanceiroPage() {
                     <td style={{ padding: "11px 16px" }}>
                       <p style={{ margin: "0 0 2px", fontSize: "12px", fontWeight: 600, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 140 }}>{tx.description}</p>
                       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                      <p style={{ margin: 0, fontSize: "11px", color: "var(--text-faint)" }}>{(tx.profiles as any)?.name ?? "â€”"}</p>
+                      <p style={{ margin: 0, fontSize: "11px", color: "var(--text-faint)" }}>{(tx.profiles as any)?.name ?? ""”"}</p>
                     </td>
                     <td style={{ padding: "11px 16px" }}>
                       <span style={{ fontSize: "10px", fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: tx.type === "credit" ? "rgba(34,197,94,0.12)" : "rgba(239,68,68,0.12)", color: tx.type === "credit" ? "#22c55e" : "#ef4444" }}>
-                        {tx.type === "credit" ? "CrÃ©dito" : "DÃ©bito"}
+                        {tx.type === "credit" ? "Crédito" : "Débito"}
                       </span>
                     </td>
                     <td style={{ padding: "11px 16px", fontSize: "13px", fontWeight: 700, color: tx.type === "credit" ? "#22c55e" : "#ef4444" }}>
@@ -123,7 +123,7 @@ export default async function AdminFinanceiroPage() {
                   </tr>
                 ))}
                 {txs.length === 0 && (
-                  <tr><td colSpan={4} style={{ padding: "28px 16px", textAlign: "center", color: "var(--text-faint)", fontSize: "13px" }}>Nenhuma movimentaÃ§Ã£o.</td></tr>
+                  <tr><td colSpan={4} style={{ padding: "28px 16px", textAlign: "center", color: "var(--text-faint)", fontSize: "13px" }}>Nenhuma movimentação.</td></tr>
                 )}
               </tbody>
             </table>

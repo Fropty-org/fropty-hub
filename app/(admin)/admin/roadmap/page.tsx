@@ -3,13 +3,13 @@ import Link from "next/link";
 import { getAllRoadmapAdmin } from "@/app/actions/roadmap";
 import { Map, Plus, ThumbsUp, Lightbulb, Calendar, Rocket, CheckCircle2, XCircle, Globe, Lock } from "lucide-react";
 
-export const metadata: Metadata = { title: "Roadmap â€” Admin" };
+export const metadata: Metadata = { title: "Roadmap "” Admin" };
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; Icon: React.ComponentType<{ size?: number; style?: React.CSSProperties }> }> = {
   ideia:              { label: "Ideia",            color: "#94a3b8",        bg: "rgba(148,163,184,0.12)", Icon: Lightbulb },
   planejado:          { label: "Planejado",         color: "#3b82f6",        bg: "rgba(59,130,246,0.12)",  Icon: Calendar },
   em_desenvolvimento: { label: "Em Desenvolvimento",color: "#EF9F27",        bg: "rgba(239,159,39,0.12)",  Icon: Rocket },
-  lancado:            { label: "LanÃ§ado",           color: "#22c55e",        bg: "rgba(34,197,94,0.12)",   Icon: CheckCircle2 },
+  lancado:            { label: "Lançado",           color: "#22c55e",        bg: "rgba(34,197,94,0.12)",   Icon: CheckCircle2 },
   descartado:         { label: "Descartado",        color: "#ef4444",        bg: "rgba(239,68,68,0.12)",   Icon: XCircle },
 };
 
@@ -17,8 +17,8 @@ const CATEGORY_LABEL: Record<string, string> = {
   produto:     "Produto",
   suporte:     "Suporte",
   financeiro:  "Financeiro",
-  integracao:  "IntegraÃ§Ã£o",
-  seguranca:   "SeguranÃ§a",
+  integracao:  "Integração",
+  seguranca:   "Segurança",
   ux:          "UX",
   performance: "Performance",
   outro:       "Outro",
@@ -97,7 +97,7 @@ export default async function AdminRoadmapPage({
         <table style={{ width: "100%", borderCollapse: "collapse" }}>
           <thead>
             <tr style={{ borderBottom: "1px solid var(--border)" }}>
-              {["TÃ­tulo", "Status", "Categoria", "Votos", "Visibilidade", "Criado em"].map((h) => (
+              {["Título", "Status", "Categoria", "Votos", "Visibilidade", "Criado em"].map((h) => (
                 <th key={h} style={{ padding: "11px 16px", textAlign: "left", fontSize: "11px", fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                   {h}
                 </th>
@@ -140,7 +140,7 @@ export default async function AdminRoadmapPage({
                   <td style={{ padding: "13px 16px" }}>
                     {item.visibility === "publico" ? (
                       <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: "11px", fontWeight: 700, color: "#22c55e" }}>
-                        <Globe size={12} /> PÃºblico
+                        <Globe size={12} /> Público
                       </span>
                     ) : (
                       <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: "11px", fontWeight: 700, color: "var(--text-faint)" }}>

@@ -4,11 +4,11 @@ import { getAllArticlesAdmin } from "@/app/actions/knowledge";
 import { BookOpen, Plus, Eye, ThumbsUp, ThumbsDown, Pencil, FileText, CheckCircle2 } from "lucide-react";
 import { TogglePublishedButton } from "@/app/components/knowledge/TogglePublishedButton";
 
-export const metadata: Metadata = { title: "Base de Conhecimento â€” Admin" };
+export const metadata: Metadata = { title: "Base de Conhecimento "” Admin" };
 
 const CATEGORY_LABELS: Record<string, string> = {
   geral: "Geral", suporte: "Suporte", produto: "Produto",
-  financeiro: "Financeiro", projetos: "Projetos", seguranca: "SeguranÃ§a", integracao: "IntegraÃ§Ã£o",
+  financeiro: "Financeiro", projetos: "Projetos", seguranca: "Segurança", integracao: "Integração",
 };
 
 export default async function AdminBaseConhecimentoPage({
@@ -33,7 +33,7 @@ export default async function AdminBaseConhecimentoPage({
     { label: "Total de artigos", value: allArticles.length, color: "var(--primary)",  Icon: BookOpen },
     { label: "Publicados",       value: published,          color: "#22c55e",         Icon: CheckCircle2 },
     { label: "Rascunhos",        value: drafts,             color: "#EF9F27",         Icon: FileText },
-    { label: "VisualizaÃ§Ãµes",    value: totalViews,         color: "#3b82f6",         Icon: Eye },
+    { label: "Visualizações",    value: totalViews,         color: "#3b82f6",         Icon: Eye },
   ];
 
   return (
@@ -45,7 +45,7 @@ export default async function AdminBaseConhecimentoPage({
             Base de Conhecimento
           </h1>
           <p style={{ margin: "4px 0 0", fontSize: "13px", color: "var(--text-faint)" }}>
-            {published} publicados Â· {drafts} rascunhos
+            {published} publicados · {drafts} rascunhos
           </p>
         </div>
         <Link
@@ -93,14 +93,14 @@ export default async function AdminBaseConhecimentoPage({
         <div style={{ padding: "60px 24px", textAlign: "center", background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14 }}>
           <BookOpen size={36} style={{ color: "var(--text-faint)", marginBottom: 12, display: "block", margin: "0 auto 12px" }} />
           <p style={{ margin: 0, fontSize: "14px", fontWeight: 700, color: "var(--text)" }}>Nenhum artigo encontrado</p>
-          <p style={{ margin: "6px 0 0", fontSize: "13px", color: "var(--text-faint)" }}>Crie o primeiro artigo para comeÃ§ar.</p>
+          <p style={{ margin: "6px 0 0", fontSize: "13px", color: "var(--text-faint)" }}>Crie o primeiro artigo para começar.</p>
         </div>
       ) : (
         <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, overflow: "hidden" }}>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
               <tr style={{ borderBottom: "1px solid var(--border)" }}>
-                {["TÃ­tulo", "Categoria", "Status", "Views", "Votos", "Atualizado", ""].map((h) => (
+                {["Título", "Categoria", "Status", "Views", "Votos", "Atualizado", ""].map((h) => (
                   <th key={h} style={{ padding: "11px 16px", textAlign: "left", fontSize: "11px", fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.05em", whiteSpace: "nowrap" }}>
                     {h}
                   </th>

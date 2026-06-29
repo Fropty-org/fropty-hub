@@ -6,11 +6,11 @@ import { HealthScoreBadge } from "@/app/components/admin/HealthScoreBadge";
 import { RISK_CONFIG, SCORE_DIMENSIONS } from "@/app/lib/constants/customer-success";
 import type { RiskLevel } from "@/app/lib/types/customer-success";
 
-export const metadata: Metadata = { title: "Customer Success â€” Admin" };
+export const metadata: Metadata = { title: "Customer Success "” Admin" };
 
 const PLAN_LABELS: Record<string, string> = {
   sem_plano: "Sem plano",
-  basico: "BÃ¡sico",
+  basico: "Básico",
   pro: "Pro",
 };
 
@@ -36,23 +36,23 @@ export default async function CustomerSuccessPage({
   });
 
   const metricCards = [
-    { label: "SaudÃ¡vel",  value: metrics.saudavel, color: "#22c55e", Icon: Heart },
-    { label: "AtenÃ§Ã£o",   value: metrics.atencao,  color: "#f59e0b", Icon: AlertTriangle },
+    { label: "Saudável",  value: metrics.saudavel, color: "#22c55e", Icon: Heart },
+    { label: "Atenção",   value: metrics.atencao,  color: "#f59e0b", Icon: AlertTriangle },
     { label: "Risco",     value: metrics.risco,    color: "#ef4444", Icon: AlertCircle },
-    { label: "CrÃ­tico",   value: metrics.critico,  color: "#dc2626", Icon: XCircle },
+    { label: "Crítico",   value: metrics.critico,  color: "#dc2626", Icon: XCircle },
   ];
 
   const riskFilters: { label: string; value: string }[] = [
     { label: "Todos", value: "" },
-    { label: "SaudÃ¡vel", value: "saudavel" },
-    { label: "AtenÃ§Ã£o", value: "atencao" },
+    { label: "Saudável", value: "saudavel" },
+    { label: "Atenção", value: "atencao" },
     { label: "Risco", value: "risco" },
-    { label: "CrÃ­tico", value: "critico" },
+    { label: "Crítico", value: "critico" },
   ];
 
   const planFilters = [
     { label: "Todos os planos", value: "" },
-    { label: "BÃ¡sico", value: "basico" },
+    { label: "Básico", value: "basico" },
     { label: "Pro", value: "pro" },
   ];
 
@@ -61,11 +61,11 @@ export default async function CustomerSuccessPage({
       <div style={{ marginBottom: 32 }}>
         <h1 style={{ fontSize: "1.75rem", fontWeight: 800, margin: "0 0 4px", color: "var(--text)" }}>Customer Success</h1>
         <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>
-          {metrics.total_clients} clientes Â· Score mÃ©dio {metrics.avg_score} Â· {metrics.sem_avaliacao} sem avaliaÃ§Ã£o
+          {metrics.total_clients} clientes · Score médio {metrics.avg_score} · {metrics.sem_avaliacao} sem avaliação
         </p>
       </div>
 
-      {/* MÃ©tricas */}
+      {/* Métricas */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 16, marginBottom: 36 }}>
         {metricCards.map((m) => (
           <div key={m.label} style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 16, padding: "22px" }}>
@@ -80,11 +80,11 @@ export default async function CustomerSuccessPage({
         ))}
       </div>
 
-      {/* Sem avaliaÃ§Ã£o */}
+      {/* Sem avaliação */}
       {withoutHealth.length > 0 && (
         <div style={{ marginBottom: 36 }}>
           <h2 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: 14, color: "var(--text)" }}>
-            Sem avaliaÃ§Ã£o ({withoutHealth.length})
+            Sem avaliação ({withoutHealth.length})
           </h2>
           <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, overflow: "hidden" }}>
             {withoutHealth.map((c, i, arr) => (
@@ -101,7 +101,7 @@ export default async function CustomerSuccessPage({
                     {c.full_name || c.email}
                   </p>
                   <p style={{ margin: 0, fontSize: "11px", color: "var(--text-faint)" }}>
-                    {PLAN_LABELS[c.plan] ?? c.plan} Â· {c.email}
+                    {PLAN_LABELS[c.plan] ?? c.plan} · {c.email}
                   </p>
                 </div>
                 <Link
@@ -176,7 +176,7 @@ export default async function CustomerSuccessPage({
           borderBottom: "1px solid var(--border)",
           gap: 12,
         }}>
-          {["Cliente", "Plano", "Score", "DimensÃµes", "Atualizado", ""].map((h) => (
+          {["Cliente", "Plano", "Score", "Dimensões", "Atualizado", ""].map((h) => (
             <span key={h} style={{ fontSize: "11px", fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.04em" }}>{h}</span>
           ))}
         </div>
@@ -226,11 +226,11 @@ export default async function CustomerSuccessPage({
                   <span key={key} style={{ fontSize: "10px", fontWeight: 600, color: "var(--text-faint)", padding: "2px 6px", background: "var(--surface-2)", borderRadius: 6 }}>
                     {label.slice(0, 3)} {(c.health as NonNullable<typeof c.health>)[key as keyof typeof c.health]}
                   </span>
-                )) : <span style={{ fontSize: "11px", color: "var(--text-faint)" }}>â€”</span>}
+                )) : <span style={{ fontSize: "11px", color: "var(--text-faint)" }}>"”</span>}
               </div>
 
               <span style={{ fontSize: "12px", color: "var(--text-faint)" }}>
-                {updatedAt ?? "â€”"}
+                {updatedAt ?? ""”"}
               </span>
 
               <Link

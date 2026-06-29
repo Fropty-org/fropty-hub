@@ -3,7 +3,7 @@ import { createClient } from "@/app/lib/supabase/server";
 import { TrendingUp, Users, MessageCircle, CheckCircle, Zap, Clock } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-export const metadata: Metadata = { title: "Analytics â€” Admin" };
+export const metadata: Metadata = { title: "Analytics "” Admin" };
 
 export default async function AdminAnalyticsPage() {
   const supabase = await createClient();
@@ -55,10 +55,10 @@ export default async function AdminAnalyticsPage() {
   });
 
   const kpis: { label: string; value: string | number; Icon: LucideIcon; color: string; sub: string }[] = [
-    { label: "MRR", value: `R$${mrr.toFixed(2).replace(".", ",")}`, Icon: TrendingUp, color: "#22c55e", sub: `${planCounts.basico} bÃ¡sico Â· ${planCounts.pro} pro` },
+    { label: "MRR", value: `R$${mrr.toFixed(2).replace(".", ",")}`, Icon: TrendingUp, color: "#22c55e", sub: `${planCounts.basico} básico · ${planCounts.pro} pro` },
     { label: "Clientes ativos", value: totalClients ?? 0, Icon: Users, color: "#3b82f6", sub: `${planCounts.sem_plano} sem plano` },
     { label: "Tickets abertos", value: openTickets ?? 0, Icon: MessageCircle, color: "var(--brand-accent)", sub: `${resolvedTickets ?? 0} resolvidos/fechados` },
-    { label: "Taxa de resoluÃ§Ã£o", value: `${resolvedRate}%`, Icon: CheckCircle, color: resolvedRate >= 80 ? "#22c55e" : resolvedRate >= 50 ? "#f59e0b" : "#ef4444", sub: `${openTickets ?? 0} abertos Â· ${resolvedTickets ?? 0} resolvidos` },
+    { label: "Taxa de resolução", value: `${resolvedRate}%`, Icon: CheckCircle, color: resolvedRate >= 80 ? "#22c55e" : resolvedRate >= 50 ? "#f59e0b" : "#ef4444", sub: `${openTickets ?? 0} abertos · ${resolvedTickets ?? 0} resolvidos` },
   ];
 
   const statusLabels: Record<string, string> = {
@@ -69,15 +69,15 @@ export default async function AdminAnalyticsPage() {
     aberto: "#ef4444", em_andamento: "#f59e0b", reaberto: "#8b5cf6",
     resolvido: "#22c55e", fechado: "#94a3b8",
   };
-  const priorityLabels: Record<string, string> = { baixa: "Baixa", media: "MÃ©dia", alta: "Alta", critica: "CrÃ­tica" };
+  const priorityLabels: Record<string, string> = { baixa: "Baixa", media: "Média", alta: "Alta", critica: "Crítica" };
   const priorityColors: Record<string, string> = { baixa: "#22c55e", media: "#3b82f6", alta: "#f59e0b", critica: "#ef4444" };
-  const PLAN_LABEL: Record<string, string> = { sem_plano: "Sem plano", basico: "BÃ¡sico", pro: "Pro" };
+  const PLAN_LABEL: Record<string, string> = { sem_plano: "Sem plano", basico: "Básico", pro: "Pro" };
 
   return (
     <div style={{ padding: "40px 32px", maxWidth: 1400, margin: "0 auto" }}>
       <div style={{ marginBottom: 32 }}>
         <h1 style={{ fontSize: "1.5rem", fontWeight: 800, margin: "0 0 4px", color: "var(--text)", letterSpacing: "-0.02em" }}>Analytics</h1>
-        <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>MÃ©tricas operacionais e de crescimento do ecossistema</p>
+        <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>Métricas operacionais e de crescimento do ecossistema</p>
       </div>
 
       {/* KPIs */}
@@ -99,7 +99,7 @@ export default async function AdminAnalyticsPage() {
       {/* Three columns */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 20, marginBottom: 20 }}>
 
-        {/* DistribuiÃ§Ã£o de planos */}
+        {/* Distribuição de planos */}
         <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "20px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
             <Users size={14} style={{ color: "var(--text-muted)" }} />
@@ -179,7 +179,7 @@ export default async function AdminAnalyticsPage() {
         <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "20px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
             <Clock size={14} style={{ color: "var(--text-muted)" }} />
-            <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>Tokens â€” Ãºltimos 30 dias</h2>
+            <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>Tokens "” últimos 30 dias</h2>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             {([["Emitidos", tokensIn, "#22c55e"], ["Consumidos", tokensOut, "#ef4444"]] as [string, number, string][]).map(([label, val, color]) => (
@@ -194,7 +194,7 @@ export default async function AdminAnalyticsPage() {
               </div>
             ))}
             <div style={{ padding: "12px 14px", background: "var(--surface-2)", borderRadius: 10, display: "flex", justifyContent: "space-between", fontSize: "13px", marginTop: 2 }}>
-              <span style={{ color: "var(--text-muted)", fontWeight: 600 }}>Saldo lÃ­quido</span>
+              <span style={{ color: "var(--text-muted)", fontWeight: 600 }}>Saldo líquido</span>
               <span style={{ fontWeight: 800, color: tokensIn - tokensOut >= 0 ? "#22c55e" : "#ef4444" }}>
                 {tokensIn - tokensOut >= 0 ? "+" : ""}{(tokensIn - tokensOut).toLocaleString("pt-BR")}
               </span>
@@ -213,7 +213,7 @@ export default async function AdminAnalyticsPage() {
               <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>Nenhum cliente ainda.</p>
             ) : (recentClients ?? []).map((c, i, arr) => {
               const initials = (c.name ?? c.email ?? "?").slice(0, 2).toUpperCase();
-              const planLabel = PLAN_LABEL[c.plan ?? "sem_plano"] ?? "â€”";
+              const planLabel = PLAN_LABEL[c.plan ?? "sem_plano"] ?? ""”";
               const planColor = c.plan === "pro" ? "var(--primary)" : c.plan === "basico" ? "#3b82f6" : "var(--text-faint)";
               return (
                 <div key={c.email} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 0", borderBottom: i < arr.length - 1 ? "1px solid var(--border)" : "none" }}>
@@ -221,7 +221,7 @@ export default async function AdminAnalyticsPage() {
                     {initials}
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ margin: 0, fontSize: "12.5px", fontWeight: 600, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{c.name ?? "â€”"}</p>
+                    <p style={{ margin: 0, fontSize: "12.5px", fontWeight: 600, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{c.name ?? ""”"}</p>
                     <p style={{ margin: 0, fontSize: "11px", color: "var(--text-faint)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{c.email}</p>
                   </div>
                   <span style={{ fontSize: "10px", fontWeight: 700, color: planColor, background: `color-mix(in srgb, ${planColor} 10%, transparent)`, padding: "2px 8px", borderRadius: 99, whiteSpace: "nowrap", flexShrink: 0 }}>{planLabel}</span>

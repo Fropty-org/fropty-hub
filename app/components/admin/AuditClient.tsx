@@ -36,7 +36,7 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
       if (v) params.set(k, v);
       else   params.delete(k);
     }
-    // Qualquer mudanÃ§a de filtro volta para a primeira pÃ¡gina
+    // Qualquer mudança de filtro volta para a primeira página
     if (!("page" in updates)) params.delete("page");
     startTransition(() => router.push(`/admin/audit?${params.toString()}`));
   }
@@ -85,7 +85,7 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
         <div>
           <h1 style={{ fontSize: "1.75rem", fontWeight: 800, margin: "0 0 4px", color: "var(--text)" }}>Auditoria</h1>
           <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>
-            {total} {total === 1 ? "aÃ§Ã£o registrada" : "aÃ§Ãµes registradas"}
+            {total} {total === 1 ? "ação registrada" : "ações registradas"}
             {hasActiveFilters && " (filtrado)"}
           </p>
         </div>
@@ -101,7 +101,7 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
           }}
         >
           {exporting ? <Loader2 size={15} style={{ animation: "spin 1s linear infinite" }} /> : <Download size={15} />}
-          {exporting ? "Exportandoâ€¦" : "Exportar CSV"}
+          {exporting ? "Exportando…" : "Exportar CSV"}
         </button>
       </div>
 
@@ -116,7 +116,7 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Buscar por admin, alvo ou detalheâ€¦"
+            placeholder="Buscar por admin, alvo ou detalhe…"
             style={{ flex: 1, background: "none", border: "none", outline: "none", color: "var(--text)", fontSize: "13px", fontFamily: "inherit" }}
           />
         </form>
@@ -126,7 +126,7 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
           onChange={(e) => applyFilter({ action: e.target.value })}
           style={selectStyle}
         >
-          <option value="">Todas as aÃ§Ãµes</option>
+          <option value="">Todas as ações</option>
           {Object.entries(AUDIT_ACTIONS).map(([key, info]) => (
             <option key={key} value={key}>{info.label}</option>
           ))}
@@ -142,7 +142,7 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
         </select>
 
         <input type="date" value={filters.from} onChange={(e) => applyFilter({ from: e.target.value })} style={selectStyle} title="De" />
-        <input type="date" value={filters.to}   onChange={(e) => applyFilter({ to: e.target.value })}   style={selectStyle} title="AtÃ©" />
+        <input type="date" value={filters.to}   onChange={(e) => applyFilter({ to: e.target.value })}   style={selectStyle} title="Até" />
 
         {hasActiveFilters && (
           <button onClick={clearFilters} style={{ background: "none", border: "1px solid var(--border)", borderRadius: 9, padding: "8px 12px", fontSize: "12px", fontWeight: 600, color: "var(--text-faint)", cursor: "pointer", fontFamily: "inherit" }}>
@@ -155,7 +155,7 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
       <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, overflow: "hidden", opacity: pending ? 0.6 : 1, transition: "opacity 0.15s" }}>
         <div className="audit-head" style={{ display: "grid", gridTemplateColumns: "150px 1fr 130px", padding: "12px 20px", borderBottom: "1px solid var(--border)", fontSize: "11px", fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
           <span>Data</span>
-          <span>AÃ§Ã£o</span>
+          <span>Ação</span>
           <span>Admin</span>
         </div>
 
@@ -187,7 +187,7 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
                     <p style={{ margin: 0, fontSize: "11px", color: "var(--text-faint)", lineHeight: 1.6 }}>
                       {meta.map((m, idx) => (
                         <span key={m.label}>
-                          {idx > 0 && " Â· "}
+                          {idx > 0 && " · "}
                           <span style={{ fontWeight: 600 }}>{m.label}:</span> {m.value}
                         </span>
                       ))}
@@ -204,12 +204,12 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
         {rows.length === 0 && (
           <p style={{ padding: "48px", textAlign: "center", color: "var(--text-faint)", fontSize: "13px", margin: 0 }}>
             <ClipboardX size={26} style={{ display: "block", marginBottom: 10 }} />
-            {hasActiveFilters ? "Nenhuma aÃ§Ã£o encontrada com esses filtros." : "Nenhuma aÃ§Ã£o registrada ainda."}
+            {hasActiveFilters ? "Nenhuma ação encontrada com esses filtros." : "Nenhuma ação registrada ainda."}
           </p>
         )}
       </div>
 
-      {/* PaginaÃ§Ã£o */}
+      {/* Paginação */}
       {totalPages > 1 && (
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12, marginTop: 20 }}>
           <button
@@ -220,14 +220,14 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
             <ChevronLeft size={14} /> Anterior
           </button>
           <span style={{ fontSize: "12px", color: "var(--text-faint)", fontWeight: 600 }}>
-            PÃ¡gina {page + 1} de {totalPages}
+            Página {page + 1} de {totalPages}
           </span>
           <button
             disabled={page >= totalPages - 1}
             onClick={() => applyFilter({ page: String(page + 1) })}
             style={pagerStyle(page >= totalPages - 1)}
           >
-            PrÃ³xima <ChevronRight size={14} />
+            Próxima <ChevronRight size={14} />
           </button>
         </div>
       )}
