@@ -43,6 +43,10 @@ export default async function PortalLayout({
   const displayName   = profile?.name || user?.email?.split("@")[0] || "Cliente";
   const initials      = displayName.slice(0, 2).toUpperCase();
   const email         = user?.email ?? "";
+  const avatarUrl     = (profile as { avatar_url?: string })?.avatar_url
+                     || user?.user_metadata?.avatar_url
+                     || user?.user_metadata?.picture
+                     || null;
 
   // Contagens para badges — todas em paralelo
   const [ticketsRes, projectsRes, contractsRes] = await Promise.all([
@@ -105,6 +109,7 @@ export default async function PortalLayout({
           initials={initials}
           userId={profile?.id ?? ""}
           initialTheme={(profile?.theme ?? "dark") as "dark" | "light"}
+          avatarUrl={avatarUrl}
         />
       ) : (
         <ClientSidebar
@@ -128,7 +133,14 @@ export default async function PortalLayout({
         />
       </div>
 
-      <main className="portal-main-content" style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+      <main
+        className="portal-main-content"
+        style={{
+          flex: 1, overflow: "hidden", display: "flex", flexDirection: "column",
+          backgroundImage: "radial-gradient(circle, rgba(148,163,184,0.10) 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
+        }}
+      >
         <PullToRefresh>{children}</PullToRefresh>
       </main>
 
