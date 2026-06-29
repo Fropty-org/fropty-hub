@@ -116,7 +116,7 @@ export function BulkUsuariosClient({ users }: Props) {
 
       <div style={{ overflowX: "auto" }}>
         {/* Header */}
-        <div style={{ display: "grid", gridTemplateColumns: "40px minmax(200px,2fr) 140px 100px 120px 110px 80px 120px", padding: "10px 20px", borderBottom: "1px solid var(--border)", fontSize: "10.5px", fontWeight: 800, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.06em", minWidth: 1000, gap: 8 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "36px minmax(200px,2fr) 140px 100px 120px 110px 80px 120px", padding: "8px 16px", borderBottom: "1px solid var(--border)", fontSize: "10px", fontWeight: 800, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.06em", minWidth: 960, gap: 8 }}>
           <button
             onClick={toggleAll}
             style={{ background: "none", border: "none", cursor: "pointer", padding: 0, color: allSelected ? "var(--primary)" : someSelected ? "var(--primary)" : "var(--text-faint)", display: "flex", alignItems: "center" }}
@@ -139,9 +139,9 @@ export function BulkUsuariosClient({ users }: Props) {
             <div
               key={u.id}
               style={{
-                display: "grid", gridTemplateColumns: "40px minmax(200px,2fr) 140px 100px 120px 110px 80px 120px",
-                padding: "12px 20px", borderBottom: i < users.length - 1 ? "1px solid var(--border)" : "none",
-                alignItems: "center", gap: 8, minWidth: 1000,
+                display: "grid", gridTemplateColumns: "36px minmax(200px,2fr) 140px 100px 120px 110px 80px 120px",
+                padding: "8px 16px", borderBottom: i < users.length - 1 ? "1px solid var(--border)" : "none",
+                alignItems: "center", gap: 8, minWidth: 960,
                 background: selected.has(u.id) ? "rgba(91,87,232,0.04)" : "transparent",
                 transition: "background 0.1s",
               }}
@@ -153,14 +153,14 @@ export function BulkUsuariosClient({ users }: Props) {
               </button>
 
               {/* Avatar + Nome + Email */}
-              <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
-                <div style={{ width: 34, height: 34, borderRadius: "50%", background: "var(--surface-2)", border: "1.5px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 800, color: "var(--text)", flexShrink: 0, overflow: "hidden" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 9, minWidth: 0 }}>
+                <div style={{ width: 30, height: 30, borderRadius: "50%", background: "var(--surface-2)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", fontWeight: 800, color: "var(--text)", flexShrink: 0, overflow: "hidden" }}>
                   {initials}
                 </div>
                 <div style={{ minWidth: 0 }}>
-                  <p style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{u.name || <span style={{ color: "var(--text-faint)", fontWeight: 400 }}>—</span>}</p>
+                  <p style={{ margin: 0, fontSize: "12.5px", fontWeight: 600, color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{u.name || <span style={{ color: "var(--text-faint)", fontWeight: 400 }}>—</span>}</p>
                   <p style={{ margin: 0, fontSize: "11px", color: "var(--text-faint)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }} title={u.email ?? ""}>{u.email ?? ""}</p>
-                  {dateStr && <p style={{ margin: 0, fontSize: "10px", color: "var(--text-faint)", opacity: 0.7 }}>Desde {dateStr}</p>}
+                  {dateStr && <p style={{ margin: 0, fontSize: "10px", color: "var(--text-faint)", opacity: 0.6 }}>{dateStr}</p>}
                 </div>
               </div>
 
