@@ -53,6 +53,8 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
   const [success,   setSuccess]   = useState(false);
   const [files,     setFiles]     = useState<File[]>([]);
   const [priority,  setPriority]  = useState("media");
+  const [touched,   setTouched]   = useState({ subject: false, body: false });
+  const [values,    setValues]    = useState({ subject: "", body: "" });
   const formRef                   = useRef<HTMLFormElement>(null);
   const fileInputRef              = useRef<HTMLInputElement>(null);
 
@@ -77,6 +79,8 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setTouched({ subject: true, body: true });
+    if (!values.subject.trim() || !values.body.trim()) return;
     setError("");
     setLoading(true);
 
@@ -168,12 +172,21 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
         <label style={labelStyle}>Assunto *</label>
         <input
           name="subject"
-          required
           placeholder="Descreva brevemente o problema"
-          style={inputStyle}
-          onFocus={(e) => { e.currentTarget.style.borderColor = "var(--primary)"; }}
-          onBlur={(e)  => { e.currentTarget.style.borderColor = "var(--border)"; }}
+          value={values.subject}
+          onChange={(e) => setValues((v) => ({ ...v, subject: e.target.value }))}
+          style={{ ...inputStyle, borderColor: touched.subject && !values.subject.trim() ? "#ef4444" : "var(--border)" }}
+          onFocus={(e) => { if (!(touched.subject && !values.subject.trim())) e.currentTarget.style.borderColor = "var(--primary)"; }}
+          onBlur={(e)  => {
+            setTouched((t) => ({ ...t, subject: true }));
+            e.currentTarget.style.borderColor = !values.subject.trim() ? "#ef4444" : "var(--border)";
+          }}
         />
+        {touched.subject && !values.subject.trim() && (
+          <p style={{ margin: "5px 0 0", fontSize: "11.5px", color: "#ef4444", display: "flex", alignItems: "center", gap: 4 }}>
+            <AlertCircle size={11} /> Campo obrigatório
+          </p>
+        )}
       </div>
 
       {/* Categoria */}
@@ -236,13 +249,22 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
         <label style={labelStyle}>Descrição *</label>
         <textarea
           name="body"
-          required
           rows={4}
           placeholder="O que aconteceu? Quando ocorre? O que já tentou?"
-          style={{ ...inputStyle, resize: "vertical", minHeight: 96, lineHeight: 1.6 }}
-          onFocus={(e) => { e.currentTarget.style.borderColor = "var(--primary)"; }}
-          onBlur={(e)  => { e.currentTarget.style.borderColor = "var(--border)"; }}
+          value={values.body}
+          onChange={(e) => setValues((v) => ({ ...v, body: e.target.value }))}
+          style={{ ...inputStyle, resize: "vertical", minHeight: 96, lineHeight: 1.6, borderColor: touched.body && !values.body.trim() ? "#ef4444" : "var(--border)" }}
+          onFocus={(e) => { if (!(touched.body && !values.body.trim())) e.currentTarget.style.borderColor = "var(--primary)"; }}
+          onBlur={(e) => {
+            setTouched((t) => ({ ...t, body: true }));
+            e.currentTarget.style.borderColor = !values.body.trim() ? "#ef4444" : "var(--border)";
+          }}
         />
+        {touched.body && !values.body.trim() && (
+          <p style={{ margin: "5px 0 0", fontSize: "11.5px", color: "#ef4444", display: "flex", alignItems: "center", gap: 4 }}>
+            <AlertCircle size={11} /> Campo obrigatório
+          </p>
+        )}
       </div>
 
       {/* Anexos */}

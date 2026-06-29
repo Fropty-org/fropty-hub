@@ -1,7 +1,8 @@
 ﻿import type { Metadata } from "next";
 import { createClient } from "@/app/lib/supabase/server";
-import { TrendingUp, Users, MessageCircle, CheckCircle, Zap, Clock } from "lucide-react";
+import { TrendingUp, Users, MessageCircle, CheckCircle, Zap, Clock, ShieldCheck } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { SLA_TARGETS } from "@/app/lib/constants/sla";
 
 export const metadata: Metadata = { title: "Analytics — Admin" };
 
@@ -30,18 +31,26 @@ export default async function AdminAnalyticsPage() {
     supabase.from("tickets").select("priority"),
     supabase.from("profiles").select("name, email, plan, created_at").eq("role", "cliente").order("created_at", { ascending: false }).limit(5),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (supabase as any).from("tickets").select("created_at, resolved_at").in("status", ["resolvido", "fechado"]).not("resolved_at", "is", null).limit(200),
+    (supabase as any).from("tickets").select("created_at, resolved_at, first_response_at, priority").in("status", ["resolvido", "fechado"]).not("resolved_at", "is", null).limit(200),
   ]);
 
   const mrr = (mrrData as unknown as number) ?? 0;
 
-  const resolvedList = (resolvedWithDates ?? []) as { created_at: string; resolved_at: string }[];
+  const resolvedList = (resolvedWithDates ?? []) as { created_at: string; resolved_at: string; first_response_at: string | null; priority: string }[];
   const avgResolutionHours = resolvedList.length > 0
     ? Math.round(resolvedList.reduce((sum, t) => {
         const h = (new Date(t.resolved_at).getTime() - new Date(t.created_at).getTime()) / 3600000;
         return sum + h;
       }, 0) / resolvedList.length)
     : null;
+  const slaComplianceCount = resolvedList.filter((t) => {
+    if (!t.first_response_at) return false;
+    const target = SLA_TARGETS[t.priority as keyof typeof SLA_TARGETS] ?? SLA_TARGETS.media;
+    const responseH = (new Date(t.first_response_at).getTime() - new Date(t.created_at).getTime()) / 3600000;
+    return responseH <= target.response;
+  }).length;
+  const slaCompliance = resolvedList.length > 0 ? Math.round((slaComplianceCount / resolvedList.length) * 100) : null;
+
   const avgResolutionLabel = avgResolutionHours == null
     ? "—"
     : avgResolutionHours < 24
@@ -76,6 +85,7 @@ export default async function AdminAnalyticsPage() {
     { label: "Tickets abertos", value: openTickets ?? 0, Icon: MessageCircle, color: "var(--brand-accent)", sub: `${resolvedTickets ?? 0} resolvidos/fechados` },
     { label: "Taxa de resolução", value: `${resolvedRate}%`, Icon: CheckCircle, color: resolvedRate >= 80 ? "#22c55e" : resolvedRate >= 50 ? "#f59e0b" : "#ef4444", sub: `${openTickets ?? 0} abertos · ${resolvedTickets ?? 0} resolvidos` },
     { label: "Tempo médio resolução", value: avgResolutionLabel, Icon: Clock, color: avgResolutionHours != null && avgResolutionHours <= 24 ? "#22c55e" : avgResolutionHours != null && avgResolutionHours <= 72 ? "#f59e0b" : "#94a3b8", sub: `base: ${resolvedList.length} tickets resolvidos` },
+    { label: "Conformidade SLA", value: slaCompliance != null ? `${slaCompliance}%` : "—", Icon: ShieldCheck, color: slaCompliance != null && slaCompliance >= 80 ? "#22c55e" : slaCompliance != null && slaCompliance >= 50 ? "#f59e0b" : "#ef4444", sub: `${slaComplianceCount} de ${resolvedList.length} dentro do SLA` },
     { label: "Tokens consumidos (30d)", value: tokensOut, Icon: Zap, color: "var(--brand-accent)", sub: `${tokensIn} adicionados` },
   ];
 

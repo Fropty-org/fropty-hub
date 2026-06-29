@@ -7,6 +7,25 @@ import { requireRole } from "@/app/lib/auth/require-role";
 import { logAdminAction } from "@/app/lib/db/audit";
 import { sanitizeServiceIds } from "@/app/lib/constants/services";
 
+export async function adminBulkUpdatePlan(
+  userIds: string[],
+  plan: string,
+): Promise<{ error?: string }> {
+  const adminId = await requireRole("admin");
+  if (!userIds.length || !["sem_plano", "basico", "pro"].includes(plan)) return { error: "Dados inválidos" };
+
+  const supabase = createServiceClient();
+  const { error } = await supabase
+    .from("profiles")
+    .update({ plan })
+    .in("id", userIds);
+
+  if (error) return { error: error.message };
+  logAdminAction({ adminId, action: "bulk_update_plan", targetType: "user", targetId: userIds.join(","), metadata: { plan, count: userIds.length } });
+  revalidatePath("/admin/usuarios");
+  return {};
+}
+
 export async function adminCreditTokens(formData: FormData): Promise<void> {
   const adminId     = await requireRole("admin");
   const userId      = (formData.get("user_id") as string)?.trim();

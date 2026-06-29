@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Plus, FolderKanban, Calendar, User, BarChart2 } from "lucide-react";
 import { getAllProjects } from "@/app/actions/projects";
 import { PROJECT_STATUSES, PROJECT_PRIORITY_MAP } from "@/app/lib/constants/projects";
+import { CSVExportButton } from "@/app/components/ui/CSVExportButton";
 import type { ProjectStatus } from "@/app/lib/types/projects";
 
 export const metadata: Metadata = { title: "Admin — Projetos" };
@@ -45,12 +46,27 @@ export default async function AdminProjetosPage({
             {allProjects.length} projeto{allProjects.length !== 1 ? "s" : ""} no total
           </p>
         </div>
-        <Link
-          href="/admin/projetos/novo"
-          style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "9px 18px", background: "var(--cta-bg)", color: "var(--cta-text)", borderRadius: 10, fontSize: "13px", fontWeight: 700, textDecoration: "none" }}
-        >
-          <Plus size={14} /> Novo Projeto
-        </Link>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <CSVExportButton
+            data={projects as unknown as Record<string, unknown>[]}
+            columns={[
+              { key: "title",       label: "Projeto" },
+              { key: "status",      label: "Status" },
+              { key: "priority",    label: "Prioridade" },
+              { key: "client_name", label: "Cliente" },
+              { key: "start_date",  label: "Início" },
+              { key: "end_date",    label: "Prazo" },
+              { key: "progress",    label: "Progresso %" },
+            ]}
+            filename="projetos.csv"
+          />
+          <Link
+            href="/admin/projetos/novo"
+            style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "9px 18px", background: "var(--cta-bg)", color: "var(--cta-text)", borderRadius: 10, fontSize: "13px", fontWeight: 700, textDecoration: "none" }}
+          >
+            <Plus size={14} /> Novo Projeto
+          </Link>
+        </div>
       </div>
 
       {/* KPI strip */}
