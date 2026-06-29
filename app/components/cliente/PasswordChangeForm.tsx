@@ -55,6 +55,8 @@ export default function PasswordChangeForm() {
   const [smsCode,   setSmsCode]   = useState("");
   const [smsPwd,    setSmsPwd]    = useState("");
   const [smsConf,   setSmsConf]   = useState("");
+  const [totpCode,  setTotpCode]  = useState("");
+  const [needTotp,  setNeedTotp]  = useState(false);
   const [smsMsg,    setSmsMsg]    = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [smsLoad,   setSmsLoad]   = useState(false);
   const smsPwdStr = smsPwd ? analyzePassword(smsPwd) : null;
@@ -126,12 +128,28 @@ export default function PasswordChangeForm() {
 
   async function handleChangePwdSms() {
     setSmsMsg(null);
-    if (!smsPwd || !smsConf)       { setSmsMsg({ type: "error", text: "Preencha os dois campos." }); return; }
-    if (smsPwd !== smsConf)        { setSmsMsg({ type: "error", text: "Senhas não conferem." }); return; }
+    if (!smsPwd || !smsConf)        { setSmsMsg({ type: "error", text: "Preencha os dois campos." }); return; }
+    if (smsPwd !== smsConf)         { setSmsMsg({ type: "error", text: "Senhas não conferem." }); return; }
     const analysis = analyzePassword(smsPwd);
     if (analysis.issues.length > 0) { setSmsMsg({ type: "error", text: "Requisitos: " + analysis.issues.join(", ") + "." }); return; }
     setSmsLoad(true);
     const supabase = createClient();
+
+    // Se AAL1 e tem 2FA ativo, precisa fazer o challenge TOTP antes de trocar senha
+    const { data: aalData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+    if (aalData?.currentLevel === "aal1" && aalData?.nextLevel === "aal2") {
+      if (!needTotp) { setNeedTotp(true); setSmsLoad(false); return; }
+      // Verifica o código TOTP informado
+      if (totpCode.length !== 6) { setSmsMsg({ type: "error", text: "Digite o código 2FA de 6 dígitos." }); setSmsLoad(false); return; }
+      const { data: factors } = await supabase.auth.mfa.listFactors();
+      const totp = factors?.totp?.find(f => f.status === "verified");
+      if (!totp) { setSmsMsg({ type: "error", text: "Fator 2FA não encontrado." }); setSmsLoad(false); return; }
+      const { data: challenge, error: cErr } = await supabase.auth.mfa.challenge({ factorId: totp.id });
+      if (cErr || !challenge) { setSmsMsg({ type: "error", text: "Erro ao criar desafio 2FA." }); setSmsLoad(false); return; }
+      const { error: vErr } = await supabase.auth.mfa.verify({ factorId: totp.id, challengeId: challenge.id, code: totpCode });
+      if (vErr) { setSmsMsg({ type: "error", text: "Código 2FA inválido." }); setSmsLoad(false); return; }
+    }
+
     const { error } = await supabase.auth.updateUser({ password: smsPwd });
     setSmsLoad(false);
     if (error) { setSmsMsg({ type: "error", text: error.message }); return; }
@@ -139,7 +157,7 @@ export default function PasswordChangeForm() {
     setTimeout(() => { window.location.href = "/area-cliente"; }, 2200);
   }
 
-  function resetSms() { setSmsStep("phone"); setSmsCode(""); setSmsPwd(""); setSmsConf(""); setSmsMsg(null); }
+  function resetSms() { setSmsStep("phone"); setSmsCode(""); setSmsPwd(""); setSmsConf(""); setTotpCode(""); setNeedTotp(false); setSmsMsg(null); }
 
   /* ─────────────────── RENDER ─────────────────── */
   return (
@@ -382,6 +400,21 @@ export default function PasswordChangeForm() {
                 <label style={labelStyle}>Confirmar nova senha</label>
                 <input type="password" value={smsConf} onChange={e => setSmsConf(e.target.value)} autoComplete="new-password" placeholder="••••••••••" style={inputStyle} />
               </div>
+
+              {needTotp && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 6, padding: "14px", borderRadius: 10, border: "1px solid rgba(99,102,241,0.35)", background: "rgba(99,102,241,0.06)" }}>
+                  <label style={{ ...labelStyle, color: "#818cf8" }}>Código 2FA (Google Authenticator)</label>
+                  <input
+                    value={totpCode}
+                    onChange={e => setTotpCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                    placeholder="000000"
+                    maxLength={6}
+                    autoFocus
+                    style={{ ...inputStyle, fontSize: 20, letterSpacing: "0.2em", textAlign: "center", fontFamily: "monospace", maxWidth: 160 }}
+                  />
+                  <p style={{ margin: 0, fontSize: "11px", color: "var(--text-faint)" }}>Sua conta tem 2FA ativo. Confirme para concluir.</p>
+                </div>
+              )}
 
               <button
                 onClick={handleChangePwdSms}
