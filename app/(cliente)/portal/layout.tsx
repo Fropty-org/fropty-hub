@@ -5,6 +5,7 @@ import { createClient } from "@/app/lib/supabase/server";
 import { headers } from "next/headers";
 import { ClientSidebar } from "@/app/components/cliente/ClientSidebar";
 import { AdminSidebar } from "@/app/components/admin/AdminSidebar";
+import { PORTAL_NAV_ITEMS } from "@/app/lib/constants/portal-nav";
 import { UserAvatarMenu } from "@/app/components/auth/UserAvatarMenu";
 import { PullToRefresh } from "@/app/components/PullToRefresh";
 import { CommandPalette } from "@/app/components/CommandPalette";
@@ -80,18 +81,16 @@ export default async function PortalLayout({
 
   const isAdmin = profile?.role === "admin";
 
-  const portalNav = [
-    { id: "dashboard",         href: "/portal/dashboard",         icon: "LayoutDashboard",   label: "Painel" },
-    { id: "suporte",           href: "/portal/suporte",           icon: "MessageCircle",     label: "Suporte",             badge: openTickets },
-    { id: "projetos",          href: "/portal/projetos",          icon: "FolderKanban",      label: "Projetos",            badge: activeProjects },
-    { id: "contratos",         href: "/portal/contratos",         icon: "FileSignature",     label: "Contratos",           badge: pendingContracts },
-    { id: "financeiro",        href: "/portal/financeiro",        icon: "CreditCard",        label: "Financeiro" },
-    { id: "planos",            href: "/portal/planos",            icon: "Sparkles",          label: "Planos" },
-    { id: "roadmap",           href: "/portal/roadmap",           icon: "Map",               label: "Roadmap" },
-    { id: "feedback",          href: "/portal/feedback",          icon: "MessageSquarePlus", label: "Feedback" },
-    { id: "base-conhecimento", href: "/portal/base-conhecimento", icon: "BookOpen",          label: "Base de Conhecimento" },
-    { id: "perfil",            href: "/portal/perfil",            icon: "UserCircle",        label: "Meu Perfil" },
-  ];
+  // Badges dinâmicos por id — itens sem entrada aqui não exibem badge.
+  const BADGES: Record<string, number> = {
+    suporte:   openTickets,
+    projetos:  activeProjects,
+    contratos: pendingContracts,
+  };
+  const portalNav = PORTAL_NAV_ITEMS.map(item => ({
+    ...item,
+    ...(BADGES[item.id] !== undefined ? { badge: BADGES[item.id] } : {}),
+  }));
 
   // Objeto compatível com ClientUser (campos mínimos necessários)
   const sidebarUser = {

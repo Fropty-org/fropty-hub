@@ -6,6 +6,7 @@ import { useTransition, useState, useEffect } from "react";
 import { signOut } from "../../actions/auth";
 import { PortalThemeToggle } from "./PortalThemeToggle";
 import type { ClientUser } from "../../lib/types/cliente";
+import { PORTAL_NAV_ITEMS } from "../../lib/constants/portal-nav";
 import {
   LayoutDashboard, MessageCircle, CreditCard, UserCircle, BookOpen, Map,
   MessageSquarePlus, FolderKanban, FileSignature, LogOut, Loader2,
@@ -27,18 +28,7 @@ interface Props {
   initialTheme?: "dark" | "light";
 }
 
-const DEFAULT_NAV: NavItem[] = [
-  { id: "dashboard",         href: "/portal/dashboard",         icon: "LayoutDashboard",   label: "Painel" },
-  { id: "suporte",           href: "/portal/suporte",           icon: "MessageCircle",     label: "Suporte" },
-  { id: "projetos",          href: "/portal/projetos",          icon: "FolderKanban",      label: "Projetos" },
-  { id: "contratos",         href: "/portal/contratos",         icon: "FileSignature",     label: "Contratos" },
-  { id: "financeiro",        href: "/portal/financeiro",        icon: "CreditCard",        label: "Financeiro" },
-  { id: "planos",            href: "/portal/planos",            icon: "Sparkles",          label: "Planos" },
-  { id: "roadmap",           href: "/portal/roadmap",           icon: "Map",               label: "Roadmap" },
-  { id: "feedback",          href: "/portal/feedback",          icon: "MessageSquarePlus", label: "Feedback" },
-  { id: "base-conhecimento", href: "/portal/base-conhecimento", icon: "BookOpen",          label: "Base de Conhecimento" },
-  { id: "perfil",            href: "/portal/perfil",            icon: "UserCircle",        label: "Meu Perfil" },
-];
+const DEFAULT_NAV: NavItem[] = PORTAL_NAV_ITEMS;
 
 const ICON_MAP: Record<string, React.ComponentType<{ size?: number }>> = {
   LayoutDashboard, MessageCircle, CreditCard, UserCircle, BookOpen, Map,
