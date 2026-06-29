@@ -243,9 +243,9 @@ export default async function PortalDashboardPage() {
               </p>
             </div>
           </div>
-          <a href="/portal/suporte/novo" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "12px", fontWeight: 700, color: healthData.risk_level === "risco" ? "#ef4444" : "#f59e0b", textDecoration: "none", whiteSpace: "nowrap" }}>
+          <Link href="/portal/suporte/novo" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "12px", fontWeight: 700, color: healthData.risk_level === "risco" ? "#ef4444" : "#f59e0b", textDecoration: "none", whiteSpace: "nowrap" }}>
             Abrir chamado <ChevronRight size={13} />
-          </a>
+          </Link>
         </div>
       )}
       {healthData && healthData.risk_level === "saudavel" && (

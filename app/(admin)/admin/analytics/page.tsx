@@ -207,7 +207,7 @@ export default async function AdminAnalyticsPage() {
         <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "20px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
             <Clock size={14} style={{ color: "var(--text-muted)" }} />
-            <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>Tokens "" últimos 30 dias</h2>
+            <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>Tokens — últimos 30 dias</h2>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             {([["Emitidos", tokensIn, "#22c55e"], ["Consumidos", tokensOut, "#ef4444"]] as [string, number, string][]).map(([label, val, color]) => (

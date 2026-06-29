@@ -226,7 +226,7 @@ export default async function CustomerSuccessPage({
                   <span key={key} style={{ fontSize: "10px", fontWeight: 600, color: "var(--text-faint)", padding: "2px 6px", background: "var(--surface-2)", borderRadius: 6 }}>
                     {label.slice(0, 3)} {(c.health as NonNullable<typeof c.health>)[key as keyof typeof c.health]}
                   </span>
-                )) : <span style={{ fontSize: "11px", color: "var(--text-faint)" }}>""</span>}
+                )) : <span style={{ fontSize: "11px", color: "var(--text-faint)" }}>—</span>}
               </div>
 
               <span style={{ fontSize: "12px", color: "var(--text-faint)" }}>
