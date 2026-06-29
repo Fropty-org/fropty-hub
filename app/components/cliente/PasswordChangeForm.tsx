@@ -83,8 +83,8 @@ export default function PasswordChangeForm() {
   return (
     <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 14, padding: "28px 28px 24px" }}>
       <SentinelScan active={scanning} />
-      <h2 style={{ margin: "0 0 20px", fontSize: "1rem", fontWeight: 700, color: "var(--text)" }}>
-        <Lock size={14} style={{ marginRight: 8 }} />
+      <h2 style={{ margin: "0 0 20px", fontSize: "1rem", fontWeight: 700, color: "var(--text)", display: "flex", alignItems: "center", gap: 8 }}>
+        <Lock size={14} />
         Alterar senha
       </h2>
 
@@ -181,9 +181,10 @@ export default function PasswordChangeForm() {
               cursor: (isPending || (!!newPwd && !!strength && strength.issues.length > 0)) ? "not-allowed" : "pointer",
               fontFamily: "inherit", whiteSpace: "nowrap",
               opacity: (isPending || (!!newPwd && !!strength && strength.issues.length > 0)) ? 0.6 : 1,
+              display: "flex", alignItems: "center", gap: 6,
             }}
           >
-            <Lock size={14} style={{ marginRight: 6 }} />
+            <Lock size={14} />
             {isPending ? "Alterando…" : "Alterar senha"}
           </button>
           {msg && (

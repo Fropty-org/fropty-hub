@@ -64,6 +64,13 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/webp", "image/avif"],
     minimumCacheTTL: 86400,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.supabase.co",
+        pathname: "/storage/v1/object/public/**",
+      },
+    ],
   },
   // Turbopack warning: definir root explícito
   turbopack: {

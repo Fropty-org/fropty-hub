@@ -231,8 +231,8 @@ export function ProfileSettings({ name: initialName, email, role, avatarUrl, goo
             {/* Danger zone */}
             <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", padding: "22px 0", borderTop: "1px solid var(--border)" }}>
               <div style={{ maxWidth: 400 }}>
-                <p style={{ margin: 0, fontSize: "14px", fontWeight: 600, color: "var(--c-danger)" }}>
-                  <AlertTriangle size={13} style={{ marginRight: 6, verticalAlign: "middle" }} />
+                <p style={{ margin: 0, fontSize: "14px", fontWeight: 600, color: "var(--c-danger)", display: "flex", alignItems: "center", gap: 6 }}>
+                  <AlertTriangle size={13} />
                   Desativar conta
                 </p>
                 <p style={{ margin: "5px 0 0", fontSize: "13px", color: "var(--text-faint)", lineHeight: 1.5 }}>
