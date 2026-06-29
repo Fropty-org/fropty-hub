@@ -25,70 +25,109 @@ export default async function AdminFinanceiroPage() {
   const totalCredits = txs.filter((t) => t.type === "credit").reduce((s, t) => s + t.amount, 0);
   const totalDebits  = txs.filter((t) => t.type === "debit").reduce((s, t) => s + t.amount, 0);
 
+  const kpis: { label: string; value: string | number; sub?: string; Icon: LucideIcon; color: string }[] = [
+    { label: "MRR",                           value: `R$${mrr.toFixed(2).replace(".", ",")}`, sub: "receita recorrente mensal", Icon: TrendingUp,    color: "#22c55e" },
+    { label: "Assinantes",                    value: assinantes.length,  sub: "planos ativos",                              Icon: Users,           color: "var(--primary)" },
+    { label: "Tokens emitidos",               value: totalCredits,       sub: "últimas 30 transações",                      Icon: ArrowDownLeft,   color: "#EF9F27" },
+    { label: "Tokens consumidos",             value: totalDebits,        sub: "últimas 30 transações",                      Icon: ArrowUpRight,    color: "#ef4444" },
+  ];
+
   return (
-    <div style={{ padding: "40px 32px", maxWidth: 1000, margin: "0 auto" }}>
-      <div style={{ marginBottom: 32 }}>
-        <h1 style={{ fontSize: "1.75rem", fontWeight: 800, margin: "0 0 4px", color: "var(--text)" }}>Financeiro</h1>
+    <div style={{ padding: "40px 32px", maxWidth: 1100, margin: "0 auto" }}>
+      <div style={{ marginBottom: 28 }}>
+        <h1 style={{ fontSize: "1.5rem", fontWeight: 800, margin: "0 0 4px", color: "var(--text)", letterSpacing: "-0.02em" }}>Financeiro</h1>
         <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>Receita, assinantes e movimentação de tokens</p>
       </div>
 
-      {/* KPIs */}
+      {/* KPI strip */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16, marginBottom: 32 }}>
-        {([
-          { label: "MRR",         value: `R$${mrr.toFixed(2).replace(".", ",")}`, Icon: TrendingUp,    color: "#22c55e" },
-          { label: "Assinantes",  value: assinantes.length,  Icon: Users,           color: "var(--primary)" },
-          { label: "Tokens emitidos (últimos 30 tx)", value: totalCredits, Icon: ArrowDownLeft, color: "#EF9F27" },
-          { label: "Tokens gastos (últimos 30 tx)", value: totalDebits, Icon: ArrowUpRight,  color: "#ef4444" },
-        ] as { label: string; value: string | number; Icon: LucideIcon; color: string }[]).map((k) => (
-          <div key={k.label} style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 16, padding: "22px" }}>
+        {kpis.map((k) => (
+          <div key={k.label} style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "20px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
-              <div style={{ width: 38, height: 38, borderRadius: 10, background: `${k.color}15`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <k.Icon size={20} style={{ color: k.color }} />
+              <div style={{ width: 36, height: 36, borderRadius: 10, background: `${k.color}18`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <k.Icon size={17} style={{ color: k.color }} />
               </div>
               <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--text-muted)" }}>{k.label}</span>
             </div>
-            <p style={{ margin: 0, fontSize: "1.9rem", fontWeight: 900, color: "var(--text)", lineHeight: 1 }}>{k.value}</p>
+            <p style={{ margin: "0 0 2px", fontSize: "1.9rem", fontWeight: 900, color: "var(--text)", lineHeight: 1, letterSpacing: "-0.02em" }}>{k.value}</p>
+            {k.sub && <p style={{ margin: 0, fontSize: "11px", color: "var(--text-faint)" }}>{k.sub}</p>}
           </div>
         ))}
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 24 }}>
+      {/* 2-col layout */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
         {/* Assinantes */}
         <div>
-          <h2 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: 14, color: "var(--text)" }}>Assinantes</h2>
+          <h2 style={{ fontSize: "1rem", fontWeight: 700, margin: "0 0 14px", color: "var(--text)" }}>Assinantes</h2>
           <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, overflow: "hidden" }}>
-            {assinantes.map((u, i) => (
-              <div key={u.id} style={{ padding: "13px 18px", borderBottom: i < assinantes.length - 1 ? "1px solid var(--border)" : "none", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
-                <div>
-                  <p style={{ margin: "0 0 2px", fontSize: "13px", fontWeight: 700, color: "var(--text)" }}>{u.name}</p>
-                  <p style={{ margin: 0, fontSize: "11px", color: "var(--text-faint)" }}>Plano {u.plan === "pro" ? "Pro — R$89,90/mês" : "Básico — R$49,90/mês"}</p>
-                </div>
-                <span style={{ fontSize: "12px", fontWeight: 700, color: "#EF9F27" }}>{u.token_balance} tokens</span>
-              </div>
-            ))}
-            {assinantes.length === 0 && <p style={{ padding: "20px", textAlign: "center", color: "var(--text-faint)", fontSize: "13px", margin: 0 }}>Nenhum assinante ainda.</p>}
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead>
+                <tr style={{ borderBottom: "1px solid var(--border)" }}>
+                  {["Nome", "Plano", "Tokens"].map((h) => (
+                    <th key={h} style={{ padding: "10px 16px", textAlign: "left", fontSize: "11px", fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.05em" }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {assinantes.map((u, i) => (
+                  <tr key={u.id} style={{ borderBottom: i < assinantes.length - 1 ? "1px solid var(--border)" : "none" }}>
+                    <td style={{ padding: "11px 16px", fontSize: "13px", fontWeight: 600, color: "var(--text)" }}>{u.name}</td>
+                    <td style={{ padding: "11px 16px" }}>
+                      <span style={{ fontSize: "11px", fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: u.plan === "pro" ? "rgba(91,87,232,0.12)" : "rgba(34,197,94,0.12)", color: u.plan === "pro" ? "var(--primary)" : "#22c55e" }}>
+                        {u.plan === "pro" ? "Pro" : "Básico"}
+                      </span>
+                    </td>
+                    <td style={{ padding: "11px 16px", fontSize: "12px", fontWeight: 700, color: "#EF9F27" }}>{u.token_balance}</td>
+                  </tr>
+                ))}
+                {assinantes.length === 0 && (
+                  <tr><td colSpan={3} style={{ padding: "28px 16px", textAlign: "center", color: "var(--text-faint)", fontSize: "13px" }}>Nenhum assinante ainda.</td></tr>
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
-      </div>
 
-      {/* Extrato recente */}
-      <div style={{ marginTop: 32 }}>
-        <h2 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: 14, color: "var(--text)" }}>Últimas movimentações</h2>
-        <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, overflow: "hidden" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 140px 90px 90px 90px", padding: "12px 20px", borderBottom: "1px solid var(--border)", fontSize: "11px", fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-            <span>Descrição</span><span>Cliente</span><span>Data</span><span style={{ textAlign: "right" }}>Tokens</span><span style={{ textAlign: "right" }}>Saldo</span>
+        {/* Últimas movimentações */}
+        <div>
+          <h2 style={{ fontSize: "1rem", fontWeight: 700, margin: "0 0 14px", color: "var(--text)" }}>Últimas movimentações</h2>
+          <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, overflow: "hidden" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead>
+                <tr style={{ borderBottom: "1px solid var(--border)" }}>
+                  {["Descrição", "Tipo", "Tokens", "Data"].map((h) => (
+                    <th key={h} style={{ padding: "10px 16px", textAlign: "left", fontSize: "11px", fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.05em" }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {txs.map((tx, i) => (
+                  <tr key={tx.id} style={{ borderBottom: i < txs.length - 1 ? "1px solid var(--border)" : "none" }}>
+                    <td style={{ padding: "11px 16px" }}>
+                      <p style={{ margin: "0 0 2px", fontSize: "12px", fontWeight: 600, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 140 }}>{tx.description}</p>
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                      <p style={{ margin: 0, fontSize: "11px", color: "var(--text-faint)" }}>{(tx.profiles as any)?.name ?? "—"}</p>
+                    </td>
+                    <td style={{ padding: "11px 16px" }}>
+                      <span style={{ fontSize: "10px", fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: tx.type === "credit" ? "rgba(34,197,94,0.12)" : "rgba(239,68,68,0.12)", color: tx.type === "credit" ? "#22c55e" : "#ef4444" }}>
+                        {tx.type === "credit" ? "Crédito" : "Débito"}
+                      </span>
+                    </td>
+                    <td style={{ padding: "11px 16px", fontSize: "13px", fontWeight: 700, color: tx.type === "credit" ? "#22c55e" : "#ef4444" }}>
+                      {tx.type === "credit" ? "+" : "-"}{tx.amount}
+                    </td>
+                    <td style={{ padding: "11px 16px", fontSize: "11px", color: "var(--text-faint)", whiteSpace: "nowrap" }}>
+                      {new Date(tx.created_at).toLocaleDateString("pt-BR")}
+                    </td>
+                  </tr>
+                ))}
+                {txs.length === 0 && (
+                  <tr><td colSpan={4} style={{ padding: "28px 16px", textAlign: "center", color: "var(--text-faint)", fontSize: "13px" }}>Nenhuma movimentação.</td></tr>
+                )}
+              </tbody>
+            </table>
           </div>
-          {txs.map((tx, i) => (
-            <div key={tx.id} style={{ display: "grid", gridTemplateColumns: "1fr 140px 90px 90px 90px", padding: "12px 20px", borderBottom: i < txs.length - 1 ? "1px solid var(--border)" : "none", fontSize: "12px", alignItems: "center" }}>
-              <span style={{ color: "var(--text)" }}>{tx.description}</span>
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-              <span style={{ color: "var(--text-faint)" }}>{(tx.profiles as any)?.name ?? "—"}</span>
-              <span style={{ color: "var(--text-faint)" }}>{new Date(tx.created_at).toLocaleDateString("pt-BR")}</span>
-              <span style={{ textAlign: "right", fontWeight: 700, color: tx.type === "credit" ? "#22c55e" : "#ef4444" }}>{tx.type === "credit" ? "+" : "-"}{tx.amount}</span>
-              <span style={{ textAlign: "right", fontWeight: 700, color: "var(--text)" }}>{tx.balance}</span>
-            </div>
-          ))}
-          {txs.length === 0 && <p style={{ padding: "20px", textAlign: "center", color: "var(--text-faint)", fontSize: "13px", margin: 0 }}>Nenhuma movimentação.</p>}
         </div>
       </div>
     </div>
