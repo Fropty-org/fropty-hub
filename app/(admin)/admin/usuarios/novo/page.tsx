@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { adminInviteClient } from "@/app/actions/admin";
 import { SERVICES } from "@/app/lib/constants/services";
 import {
   ArrowLeft, UserPlus, Mail, User, Phone, Loader2,
-  CheckCircle, XCircle, CreditCard, Coins,
+  CheckCircle, XCircle, CreditCard, Coins, Camera,
 } from "lucide-react";
 
 export default function NovoUsuarioPage() {
@@ -15,6 +15,16 @@ export default function NovoUsuarioPage() {
   const [pending, startTransition] = useTransition();
   const [msg,     setMsg]          = useState<{ ok: boolean; text: string } | null>(null);
   const [services, setServices]    = useState<Set<string>>(new Set());
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [avatarFile,    setAvatarFile]    = useState<File | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setAvatarFile(file);
+    setAvatarPreview(URL.createObjectURL(file));
+  }
 
   function toggleService(id: string) {
     setServices(prev => {
@@ -29,6 +39,8 @@ export default function NovoUsuarioPage() {
     setMsg(null);
     const fd = new FormData(e.currentTarget);
     services.forEach(s => fd.append("services", s));
+
+    if (avatarFile) fd.append("avatar_file", avatarFile);
 
     startTransition(async () => {
       const res = await adminInviteClient(fd);
@@ -61,16 +73,38 @@ export default function NovoUsuarioPage() {
       <form onSubmit={handleSubmit}>
         <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, overflow: "hidden" }}>
 
-          {/* Avatar placeholder */}
-          <div style={{ padding: "28px 28px 24px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", gap: 20 }}>
-            <div style={{ width: 72, height: 72, borderRadius: "50%", background: "var(--surface-2)", border: "2px dashed var(--border)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <User size={28} style={{ color: "var(--text-faint)" }} />
+          {/* Avatar upload */}
+          <div style={{ padding: "24px 28px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", gap: 18 }}>
+            <div style={{ position: "relative", flexShrink: 0 }}>
+              <div
+                onClick={() => fileRef.current?.click()}
+                style={{ width: 72, height: 72, borderRadius: "50%", background: "var(--surface-2)", border: avatarPreview ? "2px solid var(--primary)" : "2px dashed var(--border)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", overflow: "hidden", flexShrink: 0 }}
+              >
+                {avatarPreview
+                  ? <img src={avatarPreview} alt="preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  : <User size={26} style={{ color: "var(--text-faint)" }} />}
+              </div>
+              <button
+                type="button"
+                onClick={() => fileRef.current?.click()}
+                style={{ position: "absolute", bottom: 0, right: 0, width: 24, height: 24, borderRadius: "50%", background: "var(--primary)", border: "2px solid var(--card-bg)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+              >
+                <Camera size={12} style={{ color: "#fff" }} />
+              </button>
+              <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleAvatarChange} />
             </div>
             <div>
-              <p style={{ margin: "0 0 4px", fontSize: "13px", fontWeight: 700, color: "var(--text)" }}>Foto do usuário</p>
-              <p style={{ margin: 0, fontSize: "12px", color: "var(--text-faint)", lineHeight: 1.5 }}>
-                O usuário poderá adicionar foto após o primeiro acesso através do perfil.
+              <p style={{ margin: "0 0 3px", fontSize: "13px", fontWeight: 700, color: "var(--text)" }}>Foto do usuário</p>
+              <p style={{ margin: "0 0 8px", fontSize: "12px", color: "var(--text-faint)", lineHeight: 1.5 }}>
+                JPG, PNG ou WebP. Máx. 2 MB.
               </p>
+              <button
+                type="button"
+                onClick={() => fileRef.current?.click()}
+                style={{ fontSize: "12px", fontWeight: 600, color: "var(--primary)", background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "inherit" }}
+              >
+                {avatarPreview ? "Trocar foto" : "Escolher foto"}
+              </button>
             </div>
           </div>
 

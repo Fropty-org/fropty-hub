@@ -32,7 +32,7 @@ export default async function AdminUsuariosPage({ searchParams }: Props) {
 
   let query = supabase
     .from("profiles")
-    .select("id,name,email,role,plan,token_balance,is_active,phone_number,created_at")
+    .select("id,name,email,role,plan,token_balance,is_active,phone_number,created_at,avatar_url")
     .order("created_at", { ascending: false });
 
   if (tab === "ativos")   query = query.eq("is_active", true);
@@ -180,6 +180,7 @@ export default async function AdminUsuariosPage({ searchParams }: Props) {
             is_active:     u.is_active !== false,
             phone:         u.phone_number ?? null,
             created_at:    u.created_at ?? null,
+            avatar_url:    u.avatar_url ?? null,
           }))}
         />
 

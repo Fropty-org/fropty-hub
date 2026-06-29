@@ -323,11 +323,13 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
             onMouseEnter={e => { if (!menuOpen) (e.currentTarget as HTMLButtonElement).style.background = "var(--sidebar-item-hover)"; }}
             onMouseLeave={e => { if (!menuOpen) (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
           >
-            <div style={{ width: 30, height: 30, borderRadius: "50%", flexShrink: 0, background: "var(--surface-2)", border: "1.5px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 700, color: "var(--text)", position: "relative", overflow: "hidden" }}>
-              {avatarUrl
-                ? <img src={avatarUrl} alt={name} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "50%" }} referrerPolicy="no-referrer" />
-                : initials}
-              <span style={{ position: "absolute", bottom: -2, right: -2, width: 12, height: 12, borderRadius: "50%", background: "var(--sidebar-bg)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1 }}>
+            <div style={{ position: "relative", flexShrink: 0 }}>
+              <div style={{ width: 30, height: 30, borderRadius: "50%", background: "var(--surface-2)", border: "1.5px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 700, color: "var(--text)", overflow: "hidden" }}>
+                {avatarUrl
+                  ? <img src={avatarUrl} alt={name} style={{ width: "100%", height: "100%", objectFit: "cover" }} referrerPolicy="no-referrer" />
+                  : initials}
+              </div>
+              <span style={{ position: "absolute", bottom: -2, right: -2, width: 12, height: 12, borderRadius: "50%", background: "var(--sidebar-bg)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2 }}>
                 <Shield size={7} style={{ color: "var(--primary)", opacity: 0.8 }} />
               </span>
             </div>

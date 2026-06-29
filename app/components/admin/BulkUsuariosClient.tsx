@@ -15,6 +15,7 @@ interface User {
   is_active: boolean;
   phone?: string | null;
   created_at?: string | null;
+  avatar_url?: string | null;
 }
 
 interface Props {
@@ -155,7 +156,9 @@ export function BulkUsuariosClient({ users }: Props) {
               {/* Avatar + Nome + Email */}
               <div style={{ display: "flex", alignItems: "center", gap: 9, minWidth: 0 }}>
                 <div style={{ width: 30, height: 30, borderRadius: "50%", background: "var(--surface-2)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", fontWeight: 800, color: "var(--text)", flexShrink: 0, overflow: "hidden" }}>
-                  {initials}
+                  {u.avatar_url
+                    ? <img src={u.avatar_url} alt={u.name ?? ""} style={{ width: "100%", height: "100%", objectFit: "cover" }} referrerPolicy="no-referrer" onError={e => { (e.currentTarget as HTMLImageElement).style.display = "none"; }} />
+                    : initials}
                 </div>
                 <div style={{ minWidth: 0 }}>
                   <p style={{ margin: 0, fontSize: "12.5px", fontWeight: 600, color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{u.name || <span style={{ color: "var(--text-faint)", fontWeight: 400 }}>—</span>}</p>
