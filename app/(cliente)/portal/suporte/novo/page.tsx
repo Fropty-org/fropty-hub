@@ -15,7 +15,7 @@ export default async function NovoChamadoPage() {
   // Clientes sem tokens não podem abrir chamados
   if (!isAdmin && (profile?.token_balance ?? 0) <= 0) {
     return (
-      <div style={{ padding: "36px 32px", maxWidth: 720, margin: "0 auto" }}>
+      <div style={{ padding: "24px 24px", maxWidth: 720, margin: "0 auto" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20, fontSize: "12px" }}>
           <Link href="/portal/suporte" style={{ color: "var(--text-faint)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 5, padding: "5px 10px 5px 8px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--surface)", fontWeight: 600 }}>
             <ArrowLeft size={13} /> Suporte
@@ -57,7 +57,7 @@ export default async function NovoChamadoPage() {
   }
 
   return (
-    <div style={{ padding: "36px 32px", maxWidth: 720, margin: "0 auto" }}>
+    <div style={{ padding: "24px 24px", maxWidth: 720, margin: "0 auto" }}>
       <style>{`
         @media (max-width: 640px) {
           .novo-chamado-root { padding: 16px 14px !important; }

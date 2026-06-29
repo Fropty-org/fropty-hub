@@ -114,7 +114,7 @@ export default async function PortalDashboardPage() {
   const hasRecentProjects = recentProjects.length > 0;
 
   return (
-    <div style={{ padding: "36px 32px", maxWidth: 1060, margin: "0 auto" }}>
+    <div style={{ padding: "24px 24px", maxWidth: 1060, margin: "0 auto" }}>
 
       {/* ── Page header ── */}
       <div style={{ marginBottom: 32, display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>

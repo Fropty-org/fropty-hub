@@ -36,7 +36,7 @@ export default async function ProjetosPage({
   const projects = await getClientProjects();
 
   return (
-    <div style={{ padding: "36px 32px", maxWidth: view === "kanban" ? "none" : 1020, margin: "0 auto" }}>
+    <div style={{ padding: "24px 24px", maxWidth: view === "kanban" ? "none" : 1020, margin: "0 auto" }}>
 
       {/* ── Page header ── */}
       <div style={{

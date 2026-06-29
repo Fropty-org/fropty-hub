@@ -9,7 +9,7 @@ import {
   LayoutDashboard, Users, CreditCard, MessageCircle, BarChart2, ShieldCheck,
   UserCircle, BookOpen, Map, MessageSquarePlus, FolderKanban, FileSignature,
   HeartPulse, Menu, LogOut, Loader2, PanelLeftClose, Shield,
-  ChevronUp, ChevronDown, UserPlus, ListFilter,
+  ChevronUp, ChevronDown, UserPlus, ListFilter, Sparkles,
 } from "lucide-react";
 import { NotificationBell } from "@/app/components/NotificationBell";
 import Image from "next/image";
@@ -32,6 +32,7 @@ const NAV: NavItem[] = [
   { id: "contratos",         href: "/admin/contratos",         Icon: FileSignature,     label: "Contratos",           group: "ops" },
   { id: "financeiro",        href: "/admin/financeiro",        Icon: CreditCard,        label: "Financeiro",          group: "ops" },
   { id: "suporte",           href: "/portal/suporte",          Icon: MessageCircle,     label: "Suporte",             group: "ops" },
+  { id: "planos",            href: "/portal/planos",           Icon: Sparkles,          label: "Planos",              group: "ops" },
   { id: "roadmap",           href: "/admin/roadmap",           Icon: Map,               label: "Roadmap",             group: "produto" },
   { id: "feedback",          href: "/admin/feedback",          Icon: MessageSquarePlus, label: "Feedback",            group: "produto" },
   { id: "base-conhecimento", href: "/admin/base-conhecimento", Icon: BookOpen,          label: "Base de Conhecimento",group: "produto" },
