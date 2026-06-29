@@ -42,7 +42,7 @@ export default async function AdminOverviewPage() {
       .select("id, subject, status, priority, ticket_number, created_at, profiles:client_id(name)")
       .order("created_at", { ascending: false })
       .limit(5),
-    supabase.from("client_health").select("risk_level"),
+    supabase.from("health_scores").select("risk_level"),
   ]);
 
   const mrr = (mrrData as unknown as number) ?? 0;
