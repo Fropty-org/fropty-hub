@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useTransition, useEffect } from "react";
+import { useState, useTransition, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { createClient } from "@/app/lib/supabase/browser";
 import { ShineBorder } from "@/app/components/ShineBorder";
 import { RainbowButton } from "@/app/components/RainbowButton";
-import { Sun, Moon, ArrowLeft, AlertCircle, CheckCircle, Loader2, Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, AlertCircle, CheckCircle, Loader2, Eye, EyeOff } from "lucide-react";
 
 type Mode = "login" | "reset";
 
@@ -41,20 +41,50 @@ export default function AreaClientePage() {
   const [isPending, startTransition] = useTransition();
   const [loginSubmitting, setLoginSubmitting] = useState(false);
   const [oauthLoading, setOauthLoading] = useState<"google" | null>(null);
-  const [theme, setTheme]     = useState<"dark" | "light">("dark");
+  const [isDark, setIsDark]   = useState(true);
   const [showPwd, setShowPwd] = useState(false);
+  const themeRef              = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const saved = (localStorage.getItem("fropty-theme") ?? "dark") as "dark" | "light";
-    setTheme(saved);
+    setIsDark(saved === "dark");
     document.documentElement.classList.toggle("dark", saved === "dark");
   }, []);
 
   function toggleTheme() {
-    const next = theme === "dark" ? "light" : "dark";
-    setTheme(next);
-    document.documentElement.classList.toggle("dark", next === "dark");
-    localStorage.setItem("fropty-theme", next);
+    const next = !isDark;
+
+    const apply = () => {
+      setIsDark(next);
+      document.documentElement.classList.toggle("dark", next);
+      localStorage.setItem("fropty-theme", next ? "dark" : "light");
+    };
+
+    if (
+      !themeRef.current ||
+      !("startViewTransition" in document) ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      apply();
+      return;
+    }
+
+    const { top, left, width, height } = themeRef.current.getBoundingClientRect();
+    const x = left + width / 2;
+    const y = top + height / 2;
+    const maxRadius = Math.hypot(
+      Math.max(left, window.innerWidth - left),
+      Math.max(top, window.innerHeight - top)
+    );
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const vt = (document as any).startViewTransition(apply);
+    vt.ready.then(() => {
+      document.documentElement.animate(
+        { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${maxRadius}px at ${x}px ${y}px)`] },
+        { duration: 500, easing: "ease-in", pseudoElement: "::view-transition-new(root)" }
+      );
+    });
   }
 
   function changeMode(m: Mode) { setMode(m); setError(null); setSuccess(null); }
@@ -89,7 +119,7 @@ export default function AreaClientePage() {
   }
 
   const isLoading = mode === "login" ? loginSubmitting : isPending;
-  const dark = theme === "dark";
+  const dark = isDark;
 
   const bg       = dark ? "#0f0f0f" : "#f4f4f5";
   const cardBg   = dark ? "#1a1a1a" : "#ffffff";
@@ -113,12 +143,25 @@ export default function AreaClientePage() {
   return (
     <div style={{ minHeight: "100dvh", background: bg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px 16px", transition: "background 0.2s" }}>
 
-      {/* Theme toggle */}
+      {/* Theme toggle — mesmo efeito circular do painel */}
       <button
+        ref={themeRef}
         onClick={toggleTheme}
-        style={{ position: "fixed", top: 16, right: 16, width: 34, height: 34, borderRadius: 9, border: `1px solid ${border}`, background: cardBg, color: txtMuted, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50 }}
+        aria-label="Alternar tema"
+        style={{ position: "fixed", top: 16, right: 16, width: 34, height: 34, borderRadius: 9, border: `1px solid ${border}`, background: cardBg, color: txtMuted, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50, overflow: "hidden" }}
       >
-        {dark ? <Sun size={14} /> : <Moon size={14} />}
+        {/* Sun */}
+        <span aria-hidden="true" style={{ position: "absolute", display: "flex", alignItems: "center", justifyContent: "center", willChange: "transform, opacity", transform: dark ? "rotate(90deg) scale(0.4)" : "rotate(0deg) scale(1)", opacity: dark ? 0 : 1, transition: "transform 0.45s cubic-bezier(0.34,1.56,0.64,1), opacity 0.25s ease" }}>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="4" /><line x1="12" y1="2" x2="12" y2="4" /><line x1="12" y1="20" x2="12" y2="22" /><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" /><line x1="2" y1="12" x2="4" y2="12" /><line x1="20" y1="12" x2="22" y2="12" /><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+          </svg>
+        </span>
+        {/* Moon */}
+        <span aria-hidden="true" style={{ position: "absolute", display: "flex", alignItems: "center", justifyContent: "center", willChange: "transform, opacity", transform: dark ? "rotate(0deg) scale(1)" : "rotate(-90deg) scale(0.4)", opacity: dark ? 1 : 0, transition: "transform 0.45s cubic-bezier(0.34,1.56,0.64,1), opacity 0.25s ease" }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+        </span>
       </button>
 
       <div style={{ width: "100%", maxWidth: 380 }}>
