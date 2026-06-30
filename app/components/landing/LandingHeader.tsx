@@ -64,7 +64,7 @@ export function LandingHeader() {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 'auto' }}>
           <AnimatedThemeToggler size={32} />
-          <RainbowButton asChild size="sm" variant="outline">
+          <RainbowButton asChild size="sm">
             <a href="#acesso" style={{ textDecoration: 'none' }}>Solicitar acesso</a>
           </RainbowButton>
           <button
@@ -95,7 +95,7 @@ export function LandingHeader() {
               {n.label}
             </a>
           ))}
-          <RainbowButton asChild variant="outline" className="w-full mt-4">
+          <RainbowButton asChild className="w-full mt-4">
             <a href="#acesso" onClick={() => setOpen(false)} style={{ textDecoration: 'none', display: 'block', textAlign: 'center' }}>
               Solicitar acesso
             </a>

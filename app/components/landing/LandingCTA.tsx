@@ -132,7 +132,6 @@ export function LandingCTA() {
                   </div>
                   <RainbowButton
                     type="submit"
-                    variant="outline"
                     disabled={loading}
                     className="w-full"
                     style={{ width: '100%' }}
