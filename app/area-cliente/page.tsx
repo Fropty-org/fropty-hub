@@ -177,10 +177,10 @@ export default function AreaClientePage() {
 
           {/* Logo dentro do card */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 24 }}>
-            <Image src="/logo-icon.png" alt="Fropty Hub" width={36} height={36} style={{ objectFit: "contain" }} />
+            <Image src="/favicon.svg" alt="Fropty Hub" width={36} height={36} unoptimized />
             <span style={{ fontSize: 18, fontWeight: 800, letterSpacing: "-0.03em" }}>
               <span style={{ color: txtMain }}>Fropty </span>
-              <span style={{ background: "linear-gradient(90deg, #9333ea, #3b82f6, #22c55e, #f97316)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Hub</span>
+              <span style={{ background: "linear-gradient(90deg,#e040fb,#7c3aed,#2563eb,#16a34a,#ea580c)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Hub</span>
             </span>
           </div>
 

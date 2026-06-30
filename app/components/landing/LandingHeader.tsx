@@ -35,9 +35,14 @@ export function LandingHeader() {
 
         {/* Logo */}
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', flexShrink: 0 }}>
-          <Image src="/logo-icon.png" alt="Fropty" width={26} height={26} style={{ flexShrink: 0, objectFit: 'contain' }} />
+          <Image src="/favicon.svg" alt="Fropty Hub" width={26} height={26} style={{ flexShrink: 0 }} unoptimized />
           <span style={{ fontSize: 14.5, fontWeight: 700, letterSpacing: '-0.3px', color: 'var(--text)' }}>
-            Fropty <span style={{ color: 'var(--brand-500)' }}>Hub</span>
+            Fropty <span style={{
+              background: 'linear-gradient(90deg, #e040fb, #7c3aed, #2563eb, #16a34a, #ea580c)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}>Hub</span>
           </span>
         </Link>
 

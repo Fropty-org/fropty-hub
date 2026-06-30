@@ -110,11 +110,12 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
         }}>
           <Link href="/portal/dashboard" style={{ display: "flex", alignItems: "center", gap: 9, textDecoration: "none", overflow: "hidden" }}>
             <Image
-              src="/logo-icon.png"
+              src="/favicon.svg"
               alt="Fropty Hub"
               width={28}
               height={28}
-              style={{ objectFit: "contain", flexShrink: 0,  }}
+              unoptimized
+              style={{ flexShrink: 0 }}
             />
             <span style={{
               fontSize: "14px", fontWeight: 700, color: "var(--text)",
@@ -124,7 +125,7 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
               transition: "opacity 0.18s, max-width 0.22s",
               overflow: "hidden",
             }}>
-              Fropty<span style={{ color: "var(--primary)" }}>Hub</span>
+              Fropty<span style={{ background: "linear-gradient(90deg,#e040fb,#7c3aed,#2563eb,#16a34a,#ea580c)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Hub</span>
             </span>
           </Link>
 
@@ -345,9 +346,9 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
           <Menu size={17} />
         </button>
         <Link href="/portal/dashboard" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none", flex: 1 }}>
-          <Image src="/logo-icon.png" alt="Fropty Hub" width={22} height={22} style={{ objectFit: "contain",  }} />
+          <Image src="/favicon.svg" alt="Fropty Hub" width={22} height={22} unoptimized />
           <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text)" }}>
-            Fropty<span style={{ color: "var(--primary)" }}>Hub</span>
+            Fropty<span style={{ background: "linear-gradient(90deg,#e040fb,#7c3aed,#2563eb,#16a34a,#ea580c)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Hub</span>
           </span>
         </Link>
         <PortalThemeToggle initialTheme={initialTheme} />

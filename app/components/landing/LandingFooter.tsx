@@ -98,8 +98,13 @@ export function LandingFooter() {
           {/* Brand column */}
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
-              <Image src="/logo-icon.png" alt="Fropty" width={22} height={22} style={{ flexShrink: 0, objectFit: 'contain' }} />
-              <span style={{ fontSize: 15, fontWeight: 700 }}>Fropty</span>
+              <Image src="/favicon.svg" alt="Fropty Hub" width={22} height={22} style={{ flexShrink: 0 }} unoptimized />
+              <span style={{ fontSize: 15, fontWeight: 700 }}>Fropty <span style={{
+                background: 'linear-gradient(90deg, #e040fb, #7c3aed, #2563eb, #16a34a, #ea580c)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}>Hub</span></span>
             </div>
             <p style={{ fontSize: 13, color: 'var(--t2)', lineHeight: 1.7, maxWidth: 200, margin: '0 0 20px' }}>
               O centro operacional de relacionamento, suporte e crescimento do ecossistema Fropty.
