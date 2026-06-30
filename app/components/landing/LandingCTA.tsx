@@ -31,9 +31,23 @@ export function LandingCTA() {
     if (Object.keys(e).length) { setErrors(e); return }
     setErrors({})
     setLoading(true)
-    await new Promise(r => setTimeout(r, 1100))
-    setLoading(false)
-    setSuccess(true)
+    try {
+      const res = await fetch('/api/activate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setErrors({ _global: data.error ?? 'Erro ao enviar. Tente novamente.' })
+        return
+      }
+      setSuccess(true)
+    } catch {
+      setErrors({ _global: 'Erro de conexão. Verifique sua internet e tente novamente.' })
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -130,6 +144,11 @@ export function LandingCTA() {
                       }}
                     />
                   </div>
+                  {errors._global && (
+                    <p role="alert" style={{ fontSize: 12.5, color: 'var(--c-danger)', margin: 0, padding: '8px 12px', background: 'rgba(239,68,68,.08)', border: '1px solid rgba(239,68,68,.2)', borderRadius: 8 }}>
+                      {errors._global}
+                    </p>
+                  )}
                   <RainbowButton
                     type="submit"
                     disabled={loading}
