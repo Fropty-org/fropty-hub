@@ -1,3 +1,200 @@
+'use client'
+
+/* ─── Mini mockup cards ─────────────────────────────────────── */
+
+function CardDashboard() {
+  return (
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 16, width: '100%', minHeight: 200 }}>
+      <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', marginBottom: 12, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Dashboard</div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 12 }}>
+        {[{ l: 'Abertos', v: '3', c: 'var(--c-warning)' }, { l: 'Resolvidos', v: '18', c: 'var(--c-success)' }, { l: 'Projetos', v: '2', c: 'var(--c-info)' }, { l: 'NPS', v: '72', c: 'var(--brand-500)' }].map(m => (
+          <div key={m.l} style={{ background: 'var(--surface-2)', borderRadius: 8, padding: '8px 10px', border: '1px solid var(--border)' }}>
+            <div style={{ fontSize: 9, color: 'var(--text-muted)', marginBottom: 2 }}>{m.l}</div>
+            <div style={{ fontSize: 18, fontWeight: 800, color: m.c }}>{m.v}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ height: 4, background: 'var(--border)', borderRadius: 99, marginBottom: 6 }}>
+        <div style={{ height: '100%', width: '72%', background: 'var(--brand-500)', borderRadius: 99 }} />
+      </div>
+      <div style={{ fontSize: 10, color: 'var(--text-faint)' }}>SLA geral: 98% este mês</div>
+    </div>
+  )
+}
+
+function CardTicket() {
+  return (
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 16, width: '100%' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+        <span style={{ fontSize: 10, fontWeight: 800, color: 'var(--brand-500)', background: 'var(--sidebar-item-active)', borderRadius: 5, padding: '2px 7px' }}>UFT-1042</span>
+        <span style={{ fontSize: 9, fontWeight: 700, color: 'var(--c-info)', background: 'rgba(59,130,246,.12)', borderRadius: 4, padding: '2px 6px' }}>Em andamento</span>
+      </div>
+      <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)', marginBottom: 8, lineHeight: 1.4 }}>Integração API Fropty Boost com erro 401</div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        {[{ who: 'Cliente', msg: 'Olá, estou recebendo erro 401 ao tentar autenticar...', mine: false }, { who: 'Fropty', msg: 'Identificamos o problema. Estamos verificando as credenciais...', mine: true }].map((m, i) => (
+          <div key={i} style={{ background: m.mine ? 'var(--sidebar-item-active)' : 'var(--surface-2)', borderRadius: 7, padding: '6px 9px', borderLeft: `2px solid ${m.mine ? 'var(--brand-500)' : 'var(--border-2)'}` }}>
+            <div style={{ fontSize: 9, fontWeight: 700, color: m.mine ? 'var(--brand-500)' : 'var(--text-muted)', marginBottom: 2 }}>{m.who}</div>
+            <div style={{ fontSize: 10, color: 'var(--text-muted)', lineHeight: 1.5 }}>{m.msg}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function CardProjects() {
+  return (
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 16, width: '100%' }}>
+      <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', marginBottom: 12, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Projetos</div>
+      {[{ name: 'App Mobile Fropty Cash', pct: 72, c: 'var(--c-info)' }, { name: 'Dashboard Sentinel', pct: 100, c: 'var(--c-success)' }, { name: 'Integração Boost API', pct: 35, c: 'var(--c-warning)' }].map(p => (
+        <div key={p.name} style={{ marginBottom: 10 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+            <span style={{ fontSize: 10.5, color: 'var(--text)', fontWeight: 600 }}>{p.name}</span>
+            <span style={{ fontSize: 10, fontWeight: 700, color: p.c }}>{p.pct}%</span>
+          </div>
+          <div style={{ height: 4, background: 'var(--border)', borderRadius: 99 }}>
+            <div style={{ height: '100%', width: `${p.pct}%`, background: p.c, borderRadius: 99 }} />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function CardFinancial() {
+  return (
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 16, width: '100%' }}>
+      <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', marginBottom: 12, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Financeiro</div>
+      {[{ mes: 'Jul 2025', v: 'R$ 1.490', s: 'Pendente', c: 'var(--c-warning)' }, { mes: 'Jun 2025', v: 'R$ 1.490', s: 'Pago', c: 'var(--c-success)' }, { mes: 'Mai 2025', v: 'R$ 1.490', s: 'Pago', c: 'var(--c-success)' }].map(f => (
+        <div key={f.mes} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 7, padding: '6px 8px', background: 'var(--surface-2)', borderRadius: 7 }}>
+          <span style={{ flex: 1, fontSize: 10.5, color: 'var(--text)' }}>{f.mes}</span>
+          <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text)' }}>{f.v}</span>
+          <span style={{ fontSize: 9, fontWeight: 700, color: f.c, background: f.c + '18', borderRadius: 3, padding: '1px 5px' }}>{f.s}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function CardKnowledge() {
+  return (
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 16, width: '100%' }}>
+      <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', marginBottom: 12, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Base de Conhecimento</div>
+      {[{ t: 'Como configurar o Fropty Boost', cat: 'Integrações' }, { t: 'Glossário de SLA e prioridades', cat: 'Suporte' }, { t: 'Exportando relatórios do portal', cat: 'Financeiro' }].map(a => (
+        <div key={a.t} style={{ marginBottom: 8, padding: '7px 8px', background: 'var(--surface-2)', borderRadius: 7 }}>
+          <div style={{ fontSize: 10.5, fontWeight: 600, color: 'var(--text)', marginBottom: 3 }}>{a.t}</div>
+          <span style={{ fontSize: 9, fontWeight: 700, color: 'var(--brand-500)', background: 'var(--sidebar-item-active)', borderRadius: 3, padding: '1px 5px' }}>{a.cat}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function CardRoadmap() {
+  return (
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 16, width: '100%' }}>
+      <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', marginBottom: 12, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Roadmap</div>
+      {[{ t: 'App mobile do portal', v: 89, s: 'Planejado', c: 'var(--c-warning)' }, { t: 'Exportação CSV nos relatórios', v: 47, s: 'Em dev', c: 'var(--c-info)' }, { t: 'Integração com Slack', v: 31, s: 'Em análise', c: 'var(--text-faint)' }].map(r => (
+        <div key={r.t} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 7, padding: '6px 8px', background: 'var(--surface-2)', borderRadius: 7 }}>
+          <div style={{ textAlign: 'center', minWidth: 28 }}>
+            <div style={{ fontSize: 12, color: 'var(--brand-500)' }}>▲</div>
+            <div style={{ fontSize: 9, fontWeight: 800, color: 'var(--text-muted)' }}>{r.v}</div>
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.t}</div>
+            <div style={{ fontSize: 9, fontWeight: 700, color: r.c }}>{r.s}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function CardCS() {
+  return (
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 16, width: '100%' }}>
+      <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', marginBottom: 12, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Customer Success</div>
+      {[{ l: 'Health Score', v: '87', c: 'var(--c-success)', pct: 87 }, { l: 'NPS', v: '72', c: 'var(--c-info)', pct: 72 }, { l: 'Onboarding', v: '100%', c: 'var(--brand-500)', pct: 100 }].map(m => (
+        <div key={m.l} style={{ marginBottom: 10 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+            <span style={{ fontSize: 10.5, color: 'var(--text)' }}>{m.l}</span>
+            <span style={{ fontSize: 11, fontWeight: 800, color: m.c }}>{m.v}</span>
+          </div>
+          <div style={{ height: 4, background: 'var(--border)', borderRadius: 99 }}>
+            <div style={{ height: '100%', width: `${m.pct}%`, background: m.c, borderRadius: 99 }} />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function CardTicketList() {
+  return (
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 16, width: '100%' }}>
+      <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Chamados</div>
+      {[
+        { id: 'UFT-1042', t: 'Integração API Boost', s: 'Em andamento', c: 'var(--c-info)' },
+        { id: 'UFT-1041', t: 'Bug dashboard mobile', s: 'Aberto', c: 'var(--c-warning)' },
+        { id: 'UFT-1039', t: 'Relatório mensal', s: 'Resolvido', c: 'var(--c-success)' },
+        { id: 'UFT-1038', t: 'Acesso usuário extra', s: 'Fechado', c: 'var(--text-faint)' },
+      ].map(t => (
+        <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 6, padding: '5px 7px', background: 'var(--surface-2)', borderRadius: 6 }}>
+          <div style={{ width: 5, height: 5, borderRadius: '50%', background: t.c, flexShrink: 0 }} />
+          <span style={{ fontSize: 9, fontWeight: 700, color: 'var(--text-faint)', minWidth: 48 }}>{t.id}</span>
+          <span style={{ flex: 1, fontSize: 10, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{t.t}</span>
+          <span style={{ fontSize: 8.5, fontWeight: 700, color: t.c, background: t.c + '18', borderRadius: 3, padding: '1px 4px', flexShrink: 0 }}>{t.s}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function CardSLA() {
+  const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun']
+  const vals = [94, 97, 92, 99, 98, 100]
+  const maxH = 56
+  return (
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 16, width: '100%' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+        <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>SLA Mensal</span>
+        <span style={{ fontSize: 13, fontWeight: 800, color: 'var(--c-success)' }}>98%</span>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'flex-end', gap: 6, height: maxH + 16 }}>
+        {vals.map((v, i) => (
+          <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}>
+            <div style={{ width: '100%', height: Math.round((v / 100) * maxH), background: v === 100 ? 'var(--c-success)' : 'var(--brand-500)', borderRadius: '3px 3px 0 0', opacity: 0.85 }} />
+            <span style={{ fontSize: 8, color: 'var(--text-faint)' }}>{months[i]}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/* ─── Column data — each column has 8 cards (duplicated for loop) ─ */
+
+const COL1 = [CardDashboard, CardTicket, CardProjects, CardSLA, CardDashboard, CardTicket, CardProjects, CardSLA]
+const COL2 = [CardFinancial, CardKnowledge, CardCS, CardTicketList, CardFinancial, CardKnowledge, CardCS, CardTicketList]
+const COL3 = [CardRoadmap, CardSLA, CardTicket, CardDashboard, CardRoadmap, CardSLA, CardTicket, CardDashboard]
+
+/* ─── Scrolling column ─────────────────────────────────────────── */
+
+function ScrollCol({ cards, direction }: { cards: React.ComponentType[]; direction: 'up' | 'down' }) {
+  return (
+    <div style={{ overflow: 'hidden', flex: 1 }}>
+      <div
+        className={direction === 'up' ? 'lp-hero-col-up' : 'lp-hero-col-down'}
+        style={{ display: 'flex', flexDirection: 'column', gap: 14 }}
+      >
+        {cards.map((Card, i) => <Card key={i} />)}
+      </div>
+    </div>
+  )
+}
+
+/* ─── Hero ─────────────────────────────────────────────────────── */
+
 import type React from 'react'
 
 const STAT_ITEMS = [
@@ -6,165 +203,72 @@ const STAT_ITEMS = [
   { value: '7', label: 'módulos integrados' },
 ]
 
-function DashboardMockup() {
-  const tickets = [
-    { id: '#1042', title: 'Integração API Fropty Boost', status: 'Em andamento', color: 'var(--c-info)' },
-    { id: '#1041', title: 'Dashboard financeiro — bug mobile', status: 'Aberto', color: 'var(--c-warning)' },
-    { id: '#1039', title: 'Novo relatório mensal', status: 'Resolvido', color: 'var(--c-success)' },
-  ]
-  return (
-    <div style={{
-      background: 'var(--surface)',
-      border: '1px solid var(--border)',
-      borderRadius: 16,
-      overflow: 'hidden',
-      boxShadow: 'var(--shadow-xl)',
-    }}>
-      {/* URL bar */}
-      <div style={{ padding: '10px 16px', borderBottom: '1px solid var(--border)', background: 'var(--surface-2)', display: 'flex', alignItems: 'center', gap: 8 }}>
-        <div style={{ display: 'flex', gap: 5 }}>
-          {['#f87171','#fbbf24','#34d399'].map(c => <div key={c} style={{ width: 9, height: 9, borderRadius: '50%', background: c }} />)}
-        </div>
-        <div style={{ flex: 1, background: 'var(--surface-3)', borderRadius: 6, padding: '3px 10px', fontSize: 11, color: 'var(--text-muted)', textAlign: 'center' }}>
-          hub.fropty.com/dashboard
-        </div>
-      </div>
-      <div style={{ display: 'flex', height: 320 }}>
-        {/* Sidebar */}
-        <div style={{ width: 52, background: 'var(--sidebar-bg)', borderRight: '1px solid var(--sidebar-border)', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '14px 0', gap: 18 }}>
-          {[
-            { d: 'M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z', active: true },
-            { d: 'M9 12h6M9 8h6M9 16h4', active: false },
-            { d: 'M22 12h-4l-3 9L9 3l-3 9H2', active: false },
-            { d: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5', active: false },
-          ].map((icon, i) => (
-            <div key={i} style={{
-              width: 32, height: 32, borderRadius: 8,
-              background: icon.active ? 'var(--sidebar-item-active)' : 'transparent',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={icon.active ? 'var(--brand-500)' : 'var(--text-faint)'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d={icon.d} />
-              </svg>
-            </div>
-          ))}
-        </div>
-        {/* Main */}
-        <div style={{ flex: 1, padding: 14, overflow: 'hidden' }}>
-          {/* Metric cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, marginBottom: 12 }}>
-            {[
-              { label: 'Abertos', value: '3', color: 'var(--c-warning)' },
-              { label: 'Em andamento', value: '1', color: 'var(--c-info)' },
-              { label: 'Resolvidos', value: '18', color: 'var(--c-success)' },
-            ].map(m => (
-              <div key={m.label} style={{ background: 'var(--surface-2)', borderRadius: 8, padding: '8px 10px', border: '1px solid var(--border)' }}>
-                <div style={{ fontSize: 10, color: 'var(--text-muted)', marginBottom: 2 }}>{m.label}</div>
-                <div style={{ fontSize: 18, fontWeight: 700, color: m.color }}>{m.value}</div>
-              </div>
-            ))}
-          </div>
-          {/* Ticket list */}
-          <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--text-faint)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 6 }}>Chamados recentes</div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-            {tickets.map(t => (
-              <div key={t.id} style={{
-                display: 'flex', alignItems: 'center', gap: 8,
-                padding: '7px 10px', borderRadius: 7,
-                background: 'var(--surface-2)', border: '1px solid var(--border)',
-              }}>
-                <div style={{ width: 6, height: 6, borderRadius: '50%', background: t.color, flexShrink: 0 }} />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{t.title}</div>
-                </div>
-                <div style={{ fontSize: 9, fontWeight: 600, color: t.color, background: t.color + '18', borderRadius: 4, padding: '1px 6px', flexShrink: 0 }}>{t.status}</div>
-              </div>
-            ))}
-          </div>
-          {/* SLA bar */}
-          <div style={{ marginTop: 12 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-              <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>SLA médio</span>
-              <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--c-success)' }}>98%</span>
-            </div>
-            <div style={{ height: 5, background: 'var(--border)', borderRadius: 99 }}>
-              <div style={{ height: '100%', width: '98%', background: 'var(--c-success)', borderRadius: 99 }} />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 export function LandingHero() {
   return (
-    <section style={{ minHeight: 'calc(100vh - 56px)', display: 'flex', alignItems: 'center', borderBottom: '1px solid var(--border)', position: 'relative', overflow: 'hidden' }}>
-      {/* Dot pattern */}
-      <div className="dot-bg" style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }} />
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '80px 32px', width: '100%' }}>
-        <div className="lp-hero-grid">
-          {/* Left */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 24, justifyContent: 'center' }}>
-            {/* Badge */}
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 100, padding: '5px 14px', width: 'fit-content' }}>
-              <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--brand-500)', boxShadow: '0 0 0 3px var(--sidebar-item-active)' }} />
-              <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)', letterSpacing: '0.02em' }}>
-                Portal do Cliente · Suporte · Projetos · Financeiro
-              </span>
-            </div>
-
-            {/* Headline */}
-            <h1 style={{ fontSize: 'clamp(36px, 5vw, 64px)', fontWeight: 800, lineHeight: 1.04, letterSpacing: '-2px', margin: 0 }}>
-              Suporte que vira<br />
-              <span style={{ color: 'var(--brand-500)' }}>relacionamento.</span>
-            </h1>
-
-            {/* Subtitle */}
-            <p style={{ fontSize: 17, color: 'var(--text-muted)', lineHeight: 1.7, maxWidth: 480, margin: 0 }}>
-              O Fropty Hub é o portal central de todos os clientes do ecossistema. Chamados, projetos, contratos, financeiro e roadmap — tudo em um lugar.
-            </p>
-
-            {/* CTAs */}
-            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-              <a href="#acesso" style={{
-                display: 'inline-flex', alignItems: 'center', gap: 6,
-                background: 'var(--brand-500)', color: '#fff',
-                borderRadius: 10, padding: '11px 22px',
-                fontSize: 14, fontWeight: 700, textDecoration: 'none',
-                boxShadow: 'var(--shadow-brand)',
-              }}>
-                Solicitar acesso →
-              </a>
-              <a href="#modulos" style={{
-                display: 'inline-flex', alignItems: 'center',
-                background: 'var(--surface)', color: 'var(--text)',
-                border: '1px solid var(--border)',
-                borderRadius: 10, padding: '11px 22px',
-                fontSize: 14, fontWeight: 600, textDecoration: 'none',
-              }}>
-                Ver módulos
-              </a>
-            </div>
-
-            {/* Trust stats */}
-            <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', paddingTop: 8 }}>
-              {STAT_ITEMS.map(s => (
-                <div key={s.label} style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                  <span style={{ fontSize: 16, fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.5px' }}>{s.value}</span>
-                  <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{s.label}</span>
-                </div>
-              ))}
-            </div>
+    <section style={{ position: 'relative', overflow: 'hidden', borderBottom: '1px solid var(--border)', minHeight: 640 }}>
+      {/* Left — copy */}
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '80px 32px 80px', position: 'relative', zIndex: 2 }}>
+        <div style={{ maxWidth: 560 }}>
+          {/* Badge */}
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 100, padding: '5px 14px', marginBottom: 28 }}>
+            <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--brand-500)', boxShadow: '0 0 0 3px var(--sidebar-item-active)' }} />
+            <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)', letterSpacing: '0.02em' }}>
+              Portal do Cliente · Suporte · Projetos · Financeiro
+            </span>
           </div>
 
-          {/* Right — mockup */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ width: '100%', maxWidth: 520 }}>
-              <DashboardMockup />
-            </div>
+          <h1 style={{ fontSize: 'clamp(36px, 5vw, 62px)', fontWeight: 800, lineHeight: 1.05, letterSpacing: '-2px', margin: '0 0 20px' }}>
+            Suporte que vira<br />
+            <span style={{ color: 'var(--brand-500)' }}>relacionamento.</span>
+          </h1>
+
+          <p style={{ fontSize: 17, color: 'var(--text-muted)', lineHeight: 1.7, maxWidth: 460, margin: '0 0 32px' }}>
+            O Fropty Hub é o portal central de todos os clientes do ecossistema. Chamados, projetos, contratos e financeiro — tudo em um lugar.
+          </p>
+
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 40 }}>
+            <a href="#acesso" style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6,
+              background: 'var(--brand-500)', color: '#fff',
+              borderRadius: 10, padding: '11px 22px',
+              fontSize: 14, fontWeight: 700, textDecoration: 'none',
+              boxShadow: 'var(--shadow-brand)',
+            }}>
+              Solicitar acesso →
+            </a>
+            <a href="#modulos" style={{
+              display: 'inline-flex', alignItems: 'center',
+              background: 'var(--surface)', color: 'var(--text)',
+              border: '1px solid var(--border)',
+              borderRadius: 10, padding: '11px 22px',
+              fontSize: 14, fontWeight: 600, textDecoration: 'none',
+            }}>
+              Ver módulos
+            </a>
+          </div>
+
+          <div style={{ display: 'flex', gap: 28, flexWrap: 'wrap' }}>
+            {STAT_ITEMS.map(s => (
+              <div key={s.label}>
+                <div style={{ fontSize: 15, fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.5px' }}>{s.value}</div>
+                <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{s.label}</div>
+              </div>
+            ))}
           </div>
         </div>
+      </div>
+
+      {/* 3D scrolling columns — right side */}
+      <div className="lp-hero-3d-wrapper" aria-hidden="true">
+        <div className="lp-hero-3d-container">
+          <ScrollCol cards={COL1} direction="up" />
+          <ScrollCol cards={COL2} direction="down" />
+          <ScrollCol cards={COL3} direction="up" />
+        </div>
+        {/* Fade edges */}
+        <div className="lp-hero-fade-top" />
+        <div className="lp-hero-fade-bottom" />
+        <div className="lp-hero-fade-left" />
       </div>
     </section>
   )

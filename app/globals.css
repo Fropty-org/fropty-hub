@@ -1900,3 +1900,60 @@ a { color: inherit; text-decoration: none; }
   .lp-mobile-btn { display: block !important; }
   .lp-mobile-menu { display: block !important; }
 }
+
+/* ── Hero 3D scrolling columns (Preline-style) ───────────────────── */
+@keyframes lp-hero-up   { from { transform: translateY(0) }    to { transform: translateY(-50%) } }
+@keyframes lp-hero-down { from { transform: translateY(-50%) } to { transform: translateY(0) }    }
+
+.lp-hero-col-up   { animation: lp-hero-up   38s linear infinite; }
+.lp-hero-col-down { animation: lp-hero-down 38s linear infinite; }
+
+/* 3D wrapper — positioned to the right of the copy */
+.lp-hero-3d-wrapper {
+  position:   absolute;
+  top:        0;
+  right:      -8%;
+  bottom:     0;
+  width:      58%;
+  overflow:   hidden;
+  pointer-events: none;
+}
+
+/* 3D container — same transform as preline.co */
+.lp-hero-3d-container {
+  display:          flex;
+  gap:              16px;
+  height:           200%;            /* tall enough to scroll */
+  width:            100%;
+  transform-origin: 50% 0%;
+  transform:        translate3d(4%, -5%, 0px) scale3d(0.88, 0.82, 1)
+                    rotateX(14deg) rotateY(-8deg) rotateZ(30deg);
+}
+
+/* Gradient fades so cards dissolve at edges */
+.lp-hero-fade-top {
+  position:   absolute;
+  top: 0; left: 0; right: 0;
+  height:     35%;
+  background: linear-gradient(to bottom, var(--bg) 0%, transparent 100%);
+  pointer-events: none;
+}
+.lp-hero-fade-bottom {
+  position:   absolute;
+  bottom: 0; left: 0; right: 0;
+  height:     40%;
+  background: linear-gradient(to top, var(--bg) 0%, transparent 100%);
+  pointer-events: none;
+}
+.lp-hero-fade-left {
+  position:   absolute;
+  top: 0; left: 0; bottom: 0;
+  width:      20%;
+  background: linear-gradient(to right, var(--bg) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+/* On smaller screens hide the 3D columns */
+@media (max-width: 900px) {
+  .lp-hero-3d-wrapper { display: none; }
+}
