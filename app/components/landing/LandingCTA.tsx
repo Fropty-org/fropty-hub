@@ -7,7 +7,7 @@ import { ShineBorder } from '../ShineBorder'
 const STATS = [
   { value: '< 4h', label: 'tempo de resposta' },
   { value: '98%', label: 'CSAT médio' },
-  { value: '7', label: 'módulos integrados' },
+  { value: '13', label: 'módulos integrados' },
   { value: '99.9%', label: 'uptime garantido' },
 ]
 
