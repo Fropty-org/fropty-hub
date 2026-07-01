@@ -6,7 +6,7 @@ import { useTransition, useState, useEffect } from "react";
 import { signOut } from "../../actions/auth";
 import { PortalThemeToggle } from "./PortalThemeToggle";
 import type { ClientUser } from "../../lib/types/cliente";
-import { PORTAL_NAV_ITEMS } from "../../lib/constants/portal-nav";
+import { PORTAL_NAV_ITEMS, PORTAL_NAV_GROUPS } from "../../lib/constants/portal-nav";
 import {
   LayoutDashboard, MessageCircle, CreditCard, UserCircle, BookOpen, Map,
   MessageSquarePlus, FolderKanban, FileSignature, LogOut, Loader2,
@@ -21,6 +21,7 @@ interface NavItem {
   icon:   string;
   label:  string;
   badge?: number;
+  group?: string;
 }
 
 interface Props {
@@ -196,7 +197,20 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
 
         {/* â”€â”€ Nav â”€â”€ */}
         <nav style={{ display: "flex", flexDirection: "column", gap: 1, flex: 1, overflowY: "auto", overflowX: "hidden" }}>
-          {nav.map(({ id, href, icon, label, badge }) => {
+          {Object.entries(
+            nav.reduce<Record<string, NavItem[]>>((acc, item) => {
+              const g = item.group ?? "principal";
+              (acc[g] ??= []).push(item);
+              return acc;
+            }, {})
+          ).map(([groupKey, items]) => (
+            <div key={groupKey} style={{ marginBottom: collapsed ? 4 : 6 }}>
+              {!collapsed && (
+                <p style={{ fontSize: "9.5px", fontWeight: 800, letterSpacing: "0.10em", textTransform: "uppercase", color: "var(--text-faint)", padding: "0 10px", margin: "8px 0 4px" }}>
+                  {PORTAL_NAV_GROUPS[groupKey] ?? groupKey}
+                </p>
+              )}
+              {items.map(({ id, href, icon, label, badge }) => {
             const active = pathname === href || pathname.startsWith(href + "/");
             return (
               <Link
@@ -246,7 +260,9 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
                 )}
               </Link>
             );
-          })}
+              })}
+            </div>
+          ))}
         </nav>
 
         {/* â”€â”€ Footer: theme + user + logout â”€â”€ */}
