@@ -901,10 +901,8 @@ a { color: inherit; text-decoration: none; }
 /* ══════════════════════════════════════════════════════════════════
    VIEW TRANSITIONS — Next.js 15 native page transitions
    ══════════════════════════════════════════════════════════════════ */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+/* NOTE: @keyframes fadeIn é definido mais abaixo (secção "Keyframes
+   compartilhados"). Não redefinir aqui — a última definição vence. */
 
 @keyframes fadeOut {
   from { opacity: 1; transform: translateY(0); }
@@ -960,11 +958,8 @@ a { color: inherit; text-decoration: none; }
 }
 .hub-recent-item:hover { background: var(--surface-2); }
 
-/* ── Spin animation (loader) ─────────────────────────────────────── */
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
+/* ── Spin animation (loader) — @keyframes spin definido em "Keyframes
+   compartilhados" mais abaixo (definição idêntica). ─────────────────── */
 
 /* ── ShineBorder (Magic UI) ──────────────────────────────────────── */
 @keyframes fropty-shine {

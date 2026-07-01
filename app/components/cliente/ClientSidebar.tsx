@@ -42,7 +42,7 @@ function NavIcon({ name, size = 16 }: { name: string; size?: number }) {
   return Icon ? <Icon size={size} /> : null;
 }
 
-const PLAN_LABEL: Record<string, string> = { basico: "BÃ¡sico", pro: "Pro", sem_plano: "Sem plano" };
+const PLAN_LABEL: Record<string, string> = { basico: "Básico", pro: "Pro", sem_plano: "Sem plano" };
 
 export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) {
   const pathname              = usePathname();
@@ -79,7 +79,7 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
       className={`portal-sidebar${mobileOpen ? " open" : ""}`}
       style={{ width: W, transition: "width 0.22s cubic-bezier(0.4,0,0.2,1)", overflow: "hidden" }}
     >
-      {/* Close button â€” mobile only */}
+      {/* Close button — mobile only */}
       <button
         className="portal-sidebar-close"
         onClick={() => setMobileOpen(false)}
@@ -176,8 +176,8 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
             }}
           >
             <Search size={13} style={{ flexShrink: 0 }} />
-            <span style={{ flex: 1 }}>Buscarâ€¦</span>
-            <kbd style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 3, padding: "1px 5px", fontSize: "10px", fontFamily: "inherit", lineHeight: "15px" }}>âŒ˜K</kbd>
+            <span style={{ flex: 1 }}>Buscar…</span>
+            <kbd style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 3, padding: "1px 5px", fontSize: "10px", fontFamily: "inherit", lineHeight: "15px" }}>⌘K</kbd>
           </button>
         ) : (
           <button
@@ -253,7 +253,7 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
         <div style={{ flexShrink: 0, marginTop: 8 }}>
           <div style={{ height: 1, background: "var(--border)", marginBottom: 8 }} />
 
-          {/* Theme row â€” only when expanded */}
+          {/* Theme row — only when expanded */}
           {!collapsed && (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "4px 10px", marginBottom: 4 }}>
               <span style={{ fontSize: "12px", color: "var(--text-faint)", fontWeight: 500 }}>Tema</span>
@@ -281,7 +281,7 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
               {user.avatarInitials}
             </div>
 
-            {/* Name + plan â€” expanded */}
+            {/* Name + plan — expanded */}
             {!collapsed && (
               <div style={{ flex: 1, overflow: "hidden", minWidth: 0 }}>
                 <p style={{ margin: 0, fontSize: "12.5px", fontWeight: 600, color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
@@ -306,7 +306,7 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
               </div>
             )}
 
-            {/* Logout â€” expanded */}
+            {/* Logout — expanded */}
             {!collapsed && (
               <button
                 onClick={handleSignOut}

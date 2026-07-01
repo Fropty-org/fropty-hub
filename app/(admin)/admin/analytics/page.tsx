@@ -30,8 +30,7 @@ export default async function AdminAnalyticsPage() {
     supabase.from("tickets").select("status"),
     supabase.from("tickets").select("priority"),
     supabase.from("profiles").select("name, email, plan, created_at").eq("role", "cliente").order("created_at", { ascending: false }).limit(5),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (supabase as any).from("tickets").select("created_at, resolved_at, first_response_at, priority").in("status", ["resolvido", "fechado"]).not("resolved_at", "is", null).limit(200),
+    supabase.from("tickets").select("created_at, resolved_at, first_response_at, priority").in("status", ["resolvido", "fechado"]).not("resolved_at", "is", null).limit(200),
   ]);
 
   const mrr = (mrrData as unknown as number) ?? 0;

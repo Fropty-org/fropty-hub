@@ -86,8 +86,7 @@ export default async function PortalDashboardPage() {
           .limit(3)
       : Promise.resolve({ data: [] }),
     user
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ? (supabase as any).from("health_scores").select("risk_level, score_total").eq("client_id", user.id).maybeSingle()
+      ? supabase.from("health_scores").select("risk_level, score_total").eq("client_id", user.id).maybeSingle()
       : Promise.resolve({ data: null }),
   ]);
 
