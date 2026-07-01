@@ -382,11 +382,20 @@ em 11 rotas via `PortalPageLoading`) · QW9 (tooltip de tokens).
 contextuais com CTA) · QW10 (o email automático ao resolver já existia — apenas melhoramos o CTA
 para levar direto à avaliação) · QW12 (Tabler não é carregado globalmente → não-problema).
 
-**Bugs descobertos na execução (para módulos futuros):**
-- **Dashboard, status de projeto inválido:** o filtro de "Projetos ativos" usa
-  `.in("status", ["em_andamento", "planejamento"])`, mas o enum real (`projects.ts`) é
-  `lead/briefing/escopo/proposta/contrato/execucao/entrega/suporte/encerrado`. A contagem tende a
-  ficar sempre 0/errada. Corrigir ao auditar o módulo Projetos.
+**Bugs descobertos e CORRIGIDOS na execução** (classe "filtro por status inexistente → contagem
+sempre 0/errada"):
+- **Projetos ativos** filtravam por `em_andamento/planejamento/revisao` (inexistentes; enum real é
+  `lead/briefing/escopo/proposta/contrato/execucao/entrega/suporte/encerrado`). Corrigido em
+  dashboard, badge da nav e overview admin com `ACTIVE_PROJECT_STATUSES`. (`89ed31a`)
+- **Chamados abertos** do cliente não contavam `reaberto`. Corrigido em dashboard + badge. (`89ed31a`)
+- **Chat** usava um mapa com `aguardando` (inexistente) e sem `reaberto`. Alinhado ao canônico. (`c1ea89b`)
+- **Contratos:** badge do cliente filtrava por `pendente_assinatura` e "contratos ativos" do admin
+  por `ativo` — ambos inexistentes (enum: `rascunho/enviado/assinado/encerrado/cancelado`).
+  Corrigidos para `enviado` e `assinado`. (`2bb8146`)
+
+Aprendizado para o time: **status são strings livres com CHECK no banco**, sem enum tipado no TS —
+qualquer filtro `.in/.eq("status", …)` deve usar as constantes canônicas (`status.ts`, `projects.ts`),
+nunca literais soltos.
 
 **Adiado (precisa de passe dedicado com verificação visual, risco maior):**
 - QW11 (cores hard-coded → tokens) — amplo; risco de regressão de dark mode sem preview autenticado.
