@@ -3,23 +3,18 @@ import Link from "next/link";
 import { createClient } from "@/app/lib/supabase/server";
 import { getProfile } from "@/app/lib/auth/session";
 import { Send, Search, Edit, MessageCircle } from "lucide-react";
+import { TICKET_STATUS_MAP } from "@/app/lib/constants/status";
 
 export const metadata: Metadata = { title: "Chat" };
 
-const STATUS_DOT: Record<string, string> = {
-  aberto:       "#22c55e",
-  em_andamento: "#f59e0b",
-  aguardando:   "#6366f1",
-  resolvido:    "#64748b",
-  fechado:      "#64748b",
-};
-const STATUS_LABEL: Record<string, string> = {
-  aberto:       "Aberto",
-  em_andamento: "Em andamento",
-  aguardando:   "Aguardando",
-  resolvido:    "Resolvido",
-  fechado:      "Fechado",
-};
+// Derivados da fonte canônica de status de chamado (status.ts) — cobre todos
+// os status reais (inclui "reaberto") e mantém rótulos/cores consistentes.
+const STATUS_DOT: Record<string, string> = Object.fromEntries(
+  Object.entries(TICKET_STATUS_MAP).map(([k, v]) => [k, v.color]),
+);
+const STATUS_LABEL: Record<string, string> = Object.fromEntries(
+  Object.entries(TICKET_STATUS_MAP).map(([k, v]) => [k, v.label]),
+);
 
 export default async function ChatPage() {
   const supabase = await createClient();
