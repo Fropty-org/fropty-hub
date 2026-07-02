@@ -219,7 +219,7 @@ export default async function ProjetosPage({
                       <div style={{ height: 5, background: "var(--surface-2)", borderRadius: 99, overflow: "hidden" }}>
                         <div style={{
                           height: "100%", borderRadius: 99,
-                          background: progress >= 100 ? "#22c55e" : `linear-gradient(90deg, var(--primary), var(--brand-accent))`,
+                          background: progress >= 100 ? "var(--c-success)" : `linear-gradient(90deg, var(--primary), var(--brand-accent))`,
                           width: `${Math.min(progress, 100)}%`,
                         }} />
                       </div>

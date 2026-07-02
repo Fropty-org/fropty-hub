@@ -14,8 +14,8 @@ interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 const colors: Record<BadgeVariant, { bg: string; color: string; border: string }> = {
   default: { bg: "var(--surface)", color: "var(--text-muted)", border: "var(--border)" },
   brand:   { bg: "rgba(91,87,232,0.15)", color: "var(--primary)", border: "rgba(91,87,232,0.3)" },
-  success: { bg: "rgba(34,197,94,0.12)", color: "#22c55e", border: "rgba(34,197,94,0.3)" },
-  warning: { bg: "rgba(239,159,39,0.12)", color: "#EF9F27", border: "rgba(239,159,39,0.3)" },
+  success: { bg: "rgba(34,197,94,0.12)", color: "var(--c-success)", border: "rgba(34,197,94,0.3)" },
+  warning: { bg: "rgba(239,159,39,0.12)", color: "var(--brand-accent)", border: "rgba(239,159,39,0.3)" },
   danger:  { bg: "rgba(239,68,68,0.12)", color: "#ef4444", border: "rgba(239,68,68,0.3)" },
   info:    { bg: "rgba(59,130,246,0.12)", color: "#60a5fa", border: "rgba(59,130,246,0.3)" },
 };

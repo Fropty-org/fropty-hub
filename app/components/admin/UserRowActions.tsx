@@ -12,8 +12,8 @@ import {
 } from "@/app/actions/admin";
 
 const ROLE_COLOR: Record<string, string> = {
-  cliente: "#3b82f6",
-  admin:   "#EF9F27",
+  cliente: "var(--c-info)",
+  admin:   "var(--brand-accent)",
 };
 
 const PLAN_LABEL: Record<string, string> = {
@@ -126,7 +126,7 @@ export function UserRowActions({ userId, name, role: roleInit, plan: planInit, t
       {/* Status */}
       <span style={{ textAlign: "center" }}>
         {active ? (
-          <span style={{ fontSize: "11px", fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: "rgba(34,197,94,0.1)", color: "#22c55e", border: "1px solid rgba(34,197,94,0.3)", display: "inline-block" }}>Ativo</span>
+          <span style={{ fontSize: "11px", fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: "rgba(34,197,94,0.1)", color: "var(--c-success)", border: "1px solid rgba(34,197,94,0.3)", display: "inline-block" }}>Ativo</span>
         ) : (
           <span style={{ fontSize: "11px", fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: "rgba(239,68,68,0.1)", color: "#ef4444", border: "1px solid rgba(239,68,68,0.3)", display: "inline-block" }}>Bloqueado</span>
         )}
@@ -148,7 +148,7 @@ export function UserRowActions({ userId, name, role: roleInit, plan: planInit, t
           <button
             type="button" onClick={toggleAccess} disabled={pending}
             title="Liberar novamente o acesso deste cliente"
-            style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "5px 10px", borderRadius: 7, border: "1px solid rgba(34,197,94,0.35)", background: "rgba(34,197,94,0.08)", color: "#22c55e", fontSize: "11px", fontWeight: 700, cursor: pending ? "wait" : "pointer", fontFamily: "inherit" }}
+            style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "5px 10px", borderRadius: 7, border: "1px solid rgba(34,197,94,0.35)", background: "rgba(34,197,94,0.08)", color: "var(--c-success)", fontSize: "11px", fontWeight: 700, cursor: pending ? "wait" : "pointer", fontFamily: "inherit" }}
           >
             <LockOpen size={13} /> Desbloquear
           </button>

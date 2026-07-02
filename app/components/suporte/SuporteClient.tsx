@@ -37,7 +37,7 @@ function NoTokenModal({ onClose }: { onClose: () => void }) {
     <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(4,3,22,0.55)", backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2000, padding: 24, animation: "fadeIn 0.15s ease" }}>
       <div onClick={(e) => e.stopPropagation()} style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 20, padding: "36px 32px", maxWidth: 400, width: "100%", textAlign: "center", boxShadow: "0 24px 60px rgba(0,0,0,0.45)" }}>
         <div style={{ width: 52, height: 52, borderRadius: 14, background: "rgba(239,159,39,0.1)", border: "1px solid rgba(239,159,39,0.25)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 18px" }}>
-          <Coins size={24} style={{ color: "#EF9F27" }} />
+          <Coins size={24} style={{ color: "var(--brand-accent)" }} />
         </div>
         <h3 style={{ margin: "0 0 10px", fontSize: "1.1rem", fontWeight: 800, color: "var(--text)" }}>Tokens insuficientes</h3>
         <p style={{ margin: "0 0 24px", fontSize: "13px", color: "var(--text-muted)", lineHeight: 1.65 }}>

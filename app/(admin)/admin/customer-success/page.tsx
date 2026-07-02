@@ -110,7 +110,7 @@ export default async function CustomerSuccessPage({
                     display: "inline-flex", alignItems: "center", gap: 6,
                     padding: "6px 14px", borderRadius: 8,
                     background: "rgba(239,159,39,0.12)", border: "1px solid rgba(239,159,39,0.3)",
-                    color: "#EF9F27", fontSize: "12px", fontWeight: 700, textDecoration: "none",
+                    color: "var(--brand-accent)", fontSize: "12px", fontWeight: 700, textDecoration: "none",
                   }}
                 >
                   <UserCheck size={13} />
@@ -155,7 +155,7 @@ export default async function CustomerSuccessPage({
                 padding: "5px 14px", borderRadius: 999,
                 fontSize: "12px", fontWeight: 700,
                 background: active ? "rgba(59,130,246,0.1)" : "var(--surface-2)",
-                color: active ? "#3b82f6" : "var(--text-muted)",
+                color: active ? "var(--c-info)" : "var(--text-muted)",
                 border: `1px solid ${active ? "#3b82f650" : "var(--border)"}`,
                 textDecoration: "none",
               }}

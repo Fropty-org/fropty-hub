@@ -97,7 +97,7 @@ export default async function TicketDetailPage({ params }: Props) {
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <div style={{ width: 38, height: 38, borderRadius: 10, background: "rgba(34,197,94,0.12)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <ClipboardCheck size={19} style={{ color: "#22c55e" }} />
+              <ClipboardCheck size={19} style={{ color: "var(--c-success)" }} />
             </div>
             <div>
               <p style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text)" }}>
@@ -112,7 +112,7 @@ export default async function TicketDetailPage({ params }: Props) {
             href={`/portal/suporte/${ticketId}/avaliar`}
             style={{
               display: "inline-flex", alignItems: "center", gap: 6, flexShrink: 0,
-              background: "#22c55e", color: "#fff",
+              background: "var(--c-success)", color: "#fff",
               borderRadius: 10, padding: "9px 18px",
               fontSize: "13px", fontWeight: 700, textDecoration: "none",
               boxShadow: "0 4px 14px rgba(34,197,94,0.3)",

@@ -76,7 +76,7 @@ export function OnboardingChecklist({ steps }: Props) {
         {steps.map((step, i) => (
           <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
             {step.completed
-              ? <CheckCircle size={16} style={{ color: "#22c55e", flexShrink: 0 }} />
+              ? <CheckCircle size={16} style={{ color: "var(--c-success)", flexShrink: 0 }} />
               : <Circle      size={16} style={{ color: "var(--border)", flexShrink: 0 }} />}
             {step.href && !step.completed ? (
               <Link href={step.href} style={{

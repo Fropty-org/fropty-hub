@@ -212,7 +212,7 @@ export default async function PortalDashboardPage() {
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{ width: 36, height: 36, borderRadius: 10, background: healthData.risk_level === "risco" ? "rgba(239,68,68,0.12)" : "rgba(245,158,11,0.12)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <ShieldAlert size={17} style={{ color: healthData.risk_level === "risco" ? "#ef4444" : "#f59e0b" }} />
+              <ShieldAlert size={17} style={{ color: healthData.risk_level === "risco" ? "#ef4444" : "var(--c-warning)" }} />
             </div>
             <div>
               <p style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text)" }}>
@@ -225,16 +225,16 @@ export default async function PortalDashboardPage() {
               </p>
             </div>
           </div>
-          <Link href="/portal/suporte/novo" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "12px", fontWeight: 700, color: healthData.risk_level === "risco" ? "#ef4444" : "#f59e0b", textDecoration: "none", whiteSpace: "nowrap" }}>
+          <Link href="/portal/suporte/novo" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "12px", fontWeight: 700, color: healthData.risk_level === "risco" ? "#ef4444" : "var(--c-warning)", textDecoration: "none", whiteSpace: "nowrap" }}>
             Abrir chamado <ChevronRight size={13} />
           </Link>
         </div>
       )}
       {healthData && healthData.risk_level === "saudavel" && (
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20, background: "rgba(34,197,94,0.06)", border: "1px solid rgba(34,197,94,0.2)", borderRadius: 14, padding: "12px 18px" }}>
-          <Heart size={15} style={{ color: "#22c55e", flexShrink: 0 }} />
+          <Heart size={15} style={{ color: "var(--c-success)", flexShrink: 0 }} />
           <span style={{ fontSize: "12.5px", fontWeight: 600, color: "var(--text-muted)" }}>
-            Sua conta está <strong style={{ color: "#22c55e" }}>saudável</strong> — pontuação {healthData.score_total}/100
+            Sua conta está <strong style={{ color: "var(--c-success)" }}>saudável</strong> — pontuação {healthData.score_total}/100
           </span>
         </div>
       )}

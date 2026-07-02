@@ -54,7 +54,7 @@ export default async function AvaliarPage({ params }: Props) {
       <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 20, padding: "32px 28px" }}>
         {/* Ícone */}
         <div style={{ width: 56, height: 56, borderRadius: 16, background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.25)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
-          <ClipboardCheck size={26} style={{ color: "#22c55e" }} />
+          <ClipboardCheck size={26} style={{ color: "var(--c-success)" }} />
         </div>
 
         {ref && <p style={{ margin: "0 0 4px", fontSize: "11px", fontWeight: 700, color: "var(--text-faint)", letterSpacing: "0.05em" }}>{ref}</p>}
@@ -66,7 +66,7 @@ export default async function AvaliarPage({ params }: Props) {
           Antes de encerrar, precisamos da sua confirmação.
         </p>
         <ul style={{ margin: "0 0 24px", padding: "0 0 0 18px", fontSize: "13px", color: "var(--text-muted)", lineHeight: 1.7 }}>
-          <li><strong style={{ color: "#22c55e" }}>Confirmar:</strong> o chamado é fechado e você recebe a confirmação por e-mail.</li>
+          <li><strong style={{ color: "var(--c-success)" }}>Confirmar:</strong> o chamado é fechado e você recebe a confirmação por e-mail.</li>
           <li><strong style={{ color: "#ef4444" }}>Não resolveu:</strong> o chamado é reaberto e volta para a fila do time retomar.</li>
         </ul>
 

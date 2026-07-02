@@ -57,7 +57,7 @@ export default async function ClientCSPage({ params }: { params: Promise<{ clien
             <span style={{
               padding: "3px 10px", borderRadius: 999,
               background: "rgba(59,130,246,0.1)", border: "1px solid rgba(59,130,246,0.3)",
-              fontSize: "11px", fontWeight: 700, color: "#3b82f6",
+              fontSize: "11px", fontWeight: 700, color: "var(--c-info)",
             }}>
               {PLAN_LABELS[client.plan] ?? client.plan}
             </span>

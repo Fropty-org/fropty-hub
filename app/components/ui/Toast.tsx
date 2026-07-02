@@ -21,10 +21,10 @@ const icons: Record<ToastType, LucideIcon> = {
 };
 
 const colors: Record<ToastType, string> = {
-  success: "#22c55e",
+  success: "var(--c-success)",
   error: "#ef4444",
   info: "var(--primary)",
-  warning: "#EF9F27",
+  warning: "var(--brand-accent)",
 };
 
 export function Toast({ message, type = "info", duration = 4000, onClose }: ToastProps) {

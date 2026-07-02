@@ -76,7 +76,7 @@ export default async function AdminUsuariosPage({ searchParams }: Props) {
 
   const stats = [
     { label: "Total de Usuários", value: total ?? 0,    icon: <Users size={16} />,      color: "#6366f1", bg: "rgba(99,102,241,0.10)" },
-    { label: "Usuários Ativos",   value: ativos ?? 0,   icon: <UserCheck size={16} />,  color: "#22c55e", bg: "rgba(34,197,94,0.10)" },
+    { label: "Usuários Ativos",   value: ativos ?? 0,   icon: <UserCheck size={16} />,  color: "var(--c-success)", bg: "rgba(34,197,94,0.10)" },
     { label: "Bloqueados",        value: inativos ?? 0, icon: <UserX size={16} />,      color: "#ef4444", bg: "rgba(239,68,68,0.10)" },
     { label: "Administradores",   value: admins ?? 0,   icon: <ShieldCheck size={16} />,color: "#f97316", bg: "rgba(249,115,22,0.10)" },
   ];

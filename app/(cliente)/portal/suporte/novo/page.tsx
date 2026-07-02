@@ -23,7 +23,7 @@ export default async function NovoChamadoPage() {
         </div>
         <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 20, padding: "48px 32px", textAlign: "center" }}>
           <div style={{ width: 56, height: 56, borderRadius: 16, background: "rgba(239,159,39,0.1)", border: "1px solid rgba(239,159,39,0.2)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
-            <Coins size={26} style={{ color: "#EF9F27" }} />
+            <Coins size={26} style={{ color: "var(--brand-accent)" }} />
           </div>
           <h2 style={{ fontSize: "1.2rem", fontWeight: 800, margin: "0 0 8px", color: "var(--text)" }}>
             Tokens insuficientes

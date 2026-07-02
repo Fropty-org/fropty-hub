@@ -150,7 +150,7 @@ export function ProjectsKanban({ projects }: Props) {
                           <div style={{ height: 4, background: "var(--border)", borderRadius: 99, overflow: "hidden" }}>
                             <div style={{
                               height: "100%", borderRadius: 99,
-                              background: progress >= 100 ? "#22c55e" : "linear-gradient(90deg,#6366f1,#8b5cf6)",
+                              background: progress >= 100 ? "var(--c-success)" : "linear-gradient(90deg,#6366f1,#8b5cf6)",
                               width: `${Math.min(progress, 100)}%`,
                             }} />
                           </div>

@@ -108,12 +108,12 @@ export function OnboardingBanner({ name, tokenBalance }: Props) {
           background: "rgba(239,159,39,0.08)",
           border: "1px solid rgba(239,159,39,0.2)",
           display: "flex", alignItems: "center", gap: 10,
-          fontSize: 12, color: "#EF9F27",
+          fontSize: 12, color: "var(--brand-accent)",
         }}>
           <Coins size={15} style={{ flexShrink: 0 }} />
           <span>
             Você ainda não tem tokens. Tokens são usados para abrir chamados de suporte.{" "}
-            <Link href="/portal/financeiro" style={{ color: "#EF9F27", fontWeight: 700 }}>Ver financeiro →</Link>
+            <Link href="/portal/financeiro" style={{ color: "var(--brand-accent)", fontWeight: 700 }}>Ver financeiro →</Link>
           </span>
         </div>
       )}

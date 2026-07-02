@@ -19,7 +19,7 @@ type TxRow = Database["public"]["Tables"]["token_transactions"]["Row"];
 export const metadata: Metadata = { title: "Financeiro" };
 
 const PLAN_INFO = {
-  basico: { label: "Básico", tokens: 4, price: "R$49,90/mês", color: "#3b82f6" },
+  basico: { label: "Básico", tokens: 4, price: "R$49,90/mês", color: "var(--c-info)" },
   pro:    { label: "Pro",    tokens: 8, price: "R$89,90/mês", color: "var(--primary)" },
 };
 

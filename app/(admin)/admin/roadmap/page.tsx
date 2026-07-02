@@ -139,7 +139,7 @@ export default async function AdminRoadmapPage({
                   </td>
                   <td style={{ padding: "13px 16px" }}>
                     {item.visibility === "publico" ? (
-                      <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: "11px", fontWeight: 700, color: "#22c55e" }}>
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: "11px", fontWeight: 700, color: "var(--c-success)" }}>
                         <Globe size={12} /> Público
                       </span>
                     ) : (

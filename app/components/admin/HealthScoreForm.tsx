@@ -112,7 +112,7 @@ export function HealthScoreForm({ clientId, initial, clientName }: Props) {
                 max={100}
                 value={vals[key]}
                 onChange={(e) => handleSlider(key, parseInt(e.target.value))}
-                style={{ width: "100%", accentColor: "#EF9F27", cursor: "pointer" }}
+                style={{ width: "100%", accentColor: "var(--brand-accent)", cursor: "pointer" }}
               />
               <div style={{ display: "flex", justifyContent: "space-between", marginTop: 2 }}>
                 <span style={{ fontSize: "10px", color: "var(--text-faint)" }}>0</span>
@@ -152,7 +152,7 @@ export function HealthScoreForm({ clientId, initial, clientName }: Props) {
         </p>
       )}
       {success && (
-        <p style={{ margin: 0, fontSize: "13px", color: "#22c55e", padding: "10px 14px", background: "rgba(34,197,94,0.08)", borderRadius: 10, border: "1px solid rgba(34,197,94,0.2)" }}>
+        <p style={{ margin: 0, fontSize: "13px", color: "var(--c-success)", padding: "10px 14px", background: "rgba(34,197,94,0.08)", borderRadius: 10, border: "1px solid rgba(34,197,94,0.2)" }}>
           Score salvo com sucesso.
         </p>
       )}
@@ -162,7 +162,7 @@ export function HealthScoreForm({ clientId, initial, clientName }: Props) {
         disabled={pending}
         style={{
           padding: "12px 24px", borderRadius: 10,
-          background: "#EF9F27", border: "none",
+          background: "var(--brand-accent)", border: "none",
           color: "#fff", fontSize: "13px", fontWeight: 700,
           cursor: pending ? "not-allowed" : "pointer",
           opacity: pending ? 0.7 : 1, fontFamily: "inherit",

@@ -137,7 +137,7 @@ export default async function AdminBaseConhecimentoPage({
                   <td style={{ padding: "13px 16px", whiteSpace: "nowrap" }}>
                     <span style={{ fontSize: "12px", color: "var(--text-muted)", display: "flex", alignItems: "center", gap: 8 }}>
                       <span style={{ display: "flex", alignItems: "center", gap: 3 }}>
-                        <ThumbsUp size={12} style={{ color: "#22c55e" }} />{article.helpful_yes}
+                        <ThumbsUp size={12} style={{ color: "var(--c-success)" }} />{article.helpful_yes}
                       </span>
                       <span style={{ display: "flex", alignItems: "center", gap: 3 }}>
                         <ThumbsDown size={12} style={{ color: "#ef4444" }} />{article.helpful_no}

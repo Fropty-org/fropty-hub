@@ -47,7 +47,7 @@ export function ResolutionReview({ ticketId }: Props) {
             style={{
               flex: "1 1 220px", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
               padding: "16px 20px", borderRadius: 14, border: "1px solid rgba(34,197,94,0.4)",
-              background: "rgba(34,197,94,0.1)", color: "#22c55e", fontSize: "14px", fontWeight: 800,
+              background: "rgba(34,197,94,0.1)", color: "var(--c-success)", fontSize: "14px", fontWeight: 800,
               cursor: pending ? "wait" : "pointer", fontFamily: "inherit",
             }}
           >

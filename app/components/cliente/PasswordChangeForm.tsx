@@ -29,9 +29,9 @@ function analyzePassword(password: string): PasswordStrength {
   const levels: { label: string; color: string }[] = [
     { label: "Muito fraca", color: "#ef4444" },
     { label: "Fraca",       color: "#f97316" },
-    { label: "Razoável",    color: "#EF9F27" },
+    { label: "Razoável",    color: "var(--brand-accent)" },
     { label: "Boa",         color: "#84cc16" },
-    { label: "Forte",       color: "#22c55e" },
+    { label: "Forte",       color: "var(--c-success)" },
   ];
   return { score, issues, ...levels[score] };
 }
@@ -237,7 +237,7 @@ export default function PasswordChangeForm() {
               {isPending ? "Alterando…" : "Alterar senha"}
             </button>
             {msg && (
-              <p style={{ margin: 0, fontSize: "13px", fontWeight: 600, color: msg.type === "success" ? "#22c55e" : "#ef4444", display: "flex", alignItems: "center", gap: 5 }}>
+              <p style={{ margin: 0, fontSize: "13px", fontWeight: 600, color: msg.type === "success" ? "var(--c-success)" : "#ef4444", display: "flex", alignItems: "center", gap: 5 }}>
                 {msg.type === "success" ? <CheckCircle size={14} /> : <XCircle size={14} />}
                 {msg.text}
               </p>
@@ -372,7 +372,7 @@ export default function PasswordChangeForm() {
           {/* Step 3: Nova senha */}
           {smsStep === "newpwd" && (
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-              <p style={{ margin: 0, fontSize: "13px", color: "#22c55e", fontWeight: 600, display: "flex", alignItems: "center", gap: 6 }}>
+              <p style={{ margin: 0, fontSize: "13px", color: "var(--c-success)", fontWeight: 600, display: "flex", alignItems: "center", gap: 6 }}>
                 <CheckCircle size={14} /> Identidade confirmada. Defina sua nova senha.
               </p>
 
@@ -429,7 +429,7 @@ export default function PasswordChangeForm() {
 
           {/* Mensagem global da tab SMS */}
           {smsMsg && (
-            <p style={{ marginTop: 14, fontSize: "13px", fontWeight: 600, color: smsMsg.type === "success" ? "#22c55e" : "#ef4444", display: "flex", alignItems: "center", gap: 5 }}>
+            <p style={{ marginTop: 14, fontSize: "13px", fontWeight: 600, color: smsMsg.type === "success" ? "var(--c-success)" : "#ef4444", display: "flex", alignItems: "center", gap: 5 }}>
               {smsMsg.type === "success" ? <CheckCircle size={13} /> : <XCircle size={13} />}
               {smsMsg.text}
             </p>

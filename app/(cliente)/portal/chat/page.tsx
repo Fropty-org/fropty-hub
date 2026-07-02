@@ -192,11 +192,11 @@ export default async function ChatPage() {
                 }}>
                   F
                 </div>
-                <span style={{ position: "absolute", bottom: 0, right: 0, width: 10, height: 10, borderRadius: "50%", background: "#22c55e", border: "2px solid var(--card-bg)" }} />
+                <span style={{ position: "absolute", bottom: 0, right: 0, width: 10, height: 10, borderRadius: "50%", background: "var(--c-success)", border: "2px solid var(--card-bg)" }} />
               </div>
               <div>
                 <p style={{ margin: 0, fontSize: "13.5px", fontWeight: 700, color: "var(--text)" }}>Fropty Hub</p>
-                <p style={{ margin: 0, fontSize: "11.5px", color: "#22c55e", fontWeight: 600 }}>Online</p>
+                <p style={{ margin: 0, fontSize: "11.5px", color: "var(--c-success)", fontWeight: 600 }}>Online</p>
               </div>
             </div>
             <Link href={`/portal/suporte/${firstTicket.id}`} style={{

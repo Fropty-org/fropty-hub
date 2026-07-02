@@ -50,7 +50,7 @@ export function TokenChart({ transactions }: Props) {
         </h2>
         <div style={{ display: "flex", gap: 14, fontSize: "11px", color: "var(--text-faint)" }}>
           <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
-            <span style={{ display: "inline-block", width: 10, height: 10, borderRadius: 3, background: "#22c55e" }} />
+            <span style={{ display: "inline-block", width: 10, height: 10, borderRadius: 3, background: "var(--c-success)" }} />
             Créditos
           </span>
           <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
@@ -98,7 +98,7 @@ export function TokenChart({ transactions }: Props) {
                   width={barW}
                   height={creditH}
                   rx={4}
-                  fill="#22c55e"
+                  fill="var(--c-success)"
                   opacity={0.85}
                 />
                 {/* Debits bar */}

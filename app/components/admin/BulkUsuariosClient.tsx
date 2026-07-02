@@ -111,7 +111,7 @@ export function BulkUsuariosClient({ users }: Props) {
           >
             Cancelar
           </button>
-          {feedback && <span style={{ fontSize: "12px", color: "#22c55e", fontWeight: 600 }}>{feedback}</span>}
+          {feedback && <span style={{ fontSize: "12px", color: "var(--c-success)", fontWeight: 600 }}>{feedback}</span>}
         </div>
       )}
 

@@ -293,7 +293,7 @@ export function ProfileSettings({ name: initialName, email, role, avatarUrl, goo
                     {uploading ? "Enviando…" : "Upload foto"}
                   </button>
                   {uploadMsg && (
-                    <p style={{ margin: "5px 0 0", fontSize: 12, color: uploadMsg.ok ? "#22c55e" : "#ef4444", fontWeight: 500 }}>
+                    <p style={{ margin: "5px 0 0", fontSize: 12, color: uploadMsg.ok ? "var(--c-success)" : "#ef4444", fontWeight: 500 }}>
                       {uploadMsg.text}
                     </p>
                   )}
@@ -313,7 +313,7 @@ export function ProfileSettings({ name: initialName, email, role, avatarUrl, goo
                       autoFocus
                       style={{ flex: 1, maxWidth: 280, padding: "7px 12px", borderRadius: 8, border: "1px solid var(--primary)", background: "var(--surface-2)", color: "var(--text)", fontSize: 14, fontFamily: "inherit", outline: "none" }}
                     />
-                    <button onClick={saveName} disabled={namePending} style={iconBtnStyle("#22c55e")}>
+                    <button onClick={saveName} disabled={namePending} style={iconBtnStyle("var(--c-success)")}>
                       {namePending ? <Loader2 size={13} style={{ animation: "spin 0.8s linear infinite" }} /> : <Check size={13} />}
                     </button>
                     <button onClick={() => { setNameValue(savedName); setEditingName(false); }} style={iconBtnStyle("var(--text-faint)")}>
@@ -326,7 +326,7 @@ export function ProfileSettings({ name: initialName, email, role, avatarUrl, goo
                     <button onClick={() => setEditingName(true)} style={editBtnStyle}>Editar</button>
                   </div>
                 )}
-                {nameMsg && <p style={{ margin: "4px 0 0", fontSize: 12, color: nameMsg.ok ? "#22c55e" : "#ef4444" }}>{nameMsg.text}</p>}
+                {nameMsg && <p style={{ margin: "4px 0 0", fontSize: 12, color: nameMsg.ok ? "var(--c-success)" : "#ef4444" }}>{nameMsg.text}</p>}
               </FieldRow>
 
               {/* Email */}
@@ -349,7 +349,7 @@ export function ProfileSettings({ name: initialName, email, role, avatarUrl, goo
                       placeholder="+5511999990000"
                       style={{ flex: 1, maxWidth: 280, padding: "7px 12px", borderRadius: 8, border: "1px solid var(--primary)", background: "var(--surface-2)", color: "var(--text)", fontSize: 14, fontFamily: "inherit", outline: "none" }}
                     />
-                    <button onClick={savePhone} disabled={phonePending} style={iconBtnStyle("#22c55e")}>
+                    <button onClick={savePhone} disabled={phonePending} style={iconBtnStyle("var(--c-success)")}>
                       {phonePending ? <Loader2 size={13} style={{ animation: "spin 0.8s linear infinite" }} /> : <Check size={13} />}
                     </button>
                     <button onClick={() => { setPhoneValue(savedPhone); setEditingPhone(false); }} style={iconBtnStyle("var(--text-faint)")}>
@@ -364,7 +364,7 @@ export function ProfileSettings({ name: initialName, email, role, avatarUrl, goo
                     <button onClick={() => setEditingPhone(true)} style={editBtnStyle}>Editar</button>
                   </div>
                 )}
-                {phoneMsg && <p style={{ margin: "4px 0 0", fontSize: 12, color: phoneMsg.ok ? "#22c55e" : "#ef4444" }}>{phoneMsg.text}</p>}
+                {phoneMsg && <p style={{ margin: "4px 0 0", fontSize: 12, color: phoneMsg.ok ? "var(--c-success)" : "#ef4444" }}>{phoneMsg.text}</p>}
                 <p style={{ margin: "4px 0 0", fontSize: 11, color: "var(--text-faint)" }}>
                   Usado para verificação via SMS. Formato: +5511999990000
                 </p>
@@ -562,7 +562,7 @@ function TwoFactorSection() {
               <p style={{ margin: "0 0 6px", fontSize: 11, fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Código manual</p>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
                 <code style={{ flex: 1, fontSize: 12, background: "var(--surface-2)", border: "1px solid var(--border)", borderRadius: 7, padding: "6px 10px", color: "var(--text)", letterSpacing: "0.1em", wordBreak: "break-all" }}>{secret}</code>
-                <button onClick={copySecret} style={{ display: "flex", alignItems: "center", gap: 4, padding: "6px 10px", borderRadius: 7, border: "1px solid var(--border)", background: "var(--surface-2)", cursor: "pointer", color: copied ? "#22c55e" : "var(--text-faint)", fontSize: 11, fontWeight: 600, fontFamily: "inherit", whiteSpace: "nowrap", flexShrink: 0 }}>
+                <button onClick={copySecret} style={{ display: "flex", alignItems: "center", gap: 4, padding: "6px 10px", borderRadius: 7, border: "1px solid var(--border)", background: "var(--surface-2)", cursor: "pointer", color: copied ? "var(--c-success)" : "var(--text-faint)", fontSize: 11, fontWeight: 600, fontFamily: "inherit", whiteSpace: "nowrap", flexShrink: 0 }}>
                   {copied ? <CheckCircle size={12} /> : <Copy size={12} />}
                   {copied ? "Copiado" : "Copiar"}
                 </button>
@@ -596,7 +596,7 @@ function TwoFactorSection() {
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 20, flexWrap: "wrap" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <div style={{ width: 38, height: 38, borderRadius: "50%", background: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.3)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <CheckCircle size={18} color="#22c55e" />
+              <CheckCircle size={18} style={{ color: "var(--c-success)" }} />
             </div>
             <div>
               <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "var(--text)" }}>2FA ativo</p>
