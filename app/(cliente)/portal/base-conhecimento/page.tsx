@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import type { ArticleCategory, KnowledgeArticle } from "@/app/lib/types/knowledge";
 import { HubEmptyState } from "@/app/components/ui/HubEmptyState";
+import { PageHeader } from "@/app/components/ui/PageHeader";
 
 export const metadata: Metadata = { title: "Base de Conhecimento" };
 
@@ -37,15 +38,10 @@ export default async function BaseConhecimentoPage({ searchParams }: Props) {
   return (
     <div style={{ padding: "24px 24px", maxWidth: 1020, margin: "0 auto" }}>
 
-      {/* ── Page header ── */}
-      <div style={{ marginBottom: 28 }}>
-        <h1 style={{ margin: 0, fontSize: "1.5rem", fontWeight: 800, color: "var(--text)", letterSpacing: "-0.03em" }}>
-          Base de Conhecimento
-        </h1>
-        <p style={{ margin: "5px 0 0", fontSize: "13px", color: "var(--text-faint)" }}>
-          Encontre respostas, tutoriais e documentação sobre os produtos Fropty
-        </p>
-      </div>
+      <PageHeader
+        title="Base de Conhecimento"
+        subtitle="Encontre respostas, tutoriais e documentação sobre os produtos Fropty"
+      />
 
       {/* ── Search bar ── */}
       <form method="GET" style={{ marginBottom: 28 }}>

@@ -4,6 +4,7 @@ import { getClientFeedbacks } from "@/app/actions/feedback";
 import { Plus, ChevronRight } from "lucide-react";
 import type { Feedback, FeedbackType, FeedbackStatus } from "@/app/lib/types/feedback";
 import { HubEmptyState } from "@/app/components/ui/HubEmptyState";
+import { PageHeader } from "@/app/components/ui/PageHeader";
 
 export const metadata: Metadata = { title: "Feedback" };
 
@@ -53,32 +54,24 @@ export default async function FeedbackPage() {
   return (
     <div style={{ padding: "24px 24px", maxWidth: 1020, margin: "0 auto" }}>
 
-      {/* ── Page header ── */}
-      <div style={{
-        display: "flex", alignItems: "flex-start", justifyContent: "space-between",
-        gap: 16, marginBottom: 28, flexWrap: "wrap",
-      }}>
-        <div>
-          <h1 style={{ margin: 0, fontSize: "1.5rem", fontWeight: 800, color: "var(--text)", letterSpacing: "-0.03em" }}>
-            Feedback
-          </h1>
-          <p style={{ margin: "5px 0 0", fontSize: "13px", color: "var(--text-faint)" }}>
-            Sugestões, problemas e elogios sobre os serviços Fropty
-          </p>
-        </div>
-        <Link
-          href="/portal/feedback/novo"
-          style={{
-            display: "inline-flex", alignItems: "center", gap: 7,
-            background: "var(--cta-bg)", color: "var(--cta-text)",
-            borderRadius: "var(--r-md)", padding: "9px 18px",
-            fontSize: "13px", fontWeight: 700, textDecoration: "none",
-            boxShadow: "var(--shadow-brand)",
-          }}
-        >
-          <Plus size={14} /> Enviar feedback
-        </Link>
-      </div>
+      <PageHeader
+        title="Feedback"
+        subtitle="Sugestões, problemas e elogios sobre os serviços Fropty"
+        action={
+          <Link
+            href="/portal/feedback/novo"
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 7,
+              background: "var(--cta-bg)", color: "var(--cta-text)",
+              borderRadius: "var(--r-md)", padding: "9px 18px",
+              fontSize: "13px", fontWeight: 700, textDecoration: "none",
+              boxShadow: "var(--shadow-brand)",
+            }}
+          >
+            <Plus size={14} /> Enviar feedback
+          </Link>
+        }
+      />
 
       {feedbacks.length === 0 ? (
         <div className="hub-card">

@@ -4,6 +4,7 @@ import { FolderOpen, Calendar, ChevronRight, MessageSquarePlus, List, LayoutGrid
 import { getClientProjects } from "@/app/actions/projects";
 import { PROJECT_STATUSES, PROJECT_PRIORITY_MAP } from "@/app/lib/constants/projects";
 import { HubEmptyState } from "@/app/components/ui/HubEmptyState";
+import { PageHeader } from "@/app/components/ui/PageHeader";
 import { ProjectsKanban } from "@/app/components/projetos/ProjectsKanban";
 import { ProjectsCalendar } from "@/app/components/projetos/ProjectsCalendar";
 
@@ -38,20 +39,10 @@ export default async function ProjetosPage({
   return (
     <div style={{ padding: "24px 24px", maxWidth: view === "kanban" ? "none" : 1020, margin: "0 auto" }}>
 
-      {/* ── Page header ── */}
-      <div style={{
-        display: "flex", alignItems: "flex-start", justifyContent: "space-between",
-        gap: 16, marginBottom: 28, flexWrap: "wrap",
-      }}>
-        <div>
-          <h1 style={{ margin: 0, fontSize: "1.5rem", fontWeight: 800, color: "var(--text)", letterSpacing: "-0.03em" }}>
-            Projetos
-          </h1>
-          <p style={{ margin: "5px 0 0", fontSize: "13px", color: "var(--text-faint)" }}>
-            Acompanhe o andamento e entregas dos seus projetos
-          </p>
-        </div>
-
+      <PageHeader
+        title="Projetos"
+        subtitle="Acompanhe o andamento e entregas dos seus projetos"
+        action={
         <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
           {/* View toggle */}
           <div style={{
@@ -103,7 +94,8 @@ export default async function ProjetosPage({
             <MessageSquarePlus size={14} /> Solicitar projeto
           </Link>
         </div>
-      </div>
+        }
+      />
 
       {projects.length === 0 ? (
         <div className="hub-card">

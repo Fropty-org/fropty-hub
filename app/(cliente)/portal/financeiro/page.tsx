@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { TokenChart } from "@/app/components/cliente/TokenChart";
 import { HubEmptyState } from "@/app/components/ui/HubEmptyState";
+import { PageHeader } from "@/app/components/ui/PageHeader";
 import { getService } from "@/app/lib/constants/services";
 import type { TokenTransaction } from "@/app/lib/types/cliente";
 import type { Database } from "@/app/lib/supabase/types";
@@ -70,15 +71,10 @@ export default async function FinanceiroPage({ searchParams }: Props) {
   return (
     <div style={{ padding: "24px 24px", maxWidth: 1020, margin: "0 auto" }}>
 
-      {/* ── Page header ── */}
-      <div style={{ marginBottom: 28 }}>
-        <h1 style={{ margin: 0, fontSize: "1.5rem", fontWeight: 800, color: "var(--text)", letterSpacing: "-0.03em" }}>
-          Financeiro
-        </h1>
-        <p style={{ margin: "5px 0 0", fontSize: "13px", color: "var(--text-faint)" }}>
-          Tokens, plano e extrato de movimentações
-        </p>
-      </div>
+      <PageHeader
+        title="Financeiro"
+        subtitle="Tokens, plano e extrato de movimentações"
+      />
 
       {/* ── Banner sucesso ── */}
       {sucesso && (

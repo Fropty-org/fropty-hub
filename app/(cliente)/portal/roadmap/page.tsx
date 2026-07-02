@@ -4,6 +4,7 @@ import { RoadmapVoteButton } from "@/app/components/cliente/RoadmapVoteButton";
 import type { RoadmapItem, RoadmapStatus } from "@/app/lib/types/roadmap";
 import { Rocket, Lightbulb, CalendarCheck, CheckCircle2 } from "lucide-react";
 import { HubEmptyState } from "@/app/components/ui/HubEmptyState";
+import { PageHeader } from "@/app/components/ui/PageHeader";
 
 export const metadata: Metadata = { title: "Roadmap" };
 
@@ -39,15 +40,10 @@ export default async function RoadmapPage() {
   return (
     <div style={{ padding: "24px 24px", maxWidth: 1020, margin: "0 auto" }}>
 
-      {/* ── Page header ── */}
-      <div style={{ marginBottom: 32 }}>
-        <h1 style={{ margin: 0, fontSize: "1.5rem", fontWeight: 800, color: "var(--text)", letterSpacing: "-0.03em" }}>
-          Roadmap
-        </h1>
-        <p style={{ margin: "5px 0 0", fontSize: "13px", color: "var(--text-faint)" }}>
-          Acompanhe o que estamos construindo e vote nas features que mais importam para você.
-        </p>
-      </div>
+      <PageHeader
+        title="Roadmap"
+        subtitle="Acompanhe o que estamos construindo e vote nas features que mais importam para você."
+      />
 
       {!hasAny ? (
         <div className="hub-card">

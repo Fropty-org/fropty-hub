@@ -4,6 +4,7 @@ import { Calendar, ChevronRight, Download, MessageSquarePlus, AlertTriangle } fr
 import { getClientContracts } from "@/app/actions/contracts";
 import { CONTRACT_STATUS_MAP, CONTRACT_TYPE_MAP } from "@/app/lib/constants/projects";
 import { HubEmptyState } from "@/app/components/ui/HubEmptyState";
+import { PageHeader } from "@/app/components/ui/PageHeader";
 
 export const metadata: Metadata = { title: "Contratos" };
 
@@ -28,32 +29,24 @@ export default async function ContratosPage() {
   return (
     <div style={{ padding: "24px 24px", maxWidth: 1020, margin: "0 auto" }}>
 
-      {/* ── Page header ── */}
-      <div style={{
-        display: "flex", alignItems: "flex-start", justifyContent: "space-between",
-        gap: 16, marginBottom: 28, flexWrap: "wrap",
-      }}>
-        <div>
-          <h1 style={{ margin: 0, fontSize: "1.5rem", fontWeight: 800, color: "var(--text)", letterSpacing: "-0.03em" }}>
-            Contratos
-          </h1>
-          <p style={{ margin: "5px 0 0", fontSize: "13px", color: "var(--text-faint)" }}>
-            Contratos e propostas firmados com a Fropty
-          </p>
-        </div>
-        <Link
-          href="/portal/suporte/novo"
-          style={{
-            display: "inline-flex", alignItems: "center", gap: 7,
-            background: "var(--cta-bg)", color: "var(--cta-text)",
-            borderRadius: "var(--r-md)", padding: "9px 18px",
-            fontSize: "13px", fontWeight: 700, textDecoration: "none",
-            boxShadow: "var(--shadow-brand)",
-          }}
-        >
-          <MessageSquarePlus size={14} /> Solicitar contrato
-        </Link>
-      </div>
+      <PageHeader
+        title="Contratos"
+        subtitle="Contratos e propostas firmados com a Fropty"
+        action={
+          <Link
+            href="/portal/suporte/novo"
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 7,
+              background: "var(--cta-bg)", color: "var(--cta-text)",
+              borderRadius: "var(--r-md)", padding: "9px 18px",
+              fontSize: "13px", fontWeight: 700, textDecoration: "none",
+              boxShadow: "var(--shadow-brand)",
+            }}
+          >
+            <MessageSquarePlus size={14} /> Solicitar contrato
+          </Link>
+        }
+      />
 
       {contracts.length === 0 ? (
         <div className="hub-card">

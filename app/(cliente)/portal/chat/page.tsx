@@ -4,6 +4,7 @@ import { createClient } from "@/app/lib/supabase/server";
 import { getProfile } from "@/app/lib/auth/session";
 import { Send, Search, Edit, MessageCircle } from "lucide-react";
 import { TICKET_STATUS_MAP } from "@/app/lib/constants/status";
+import { HubEmptyState } from "@/app/components/ui";
 
 export const metadata: Metadata = { title: "Chat" };
 
@@ -97,10 +98,13 @@ export default async function ChatPage() {
         {/* List */}
         <div style={{ flex: 1, overflowY: "auto" }}>
           {(!tickets || tickets.length === 0) ? (
-            <div style={{ padding: "40px 20px", textAlign: "center" }}>
-              <MessageCircle size={32} style={{ color: "var(--text-faint)", opacity: 0.35, display: "block", margin: "0 auto 10px" }} />
-              <p style={{ margin: 0, fontSize: "12.5px", color: "var(--text-faint)" }}>Nenhuma conversa.<br />Abra um chamado para começar.</p>
-            </div>
+            <HubEmptyState
+              variant="tickets"
+              title="Nenhuma conversa"
+              description="As conversas dos seus chamados aparecerão aqui, em tempo real."
+              ctaLabel="Abrir chamado"
+              ctaHref="/portal/suporte/novo"
+            />
           ) : tickets.map((t, i) => {
             const dot  = STATUS_DOT[t.status]   ?? "#64748b";
             const isFirst = i === 0;
