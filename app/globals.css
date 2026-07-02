@@ -57,6 +57,12 @@
   --c-warning-bg: rgba(245, 158, 11, 0.10);
   --c-danger-bg:  rgba(220, 38, 38, 0.10);
   --c-info-bg:    rgba(59, 130, 246, 0.10);
+  --c-accent:     var(--brand-accent);
+  --c-accent-bg:  rgba(239, 159, 39, 0.12);
+  --c-purple:     #a855f7;
+  --c-purple-bg:  rgba(168, 85, 247, 0.12);
+  --c-cyan:       #06b6d4;
+  --c-cyan-bg:    rgba(6, 182, 212, 0.12);
 }
 
 /* ── Shadow scale ────────────────────────────────────────────────── */
@@ -545,6 +551,10 @@ a { color: inherit; text-decoration: none; }
   color:        var(--brand-500);
   border:       1px solid rgba(91, 87, 232, 0.22);
 }
+.hub-badge-accent { background: var(--c-accent-bg); color: var(--c-accent); border: 1px solid rgba(239,159,39,0.24); }
+.hub-badge-purple { background: var(--c-purple-bg); color: var(--c-purple); border: 1px solid rgba(168,85,247,0.24); }
+.hub-badge-cyan   { background: var(--c-cyan-bg);   color: var(--c-cyan);   border: 1px solid rgba(6,182,212,0.24); }
+.hub-badge.sm { padding: 2px 8px; font-size: 10.5px; }
 
 /* Status dot */
 .hub-status-dot {
