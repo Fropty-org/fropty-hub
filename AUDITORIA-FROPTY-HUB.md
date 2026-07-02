@@ -443,8 +443,33 @@ de verificação objetiva (computed styles + build), sem depender de preview aut
   de evento, link para a entidade. Duas queries a mais no `Promise.all` do dashboard
   (custo marginal; ambas indexadas por usuário e limitadas).
 
-Com isso, do plano de 30 dias restam: 30D4 (Command Palette completo), 30D7 (quick actions
-contextuais) e 30D8 (feedback de erro padronizado) — 30D1/2/3/5/6 executados.
+**Sprint 2 (fechamento, 2026-07-02):** executados os três itens restantes — **plano de 30 dias
+100% concluído (30D1–30D8)**:
+- **30D8 — Feedback de erro padronizado.** Novo `ToastProvider` global (stack de toasts,
+  `aria-live`, tons por token) montado nos layouts do portal e do admin, com `useGlobalToast()`
+  e `useActionFeedback()` (executa server action `{ error? }`, mostra a mensagem de erro da
+  action ou o toast de sucesso, devolve o resultado). Primeira adoção: `RoadmapVoteButton`,
+  que antes **engolia erros em silêncio**. O `Toast` antigo (uso local) continua exportado.
+- **30D4 — Command Palette completo.** `searchPortal` agora: (a) navega por papel — admin vê
+  as rotas `/admin/*`, cliente as do portal; (b) tem grupo **Ações** ("Abrir chamado",
+  "Enviar feedback", "Convidar cliente", "Novo artigo"…); (c) busca por **número UFT**
+  ("UFT0012" ou "12" → `ticket_number`); (d) cobre também **roadmap** e **feedbacks**;
+  (e) subtítulo dos chamados traz `UFT0000 · status`. Palette agora montado **também no admin**
+  (`/admin/*` não tinha ⌘K). **Bug corrigido:** resultado de chamado para admin apontava para
+  `/admin/usuarios` (rota sem relação) → agora `/portal/suporte/[id]`.
+- **30D7 — Quick actions contextuais no dashboard.** Novo bloco "Para você" no topo da coluna
+  direita, computado do estado real: chamados `resolvido` aguardando avaliação (link direto
+  para `/avaliar`), tokens zerados (CTA de recarga) e contrato assinado renovando em ≤45 dias.
+  Só aparece quando há pendência.
+- **Bug descoberto e corrigido (classe já conhecida):** a query de "Chamados recentes" do
+  dashboard selecionava `tickets.title` — coluna **inexistente** (o campo é `subject`). A query
+  falhava silenciosamente e o card **nunca renderizava**. Mesma família dos filtros por status
+  inexistente do Sprint 1: colunas/valores fora do schema não quebram build, quebram runtime.
+
+**Plano de 30 dias: 8/8. Sprint 2 encerrado.** Próximo horizonte: Sprint 3 (90 dias), começando
+por 90D1 (telas admin próprias) e 90D2 (copiloto de suporte) — ambos exigem plano técnico prévio.
+Resíduo técnico que pode ser intercalado: passe `color-mix()` nos mapas com sufixo alpha
+(`status.ts`, `projects.ts`, `TYPE_COLOR` do sino).
 
 ## FASE 11 — Implementação & próximos passos
 
