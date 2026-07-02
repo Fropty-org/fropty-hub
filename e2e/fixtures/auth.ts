@@ -28,6 +28,8 @@ export const test = base.extend<{
     }
 
     await loginAs(page, email, password);
+    // `use` aqui é o provider de fixture do Playwright, não um hook React
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     await use(page);
   },
 });

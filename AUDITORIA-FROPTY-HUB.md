@@ -418,6 +418,25 @@ de verificação objetiva (computed styles + build), sem depender de preview aut
 - **PageHeader ampliado** — adotado também em Feedback, Projetos, Contratos, Financeiro, Roadmap
   e Base de Conhecimento (total: 8 telas), padronizando o h1 do portal.
 
+**Sprint 2 (continuação II, 2026-07-02):** executados **30D5** e **30D6** do plano de 30 dias:
+- **30D5 — SLA visível na lista de chamados.** Novo `computeSlaSummary()` em `sla.ts` resume as
+  duas metas em um único chip por chamado: aberto → relógio ativo (resposta → resolução) com
+  prazo restante ("Responder em 2h") ou "SLA estourado"; resolvido/fechado → "SLA cumprido"/
+  "SLA estourado". `first_response_at`/`resolved_at` agora chegam ao client (tipo `Ticket`
+  estendido). Chip presente na tabela desktop (coluna SLA) e nos cards mobile; cores por tom
+  (`--c-info/--c-warning/--c-danger/--c-success`). As barras da tela de detalhe (`SlaBars`)
+  também foram tokenizadas (hex puro → `var()`).
+- **30D6 — Paginação em suporte/projetos/contratos.** Novo `PaginationNav` (DS, classes
+  `hub-pagination`/`hub-page-btn` que já existiam no CSS sem uso) com helpers `pageItems`/
+  `parsePage` e page size único (`LIST_PAGE_SIZE = 20`). Suporte pagina client-side (integrada
+  à busca/filtros, reset de página ao filtrar); Projetos (visão lista) e Contratos paginam
+  server-side via `?page=` com links. Toolbars mostram "mostrando X–Y" quando há mais de uma página.
+- **Técnica descoberta para o passe QW11-alpha:** `color-mix(in srgb, var(--token) N%, transparent)`
+  substitui o padrão `${hex}15` mantendo tokens — aplicado nos StatCards e no chip de SLA do
+  Suporte como prova; resta replicar nos demais mapas de cor com sufixo alpha.
+- **Lint zerado de erros:** o único `error` (falso positivo `react-hooks/rules-of-hooks` no
+  `use` de fixture do Playwright em `e2e/fixtures/auth.ts`) foi suprimido com justificativa.
+
 ## FASE 11 — Implementação & próximos passos
 
 **Nada implementado.** Proposta de execução em sprints temáticos, do fundacional ao visível:
