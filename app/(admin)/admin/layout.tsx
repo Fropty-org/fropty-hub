@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import { getProfile } from "@/app/lib/auth/session";
 import { createClient } from "@/app/lib/supabase/server";
 import { AdminSidebar } from "@/app/components/admin/AdminSidebar";
+import { CommandPalette } from "@/app/components/CommandPalette";
+import { ToastProvider } from "@/app/components/ui/ToastProvider";
 
 export const metadata: Metadata = { robots: { index: false, follow: false } };
 
@@ -26,6 +28,7 @@ export default async function AdminPortalLayout({ children }: { children: React.
                     || null;
 
   return (
+    <ToastProvider>
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg)", color: "var(--text)" }}>
       <AdminSidebar name={name} initials={initials} userId={user?.id ?? ""} initialTheme={initialTheme} avatarUrl={avatarUrl} />
       <main
@@ -38,6 +41,10 @@ export default async function AdminPortalLayout({ children }: { children: React.
       >
         {children}
       </main>
+
+      {/* Busca global Cmd+K (mesma do portal) */}
+      <CommandPalette />
     </div>
+    </ToastProvider>
   );
 }

@@ -5,11 +5,13 @@ import {
 } from "react";
 import { useRouter } from "next/navigation";
 import {
-  Search, LayoutDashboard, MessageCircle, FolderKanban, FileText,
+  Search, LayoutDashboard, MessageCircle, FolderKanban,
   CreditCard, Map, MessageSquarePlus, BookOpen, UserCircle, ArrowRight,
-  Hash, Loader2, FileSignature, X,
+  Hash, Loader2, FileSignature, X, Zap, Users, BarChart3, ScrollText,
 } from "lucide-react";
-import { searchPortal, type SearchResult, type SearchResultType } from "@/app/actions/search";
+import {
+  searchPortal, type SearchResult, type SearchResultType, type SearchResults,
+} from "@/app/actions/search";
 
 // ── Icon per result type ────────────────────────────────────────────────────
 
@@ -17,17 +19,24 @@ function ResultIcon({ type, href }: { type: SearchResultType; href: string }) {
   const s = 14;
   const style = { flexShrink: 0 as const };
 
+  if (type === "action")   return <Zap            size={s} style={style} />;
   if (type === "ticket")   return <MessageCircle  size={s} style={style} />;
   if (type === "project")  return <FolderKanban   size={s} style={style} />;
   if (type === "contract") return <FileSignature  size={s} style={style} />;
   if (type === "kb")       return <BookOpen       size={s} style={style} />;
+  if (type === "roadmap")  return <Map            size={s} style={style} />;
+  if (type === "feedback") return <MessageSquarePlus size={s} style={style} />;
 
   // nav — pick by href
-  if (href.includes("dashboard"))       return <LayoutDashboard   size={s} style={style} />;
+  if (href.includes("dashboard") || href.includes("overview")) return <LayoutDashboard size={s} style={style} />;
+  if (href.includes("usuarios"))        return <Users             size={s} style={style} />;
+  if (href.includes("customer-success")) return <Users            size={s} style={style} />;
+  if (href.includes("analytics"))       return <BarChart3         size={s} style={style} />;
+  if (href.includes("audit"))           return <ScrollText        size={s} style={style} />;
   if (href.includes("suporte"))         return <MessageCircle     size={s} style={style} />;
   if (href.includes("projetos"))        return <FolderKanban      size={s} style={style} />;
   if (href.includes("contratos"))       return <FileSignature     size={s} style={style} />;
-  if (href.includes("financeiro"))      return <CreditCard        size={s} style={style} />;
+  if (href.includes("financeiro") || href.includes("planos")) return <CreditCard size={s} style={style} />;
   if (href.includes("roadmap"))         return <Map               size={s} style={style} />;
   if (href.includes("feedback"))        return <MessageSquarePlus size={s} style={style} />;
   if (href.includes("base-conhecimento")) return <BookOpen        size={s} style={style} />;
@@ -36,11 +45,14 @@ function ResultIcon({ type, href }: { type: SearchResultType; href: string }) {
 }
 
 const GROUP_LABELS: Record<string, string> = {
+  action:   "Ações",
   nav:      "Navegar",
   ticket:   "Chamados",
   project:  "Projetos",
   contract: "Contratos",
   kb:       "Base de Conhecimento",
+  roadmap:  "Roadmap",
+  feedback: "Feedback",
 };
 
 interface FlatResult extends SearchResult {
@@ -52,10 +64,7 @@ interface FlatResult extends SearchResult {
 export function CommandPalette() {
   const [open,    setOpen]    = useState(false);
   const [query,   setQuery]   = useState("");
-  const [results, setResults] = useState<{
-    nav: SearchResult[]; tickets: SearchResult[]; projects: SearchResult[];
-    contracts: SearchResult[]; kb: SearchResult[];
-  } | null>(null);
+  const [results, setResults] = useState<SearchResults | null>(null);
   const [active, setActive] = useState(0);
   const [isPending, startTransition] = useTransition();
 
@@ -115,11 +124,14 @@ export function CommandPalette() {
 
   const flat: FlatResult[] = results
     ? [
+        ...results.actions.map(r   => ({ ...r, groupKey: "action" })),
         ...results.nav.map(r       => ({ ...r, groupKey: "nav" })),
         ...results.tickets.map(r   => ({ ...r, groupKey: "ticket" })),
         ...results.projects.map(r  => ({ ...r, groupKey: "project" })),
         ...results.contracts.map(r => ({ ...r, groupKey: "contract" })),
         ...results.kb.map(r        => ({ ...r, groupKey: "kb" })),
+        ...results.roadmap.map(r   => ({ ...r, groupKey: "roadmap" })),
+        ...results.feedbacks.map(r => ({ ...r, groupKey: "feedback" })),
       ]
     : [];
 
@@ -149,11 +161,14 @@ export function CommandPalette() {
 
   const groupEntries: Array<{ key: string; items: SearchResult[] }> = results
     ? [
+        { key: "action",   items: results.actions },
         { key: "nav",      items: results.nav },
         { key: "ticket",   items: results.tickets },
         { key: "project",  items: results.projects },
         { key: "contract", items: results.contracts },
         { key: "kb",       items: results.kb },
+        { key: "roadmap",  items: results.roadmap },
+        { key: "feedback", items: results.feedbacks },
       ].filter(g => g.items.length > 0)
     : [];
 
@@ -206,7 +221,7 @@ export function CommandPalette() {
             value={query}
             onChange={e => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Buscar chamados, projetos, artigos..."
+            placeholder="Buscar por UFT0000, chamados, projetos, artigos, ações..."
             style={{
               flex: 1, background: "transparent", border: "none", outline: "none",
               fontSize: "15px", color: "var(--text)", fontFamily: "inherit",
