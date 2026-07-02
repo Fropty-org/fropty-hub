@@ -436,6 +436,15 @@ de verificação objetiva (computed styles + build), sem depender de preview aut
   Suporte como prova; resta replicar nos demais mapas de cor com sufixo alpha.
 - **Lint zerado de erros:** o único `error` (falso positivo `react-hooks/rules-of-hooks` no
   `use` de fixture do Playwright em `e2e/fixtures/auth.ts`) foi suprimido com justificativa.
+- **30D2 — Activity Feed no dashboard.** Novo `ActivityFeed` (server component, classes
+  `hub-timeline` do DS que existiam sem uso) unifica em ordem cronológica o histórico de
+  `notifications` (chamados, projetos, feedback, contratos — cobertos pelos triggers da 0036)
+  com as movimentações de `token_transactions` (crédito/débito). 8 itens, ícone+tom por tipo
+  de evento, link para a entidade. Duas queries a mais no `Promise.all` do dashboard
+  (custo marginal; ambas indexadas por usuário e limitadas).
+
+Com isso, do plano de 30 dias restam: 30D4 (Command Palette completo), 30D7 (quick actions
+contextuais) e 30D8 (feedback de erro padronizado) — 30D1/2/3/5/6 executados.
 
 ## FASE 11 — Implementação & próximos passos
 

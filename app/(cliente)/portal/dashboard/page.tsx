@@ -16,6 +16,7 @@ import { PlanRenewalBanner } from "@/app/components/cliente/PlanRenewalBanner";
 import { getOnboardingSteps } from "@/app/lib/onboarding";
 import { StatusBadge } from "@/app/components/ui/StatusBadge";
 import { PROJECT_STATUSES, ACTIVE_PROJECT_STATUSES } from "@/app/lib/constants/projects";
+import { ActivityFeed, type ActivityItem } from "@/app/components/cliente/ActivityFeed";
 
 export const metadata: Metadata = { title: "Meu Painel" };
 
@@ -40,6 +41,8 @@ export default async function PortalDashboardPage() {
     recentTicketsRes,
     recentProjectsRes,
     healthRes,
+    notifsRes,
+    tokenTxRes,
   ] = await Promise.all([
     user
       ? supabase.from("tickets").select("id", { count: "exact", head: true })
@@ -66,6 +69,20 @@ export default async function PortalDashboardPage() {
     user
       ? supabase.from("health_scores").select("risk_level, score_total").eq("client_id", user.id).maybeSingle()
       : Promise.resolve({ data: null }),
+    user
+      ? supabase.from("notifications")
+          .select("id, type, title, body, link, created_at")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false })
+          .limit(8)
+      : Promise.resolve({ data: [] }),
+    user
+      ? supabase.from("token_transactions")
+          .select("id, description, type, amount, created_at")
+          .eq("client_id", user.id)
+          .order("created_at", { ascending: false })
+          .limit(4)
+      : Promise.resolve({ data: [] }),
   ]);
 
   const openTickets    = ticketsRes.count    ?? 0;
@@ -89,6 +106,32 @@ export default async function PortalDashboardPage() {
 
   const hasRecentTickets  = recentTickets.length > 0;
   const hasRecentProjects = recentProjects.length > 0;
+
+  // Feed unificado: notificações + movimentações de tokens, mais recentes primeiro
+  const notifs  = notifsRes.data  ?? [];
+  const tokenTx = tokenTxRes.data ?? [];
+  const activity: ActivityItem[] = [
+    ...notifs.map((n) => ({
+      id:        `n-${n.id}`,
+      kind:      n.type,
+      title:     n.title,
+      body:      n.body,
+      link:      n.link,
+      createdAt: n.created_at,
+    })),
+    ...tokenTx.map((t) => ({
+      id:        `t-${t.id}`,
+      kind:      t.type === "credit" ? "token_credit" : "token_debit",
+      title:     t.type === "credit"
+        ? `${t.amount} token${t.amount !== 1 ? "s" : ""} creditado${t.amount !== 1 ? "s" : ""}`
+        : `${t.amount} token${t.amount !== 1 ? "s" : ""} utilizado${t.amount !== 1 ? "s" : ""}`,
+      body:      t.description,
+      link:      "/portal/financeiro",
+      createdAt: t.created_at,
+    })),
+  ]
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, 8);
 
   return (
     <div style={{ padding: "24px 24px", maxWidth: 1060, margin: "0 auto" }}>
@@ -411,6 +454,9 @@ export default async function PortalDashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* ── Atividade recente ── */}
+      <ActivityFeed items={activity} />
 
       {/* ── Serviços contratados ── */}
       {hasServices && (
