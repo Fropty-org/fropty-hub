@@ -22,7 +22,7 @@ const icons: Record<ToastType, LucideIcon> = {
 
 const colors: Record<ToastType, string> = {
   success: "var(--c-success)",
-  error: "#ef4444",
+  error: "var(--c-danger)",
   info: "var(--primary)",
   warning: "var(--brand-accent)",
 };

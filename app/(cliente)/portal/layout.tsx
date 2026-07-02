@@ -10,6 +10,7 @@ import { ACTIVE_PROJECT_STATUSES } from "@/app/lib/constants/projects";
 import { UserAvatarMenu } from "@/app/components/auth/UserAvatarMenu";
 import { PullToRefresh } from "@/app/components/PullToRefresh";
 import { CommandPalette } from "@/app/components/CommandPalette";
+import { ToastProvider } from "@/app/components/ui/ToastProvider";
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -107,6 +108,7 @@ export default async function PortalLayout({
   };
 
   return (
+    <ToastProvider>
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg)", color: "var(--text)" }}>
       {/* Admin mantém a navegação completa do painel mesmo no suporte;
           cliente usa a sidebar do portal. */}
@@ -155,5 +157,6 @@ export default async function PortalLayout({
       <CommandPalette />
 
     </div>
+    </ToastProvider>
   );
 }

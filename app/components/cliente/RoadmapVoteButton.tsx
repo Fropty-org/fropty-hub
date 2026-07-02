@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { ThumbsUp, Loader2 } from "lucide-react";
 import { toggleVote } from "@/app/actions/roadmap";
+import { useGlobalToast } from "@/app/components/ui/ToastProvider";
 
 interface Props {
   itemId: string;
@@ -14,14 +15,17 @@ export function RoadmapVoteButton({ itemId, initialVotes, initialVoted }: Props)
   const [voted,   setVoted]   = useState(initialVoted);
   const [votes,   setVotes]   = useState(initialVotes);
   const [pending, start]      = useTransition();
+  const { show }              = useGlobalToast();
 
   function handleVote() {
     start(async () => {
       const result = await toggleVote(itemId);
-      if (!result.error) {
-        setVoted(result.voted);
-        setVotes((v) => result.voted ? v + 1 : v - 1);
+      if (result.error) {
+        show(result.error, "error");
+        return;
       }
+      setVoted(result.voted);
+      setVotes((v) => result.voted ? v + 1 : v - 1);
     });
   }
 
