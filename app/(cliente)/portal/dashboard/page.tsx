@@ -43,6 +43,8 @@ export default async function PortalDashboardPage() {
     healthRes,
     notifsRes,
     tokenTxRes,
+    awaitingReviewRes,
+    renewalRes,
   ] = await Promise.all([
     user
       ? supabase.from("tickets").select("id", { count: "exact", head: true })
@@ -54,7 +56,7 @@ export default async function PortalDashboardPage() {
       : Promise.resolve({ count: 0 }),
     user
       ? supabase.from("tickets")
-          .select("id, title, status, priority, created_at, updated_at")
+          .select("id, subject, status, priority, created_at, updated_at")
           .eq("client_id", user.id)
           .order("updated_at", { ascending: false })
           .limit(4)
@@ -82,6 +84,26 @@ export default async function PortalDashboardPage() {
           .eq("client_id", user.id)
           .order("created_at", { ascending: false })
           .limit(4)
+      : Promise.resolve({ data: [] }),
+    // Chamados resolvidos aguardando a avaliação do cliente
+    user
+      ? supabase.from("tickets")
+          .select("id, subject, ticket_number")
+          .eq("client_id", user.id)
+          .eq("status", "resolvido")
+          .order("updated_at", { ascending: false })
+          .limit(2)
+      : Promise.resolve({ data: [] }),
+    // Próximo contrato assinado a vencer (para alerta de renovação)
+    user
+      ? supabase.from("contracts")
+          .select("id, title, end_date")
+          .eq("client_id", user.id)
+          .eq("status", "assinado")
+          .not("end_date", "is", null)
+          .gte("end_date", new Date().toISOString().slice(0, 10))
+          .order("end_date", { ascending: true })
+          .limit(1)
       : Promise.resolve({ data: [] }),
   ]);
 
@@ -132,6 +154,40 @@ export default async function PortalDashboardPage() {
   ]
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 8);
+
+  // Ações contextuais: o que o cliente precisa fazer agora
+  const awaitingReview = awaitingReviewRes.data ?? [];
+  const nextRenewal    = (renewalRes.data ?? [])[0] ?? null;
+  const renewalDays    = nextRenewal?.end_date
+    ? Math.ceil((new Date(nextRenewal.end_date).getTime() - Date.now()) / 86_400_000)
+    : null;
+
+  const contextualActions: {
+    href: string; label: string; description: string; tone: "warning" | "danger" | "info";
+  }[] = [
+    ...awaitingReview.map((t) => ({
+      href:        `/portal/suporte/${t.id}/avaliar`,
+      label:       `Avaliar chamado UFT${String(t.ticket_number).padStart(4, "0")}`,
+      description: "Resolvido — aguardando sua validação",
+      tone:        "warning" as const,
+    })),
+    ...(hasServices && tokenBalance === 0
+      ? [{
+          href:        "/portal/financeiro",
+          label:       "Recarregar tokens",
+          description: "Sem tokens, não é possível abrir chamados",
+          tone:        "danger" as const,
+        }]
+      : []),
+    ...(nextRenewal && renewalDays !== null && renewalDays <= 45
+      ? [{
+          href:        `/portal/contratos/${nextRenewal.id}`,
+          label:       `Contrato renova em ${renewalDays}d`,
+          description: nextRenewal.title,
+          tone:        "info" as const,
+        }]
+      : []),
+  ].slice(0, 3);
 
   return (
     <div style={{ padding: "24px 24px", maxWidth: 1060, margin: "0 auto" }}>
@@ -345,7 +401,7 @@ export default async function PortalDashboardPage() {
                         fontSize: "13px", fontWeight: 600, color: "var(--text)",
                         overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
                       }}>
-                        {ticket.title as string}
+                        {ticket.subject as string}
                       </span>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -364,6 +420,52 @@ export default async function PortalDashboardPage() {
 
         {/* Coluna direita: projetos + ações rápidas */}
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+
+          {/* Ações contextuais: pendências que dependem do cliente */}
+          {contextualActions.length > 0 && (
+            <div>
+              <p style={{
+                fontSize: "11px", fontWeight: 700, textTransform: "uppercase",
+                letterSpacing: "0.08em", color: "var(--text-faint)", margin: "0 0 10px",
+                display: "flex", alignItems: "center", gap: 6,
+              }}>
+                <AlertCircle size={12} style={{ color: "var(--c-warning)" }} /> Para você
+              </p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                {contextualActions.map(({ href, label, description, tone }) => {
+                  const toneColor =
+                    tone === "danger" ? "var(--c-danger)" :
+                    tone === "warning" ? "var(--c-warning)" : "var(--c-info)";
+                  return (
+                    <Link
+                      key={href}
+                      href={href}
+                      className="hub-action-link"
+                      style={{
+                        display: "flex", alignItems: "center", gap: 10,
+                        padding: "10px 14px",
+                        background: `color-mix(in srgb, ${toneColor} 6%, var(--surface))`,
+                        border: `1px solid color-mix(in srgb, ${toneColor} 22%, transparent)`,
+                        borderLeft: `3px solid ${toneColor}`,
+                        borderRadius: "var(--r-md)", textDecoration: "none",
+                        transition: "border-color 0.15s, background 0.15s",
+                      }}
+                    >
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <p style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          {label}
+                        </p>
+                        <p style={{ margin: "1px 0 0", fontSize: "11.5px", color: "var(--text-faint)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          {description}
+                        </p>
+                      </div>
+                      <ArrowRight size={13} style={{ color: toneColor, flexShrink: 0 }} />
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {/* Projetos recentes */}
           {hasRecentProjects && (
