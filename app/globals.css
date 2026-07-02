@@ -1039,24 +1039,9 @@ a { color: inherit; text-decoration: none; }
   .lp-hs-grid { grid-template-columns: 1fr; }
 }
 
-/* Scroll reveal */
-.sr {
-  opacity:   0;
-  transform: translateY(22px);
-  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-  transition-delay: var(--sr-delay, 0ms);
-}
-.sr.sr-in { opacity: 1; transform: translateY(0); }
-@media (prefers-reduced-motion: reduce) {
-  .sr { opacity: 1 !important; transform: none !important; transition: none !important; }
-}
-
-/* Dot grid background */
-.dot-bg {
-  background-image: radial-gradient(circle, var(--dot-color) 1px, transparent 1px);
-  background-size: 26px 26px;
-}
+/* Scroll reveal (.sr/.sr-in) e dot grid (.dot-bg): definições únicas na
+   seção LANDING PAGE mais abaixo — eram duplicadas aqui com valores
+   divergentes; a cascata já fazia as de lá vencerem. */
 
 /* Section chip (site público) */
 .section-chip {
