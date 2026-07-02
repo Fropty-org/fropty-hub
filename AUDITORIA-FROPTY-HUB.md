@@ -405,10 +405,18 @@ Aprendizado para o time: **status são strings livres com CHECK no banco**, sem 
 qualquer filtro `.in/.eq("status", …)` deve usar as constantes canônicas (`status.ts`, `projects.ts`),
 nunca literais soltos.
 
-**Adiado (precisa de passe dedicado com verificação visual, risco maior):**
-- QW11 (cores hard-coded → tokens) — amplo; risco de regressão de dark mode sem preview autenticado.
-- Consolidação de `.sr`/`.dot-bg` no `globals.css` (definições conflitantes com especificidade distinta).
-- Adoção do `HubEmptyState` nas telas que ainda montam vazio à mão (ex. `chat`).
+**Sprint 2 (continuação, 2026-07-02):** os três itens antes adiados foram executados com técnica
+de verificação objetiva (computed styles + build), sem depender de preview autenticado:
+- **QW11 passe seguro** — 57 ocorrências de hex de valor exato (#22c55e/#EF9F27/#3b82f6/#f59e0b)
+  viraram `var(--c-success/--brand-accent/--c-info/--c-warning)` em 31 arquivos. **Restrição
+  descoberta:** constantes consumidas com sufixo alpha (`${color}15`) — status.ts, projects.ts,
+  TYPE_COLOR do sino, mapas de páginas admin — NÃO podem virar var(); ficaram em hex e exigem
+  passe dedicado (ex.: gerar pares token+token-bg ou usar color-mix()).
+- **Consolidação `.sr`/`.dot-bg`** — o segundo bloco (seção LANDING) já vencia na cascata;
+  primeiro bloco removido com no-op comprovado por computed styles idênticos antes/depois.
+- **`HubEmptyState` no chat** — lista vazia de conversas agora usa o componente com CTA.
+- **PageHeader ampliado** — adotado também em Feedback, Projetos, Contratos, Financeiro, Roadmap
+  e Base de Conhecimento (total: 8 telas), padronizando o h1 do portal.
 
 ## FASE 11 — Implementação & próximos passos
 
