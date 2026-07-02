@@ -5,6 +5,7 @@ import { getClientContracts } from "@/app/actions/contracts";
 import { CONTRACT_STATUS_MAP, CONTRACT_TYPE_MAP } from "@/app/lib/constants/projects";
 import { HubEmptyState } from "@/app/components/ui/HubEmptyState";
 import { PageHeader } from "@/app/components/ui/PageHeader";
+import { PaginationNav, parsePage, LIST_PAGE_SIZE } from "@/app/components/ui/PaginationNav";
 
 export const metadata: Metadata = { title: "Contratos" };
 
@@ -23,8 +24,17 @@ function fCurrency(v?: number | null) {
   return v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
-export default async function ContratosPage() {
+export default async function ContratosPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const params    = await searchParams;
   const contracts = await getClientContracts();
+
+  const totalPages = Math.max(1, Math.ceil(contracts.length / LIST_PAGE_SIZE));
+  const page       = parsePage(params.page, totalPages);
+  const paged      = contracts.slice((page - 1) * LIST_PAGE_SIZE, page * LIST_PAGE_SIZE);
 
   return (
     <div style={{ padding: "24px 24px", maxWidth: 1020, margin: "0 auto" }}>
@@ -61,6 +71,11 @@ export default async function ContratosPage() {
           }}>
             <span style={{ fontSize: "13px", fontWeight: 700, color: "var(--text)" }}>
               {contracts.length} contrato{contracts.length !== 1 ? "s" : ""}
+              {totalPages > 1 && (
+                <span style={{ fontWeight: 500, color: "var(--text-faint)" }}>
+                  {" "}· mostrando {(page - 1) * LIST_PAGE_SIZE + 1}–{Math.min(page * LIST_PAGE_SIZE, contracts.length)}
+                </span>
+              )}
             </span>
           </div>
 
@@ -84,7 +99,7 @@ export default async function ContratosPage() {
           </div>
 
           {/* Rows */}
-          {contracts.map((c, i) => {
+          {paged.map((c, i) => {
             const st        = CONTRACT_STATUS_MAP[c.status] ?? { label: c.status,   color: "#94a3b8" };
             const typeLabel = CONTRACT_TYPE_MAP[c.type]     ?? c.type;
             const days      = c.status === "assinado" ? daysUntil(c.end_date) : null;
@@ -99,7 +114,7 @@ export default async function ContratosPage() {
                   display: "grid",
                   gridTemplateColumns: "2fr 110px 100px 150px 110px 32px",
                   padding: "13px 20px", alignItems: "center",
-                  borderBottom: i < contracts.length - 1 ? "1px solid var(--border)" : "none",
+                  borderBottom: i < paged.length - 1 ? "1px solid var(--border)" : "none",
                   textDecoration: "none", color: "inherit",
                   transition: "background 0.1s",
                 }}
@@ -171,6 +186,13 @@ export default async function ContratosPage() {
               </Link>
             );
           })}
+
+          <PaginationNav
+            current={page}
+            total={totalPages}
+            basePath="/portal/contratos"
+            label="Paginação de contratos"
+          />
         </div>
       )}
     </div>

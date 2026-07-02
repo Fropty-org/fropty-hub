@@ -5,6 +5,7 @@ import { getClientProjects } from "@/app/actions/projects";
 import { PROJECT_STATUSES, PROJECT_PRIORITY_MAP } from "@/app/lib/constants/projects";
 import { HubEmptyState } from "@/app/components/ui/HubEmptyState";
 import { PageHeader } from "@/app/components/ui/PageHeader";
+import { PaginationNav, parsePage, LIST_PAGE_SIZE } from "@/app/components/ui/PaginationNav";
 import { ProjectsKanban } from "@/app/components/projetos/ProjectsKanban";
 import { ProjectsCalendar } from "@/app/components/projetos/ProjectsCalendar";
 
@@ -26,7 +27,7 @@ const VIEW_BUTTONS: { view: ViewMode; Icon: typeof List; label: string }[] = [
 export default async function ProjetosPage({
   searchParams,
 }: {
-  searchParams: Promise<{ view?: string }>;
+  searchParams: Promise<{ view?: string; page?: string }>;
 }) {
   const params = await searchParams;
   const view: ViewMode =
@@ -35,6 +36,11 @@ export default async function ProjetosPage({
       : "lista";
 
   const projects = await getClientProjects();
+
+  // Paginação só na visão lista (kanban/calendário mostram tudo)
+  const totalPages = Math.max(1, Math.ceil(projects.length / LIST_PAGE_SIZE));
+  const page       = parsePage(params.page, totalPages);
+  const paged      = projects.slice((page - 1) * LIST_PAGE_SIZE, page * LIST_PAGE_SIZE);
 
   return (
     <div style={{ padding: "24px 24px", maxWidth: view === "kanban" ? "none" : 1020, margin: "0 auto" }}>
@@ -114,6 +120,11 @@ export default async function ProjetosPage({
           }}>
             <span style={{ fontSize: "13px", fontWeight: 700, color: "var(--text)" }}>
               {projects.length} projeto{projects.length !== 1 ? "s" : ""}
+              {totalPages > 1 && (
+                <span style={{ fontWeight: 500, color: "var(--text-faint)" }}>
+                  {" "}· mostrando {(page - 1) * LIST_PAGE_SIZE + 1}–{Math.min(page * LIST_PAGE_SIZE, projects.length)}
+                </span>
+              )}
             </span>
           </div>
 
@@ -137,7 +148,7 @@ export default async function ProjetosPage({
           </div>
 
           {/* Rows */}
-          {projects.map((project, i) => {
+          {paged.map((project, i) => {
             const st       = PROJECT_STATUSES[project.status]       ?? { label: project.status,   color: "#94a3b8", Icon: FolderOpen };
             const pr       = PROJECT_PRIORITY_MAP[project.priority] ?? { label: project.priority, color: "#94a3b8" };
             const StIcon   = st.Icon;
@@ -152,7 +163,7 @@ export default async function ProjetosPage({
                   gridTemplateColumns: "2fr 130px 110px 120px 140px 32px",
                   padding: "13px 20px",
                   alignItems: "center",
-                  borderBottom: i < projects.length - 1 ? "1px solid var(--border)" : "none",
+                  borderBottom: i < paged.length - 1 ? "1px solid var(--border)" : "none",
                   textDecoration: "none", color: "inherit",
                   transition: "background 0.1s",
                 }}
@@ -225,6 +236,14 @@ export default async function ProjetosPage({
               </Link>
             );
           })}
+
+          <PaginationNav
+            current={page}
+            total={totalPages}
+            basePath="/portal/projetos"
+            params={{ view: "lista" }}
+            label="Paginação de projetos"
+          />
         </div>
       )}
     </div>
