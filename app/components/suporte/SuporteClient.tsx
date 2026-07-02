@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import Link from "next/link";
 import { TICKET_PRIORITY_MAP } from "@/app/lib/constants/status";
 import { StatusBadge } from "@/app/components/ui/StatusBadge";
+import { Pagination } from "@/app/components/ui/Pagination";
 import type { Ticket } from "@/app/lib/types/cliente";
 import {
   Coins, Headphones, Plus, Search, X,
@@ -60,9 +61,11 @@ function NoTokenModal({ onClose }: { onClose: () => void }) {
 
 /* ── SuporteClient ─────────────────────────────────────────────────── */
 export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
+  const PAGE_SIZE = 15;
   const [search,      setSearch]      = useState("");
   const [filter,      setFilter]      = useState<FilterMode>("todos");
   const [showNoToken, setShowNoToken] = useState(false);
+  const [page,        setPage]        = useState(1);
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase();
@@ -76,6 +79,18 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
       return matchSearch && matchFilter;
     });
   }, [tickets, search, filter]);
+
+  // Reinicia a paginação sempre que o conjunto filtrado muda (busca/filtro).
+  useEffect(() => { setPage(1); }, [search, filter]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const safePage   = Math.min(page, totalPages);
+  const paged      = useMemo(
+    () => filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE),
+    [filtered, safePage],
+  );
+  const rangeStart = filtered.length === 0 ? 0 : (safePage - 1) * PAGE_SIZE + 1;
+  const rangeEnd   = Math.min(safePage * PAGE_SIZE, filtered.length);
 
   const totalOpen     = tickets.filter((t) => t.status !== "fechado").length;
   const totalResolved = tickets.filter((t) => t.status === "fechado").length;
@@ -206,6 +221,11 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
             <span style={{ fontSize: "13px", fontWeight: 700, color: "var(--text)" }}>
               {filtered.length} chamado{filtered.length !== 1 ? "s" : ""}
             </span>
+            {totalPages > 1 && (
+              <span style={{ fontSize: "12px", color: "var(--text-faint)" }}>
+                {rangeStart}–{rangeEnd} de {filtered.length}
+              </span>
+            )}
           </div>
 
           {/* ── Tabela (desktop) ── */}
@@ -227,7 +247,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
               <span />
             </div>
 
-            {filtered.map((t, i) => {
+            {paged.map((t, i) => {
               const pri = TICKET_PRIORITY_MAP[t.priority];
               const updatedDate = new Date(t.updatedAt).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
 
@@ -239,7 +259,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
                     display: "grid",
                     gridTemplateColumns: "2fr 110px 90px 110px 120px 32px",
                     padding: "13px 20px", alignItems: "center",
-                    borderBottom: i < filtered.length - 1 ? "1px solid var(--border)" : "none",
+                    borderBottom: i < paged.length - 1 ? "1px solid var(--border)" : "none",
                     textDecoration: "none", color: "inherit",
                     borderLeft: `3px solid ${pri.color}`,
                     transition: "background 0.1s",
@@ -272,7 +292,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
 
           {/* ── Cards (mobile) ── */}
           <div className="sup-card-view" style={{ flexDirection: "column" }}>
-            {filtered.map((t, i) => {
+            {paged.map((t, i) => {
               const pri = TICKET_PRIORITY_MAP[t.priority];
               const updatedDate = new Date(t.updatedAt).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
 
@@ -282,7 +302,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
                   href={`/portal/suporte/${t.id}`}
                   style={{
                     display: "block", padding: "14px 16px", textDecoration: "none", color: "inherit",
-                    borderBottom: i < filtered.length - 1 ? "1px solid var(--border)" : "none",
+                    borderBottom: i < paged.length - 1 ? "1px solid var(--border)" : "none",
                     borderLeft: `3px solid ${pri.color}`,
                   }}
                 >
@@ -307,6 +327,13 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
               );
             })}
           </div>
+
+          {/* Paginação */}
+          {totalPages > 1 && (
+            <div style={{ display: "flex", justifyContent: "flex-end", padding: "14px 20px", borderTop: "1px solid var(--border)" }}>
+              <Pagination page={safePage} totalPages={totalPages} onChange={setPage} />
+            </div>
+          )}
         </div>
       )}
     </div>

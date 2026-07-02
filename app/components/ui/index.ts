@@ -7,3 +7,4 @@ export { Toast, useToast } from "./Toast";
 export { HubEmptyState } from "./HubEmptyState";
 export { StatusBadge } from "./StatusBadge";
 export { PageHeader } from "./PageHeader";
+export { Pagination } from "./Pagination";
