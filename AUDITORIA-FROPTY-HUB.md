@@ -471,6 +471,52 @@ por 90D1 (telas admin próprias) e 90D2 (copiloto de suporte) — ambos exigem p
 Resíduo técnico que pode ser intercalado: passe `color-mix()` nos mapas com sufixo alpha
 (`status.ts`, `projects.ts`, `TYPE_COLOR` do sino).
 
+---
+
+## Pré-Sprint 3 — decisões técnicas necessárias
+
+Diferente dos sprints 1–2 (correções e infra sem dependências novas), o Sprint 3 exige
+**decisões de arquitetura, dependências novas e custo recorrente** antes de codar. Registradas
+aqui para aprovação (recomendações do time entre parênteses):
+
+- **Decisão 0 — Merge e fluxo de deploy.** Todo o trabalho dos sprints 1–2 recente está no
+  branch `claude/fropty-hub-audit-continue-rhg7sq`; a Vercel publica do `master` — nada vai ao
+  ar até o merge. Mergear agora e voltar ao fluxo do CLAUDE.md, ou manter branch por sprint?
+  *(Recomendação: mergear agora — 20 itens validados parados em branch = risco de conflito
+  crescente.)*
+- **Decisão 1 — 90D1: arquitetura das telas admin.** (a) rotas `/admin/*` novas com componentes
+  compartilhados parametrizados por papel (`SuporteClient` já aceita `isAdmin`); (b) evoluir a
+  variação por papel na rota única atual; (c) telas independentes. E qual módulo primeiro.
+  *(Recomendação: (a), começando pelo Suporte — fila com filtro por cliente/status/SLA e ações
+  em lote; Kanban/Calendário admin só depois do 90D3.)*
+- **Decisão 2 — 90D2: copiloto de suporte (a maior do sprint).** (i) modelo LLM + chave + teto
+  de orçamento mensal; (ii) `pgvector` no Supabase + modelo de embedding + pipeline de indexação
+  da KB (trigger no publish vs. cron); (iii) UX: sugerir artigos antes do submit vs. painel do
+  analista; (iv) fallback obrigatório — o fluxo de chamado nunca pode bloquear por indisponibilidade
+  da API. *(Recomendação: fase 1 sem LLM — busca semântica pura sugerindo artigos no formulário;
+  fase 2 adiciona LLM. Corta ~80% do custo e entrega o ROI principal primeiro.)*
+- **Decisão 3 — 90D3: Kanban DnD — quem pode mover?** Mover card = mudar status do projeto,
+  hoje gerido pela Fropty (cliente read-only por design). DnD só para admin ou também cliente?
+  Define policies RLS de UPDATE, server action e onde a tela vive (conecta com a Decisão 1).
+  Dependência nova: `@dnd-kit`. *(Recomendação: DnD apenas no admin, update otimista + registro
+  em `admin_audit_log`; cliente segue read-only e é avisado pela notificação da 0036.)*
+- **Decisão 4 — 90D7: gráficos e fonte dos dados.** Lib (Recharts vs. SVG próprio como o
+  `TokenChart`) e fonte (queries diretas vs. RPCs/views agregadas — necessárias com 100+
+  clientes; mesma decisão vale para `calculate_health_score`, Fase 6). *(Recomendação: Recharts
+  em `dynamic()` + 3 RPCs agregadas: MRR, tempo de resolução, consumo de tokens.)*
+- **Decisão 5 — 90D5/90D6: escopo.** Relatório mensal exige cron adicional na Vercel (verificar
+  limite do plano) + template. Webhook API exige tabela de endpoints, HMAC, retries e docs.
+  Webhook entra no Sprint 3 ou desce para 180 dias? *(Recomendação: adiar Webhook API — nenhum
+  cliente pediu; manter relatório mensal, que reaproveita Resend + cron existentes.)*
+- **Decisão 6 — Testes com sessão autenticada.** Telas admin, DnD e copiloto só são verificáveis
+  logado. Fixture E2E pronto (`E2E_EMAIL`/`E2E_PASSWORD`). Criar usuário de teste dedicado
+  (cliente + admin) em produção ou em branch database, e prover credenciais como env vars.
+  *(Recomendação: usuário de teste dedicado com dados sintéticos + specs Playwright incrementais
+  por item entregue.)*
+
+Com as decisões tomadas — ou as recomendações aprovadas em bloco — o Sprint 3 inicia pelo par
+**90D1 (Suporte admin) + fase 1 do 90D2 (busca semântica na KB)**.
+
 ## FASE 11 — Implementação & próximos passos
 
 **Nada implementado.** Proposta de execução em sprints temáticos, do fundacional ao visível:
