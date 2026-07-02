@@ -44,14 +44,12 @@ export function middleware(request: NextRequest) {
 
   if (HUB_HOST) {
     if (onHub) {
-      // Raiz do hub = login (ou portal, se já logado).
-      // Usa redirect (não rewrite): a página de login precisa morar numa URL real
-      // (/area-cliente). Com rewrite a URL do browser fica "/", e o POST do Server
-      // Action de login bate em "/" sendo reescrito — o que descarta o Set-Cookie
-      // da sessão e faz o login "não funcionar". Redirect elimina esse POST na raiz.
-      if (path === "/") {
+      // Raiz do hub: visitante sem sessão vê a landing (app/page.tsx) normalmente.
+      // Com sessão ativa, vai direto para o portal — cliente logado não precisa
+      // rever a landing. (Login continua morando em /area-cliente, URL real.)
+      if (path === "/" && hasSession) {
         const url = request.nextUrl.clone();
-        url.pathname = hasSession ? "/portal/dashboard" : LOGIN_PAGE;
+        url.pathname = "/portal/dashboard";
         return NextResponse.redirect(url);
       }
     } else {
