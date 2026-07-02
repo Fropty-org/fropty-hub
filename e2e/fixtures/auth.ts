@@ -3,12 +3,14 @@ import { test as base, type Page } from "@playwright/test";
 /**
  * Faz login via UI e retorna a página autenticada.
  * Usado pelos testes que precisam de sessão de cliente.
+ * Credenciais: E2E_EMAIL / E2E_PASSWORD (definir em .env.test.local,
+ * carregado pelo playwright.config.ts).
  */
 async function loginAs(page: Page, email: string, password: string) {
   await page.goto("/area-cliente");
-  await page.getByPlaceholder("seu@email.com").fill(email);
-  await page.getByPlaceholder(/senha/i).fill(password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.locator('input[name="email"]').fill(email);
+  await page.locator('input[name="password"]').fill(password);
+  await page.getByRole("button", { name: /^entrar$/i }).click();
 
   // Aguarda redirecionamento para o portal
   await page.waitForURL(/\/portal\/dashboard/, { timeout: 15_000 });
