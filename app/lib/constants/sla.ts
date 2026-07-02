@@ -54,6 +54,54 @@ interface SlaInput {
   now?: number;
 }
 
+export type SlaSummaryTone = "ok" | "risk" | "breach" | "met" | "missed";
+
+export interface SlaSummary {
+  /** qual relógio está valendo agora */
+  kind: "response" | "resolution";
+  tone: SlaSummaryTone;
+  /** texto curto para chip de lista, ex.: "Responder em 2h" / "SLA estourado" */
+  label: string;
+  /** chamado ainda aberto (relógio correndo) */
+  running: boolean;
+}
+
+/**
+ * Resume o SLA de um chamado em um único chip para listas:
+ * enquanto aberto, mostra o relógio ativo (resposta → resolução) com prazo
+ * restante; depois de resolvido/fechado, informa se as metas foram cumpridas.
+ */
+export function computeSlaSummary(input: SlaInput): SlaSummary {
+  const { response, resolution } = computeSla(input);
+  const closed = input.status === "resolvido" || input.status === "fechado";
+
+  if (closed) {
+    const missed = response.breached || (resolution?.breached ?? false);
+    return {
+      kind: resolution ? "resolution" : "response",
+      tone: missed ? "missed" : "met",
+      label: missed ? "SLA estourado" : "SLA cumprido",
+      running: false,
+    };
+  }
+
+  // Relógio ativo: resposta enquanto não houver primeiro atendimento; depois, resolução.
+  const active = response.done && resolution ? resolution : response;
+  const kind: SlaSummary["kind"] = active === response ? "response" : "resolution";
+  const verb = kind === "response" ? "Responder" : "Resolver";
+
+  if (active.breached) {
+    return { kind, tone: "breach", label: "SLA estourado", running: true };
+  }
+  const remaining = fmtH(active.targetH - active.elapsedH);
+  return {
+    kind,
+    tone: active.ratio >= 0.75 ? "risk" : "ok",
+    label: `${verb} em ${remaining}`,
+    running: true,
+  };
+}
+
 /** Calcula o estado das duas barras de SLA (resposta e resolução). */
 export function computeSla({ priority, createdAt, firstResponseAt, resolvedAt, status, now = Date.now() }: SlaInput) {
   const target = SLA_TARGETS[priority] ?? SLA_TARGETS.media;

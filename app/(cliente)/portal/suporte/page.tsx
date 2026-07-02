@@ -45,6 +45,8 @@ export default async function SuportePage() {
       ticketNumber: t.ticket_number,
       createdAt:    t.created_at,
       updatedAt:    t.updated_at,
+      firstResponseAt: t.first_response_at,
+      resolvedAt:      t.resolved_at,
     }));
 
     const clients = (clientsResult.data ?? []).map((c) => ({ id: c.id, name: c.name ?? c.id }));
@@ -69,6 +71,8 @@ export default async function SuportePage() {
     ticketNumber: t.ticket_number,
     createdAt:    t.created_at,
     updatedAt:    t.updated_at,
+    firstResponseAt: t.first_response_at,
+    resolvedAt:      t.resolved_at,
   }));
 
   return <SuporteClient tickets={tickets} tokenBalance={profile?.token_balance ?? 0} />;

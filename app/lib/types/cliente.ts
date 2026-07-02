@@ -21,6 +21,8 @@ export interface Ticket {
   ticketNumber?: number;
   createdAt: string;
   updatedAt: string;
+  firstResponseAt?: string | null;
+  resolvedAt?: string | null;
 }
 
 export interface ClientUser {

@@ -4,12 +4,48 @@ import { useState, useMemo, useEffect } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { TICKET_STATUS_MAP, TICKET_PRIORITY_MAP } from "@/app/lib/constants/status";
+import { computeSlaSummary, type SlaSummaryTone } from "@/app/lib/constants/sla";
+import { pageItems, LIST_PAGE_SIZE as PAGE_SIZE } from "@/app/components/ui/PaginationNav";
 import type { Ticket } from "@/app/lib/types/cliente";
 import {
   Coins, Headphones, Plus, Search, X,
   Circle, CheckCircle, AlertTriangle,
-  Ticket as TicketIcon, ChevronRight, LucideIcon,
+  Ticket as TicketIcon, ChevronRight, ChevronLeft, LucideIcon,
 } from "lucide-react";
+
+const SLA_TONE_COLOR: Record<SlaSummaryTone, string> = {
+  ok:     "var(--c-info)",
+  risk:   "var(--c-warning)",
+  breach: "var(--c-danger)",
+  met:    "var(--c-success)",
+  missed: "var(--c-danger)",
+};
+
+function SlaChip({ ticket }: { ticket: Ticket }) {
+  const s = computeSlaSummary({
+    priority:        ticket.priority,
+    createdAt:       ticket.createdAt,
+    firstResponseAt: ticket.firstResponseAt ?? null,
+    resolvedAt:      ticket.resolvedAt ?? null,
+    status:          ticket.status,
+  });
+  const color = SLA_TONE_COLOR[s.tone];
+  return (
+    <span
+      suppressHydrationWarning
+      title={s.running ? `Meta de ${s.kind === "response" ? "resposta" : "resolução"} (prioridade ${ticket.priority})` : undefined}
+      style={{
+        fontSize: "11px", fontWeight: 700, padding: "3px 9px",
+        borderRadius: "var(--r-full)", whiteSpace: "nowrap", display: "inline-block",
+        color,
+        background: `color-mix(in srgb, ${color} 9%, transparent)`,
+        border: `1px solid color-mix(in srgb, ${color} 18%, transparent)`,
+      }}
+    >
+      {s.label}
+    </span>
+  );
+}
 
 type FilterMode = "todos" | "abertos" | "fechados";
 
@@ -62,6 +98,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
   const [search,      setSearch]      = useState("");
   const [filter,      setFilter]      = useState<FilterMode>("todos");
   const [showNoToken, setShowNoToken] = useState(false);
+  const [page,        setPage]        = useState(1);
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase();
@@ -75,6 +112,13 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
       return matchSearch && matchFilter;
     });
   }, [tickets, search, filter]);
+
+  const totalPages  = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const paged       = useMemo(
+    () => filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),
+    [filtered, currentPage],
+  );
 
   const totalOpen     = tickets.filter((t) => t.status !== "fechado").length;
   const totalResolved = tickets.filter((t) => t.status === "fechado").length;
@@ -129,10 +173,10 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
       {/* ── KPI cards ── */}
       <div className="suporte-stats" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: 28 }}>
         <StatCard label="Total" value={tickets.length}  Icon={TicketIcon}     color="var(--primary)" />
-        <StatCard label="Em aberto" value={totalOpen}    Icon={Circle}        color="#3b82f6" />
+        <StatCard label="Em aberto" value={totalOpen}    Icon={Circle}        color="var(--c-info)" />
         {totalHigh > 0
-          ? <StatCard label="Alta prioridade" value={totalHigh}     Icon={AlertTriangle} color="#ef4444" />
-          : <StatCard label="Resolvidos"       value={totalResolved} Icon={CheckCircle}   color="#22c55e" />
+          ? <StatCard label="Alta prioridade" value={totalHigh}     Icon={AlertTriangle} color="var(--c-danger)" />
+          : <StatCard label="Resolvidos"       value={totalResolved} Icon={CheckCircle}   color="var(--c-success)" />
         }
       </div>
 
@@ -147,7 +191,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
           <Search size={14} style={{ color: "var(--text-faint)", flexShrink: 0 }} />
           <input
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => { setSearch(e.target.value); setPage(1); }}
             placeholder="Buscar por assunto ou categoria…"
             style={{ flex: 1, background: "none", border: "none", outline: "none", color: "var(--text)", fontSize: "13px", fontFamily: "inherit" }}
           />
@@ -162,7 +206,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
           {(["todos", "abertos", "fechados"] as FilterMode[]).map((f) => (
             <button
               key={f}
-              onClick={() => setFilter(f)}
+              onClick={() => { setFilter(f); setPage(1); }}
               style={{
                 padding: "7px 14px", borderRadius: "var(--r-md)", border: "1px solid",
                 borderColor: filter === f ? "rgba(91,87,232,0.45)" : "var(--border)",
@@ -204,6 +248,11 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 20px", borderBottom: "1px solid var(--border)" }}>
             <span style={{ fontSize: "13px", fontWeight: 700, color: "var(--text)" }}>
               {filtered.length} chamado{filtered.length !== 1 ? "s" : ""}
+              {totalPages > 1 && (
+                <span style={{ fontWeight: 500, color: "var(--text-faint)" }}>
+                  {" "}· mostrando {(currentPage - 1) * PAGE_SIZE + 1}–{Math.min(currentPage * PAGE_SIZE, filtered.length)}
+                </span>
+              )}
             </span>
           </div>
 
@@ -212,7 +261,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
             {/* Column headers */}
             <div style={{
               display: "grid",
-              gridTemplateColumns: "2fr 110px 90px 110px 120px 32px",
+              gridTemplateColumns: "2fr 100px 90px 100px 120px 100px 32px",
               padding: "9px 20px", background: "var(--surface-2)",
               borderBottom: "1px solid var(--border)",
               fontSize: "11px", fontWeight: 700,
@@ -222,11 +271,12 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
               <span>Categoria</span>
               <span>Status</span>
               <span>Prioridade</span>
+              <span>SLA</span>
               <span style={{ textAlign: "right" }}>Atualizado</span>
               <span />
             </div>
 
-            {filtered.map((t, i) => {
+            {paged.map((t, i) => {
               const st  = TICKET_STATUS_MAP[t.status];
               const pri = TICKET_PRIORITY_MAP[t.priority];
               const updatedDate = new Date(t.updatedAt).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
@@ -237,9 +287,9 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
                   href={`/portal/suporte/${t.id}`}
                   style={{
                     display: "grid",
-                    gridTemplateColumns: "2fr 110px 90px 110px 120px 32px",
+                    gridTemplateColumns: "2fr 100px 90px 100px 120px 100px 32px",
                     padding: "13px 20px", alignItems: "center",
-                    borderBottom: i < filtered.length - 1 ? "1px solid var(--border)" : "none",
+                    borderBottom: i < paged.length - 1 ? "1px solid var(--border)" : "none",
                     textDecoration: "none", color: "inherit",
                     borderLeft: `3px solid ${pri.color}`,
                     transition: "background 0.1s",
@@ -265,6 +315,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
                   <span style={{ fontSize: "11px", fontWeight: 700, padding: "3px 9px", borderRadius: "var(--r-full)", whiteSpace: "nowrap", color: pri.color, background: `${pri.color}12`, border: `1px solid ${pri.color}22`, display: "inline-block" }}>
                     {pri.label}
                   </span>
+                  <span><SlaChip ticket={t} /></span>
                   <span style={{ fontSize: "12px", color: "var(--text-faint)", textAlign: "right" }}>
                     {updatedDate}
                   </span>
@@ -276,7 +327,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
 
           {/* ── Cards (mobile) ── */}
           <div className="sup-card-view" style={{ flexDirection: "column" }}>
-            {filtered.map((t, i) => {
+            {paged.map((t, i) => {
               const st  = TICKET_STATUS_MAP[t.status];
               const pri = TICKET_PRIORITY_MAP[t.priority];
               const updatedDate = new Date(t.updatedAt).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
@@ -287,7 +338,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
                   href={`/portal/suporte/${t.id}`}
                   style={{
                     display: "block", padding: "14px 16px", textDecoration: "none", color: "inherit",
-                    borderBottom: i < filtered.length - 1 ? "1px solid var(--border)" : "none",
+                    borderBottom: i < paged.length - 1 ? "1px solid var(--border)" : "none",
                     borderLeft: `3px solid ${pri.color}`,
                   }}
                 >
@@ -308,6 +359,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
                     <span style={{ fontSize: "11px", fontWeight: 700, color: pri.color, background: `${pri.color}12`, border: `1px solid ${pri.color}22`, borderRadius: "var(--r-full)", padding: "2px 8px" }}>
                       {pri.label}
                     </span>
+                    <SlaChip ticket={t} />
                     <span style={{ fontSize: "11px", color: "var(--text-faint)", marginLeft: "auto" }}>
                       {updatedDate}
                     </span>
@@ -316,6 +368,47 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
               );
             })}
           </div>
+
+          {/* ── Paginação ── */}
+          {totalPages > 1 && (
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, padding: "12px 20px", borderTop: "1px solid var(--border)", flexWrap: "wrap" }}>
+              <span style={{ fontSize: "12px", color: "var(--text-faint)" }}>
+                Página {currentPage} de {totalPages}
+              </span>
+              <nav className="hub-pagination" aria-label="Paginação de chamados">
+                <button
+                  className="hub-page-btn"
+                  onClick={() => setPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  aria-label="Página anterior"
+                >
+                  <ChevronLeft size={14} />
+                </button>
+                {pageItems(currentPage, totalPages).map((it, idx) =>
+                  it === "…" ? (
+                    <span key={`sep-${idx}`} className="hub-page-sep">…</span>
+                  ) : (
+                    <button
+                      key={it}
+                      className={`hub-page-btn${it === currentPage ? " active" : ""}`}
+                      onClick={() => setPage(it)}
+                      aria-current={it === currentPage ? "page" : undefined}
+                    >
+                      {it}
+                    </button>
+                  ),
+                )}
+                <button
+                  className="hub-page-btn"
+                  onClick={() => setPage(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  aria-label="Próxima página"
+                >
+                  <ChevronRight size={14} />
+                </button>
+              </nav>
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -326,7 +419,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
 function StatCard({ label, value, Icon, color }: { label: string; value: number; Icon: LucideIcon; color: string }) {
   return (
     <div className="hub-stat-card" style={{ border: "1px solid var(--border)", borderRadius: "var(--r-lg)", padding: "16px 18px", display: "flex", alignItems: "center", gap: 12, background: "var(--surface)" }}>
-      <div style={{ width: 36, height: 36, borderRadius: "var(--r-md)", background: `${color}15`, border: `1px solid ${color}25`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+      <div style={{ width: 36, height: 36, borderRadius: "var(--r-md)", background: `color-mix(in srgb, ${color} 9%, transparent)`, border: `1px solid color-mix(in srgb, ${color} 16%, transparent)`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
         <Icon size={16} style={{ color }} />
       </div>
       <div>
