@@ -1,10 +1,13 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { createTicket } from "@/app/actions/suporte";
-import { CheckCircle, Paperclip, File, X, AlertCircle, Loader2, Send, ArrowDown, ArrowRight, ArrowUp, LucideIcon, Coins } from "lucide-react";
+import { suggestArticles } from "@/app/actions/knowledge";
+import { CheckCircle, Paperclip, File, X, AlertCircle, Loader2, Send, ArrowDown, ArrowRight, ArrowUp, LucideIcon, Coins, Lightbulb, BookOpen } from "lucide-react";
 import { createClient } from "@/app/lib/supabase/browser";
+import type { KnowledgeArticle } from "@/app/lib/types/knowledge";
 
 interface Props {
   onClose?:  () => void;
@@ -55,8 +58,21 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
   const [priority,  setPriority]  = useState("media");
   const [touched,   setTouched]   = useState({ subject: false, body: false });
   const [values,    setValues]    = useState({ subject: "", body: "" });
+  const [suggestions, setSuggestions] = useState<KnowledgeArticle[]>([]);
+  const [dismissedKb, setDismissedKb] = useState(false);
   const formRef                   = useRef<HTMLFormElement>(null);
   const fileInputRef              = useRef<HTMLInputElement>(null);
+
+  // Copiloto de suporte (sem IA): ao digitar o assunto, sugere artigos da base
+  // que talvez já resolvam o problema — reduzindo a abertura de chamados.
+  useEffect(() => {
+    const q = `${values.subject} ${values.body}`.trim();
+    if (dismissedKb || q.length < 6) { setSuggestions([]); return; }
+    const t = setTimeout(async () => {
+      setSuggestions(await suggestArticles(q, 3));
+    }, 400);
+    return () => clearTimeout(t);
+  }, [values.subject, values.body, dismissedKb]);
 
   // Em modo modal, onClose fecha. Em modo página, volta para a lista de chamados.
   function finish() {
@@ -188,6 +204,47 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
           </p>
         )}
       </div>
+
+      {/* Copiloto: sugestões da base de conhecimento */}
+      {suggestions.length > 0 && !dismissedKb && (
+        <div style={{ background: "var(--c-info-bg)", border: "1px solid rgba(59,130,246,0.22)", borderRadius: 12, padding: "12px 14px" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "12px", fontWeight: 700, color: "var(--c-info)" }}>
+              <Lightbulb size={13} /> Talvez isto já resolva
+            </span>
+            <button
+              type="button"
+              onClick={() => setDismissedKb(true)}
+              style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-faint)", display: "flex", padding: 2 }}
+              aria-label="Dispensar sugestões"
+            >
+              <X size={13} />
+            </button>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            {suggestions.map((a) => (
+              <Link
+                key={a.id}
+                href={`/portal/base-conhecimento/${a.slug}`}
+                target="_blank"
+                style={{ display: "flex", alignItems: "center", gap: 9, padding: "8px 10px", background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 9, textDecoration: "none", color: "inherit" }}
+              >
+                <BookOpen size={14} style={{ color: "var(--c-info)", flexShrink: 0 }} />
+                <span style={{ flex: 1, minWidth: 0 }}>
+                  <span style={{ display: "block", fontSize: "12.5px", fontWeight: 600, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{a.title}</span>
+                  {a.excerpt && (
+                    <span style={{ display: "block", fontSize: "11px", color: "var(--text-faint)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{a.excerpt}</span>
+                  )}
+                </span>
+                <ArrowRight size={12} style={{ color: "var(--text-faint)", flexShrink: 0 }} />
+              </Link>
+            ))}
+          </div>
+          <p style={{ margin: "9px 0 0", fontSize: "11px", color: "var(--text-muted)" }}>
+            Não resolveu? Continue preenchendo abaixo para abrir o chamado.
+          </p>
+        </div>
+      )}
 
       {/* Categoria */}
       <div>

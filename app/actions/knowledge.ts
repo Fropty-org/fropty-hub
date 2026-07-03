@@ -34,6 +34,48 @@ export async function getArticles(category?: string, search?: string): Promise<K
   return (data ?? []) as KnowledgeArticle[];
 }
 
+// Palavras muito comuns em pt-BR que não ajudam a discriminar artigos.
+const STOPWORDS = new Set([
+  "para", "como", "porque", "quando", "onde", "qual", "quais", "isso", "esse",
+  "essa", "está", "estao", "estão", "sobre", "pelo", "pela", "meu", "minha",
+  "meus", "minhas", "nao", "não", "sim", "com", "sem", "mais", "menos", "muito",
+  "erro", "problema", "ajuda", "duvida", "dúvida", "fazer", "consigo", "quero",
+  "preciso", "gostaria", "poderia", "favor",
+]);
+
+/**
+ * Sugere artigos da base de conhecimento a partir de um texto livre (ex.: o
+ * assunto de um novo chamado). É o "copiloto de suporte" na sua forma sem IA:
+ * extrai palavras-chave e busca por correspondência textual (title/excerpt),
+ * ordenando por popularidade. Este é o ponto de troca (seam) para, no futuro,
+ * plugar embeddings/pgvector + LLM sem mudar os consumidores.
+ */
+export async function suggestArticles(text: string, limit = 3): Promise<KnowledgeArticle[]> {
+  const words = (text ?? "")
+    .toLowerCase()
+    .normalize("NFD").replace(/[̀-ͯ]/g, "")    // remove acentos
+    .match(/[a-z0-9]{4,}/g) ?? [];                        // só alfanumérico ≥ 4 chars (safe p/ ilike)
+  const keywords = [...new Set(words.filter((w) => !STOPWORDS.has(w)))].slice(0, 6);
+  if (keywords.length === 0) return [];
+
+  const supabase = (await createClient()) as AnyClient;
+  const orClause = keywords.map((k) => `title.ilike.%${k}%,excerpt.ilike.%${k}%`).join(",");
+
+  const { data, error } = await supabase
+    .from("knowledge_articles")
+    .select("*")
+    .eq("published", true)
+    .or(orClause)
+    .order("views", { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    console.error("[knowledge/suggestArticles]", error.message);
+    return [];
+  }
+  return (data ?? []) as KnowledgeArticle[];
+}
+
 export async function getArticle(slug: string): Promise<KnowledgeArticle | null> {
   const supabase = (await createClient()) as AnyClient;
 

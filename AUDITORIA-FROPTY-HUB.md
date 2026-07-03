@@ -467,6 +467,28 @@ server-side com `searchParams`+`range` para projetos/contratos e suporte admin e
   links antigos). O Suporte é o canal único: lista de chamados + conversa realtime no detalhe.
   **Não resta nenhum item de nav (cliente ou admin) apontando para rota duplicada/parasita.**
 
+## Registro de execução — Sprint 5 (diferenciais)
+
+Todos no `master`, build verde, sem dependências novas (decisão consciente de evitar libs de chart/DnD):
+- **S5.1 Activity Feed** no dashboard do cliente — timeline consolidada via `notifications`
+  (`getActivityFeed` + `ActivityFeed`, classes `hub-timeline`).
+- **S5.2 Token Forecast** no financeiro — burn médio diário → "seus tokens duram ~X dias",
+  com alerta abaixo de 14 dias.
+- **S5.3 Command Palette com ações** (⌘K) — grupo "Ações" que executa função ("Abrir chamado",
+  "Alternar tema" replicando o `PortalThemeToggle`), integrado à navegação por teclado.
+- **S5.4 Gráficos de tendência** no analytics — `TrendBars` (SVG/CSS inline, sem lib): novos
+  chamados/dia e tokens consumidos/dia (30 dias, bucketizados server-side).
+- **S5.5 Relatório mensal automático** — cron `/api/cron/monthly-report` (agendado no `vercel.json`,
+  dia 1) + template `sendMonthlyReport`; resumo do mês anterior por cliente, pula quem não teve
+  atividade. Ativação depende de `CRON_SECRET`/`RESEND_API_KEY` na Vercel.
+- **S5.6 Kanban DnD persistente** (admin) — HTML5 Drag and Drop nativo (sem `@dnd-kit`); drop
+  atualiza status otimista + persiste via `updateProjectStatus` (registra no timeline), reverte em
+  erro. `editable` só no admin; cliente segue read-only.
+- **S5.7 Copiloto de suporte (scaffold sem IA)** — `suggestArticles` extrai palavras-chave do
+  assunto/descrição e sugere artigos da KB no `NewTicketForm` ("talvez isto já resolva"),
+  reduzindo abertura de chamados. É o **seam pluggável** para trocar por embeddings/pgvector + LLM
+  depois, sem mudar os consumidores. (Copiloto com IA de fato aguarda API key de LLM.)
+
 ## FASE 11 — Implementação & próximos passos
 
 **Nada implementado.** Proposta de execução em sprints temáticos, do fundacional ao visível:
