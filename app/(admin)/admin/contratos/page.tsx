@@ -4,7 +4,10 @@ import { Plus, FileSignature, User, Calendar, CheckCircle, Clock, XCircle } from
 import { getAllContracts } from "@/app/actions/contracts";
 import { CONTRACT_STATUS_MAP, CONTRACT_TYPE_MAP } from "@/app/lib/constants/projects";
 import { StatusBadge } from "@/app/components/ui/StatusBadge";
+import { PaginationNav } from "@/app/components/ui/PaginationNav";
 import type { ContractStatus } from "@/app/lib/types/projects";
+
+const PAGE_SIZE = 20;
 
 export const metadata: Metadata = { title: "Admin — Contratos" };
 
@@ -23,14 +26,19 @@ const ALL_STATUSES = Object.keys(CONTRACT_STATUS_MAP) as ContractStatus[];
 export default async function AdminContratosPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string }>;
+  searchParams: Promise<{ status?: string; page?: string }>;
 }) {
-  const { status: filterStatus } = await searchParams;
+  const { status: filterStatus, page } = await searchParams;
   const allContracts = await getAllContracts();
 
   const contracts = filterStatus && filterStatus !== "todos"
     ? allContracts.filter((c) => c.status === filterStatus)
     : allContracts;
+
+  const pageNum    = Math.max(1, Number.parseInt(page ?? "1", 10) || 1);
+  const totalPages = Math.max(1, Math.ceil(contracts.length / PAGE_SIZE));
+  const safePage   = Math.min(pageNum, totalPages);
+  const pageContracts = contracts.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
   // KPI counts
   const total     = allContracts.length;
@@ -109,7 +117,7 @@ export default async function AdminContratosPage({
                 </tr>
               </thead>
               <tbody>
-                {contracts.map((contract) => {
+                {pageContracts.map((contract) => {
                   return (
                     <tr key={contract.id}>
                       <td className="hub-td-primary">
@@ -144,8 +152,11 @@ export default async function AdminContratosPage({
               </tbody>
             </table>
           </div>
-          <div className="hub-table-footer">
-            <span className="hub-table-info">{contracts.length} contrato{contracts.length !== 1 ? "s" : ""}</span>
+          <div className="hub-table-footer" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+            <span className="hub-table-info">
+              {contracts.length === 0 ? "0 contratos" : `${(safePage - 1) * PAGE_SIZE + 1}–${Math.min(safePage * PAGE_SIZE, contracts.length)} de ${contracts.length}`}
+            </span>
+            <PaginationNav page={safePage} totalPages={totalPages} basePath="/admin/contratos" params={{ status: filterStatus }} />
           </div>
         </div>
       )}

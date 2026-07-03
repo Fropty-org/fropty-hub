@@ -4,6 +4,7 @@ import { Plus, FolderKanban, Calendar, User, BarChart2 } from "lucide-react";
 import { getAllProjects } from "@/app/actions/projects";
 import { PROJECT_STATUSES } from "@/app/lib/constants/projects";
 import { StatusBadge } from "@/app/components/ui/StatusBadge";
+import { PaginationNav } from "@/app/components/ui/PaginationNav";
 import { CSVExportButton } from "@/app/components/ui/CSVExportButton";
 import type { ProjectStatus } from "@/app/lib/types/projects";
 
@@ -19,14 +20,20 @@ const ALL_STATUSES = Object.keys(PROJECT_STATUSES) as ProjectStatus[];
 export default async function AdminProjetosPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string }>;
+  searchParams: Promise<{ status?: string; page?: string }>;
 }) {
-  const { status: filterStatus } = await searchParams;
+  const { status: filterStatus, page: pageParam } = await searchParams;
   const allProjects = await getAllProjects();
 
   const projects = filterStatus && filterStatus !== "todos"
     ? allProjects.filter((p) => p.status === filterStatus)
     : allProjects;
+
+  const PAGE_SIZE  = 24;
+  const pageNum    = Math.max(1, Number.parseInt(pageParam ?? "1", 10) || 1);
+  const totalPages = Math.max(1, Math.ceil(projects.length / PAGE_SIZE));
+  const safePage   = Math.min(pageNum, totalPages);
+  const pageProjects = projects.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
   // KPI counts per status
   const kpis = ALL_STATUSES.map((s) => ({
@@ -115,8 +122,9 @@ export default async function AdminProjetosPage({
           <p style={{ margin: "6px 0 0", fontSize: "13px", color: "var(--text-faint)" }}>Crie o primeiro projeto para começar.</p>
         </div>
       ) : (
+        <>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 16 }}>
-          {projects.map((project) => {
+          {pageProjects.map((project) => {
             const st = PROJECT_STATUSES[project.status] ?? { label: project.status, color: "#94a3b8", Icon: FolderKanban };
             const StIcon = st.Icon;
 
@@ -172,6 +180,12 @@ export default async function AdminProjetosPage({
             );
           })}
         </div>
+        {totalPages > 1 && (
+          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 20 }}>
+            <PaginationNav page={safePage} totalPages={totalPages} basePath="/admin/projetos" params={{ status: filterStatus }} />
+          </div>
+        )}
+        </>
       )}
     </div>
   );

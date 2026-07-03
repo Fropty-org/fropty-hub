@@ -8,3 +8,4 @@ export { HubEmptyState } from "./HubEmptyState";
 export { StatusBadge } from "./StatusBadge";
 export { PageHeader } from "./PageHeader";
 export { Pagination } from "./Pagination";
+export { PaginationNav } from "./PaginationNav";
