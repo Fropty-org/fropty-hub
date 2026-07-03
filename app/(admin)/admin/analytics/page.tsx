@@ -1,8 +1,9 @@
 ﻿import type { Metadata } from "next";
 import { createClient } from "@/app/lib/supabase/server";
-import { TrendingUp, Users, MessageCircle, CheckCircle, Zap, Clock, ShieldCheck } from "lucide-react";
+import { TrendingUp, Users, MessageCircle, CheckCircle, Zap, Clock, ShieldCheck, Activity } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { SLA_TARGETS } from "@/app/lib/constants/sla";
+import { TrendBars } from "@/app/components/admin/TrendBars";
 
 export const metadata: Metadata = { title: "Analytics — Admin" };
 
@@ -20,6 +21,7 @@ export default async function AdminAnalyticsPage() {
     { data: ticketsByPriority },
     { data: recentClients },
     { data: resolvedWithDates },
+    { data: ticketsCreated30d },
   ] = await Promise.all([
     supabase.rpc("admin_mrr"),
     supabase.from("profiles").select("*", { count: "exact", head: true }).eq("role", "cliente"),
@@ -31,7 +33,25 @@ export default async function AdminAnalyticsPage() {
     supabase.from("tickets").select("priority"),
     supabase.from("profiles").select("name, email, plan, created_at").eq("role", "cliente").order("created_at", { ascending: false }).limit(5),
     supabase.from("tickets").select("created_at, resolved_at, first_response_at, priority").in("status", ["resolvido", "fechado"]).not("resolved_at", "is", null).limit(200),
+    supabase.from("tickets").select("created_at").gte("created_at", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()),
   ]);
+
+  // Séries diárias dos últimos 30 dias (para os gráficos de tendência).
+  const DAYS = 30;
+  const startMs = (() => { const d = new Date(); d.setHours(0, 0, 0, 0); return d.getTime() - (DAYS - 1) * 86_400_000; })();
+  function dailySeries(items: { created_at: string; amount?: number }[], useAmount = false) {
+    const buckets = Array<number>(DAYS).fill(0);
+    for (const it of items) {
+      const idx = Math.floor((new Date(it.created_at).getTime() - startMs) / 86_400_000);
+      if (idx >= 0 && idx < DAYS) buckets[idx] += useAmount ? (it.amount ?? 0) : 1;
+    }
+    return buckets.map((v, i) => ({
+      label: new Date(startMs + i * 86_400_000).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" }),
+      value: v,
+    }));
+  }
+  const newTicketsSeries     = dailySeries((ticketsCreated30d ?? []) as { created_at: string }[]);
+  const tokensConsumedSeries = dailySeries((monthlyTokens ?? []).filter((t) => t.type === "debit") as { created_at: string; amount: number }[], true);
 
   const mrr = (mrrData as unknown as number) ?? 0;
 
@@ -121,6 +141,24 @@ export default async function AdminAnalyticsPage() {
             <p style={{ margin: 0, fontSize: "11px", color: "var(--text-faint)" }}>{k.sub}</p>
           </div>
         ))}
+      </div>
+
+      {/* Tendências (30 dias) */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 20 }}>
+        <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "20px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+            <Activity size={14} style={{ color: "var(--text-muted)" }} />
+            <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>Novos chamados — últimos 30 dias</h2>
+          </div>
+          <TrendBars data={newTicketsSeries} color="var(--brand-accent)" unit="chamados" />
+        </div>
+        <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "20px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+            <Zap size={14} style={{ color: "var(--text-muted)" }} />
+            <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>Tokens consumidos — últimos 30 dias</h2>
+          </div>
+          <TrendBars data={tokensConsumedSeries} color="var(--primary)" unit="tokens" />
+        </div>
       </div>
 
       {/* Three columns */}
