@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { Search, ChevronRight, AlertTriangle } from "lucide-react";
 import { StatusBadge } from "@/app/components/ui/StatusBadge";
@@ -28,13 +28,14 @@ const OPEN_STATUSES = ["aberto", "em_andamento", "reaberto"];
 const PAGE_SIZE = 20;
 
 /** Estado de SLA "ativo" da linha: a barra que está correndo (ou concluída). */
-function activeSla(t: QueueTicket) {
+function activeSla(t: QueueTicket, now?: number) {
   const { response, resolution } = computeSla({
     priority:        (["baixa", "media", "alta"].includes(t.priority) ? t.priority : "media") as TicketPriority,
     createdAt:       t.createdAt,
     firstResponseAt: t.firstResponseAt,
     resolvedAt:      t.resolvedAt,
     status:          t.status,
+    now,
   });
   // Antes do primeiro atendimento → SLA de resposta; depois → resolução.
   const state = t.firstResponseAt ? (resolution ?? response) : response;
@@ -42,9 +43,9 @@ function activeSla(t: QueueTicket) {
   return { state, phase };
 }
 
-function SlaCell({ t }: { t: QueueTicket }) {
+function SlaCell({ t, now }: { t: QueueTicket; now: number }) {
   const isOpen = OPEN_STATUSES.includes(t.status);
-  const { state, phase } = activeSla(t);
+  const { state, phase } = activeSla(t, now);
 
   if (!isOpen) {
     return <span className="hub-badge hub-badge-neutral sm">Concluído</span>;
@@ -74,14 +75,22 @@ export function AdminSuporteQueue({ tickets, clients }: Props) {
   const [priority, setPriority]   = useState("todos");
   const [sort, setSort]           = useState<SortMode>("urgencia");
   const [page, setPage]           = useState(1);
+  const [now, setNow]             = useState(() => Date.now());
+
+  // Relógio de SLA ao vivo: re-renderiza a fila a cada 30s para o tempo
+  // decorrido e o estado de estouro acompanharem o relógio sem recarregar.
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 30_000);
+    return () => clearInterval(id);
+  }, []);
 
   const enriched = useMemo(
     () => tickets.map((t) => {
       const isOpen = OPEN_STATUSES.includes(t.status);
-      const { state } = activeSla(t);
+      const { state } = activeSla(t, now);
       return { t, isOpen, breached: isOpen && state.breached, ratio: isOpen ? state.ratio : -1 };
     }),
-    [tickets],
+    [tickets, now],
   );
 
   const filtered = useMemo(() => {
@@ -205,7 +214,7 @@ export function AdminSuporteQueue({ tickets, clients }: Props) {
                 <span style={{ fontSize: "12.5px", color: "var(--text-muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", paddingRight: 8 }}>{t.clientName}</span>
                 <span><StatusBadge kind="ticket" status={t.status} size="sm" /></span>
                 <span><StatusBadge kind="ticket-priority" status={t.priority} size="sm" /></span>
-                <span><SlaCell t={t} /></span>
+                <span><SlaCell t={t} now={now} /></span>
                 <span style={{ fontSize: "12px", color: "var(--text-faint)", textAlign: "right" }}>{updated}</span>
                 <ChevronRight size={14} style={{ color: "var(--text-faint)" }} />
               </Link>
