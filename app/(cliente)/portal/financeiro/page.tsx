@@ -68,6 +68,19 @@ export default async function FinanceiroPage({ searchParams }: Props) {
   const totalCredits = transactions.filter(t => t.type === "credit").reduce((s, t) => s + t.amount, 0);
   const totalDebits  = transactions.filter(t => t.type === "debit").reduce((s, t) => s + t.amount, 0);
 
+  // Projeção de consumo: burn médio diário a partir dos débitos observados
+  // (janela = do débito mais antigo até hoje) → dias estimados de duração.
+  const forecast = (() => {
+    const debits = transactions.filter(t => t.type === "debit");
+    if (debits.length === 0 || tokenBalance <= 0) return null;
+    const oldest   = Math.min(...debits.map(d => new Date(d.date).getTime()));
+    const spanDays = Math.max(1, (Date.now() - oldest) / 86_400_000);
+    const dailyBurn = debits.reduce((s, d) => s + d.amount, 0) / spanDays;
+    if (dailyBurn <= 0) return null;
+    const days = Math.round(tokenBalance / dailyBurn);
+    return { days, perMonth: Math.round(dailyBurn * 30 * 10) / 10 };
+  })();
+
   return (
     <div style={{ padding: "24px 24px", maxWidth: 1020, margin: "0 auto" }}>
 
@@ -390,6 +403,37 @@ export default async function FinanceiroPage({ searchParams }: Props) {
           </form>
         </div>
       </div>
+
+      {/* ── Projeção de consumo ── */}
+      {forecast && (
+        <div
+          className="hub-card"
+          style={{
+            marginBottom: 24, padding: "16px 20px",
+            display: "flex", alignItems: "center", gap: 14,
+            borderLeft: `3px solid ${forecast.days < 14 ? "var(--c-warning)" : "var(--c-info)"}`,
+          }}
+        >
+          <div style={{
+            width: 40, height: 40, borderRadius: "var(--r-md)", flexShrink: 0,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            background: forecast.days < 14 ? "var(--c-warning-bg)" : "var(--c-info-bg)",
+            color: forecast.days < 14 ? "var(--c-warning)" : "var(--c-info)",
+          }}>
+            <TrendingDown size={18} />
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <p style={{ margin: 0, fontSize: "13.5px", fontWeight: 700, color: "var(--text)" }}>
+              Com seu consumo atual, seus tokens duram{" "}
+              {forecast.days >= 90 ? "mais de 90 dias" : `~${forecast.days} dia${forecast.days === 1 ? "" : "s"}`}
+            </p>
+            <p style={{ margin: "3px 0 0", fontSize: "12px", color: "var(--text-muted)" }}>
+              Consumo médio de ~{forecast.perMonth} token{forecast.perMonth === 1 ? "" : "s"}/mês.
+              {forecast.days < 14 && " Considere recarregar para não ficar sem suporte."}
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* ── Gráfico ── */}
       {transactions.length > 0 && (
