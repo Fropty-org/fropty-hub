@@ -453,9 +453,15 @@ server-side com `searchParams`+`range` para projetos/contratos e suporte admin e
   opcionais `basePath` (link para `/admin/projetos/[id]`) e `showClient` (nome do cliente no card),
   backward-compatible com o portal. `AdminSidebar`: kanban/calendário deixam de apontar para
   `/portal/*`. Sem migration.
-- **Incremento 2 (pendente):** migration `assigned_to` + atribuição de analista + filtro "meus
-  chamados" + SLA countdown ao vivo. Parasitismo restante do admin: `chat` e `planos` ainda
-  apontam para `/portal/*` (decidir fundir/diferenciar).
+- **SLA ao vivo + limpeza de nav (inc. 1c):** a fila do analista "ticka" o SLA a cada 30s
+  (relógio interno, sem reload). `AdminSidebar` perde **Chat** (duplicava o Suporte) e **Planos**
+  (admin não gerencia o próprio plano) — as rotas `/portal/*` seguem intactas para o cliente.
+- **Atribuição de analista (inc. 2):** migration `0039` (produção + versionada) adiciona
+  `tickets.assigned_to` (uuid → profiles, ON DELETE SET NULL) + índice; tipos atualizados. Action
+  `assignTicket` (admin-only, valida analista, service role). Fila ganha coluna **Responsável**
+  com `<select>` inline por linha e filtro por responsável (Meus chamados / Não atribuídos / por
+  analista). Fim do parasitismo admin→/portal para os itens com tela própria; restam decisões de
+  produto sobre o Chat do cliente (fundir ao Suporte?).
 
 ## FASE 11 — Implementação & próximos passos
 
