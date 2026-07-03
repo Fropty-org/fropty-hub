@@ -418,6 +418,39 @@ de verificação objetiva (computed styles + build), sem depender de preview aut
 - **PageHeader ampliado** — adotado também em Feedback, Projetos, Contratos, Financeiro, Roadmap
   e Base de Conhecimento (total: 8 telas), padronizando o h1 do portal.
 
+## Registro de execução — Sprint 3 (design system) e Sprint 4 (tela do analista)
+
+Reauditoria com Fable 5 reconciliada contra o código pós-Sprint 1/2. Medições reais na
+época: 737 `style={{}}`, ~105 hex em `.tsx`, 5 rotas admin apontando para `/portal`, 0 paginação.
+
+**Sprint 3 — zerar a dívida visual (todos no `master`, build verde a cada leva):**
+- **S3.1** (`aa993e0`) — campo `tone` (BadgeTone) nos mapas de status/prioridade → classes
+  `.hub-badge-{tone}`; `StatusBadge` reescrito sem cor inline (theme-safe); tokens/classes
+  accent/purple/cyan; `portal/error.tsx` (error boundary dentro do shell).
+- **S3.2** (`77f49d7`) — primitivo `Pagination` (classes `hub-pagination`, reticências) +
+  paginação client-side (15/pág.) na lista de suporte, preservando filtros/busca.
+- **S3.3** (`dc36842`) — 9 telas (projetos/contratos/chamados, cliente e admin, listas e
+  detalhes) migradas de pills hex inline para `<StatusBadge>` (27 ins / 74 del).
+- **S3.4** (`121360a`) — ESLint: ignora `workspace/**` (protótipo separado que respondia por
+  121 dos 128 erros) e adiciona `no-restricted-syntax` (warn) contra `style` inline e hex
+  literal nas superfícies do Hub. Erros de lint: 128 → 7 (restantes pré-existentes em /demo e
+  marketing). Nível warn consciente: `error` quebraria com os ~730 style/~100 hex ainda a migrar.
+- **S3.5** (`1b98c21`) — skeletons específicos (dashboard e financeiro) espelhando o layout real;
+  suporte já tinha o seu.
+
+**Descoberta importante:** o `DataTable` genérico previsto foi **descartado** — as listas do Hub
+são grids bespoke (accent lateral, cards mobile, progresso, toggle de view); um componente genérico
+destruiria essa UX. O valor real era paginação, entregue sem rewrite. Fica S3.2b (paginação
+server-side com `searchParams`+`range` para projetos/contratos e suporte admin em escala).
+
+**Sprint 4 — tela do analista (incremento 1):**
+- Rota admin dedicada `/admin/suporte` (`AdminSuporteQueue` + page server) com **fila real**:
+  filtros por cliente/status/prioridade/atraso, **SLA por linha** (via `computeSla` + timestamps
+  0026), ordenação por urgência (em atraso primeiro), paginação e busca. `AdminSidebar`: `suporte`
+  deixa de apontar para `/portal/suporte` (fim do parasitismo para o suporte). Sem migration.
+- **Incremento 2 (pendente):** migration `assigned_to` + atribuição de analista + filtro "meus
+  chamados" + SLA countdown ao vivo; e telas admin próprias para kanban/calendário.
+
 ## FASE 11 — Implementação & próximos passos
 
 **Nada implementado.** Proposta de execução em sprints temáticos, do fundacional ao visível:

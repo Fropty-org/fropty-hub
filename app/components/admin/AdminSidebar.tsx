@@ -32,7 +32,7 @@ const NAV: NavItem[] = [
   { id: "projetos",          href: "/admin/projetos",          Icon: FolderKanban,      label: "Projetos",            group: "ops" },
   { id: "contratos",         href: "/admin/contratos",         Icon: FileSignature,     label: "Contratos",           group: "ops" },
   { id: "financeiro",        href: "/admin/financeiro",        Icon: CreditCard,        label: "Financeiro",          group: "ops" },
-  { id: "suporte",           href: "/portal/suporte",          Icon: MessageCircle,     label: "Suporte",             group: "ops" },
+  { id: "suporte",           href: "/admin/suporte",           Icon: MessageCircle,     label: "Suporte",             group: "ops" },
   { id: "chat",              href: "/portal/chat",             Icon: MessagesSquare,    label: "Chat",                group: "ops" },
   { id: "kanban",            href: "/portal/kanban",           Icon: LayoutGrid,        label: "Kanban",              group: "ops" },
   { id: "calendario",        href: "/portal/calendario",       Icon: CalendarDays,      label: "Calendário",          group: "ops" },
