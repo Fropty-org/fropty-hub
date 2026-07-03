@@ -141,12 +141,8 @@ export default async function PortalLayout({
       </div>
 
       <main
-        className="portal-main-content"
-        style={{
-          flex: 1, overflow: "hidden", display: "flex", flexDirection: "column",
-          backgroundImage: "radial-gradient(circle, rgba(148,163,184,0.10) 1px, transparent 1px)",
-          backgroundSize: "28px 28px",
-        }}
+        className="portal-main-content hub-bg-diagonal"
+        style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}
       >
         <PullToRefresh>{children}</PullToRefresh>
       </main>

@@ -13,31 +13,10 @@ interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   error?: string;
 }
 
-const labelStyle: React.CSSProperties = {
-  display: "block",
-  fontSize: "13px",
-  fontWeight: 600,
-  marginBottom: "6px",
-  color: "var(--text-muted)",
-};
-
-const inputBase: React.CSSProperties = {
-  width: "100%",
-  background: "var(--input-bg)",
-  color: "var(--text)",
-  border: "1px solid var(--border)",
-  borderRadius: "10px",
-  padding: "10px 14px",
-  fontSize: "14px",
-  fontFamily: "inherit",
-  outline: "none",
-  transition: "border-color 0.15s",
-};
-
 const errorStyle: React.CSSProperties = {
   marginTop: "4px",
   fontSize: "12px",
-  color: "#ef4444",
+  color: "var(--c-danger)",
 };
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
@@ -46,7 +25,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
     return (
       <div style={{ display: "flex", flexDirection: "column" }}>
-        {label && <label htmlFor={inputId} style={labelStyle}>{label}</label>}
+        {label && <label htmlFor={inputId} className="hub-label">{label}</label>}
         <div style={{ position: "relative" }}>
           {icon && (
             <i
@@ -65,14 +44,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           <input
             ref={ref}
             id={inputId}
+            className="hub-input"
             style={{
-              ...inputBase,
-              paddingLeft: icon ? "36px" : "14px",
-              borderColor: error ? "#ef4444" : undefined,
+              paddingLeft: icon ? "36px" : undefined,
+              borderColor: error ? "var(--c-danger)" : undefined,
               ...style,
             }}
-            onFocus={(e) => { e.currentTarget.style.borderColor = "var(--primary)"; }}
-            onBlur={(e) => { e.currentTarget.style.borderColor = error ? "#ef4444" : "var(--border)"; }}
             {...props}
           />
         </div>
@@ -90,19 +67,17 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 
     return (
       <div style={{ display: "flex", flexDirection: "column" }}>
-        {label && <label htmlFor={inputId} style={labelStyle}>{label}</label>}
+        {label && <label htmlFor={inputId} className="hub-label">{label}</label>}
         <textarea
           ref={ref}
           id={inputId}
+          className="hub-input"
           style={{
-            ...inputBase,
             resize: "vertical",
             minHeight: "100px",
-            borderColor: error ? "#ef4444" : undefined,
+            borderColor: error ? "var(--c-danger)" : undefined,
             ...style,
           }}
-          onFocus={(e) => { e.currentTarget.style.borderColor = "var(--primary)"; }}
-          onBlur={(e) => { e.currentTarget.style.borderColor = error ? "#ef4444" : "var(--border)"; }}
           {...props}
         />
         {error && <span style={errorStyle}>{error}</span>}

@@ -159,7 +159,7 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
     fontSize: "13px", fontWeight: active ? 600 : 500,
     textDecoration: "none",
     color: active ? "var(--text)" : "var(--text-muted)",
-    background: active ? "var(--surface-2)" : "transparent",
+    background: active ? "var(--sidebar-active-bg)" : "transparent",
     transition: "background 0.12s, color 0.12s",
     whiteSpace: "nowrap", overflow: "hidden",
     marginBottom: 2,
@@ -232,13 +232,13 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
                           gap: 9, padding: "6px 10px", borderRadius: "var(--r-md)",
                           fontSize: "13px", fontWeight: active ? 600 : 500,
                           color: active ? "var(--text)" : "var(--text-muted)",
-                          background: active && !isExpanded ? "var(--surface-2)" : "transparent",
+                          background: active && !isExpanded ? "var(--sidebar-active-bg)" : "transparent",
                           border: "none", cursor: "pointer", fontFamily: "inherit",
                           transition: "background 0.12s, color 0.12s",
                           whiteSpace: "nowrap", overflow: "hidden",
                         }}
                         onMouseEnter={e => { if (!active || isExpanded) (e.currentTarget as HTMLButtonElement).style.background = "var(--sidebar-item-hover)"; (e.currentTarget as HTMLButtonElement).style.color = "var(--text)"; }}
-                        onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = (active && !isExpanded) ? "var(--surface-2)" : "transparent"; (e.currentTarget as HTMLButtonElement).style.color = active ? "var(--text)" : "var(--text-muted)"; }}
+                        onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = (active && !isExpanded) ? "var(--sidebar-active-bg)" : "transparent"; (e.currentTarget as HTMLButtonElement).style.color = active ? "var(--text)" : "var(--text-muted)"; }}
                       >
                         <span style={{ flexShrink: 0, display: "flex", opacity: active ? 1 : 0.65 }}>
                           <Icon size={16} />
@@ -265,7 +265,7 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
                                   padding: "5px 10px", borderRadius: "var(--r-md)",
                                   fontSize: "12.5px", fontWeight: subActive ? 600 : 500,
                                   color: subActive ? "var(--text)" : "var(--text-muted)",
-                                  background: subActive ? "var(--surface-2)" : "transparent",
+                                  background: subActive ? "var(--sidebar-active-bg)" : "transparent",
                                   textDecoration: "none", marginBottom: 1,
                                   transition: "background 0.12s, color 0.12s",
                                   whiteSpace: "nowrap",

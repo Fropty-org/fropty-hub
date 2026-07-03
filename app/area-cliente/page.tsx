@@ -5,8 +5,6 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { createClient } from "@/app/lib/supabase/browser";
-import { ShineBorder } from "@/app/components/ShineBorder";
-import { RainbowButton } from "@/app/components/RainbowButton";
 import { ArrowLeft, AlertCircle, CheckCircle, Loader2, Eye, EyeOff } from "lucide-react";
 
 type Mode = "login" | "reset";
@@ -121,7 +119,7 @@ export default function AreaClientePage() {
   const isLoading = mode === "login" ? loginSubmitting : isPending;
   const dark = isDark;
 
-  const bg       = dark ? "#0f0f0f" : "#f4f4f5";
+  const bg       = dark ? "#0a0a0a" : "#f5f4f0";
   const cardBg   = dark ? "#1a1a1a" : "#ffffff";
   const border   = dark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.10)";
   const inputBg  = dark ? "#111111" : "#f9f9f9";
@@ -141,7 +139,7 @@ export default function AreaClientePage() {
   };
 
   return (
-    <div style={{ minHeight: "100dvh", background: bg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px 16px", transition: "background 0.2s" }}>
+    <div className="hub-bg-diagonal" style={{ minHeight: "100dvh", background: bg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px 16px", transition: "background 0.2s" }}>
 
       {/* Theme toggle — mesmo efeito circular do painel */}
       <button
@@ -166,21 +164,15 @@ export default function AreaClientePage() {
 
       <div style={{ width: "100%", maxWidth: 380 }}>
 
-        {/* Card */}
-        <ShineBorder
-          borderRadius={16}
-          borderWidth={1.5}
-          duration={8}
-          shineColor={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
-        >
-        <div style={{ background: cardBg, borderRadius: 16, padding: "28px 24px", boxShadow: dark ? "0 8px 40px rgba(0,0,0,0.5)" : "0 4px 24px rgba(0,0,0,0.07)" }}>
+        {/* Card — borda sutil estilo Preline (sem shine animado) */}
+        <div style={{ background: cardBg, borderRadius: 16, border: `1px solid ${border}`, padding: "28px 24px", boxShadow: dark ? "0 8px 40px rgba(0,0,0,0.5)" : "0 4px 24px rgba(0,0,0,0.07)" }}>
 
           {/* Logo dentro do card */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 24 }}>
             <Image src="/favicon.svg" alt="Fropty Hub" width={36} height={36} unoptimized />
             <span style={{ fontSize: 18, fontWeight: 800, letterSpacing: "-0.03em" }}>
               <span style={{ color: txtMain }}>Fropty </span>
-              <span style={{ background: "linear-gradient(90deg,#e040fb,#7c3aed,#2563eb,#16a34a,#ea580c)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Hub</span>
+              <span style={{ color: "#5B57E8" }}>Hub</span>
             </span>
           </div>
 
@@ -259,7 +251,9 @@ export default function AreaClientePage() {
             <button
               type="submit"
               disabled={isLoading}
-              style={{ width: "100%", marginTop: 2, padding: "12px 0", borderRadius: 10, border: "none", background: dark ? "#ffffff" : "#111111", color: dark ? "#111111" : "#ffffff", fontSize: 14, fontWeight: 700, fontFamily: "inherit", cursor: isLoading ? "not-allowed" : "pointer", opacity: isLoading ? 0.7 : 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, transition: "opacity 0.15s" }}
+              style={{ width: "100%", marginTop: 2, padding: "12px 0", borderRadius: 10, border: "none", background: "#5B57E8", color: "#ffffff", fontSize: 14, fontWeight: 700, fontFamily: "inherit", cursor: isLoading ? "not-allowed" : "pointer", opacity: isLoading ? 0.7 : 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, transition: "opacity 0.15s, background 0.15s", boxShadow: "0 4px 20px rgba(91,87,232,0.25)" }}
+              onMouseEnter={e => { if (!isLoading) (e.currentTarget as HTMLButtonElement).style.background = "#4440C8"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "#5B57E8"; }}
             >
               {isLoading
                 ? <><Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} /> Aguarde…</>
@@ -295,7 +289,6 @@ export default function AreaClientePage() {
             </>
           )}
         </div>
-        </ShineBorder>
 
         {/* Footer */}
         <p style={{ marginTop: 18, fontSize: 12, color: txtFaint, textAlign: "center" }}>

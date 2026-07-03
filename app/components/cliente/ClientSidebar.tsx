@@ -126,7 +126,7 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
               transition: "opacity 0.18s, max-width 0.22s",
               overflow: "hidden",
             }}>
-              Fropty<span style={{ background: "linear-gradient(90deg,#e040fb,#7c3aed,#2563eb,#16a34a,#ea580c)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Hub</span>
+              Fropty<span style={{ color: "var(--ac)" }}>Hub</span>
             </span>
           </Link>
 
@@ -226,10 +226,9 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
                   borderRadius: "var(--r-md)",
                   fontSize: "13px", fontWeight: active ? 600 : 500,
                   textDecoration: "none",
-                  color: active ? "var(--sidebar-item-active-text)" : "var(--text-muted)",
-                  background: active ? "var(--sidebar-item-active)" : "transparent",
-                  borderLeft: active && !collapsed ? "2px solid var(--primary)" : "2px solid transparent",
-                  paddingLeft: active && !collapsed ? 9 : 10,
+                  color: active ? "var(--sidebar-active-text)" : "var(--text-muted)",
+                  background: active ? "var(--sidebar-active-bg)" : "transparent",
+                  paddingLeft: 10,
                   transition: "background 0.12s, color 0.12s",
                   position: "relative", whiteSpace: "nowrap", overflow: "hidden",
                 }}

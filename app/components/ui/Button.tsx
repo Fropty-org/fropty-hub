@@ -14,33 +14,17 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   IconRight?: LucideIcon;
 }
 
-const variantStyles: Record<Variant, React.CSSProperties> = {
-  primary: {
-    background: "var(--cta-bg)",
-    color: "var(--cta-text)",
-    border: "1px solid transparent",
-  },
-  secondary: {
-    background: "var(--surface)",
-    color: "var(--text)",
-    border: "1px solid var(--border)",
-  },
-  ghost: {
-    background: "transparent",
-    color: "var(--text-muted)",
-    border: "1px solid transparent",
-  },
-  danger: {
-    background: "transparent",
-    color: "#ef4444",
-    border: "1px solid #ef444433",
-  },
+const variantClass: Record<Variant, string> = {
+  primary:   "hub-btn-primary",
+  secondary: "hub-btn-secondary",
+  ghost:     "hub-btn-ghost",
+  danger:    "hub-btn-danger",
 };
 
-const sizeStyles: Record<Size, React.CSSProperties> = {
-  sm: { padding: "6px 14px", fontSize: "13px", borderRadius: "8px" },
-  md: { padding: "10px 20px", fontSize: "14px", borderRadius: "10px" },
-  lg: { padding: "14px 28px", fontSize: "15px", borderRadius: "12px" },
+const sizeClass: Record<Size, string> = {
+  sm: "hub-btn-sm",
+  md: "",
+  lg: "hub-btn-lg",
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -53,42 +37,21 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       IconRight,
       children,
       disabled,
+      className,
       style,
       ...props
     },
     ref
   ) => {
     const isDisabled = disabled || loading;
+    const classes = ["hub-btn", variantClass[variant], sizeClass[size], className]
+      .filter(Boolean)
+      .join(" ");
 
     return (
-      <button
-        ref={ref}
-        disabled={isDisabled}
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "8px",
-          fontWeight: 600,
-          fontFamily: "inherit",
-          cursor: isDisabled ? "not-allowed" : "pointer",
-          opacity: isDisabled ? 0.55 : 1,
-          transition: "opacity 0.15s, filter 0.15s",
-          whiteSpace: "nowrap",
-          ...variantStyles[variant],
-          ...sizeStyles[size],
-          ...style,
-        }}
-        onMouseEnter={(e) => {
-          if (!isDisabled) (e.currentTarget as HTMLButtonElement).style.filter = "brightness(1.1)";
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLButtonElement).style.filter = "";
-        }}
-        {...props}
-      >
+      <button ref={ref} disabled={isDisabled} className={classes} style={style} {...props}>
         {loading ? (
-          <Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} />
+          <Loader2 size={16} className="hub-spin" />
         ) : (
           Icon && <Icon size={16} />
         )}

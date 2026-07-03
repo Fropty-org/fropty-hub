@@ -29,12 +29,8 @@ export default async function AdminPortalLayout({ children }: { children: React.
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg)", color: "var(--text)" }}>
       <AdminSidebar name={name} initials={initials} userId={user?.id ?? ""} initialTheme={initialTheme} avatarUrl={avatarUrl} />
       <main
-        className="portal-main-content"
-        style={{
-          flex: 1, overflow: "hidden",
-          backgroundImage: "radial-gradient(circle, rgba(148,163,184,0.10) 1px, transparent 1px)",
-          backgroundSize: "28px 28px",
-        }}
+        className="portal-main-content hub-bg-diagonal"
+        style={{ flex: 1, overflow: "hidden" }}
       >
         {children}
       </main>

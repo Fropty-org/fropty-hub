@@ -96,7 +96,7 @@ export default async function PortalDashboardPage() {
   const activity = await getActivityFeed(8);
 
   return (
-    <div style={{ padding: "24px 24px", maxWidth: 1060, margin: "0 auto" }}>
+    <div style={{ padding: "24px 28px", maxWidth: 1280, margin: "0 auto" }}>
 
       {/* ── Page header ── */}
       <div style={{ marginBottom: 32, display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
@@ -115,17 +115,7 @@ export default async function PortalDashboardPage() {
           )}
         </div>
 
-        <Link
-          href="/portal/suporte/novo"
-          style={{
-            display: "inline-flex", alignItems: "center", gap: 7,
-            background: "var(--cta-bg)", color: "var(--cta-text)",
-            borderRadius: "var(--r-md)", padding: "9px 18px",
-            fontSize: "13px", fontWeight: 700, textDecoration: "none",
-            boxShadow: "var(--shadow-brand)", flexShrink: 0,
-            transition: "opacity 0.15s",
-          }}
-        >
+        <Link href="/portal/suporte/novo" className="hub-btn hub-btn-primary" style={{ flexShrink: 0 }}>
           <MessageSquarePlus size={14} /> Abrir chamado
         </Link>
       </div>
@@ -217,7 +207,7 @@ export default async function PortalDashboardPage() {
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{ width: 36, height: 36, borderRadius: 10, background: healthData.risk_level === "risco" ? "rgba(239,68,68,0.12)" : "rgba(245,158,11,0.12)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <ShieldAlert size={17} style={{ color: healthData.risk_level === "risco" ? "#ef4444" : "var(--c-warning)" }} />
+              <ShieldAlert size={17} style={{ color: healthData.risk_level === "risco" ? "var(--c-danger)" : "var(--c-warning)" }} />
             </div>
             <div>
               <p style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text)" }}>
@@ -230,7 +220,7 @@ export default async function PortalDashboardPage() {
               </p>
             </div>
           </div>
-          <Link href="/portal/suporte/novo" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "12px", fontWeight: 700, color: healthData.risk_level === "risco" ? "#ef4444" : "var(--c-warning)", textDecoration: "none", whiteSpace: "nowrap" }}>
+          <Link href="/portal/suporte/novo" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "12px", fontWeight: 700, color: healthData.risk_level === "risco" ? "var(--c-danger)" : "var(--c-warning)", textDecoration: "none", whiteSpace: "nowrap" }}>
             Abrir chamado <ChevronRight size={13} />
           </Link>
         </div>

@@ -14,29 +14,13 @@ const paddings = {
   lg: "32px",
 };
 
-export function Card({ hover = false, padding = "md", style, children, ...props }: CardProps) {
+export function Card({ hover = false, padding = "md", className, style, children, ...props }: CardProps) {
+  const classes = ["hub-card", hover ? "hub-card-hover" : "", className]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <div
-      style={{
-        background: "var(--card-bg)",
-        border: "1px solid var(--card-border)",
-        borderRadius: "16px",
-        padding: paddings[padding],
-        transition: hover ? "border-color 0.2s, box-shadow 0.2s" : undefined,
-        ...style,
-      }}
-      onMouseEnter={hover ? (e) => {
-        const el = e.currentTarget as HTMLDivElement;
-        el.style.borderColor = "var(--border-hover)";
-        el.style.boxShadow = "0 8px 32px rgba(0,0,0,0.2)";
-      } : undefined}
-      onMouseLeave={hover ? (e) => {
-        const el = e.currentTarget as HTMLDivElement;
-        el.style.borderColor = "var(--card-border)";
-        el.style.boxShadow = "";
-      } : undefined}
-      {...props}
-    >
+    <div className={classes} style={{ padding: paddings[padding], ...style }} {...props}>
       {children}
     </div>
   );
