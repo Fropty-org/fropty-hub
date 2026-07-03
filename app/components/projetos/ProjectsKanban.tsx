@@ -1,9 +1,12 @@
 "use client";
 
+import { useState, useEffect, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Plus, MessageSquare, Paperclip } from "lucide-react";
 import type { Project, ProjectStatus } from "@/app/lib/types/projects";
 import { PROJECT_STATUSES, PROJECT_PRIORITY_MAP } from "@/app/lib/constants/projects";
+import { updateProjectStatus } from "@/app/actions/projects";
 
 interface Props {
   projects: Project[];
@@ -11,6 +14,8 @@ interface Props {
   basePath?: string;
   /** Exibe o nome do cliente no card (visão admin). */
   showClient?: boolean;
+  /** Habilita drag-and-drop persistente (admin). No cliente o board é read-only. */
+  editable?: boolean;
 }
 
 const COLUMNS: { key: ProjectStatus; label: string; color: string }[] = [
@@ -22,15 +27,44 @@ const COLUMNS: { key: ProjectStatus; label: string; color: string }[] = [
   { key: "entrega",   label: "Entregue",     color: "#06b6d4" },
 ];
 
-export function ProjectsKanban({ projects, basePath = "/portal/projetos", showClient = false }: Props) {
+export function ProjectsKanban({ projects, basePath = "/portal/projetos", showClient = false, editable = false }: Props) {
+  // Cópia local para mover cards de forma otimista no drag-and-drop.
+  const [items, setItems] = useState<Project[]>(projects);
+  useEffect(() => { setItems(projects); }, [projects]);
+
+  const [dragId,  setDragId]  = useState<string | null>(null);
+  const [overCol, setOverCol] = useState<string | null>(null);
+  const [, startTransition]   = useTransition();
+  const router = useRouter();
+
+  function handleDrop(colKey: ProjectStatus) {
+    setOverCol(null);
+    const id = dragId;
+    setDragId(null);
+    if (!id) return;
+    const proj = items.find(p => p.id === id);
+    if (!proj || proj.status === colKey) return;
+
+    const prevStatus = proj.status;
+    setItems(cur => cur.map(p => (p.id === id ? { ...p, status: colKey } : p))); // otimista
+    startTransition(async () => {
+      const res = await updateProjectStatus(id, colKey);
+      if (res?.error) {
+        setItems(cur => cur.map(p => (p.id === id ? { ...p, status: prevStatus } : p))); // reverte
+      } else {
+        router.refresh();
+      }
+    });
+  }
+
   const byStatus = COLUMNS.reduce<Record<string, Project[]>>((acc, c) => {
-    acc[c.key] = projects.filter(p => p.status === c.key);
+    acc[c.key] = items.filter(p => p.status === c.key);
     return acc;
   }, {});
 
   // Also bucket any status not in COLUMNS into first column
   const knownKeys = new Set(COLUMNS.map(c => c.key));
-  projects.forEach(p => {
+  items.forEach(p => {
     if (!knownKeys.has(p.status as ProjectStatus)) {
       byStatus["lead"] = [...(byStatus["lead"] ?? []), p];
     }
@@ -94,13 +128,20 @@ export function ProjectsKanban({ projects, basePath = "/portal/projetos", showCl
               </div>
 
               {/* Cards */}
-              <div style={{
-                background: `${col.color}08`,
-                border: "1px solid var(--card-border)", borderTop: "none",
-                borderRadius: "0 0 10px 10px", padding: 8,
-                display: "flex", flexDirection: "column", gap: 8,
-                maxHeight: 520, overflowY: "auto", flex: 1,
-              }}>
+              <div
+                onDragOver={editable ? (e) => { e.preventDefault(); if (overCol !== col.key) setOverCol(col.key); } : undefined}
+                onDragLeave={editable ? () => setOverCol(o => (o === col.key ? null : o)) : undefined}
+                onDrop={editable ? () => handleDrop(col.key) : undefined}
+                style={{
+                  background: editable && overCol === col.key ? `${col.color}1f` : `${col.color}08`,
+                  border: editable && overCol === col.key ? `1px dashed ${col.color}` : "1px solid var(--card-border)",
+                  borderTop: "none",
+                  borderRadius: "0 0 10px 10px", padding: 8,
+                  display: "flex", flexDirection: "column", gap: 8,
+                  maxHeight: 520, overflowY: "auto", flex: 1,
+                  transition: "background 0.12s",
+                }}
+              >
                 {cards.length === 0 && (
                   <div style={{ padding: "20px 0", textAlign: "center", fontSize: "11.5px", color: "var(--text-faint)" }}>
                     Vazio
@@ -113,11 +154,16 @@ export function ProjectsKanban({ projects, basePath = "/portal/projetos", showCl
                     <Link
                       key={p.id}
                       href={`${basePath}/${p.id}`}
+                      draggable={editable}
+                      onDragStart={editable ? (e) => { setDragId(p.id); e.dataTransfer.effectAllowed = "move"; try { e.dataTransfer.setData("text/plain", p.id); } catch {} } : undefined}
+                      onDragEnd={editable ? () => { setDragId(null); setOverCol(null); } : undefined}
                       style={{
                         display: "block", background: "var(--card-bg)",
                         border: "1px solid var(--card-border)", borderRadius: 10,
                         padding: "12px 14px", textDecoration: "none", color: "inherit",
-                        transition: "box-shadow 0.15s",
+                        transition: "box-shadow 0.15s, opacity 0.15s",
+                        cursor: editable ? "grab" : "pointer",
+                        opacity: editable && dragId === p.id ? 0.4 : 1,
                       }}
                       onMouseEnter={e => (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 16px rgba(0,0,0,0.10)"}
                       onMouseLeave={e => (e.currentTarget as HTMLElement).style.boxShadow = "none"}

@@ -15,7 +15,7 @@ export default async function AdminKanbanPage() {
     <div style={{ padding: "24px 24px", margin: "0 auto", maxWidth: "none" }}>
       <PageHeader
         title="Kanban"
-        subtitle="Projetos de todos os clientes por status"
+        subtitle="Projetos de todos os clientes por status — arraste os cards para mudar o status"
         action={
           <Link
             href="/admin/projetos/novo"
@@ -36,7 +36,7 @@ export default async function AdminKanbanPage() {
           <HubEmptyState variant="projetos" title="Nenhum projeto cadastrado" description="Projetos criados para os clientes aparecerão aqui, organizados por status." />
         </div>
       ) : (
-        <ProjectsKanban projects={projects} basePath="/admin/projetos" showClient />
+        <ProjectsKanban projects={projects} basePath="/admin/projetos" showClient editable />
       )}
     </div>
   );
