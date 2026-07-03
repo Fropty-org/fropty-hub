@@ -377,3 +377,47 @@ export async function sendPlanConfirmation(opts: {
     `),
   }).catch((e) => console.error("[email] sendPlanConfirmation:", e));
 }
+
+// ── Relatório mensal automático ───────────────────────────────────
+export async function sendMonthlyReport(opts: {
+  toEmail: string;
+  toName: string;
+  monthLabel: string;        // ex.: "junho de 2026"
+  ticketsOpened: number;
+  ticketsResolved: number;
+  tokensConsumed: number;
+  projectUpdates: number;
+  tokenBalance: number;
+}) {
+  if (!opts.toEmail) return;
+
+  const stat = (value: string | number, label: string, color: string) =>
+    `<td width="50%" style="padding:5px;">
+      <div style="background:#0B0940;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 12px;text-align:center;">
+        <div style="font-size:26px;font-weight:800;color:${color};line-height:1;">${value}</div>
+        <div style="font-size:12px;color:#94a3b8;margin-top:6px;">${label}</div>
+      </div>
+    </td>`;
+
+  await getResend()?.emails.send({
+    from: FROM,
+    to:   opts.toEmail,
+    subject: `Seu resumo de ${opts.monthLabel} — FroptyHub`,
+    html: baseTemplate(`
+      <p style="margin:0 0 6px;font-size:13px;color:#5B57E8;">Resumo mensal</p>
+      <h2 style="margin:0 0 12px;font-size:18px;font-weight:800;color:#F7F8FC;">Seu ${esc(opts.monthLabel)} na Fropty</h2>
+      <p style="font-size:14px;color:#94a3b8;line-height:1.6;margin:0 0 18px;">
+        Olá, <strong style="color:#F7F8FC;">${esc(opts.toName.split(" ")[0])}</strong>!
+        Veja o que aconteceu na sua conta em ${esc(opts.monthLabel)}.
+      </p>
+      <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 6px;">
+        <tr>${stat(opts.ticketsOpened, "Chamados abertos", "#3b82f6")}${stat(opts.ticketsResolved, "Chamados resolvidos", "#22c55e")}</tr>
+        <tr>${stat(opts.tokensConsumed, "Tokens consumidos", "#EF9F27")}${stat(opts.projectUpdates, "Atualizações de projeto", "#a855f7")}</tr>
+      </table>
+      <p style="font-size:13px;color:#94a3b8;line-height:1.6;margin:14px 0 0;">
+        Saldo atual: <strong style="color:#F7F8FC;">${opts.tokenBalance} token${opts.tokenBalance !== 1 ? "s" : ""}</strong>.
+      </p>
+      ${btn("Ver meu painel", `${HUB_URL}/portal/dashboard`)}
+    `),
+  }).catch((e) => console.error("[email] sendMonthlyReport:", e));
+}
