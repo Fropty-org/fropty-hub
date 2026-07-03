@@ -5,7 +5,13 @@ import { Plus, MessageSquare, Paperclip } from "lucide-react";
 import type { Project, ProjectStatus } from "@/app/lib/types/projects";
 import { PROJECT_STATUSES, PROJECT_PRIORITY_MAP } from "@/app/lib/constants/projects";
 
-interface Props { projects: Project[] }
+interface Props {
+  projects: Project[];
+  /** Base do link do card. Cliente: "/portal/projetos" (padrão); admin: "/admin/projetos". */
+  basePath?: string;
+  /** Exibe o nome do cliente no card (visão admin). */
+  showClient?: boolean;
+}
 
 const COLUMNS: { key: ProjectStatus; label: string; color: string }[] = [
   { key: "lead",      label: "Sem status",   color: "#64748b" },
@@ -16,7 +22,7 @@ const COLUMNS: { key: ProjectStatus; label: string; color: string }[] = [
   { key: "entrega",   label: "Entregue",     color: "#06b6d4" },
 ];
 
-export function ProjectsKanban({ projects }: Props) {
+export function ProjectsKanban({ projects, basePath = "/portal/projetos", showClient = false }: Props) {
   const byStatus = COLUMNS.reduce<Record<string, Project[]>>((acc, c) => {
     acc[c.key] = projects.filter(p => p.status === c.key);
     return acc;
@@ -106,7 +112,7 @@ export function ProjectsKanban({ projects }: Props) {
                   return (
                     <Link
                       key={p.id}
-                      href={`/portal/projetos/${p.id}`}
+                      href={`${basePath}/${p.id}`}
                       style={{
                         display: "block", background: "var(--card-bg)",
                         border: "1px solid var(--card-border)", borderRadius: 10,
@@ -125,6 +131,12 @@ export function ProjectsKanban({ projects }: Props) {
                       }}>
                         {p.title}
                       </p>
+
+                      {showClient && p.client_name && (
+                        <p style={{ margin: "0 0 8px", fontSize: "11px", fontWeight: 600, color: "var(--text-faint)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          {p.client_name}
+                        </p>
+                      )}
 
                       {/* Tags row */}
                       <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 10 }}>

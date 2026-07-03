@@ -6,7 +6,11 @@ import { ChevronLeft, ChevronRight, CalendarDays } from "lucide-react";
 import type { Project } from "@/app/lib/types/projects";
 import { PROJECT_STATUSES } from "@/app/lib/constants/projects";
 
-interface Props { projects: Project[] }
+interface Props {
+  projects: Project[];
+  /** Base do link do projeto. Cliente: "/portal/projetos" (padrão); admin: "/admin/projetos". */
+  basePath?: string;
+}
 
 const WEEK_DAYS = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"];
 const MONTH_NAMES = [
@@ -19,7 +23,7 @@ type ViewMode = "Dia" | "Semana" | "Mês" | "Ano";
 function getDaysInMonth(y: number, m: number) { return new Date(y, m + 1, 0).getDate(); }
 function getDow(y: number, m: number, d: number) { const x = new Date(y, m, d).getDay(); return x === 0 ? 6 : x - 1; }
 
-export function ProjectsCalendar({ projects }: Props) {
+export function ProjectsCalendar({ projects, basePath = "/portal/projetos" }: Props) {
   const today = new Date();
   const [year,  setYear]  = useState(today.getFullYear());
   const [month, setMonth] = useState(today.getMonth());
@@ -149,7 +153,7 @@ export function ProjectsCalendar({ projects }: Props) {
                         return (
                           <Link
                             key={p.id}
-                            href={`/portal/projetos/${p.id}`}
+                            href={`${basePath}/${p.id}`}
                             title={p.title}
                             style={{
                               display: "block", fontSize: "10.5px", fontWeight: 600,
@@ -199,7 +203,7 @@ export function ProjectsCalendar({ projects }: Props) {
                   const st   = PROJECT_STATUSES[p.status] ?? { color: "#6366f1", label: p.status };
                   const date = new Date(p.due_date!).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
                   return (
-                    <Link key={p.id} href={`/portal/projetos/${p.id}`} style={{ textDecoration: "none" }}>
+                    <Link key={p.id} href={`${basePath}/${p.id}`} style={{ textDecoration: "none" }}>
                       <div style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
                         <div style={{ width: 3, height: "100%", minHeight: 32, borderRadius: 99, background: st.color, flexShrink: 0 }} />
                         <div>

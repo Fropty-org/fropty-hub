@@ -448,8 +448,14 @@ server-side com `searchParams`+`range` para projetos/contratos e suporte admin e
   filtros por cliente/status/prioridade/atraso, **SLA por linha** (via `computeSla` + timestamps
   0026), ordenação por urgência (em atraso primeiro), paginação e busca. `AdminSidebar`: `suporte`
   deixa de apontar para `/portal/suporte` (fim do parasitismo para o suporte). Sem migration.
+- **Telas admin de kanban e calendário** (`/admin/kanban`, `/admin/calendario`): rotas próprias
+  lendo `getAllProjects` (todos os clientes). `ProjectsKanban`/`ProjectsCalendar` ganharam props
+  opcionais `basePath` (link para `/admin/projetos/[id]`) e `showClient` (nome do cliente no card),
+  backward-compatible com o portal. `AdminSidebar`: kanban/calendário deixam de apontar para
+  `/portal/*`. Sem migration.
 - **Incremento 2 (pendente):** migration `assigned_to` + atribuição de analista + filtro "meus
-  chamados" + SLA countdown ao vivo; e telas admin próprias para kanban/calendário.
+  chamados" + SLA countdown ao vivo. Parasitismo restante do admin: `chat` e `planos` ainda
+  apontam para `/portal/*` (decidir fundir/diferenciar).
 
 ## FASE 11 — Implementação & próximos passos
 
