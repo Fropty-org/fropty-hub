@@ -2,7 +2,8 @@
 import Link from "next/link";
 import { Plus, FolderKanban, Calendar, User, BarChart2 } from "lucide-react";
 import { getAllProjects } from "@/app/actions/projects";
-import { PROJECT_STATUSES, PROJECT_PRIORITY_MAP } from "@/app/lib/constants/projects";
+import { PROJECT_STATUSES } from "@/app/lib/constants/projects";
+import { StatusBadge } from "@/app/components/ui/StatusBadge";
 import { CSVExportButton } from "@/app/components/ui/CSVExportButton";
 import type { ProjectStatus } from "@/app/lib/types/projects";
 
@@ -117,7 +118,6 @@ export default async function AdminProjetosPage({
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 16 }}>
           {projects.map((project) => {
             const st = PROJECT_STATUSES[project.status] ?? { label: project.status, color: "#94a3b8", Icon: FolderKanban };
-            const pr = PROJECT_PRIORITY_MAP[project.priority] ?? { label: project.priority, color: "#94a3b8" };
             const StIcon = st.Icon;
 
             return (
@@ -146,9 +146,7 @@ export default async function AdminProjetosPage({
 
                 {/* Badges + data */}
                 <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                  <span style={{ fontSize: "11px", fontWeight: 600, padding: "3px 9px", borderRadius: 99, background: `${pr.color}15`, color: pr.color }}>
-                    {pr.label}
-                  </span>
+                  <StatusBadge kind="project-priority" status={project.priority} size="sm" />
                   {project.due_date && (
                     <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: "12px", color: "var(--text-faint)" }}>
                       <Calendar size={11} /> {formatDate(project.due_date)}

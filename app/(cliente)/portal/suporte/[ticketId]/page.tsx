@@ -5,7 +5,7 @@ import { getTicketDetail } from "@/app/actions/suporte";
 import { getArticles } from "@/app/actions/knowledge";
 import { TicketConversation } from "@/app/components/suporte/TicketConversation";
 import { AdminTicketActions } from "@/app/components/suporte/AdminTicketActions";
-import { TICKET_STATUS_MAP, TICKET_PRIORITY_MAP } from "@/app/lib/constants/status";
+import { StatusBadge } from "@/app/components/ui/StatusBadge";
 import { ArrowLeft, BookOpen, ChevronRight, Clock, ClipboardCheck } from "lucide-react";
 import { SlaBars } from "@/app/components/suporte/SlaBars";
 
@@ -28,8 +28,6 @@ export default async function TicketDetailPage({ params }: Props) {
     ? await getArticles(ticket.category).then((arts) => arts.slice(0, 3))
     : [];
 
-  const statusInfo   = TICKET_STATUS_MAP[ticket.status as keyof typeof TICKET_STATUS_MAP];
-  const priorityInfo = TICKET_PRIORITY_MAP[ticket.priority as keyof typeof TICKET_PRIORITY_MAP];
   const ticketNum    = ticket.ticket_number ? `UFT${String(ticket.ticket_number).padStart(4, "0")}` : null;
 
   return (
@@ -57,16 +55,8 @@ export default async function TicketDetailPage({ params }: Props) {
                   {ticketNum}
                 </span>
               )}
-              {statusInfo && (
-                <span style={{ fontSize: "11px", fontWeight: 700, padding: "3px 10px", borderRadius: "var(--r-full)", color: statusInfo.color, background: `${statusInfo.color}15`, border: `1px solid ${statusInfo.color}28` }}>
-                  {statusInfo.label}
-                </span>
-              )}
-              {priorityInfo && (
-                <span style={{ fontSize: "11px", fontWeight: 700, padding: "3px 10px", borderRadius: "var(--r-full)", color: priorityInfo.color, background: `${priorityInfo.color}12`, border: `1px solid ${priorityInfo.color}22` }}>
-                  {priorityInfo.label}
-                </span>
-              )}
+              <StatusBadge kind="ticket" status={ticket.status} />
+              <StatusBadge kind="ticket-priority" status={ticket.priority} />
             </div>
             <h1 style={{ margin: "0 0 6px", fontSize: "1.15rem", fontWeight: 800, color: "var(--text)", letterSpacing: "-0.02em" }}>
               {ticket.subject}

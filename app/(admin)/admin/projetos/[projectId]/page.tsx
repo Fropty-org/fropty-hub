@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Calendar, DollarSign, Clock, User } from "lucide-react";
 import { getProject, updateProjectStatus, addProjectUpdate } from "@/app/actions/projects";
-import { PROJECT_STATUSES, PROJECT_PRIORITY_MAP } from "@/app/lib/constants/projects";
+import { PROJECT_STATUSES } from "@/app/lib/constants/projects";
+import { StatusBadge } from "@/app/components/ui/StatusBadge";
 import type { ProjectStatus } from "@/app/lib/types/projects";
 
 export const metadata: Metadata = { title: "Admin — Projeto" };
@@ -29,7 +30,6 @@ export default async function AdminProjetoDetailPage({ params }: { params: Promi
   if (!project) notFound();
 
   const st = PROJECT_STATUSES[project.status] ?? { label: project.status, color: "#94a3b8", Icon: () => null };
-  const pr = PROJECT_PRIORITY_MAP[project.priority] ?? { label: project.priority, color: "#94a3b8" };
   const StIcon = st.Icon;
 
   async function handleStatusUpdate(formData: FormData) {
@@ -79,8 +79,8 @@ export default async function AdminProjetoDetailPage({ params }: { params: Promi
               {project.title}
             </h1>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-              <span style={{ fontSize: "11px", fontWeight: 700, padding: "3px 10px", borderRadius: 99, background: `${st.color}18`, color: st.color }}>{st.label}</span>
-              <span style={{ fontSize: "11px", fontWeight: 600, padding: "3px 10px", borderRadius: 99, background: `${pr.color}15`, color: pr.color }}>{pr.label}</span>
+              <StatusBadge kind="project" status={project.status} size="sm" />
+              <StatusBadge kind="project-priority" status={project.priority} size="sm" />
               <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: "12px", color: "var(--text-faint)" }}>
                 <User size={11} /> {project.client_name ?? "—"}
               </span>

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Plus, FileSignature, User, Calendar, CheckCircle, Clock, XCircle } from "lucide-react";
 import { getAllContracts } from "@/app/actions/contracts";
 import { CONTRACT_STATUS_MAP, CONTRACT_TYPE_MAP } from "@/app/lib/constants/projects";
+import { StatusBadge } from "@/app/components/ui/StatusBadge";
 import type { ContractStatus } from "@/app/lib/types/projects";
 
 export const metadata: Metadata = { title: "Admin — Contratos" };
@@ -109,7 +110,6 @@ export default async function AdminContratosPage({
               </thead>
               <tbody>
                 {contracts.map((contract) => {
-                  const st = CONTRACT_STATUS_MAP[contract.status] ?? { label: contract.status, color: "#94a3b8" };
                   return (
                     <tr key={contract.id}>
                       <td className="hub-td-primary">
@@ -121,9 +121,7 @@ export default async function AdminContratosPage({
                         </span>
                       </td>
                       <td>
-                        <span className="hub-badge" style={{ background: `${st.color}18`, color: st.color, border: `1px solid ${st.color}30` }}>
-                          {st.label}
-                        </span>
+                        <StatusBadge kind="contract" status={contract.status} size="sm" />
                       </td>
                       <td style={{ whiteSpace: "nowrap" }}>{CONTRACT_TYPE_MAP[contract.type] ?? contract.type}</td>
                       <td className="hub-td-primary" style={{ whiteSpace: "nowrap" }}>{formatCurrency(contract.value)}</td>

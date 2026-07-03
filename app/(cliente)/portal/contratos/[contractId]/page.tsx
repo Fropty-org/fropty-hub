@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getContract } from "@/app/actions/contracts";
-import { CONTRACT_STATUS_MAP, CONTRACT_TYPE_MAP } from "@/app/lib/constants/projects";
+import { CONTRACT_TYPE_MAP } from "@/app/lib/constants/projects";
+import { StatusBadge } from "@/app/components/ui/StatusBadge";
 import { ArrowLeft, ChevronRight, Download, Calendar, DollarSign, Folder, User, FileText, Clock } from "lucide-react";
 
 export const metadata: Metadata = { title: "Contrato" };
@@ -23,7 +24,6 @@ export default async function ContractDetailPage({ params }: Props) {
   const contract = await getContract(contractId);
   if (!contract) notFound();
 
-  const statusInfo = CONTRACT_STATUS_MAP[contract.status] ?? { label: contract.status, color: "#94a3b8" };
   const typeLabel  = CONTRACT_TYPE_MAP[contract.type]     ?? contract.type;
 
   const meta: { icon: React.ReactNode; label: string; value: string }[] = [
@@ -66,9 +66,7 @@ export default async function ContractDetailPage({ params }: Props) {
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10, flexWrap: "wrap" }}>
-              <span style={{ fontSize: "11px", fontWeight: 700, padding: "3px 10px", borderRadius: "var(--r-full)", color: statusInfo.color, background: `${statusInfo.color}15`, border: `1px solid ${statusInfo.color}28` }}>
-                {statusInfo.label}
-              </span>
+              <StatusBadge kind="contract" status={contract.status} />
               <span style={{ fontSize: "11px", fontWeight: 600, padding: "3px 10px", borderRadius: "var(--r-full)", color: "var(--text-muted)", background: "var(--surface-2)", border: "1px solid var(--border)" }}>
                 {typeLabel}
               </span>

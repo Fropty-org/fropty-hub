@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Calendar, ChevronRight, Download, MessageSquarePlus, AlertTriangle } from "lucide-react";
 import { getClientContracts } from "@/app/actions/contracts";
-import { CONTRACT_STATUS_MAP, CONTRACT_TYPE_MAP } from "@/app/lib/constants/projects";
+import { CONTRACT_TYPE_MAP } from "@/app/lib/constants/projects";
+import { StatusBadge } from "@/app/components/ui/StatusBadge";
 import { HubEmptyState } from "@/app/components/ui/HubEmptyState";
 import { PageHeader } from "@/app/components/ui/PageHeader";
 
@@ -85,7 +86,6 @@ export default async function ContratosPage() {
 
           {/* Rows */}
           {contracts.map((c, i) => {
-            const st        = CONTRACT_STATUS_MAP[c.status] ?? { label: c.status,   color: "#94a3b8" };
             const typeLabel = CONTRACT_TYPE_MAP[c.type]     ?? c.type;
             const days      = c.status === "assinado" ? daysUntil(c.end_date) : null;
             const renewalUrgent = days !== null && days <= 30;
@@ -132,14 +132,7 @@ export default async function ContratosPage() {
                 </div>
 
                 {/* Status */}
-                <span style={{
-                  fontSize: "11px", fontWeight: 700, color: st.color,
-                  background: `${st.color}15`, border: `1px solid ${st.color}28`,
-                  borderRadius: "var(--r-full)", padding: "3px 10px",
-                  whiteSpace: "nowrap", display: "inline-block",
-                }}>
-                  {st.label}
-                </span>
+                <span><StatusBadge kind="contract" status={c.status} size="sm" /></span>
 
                 {/* Tipo */}
                 <span style={{

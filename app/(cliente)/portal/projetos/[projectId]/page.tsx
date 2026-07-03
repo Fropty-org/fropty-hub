@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { getProject } from "@/app/actions/projects";
 import { PROJECT_STATUSES, PROJECT_PRIORITY_MAP } from "@/app/lib/constants/projects";
+import { StatusBadge } from "@/app/components/ui/StatusBadge";
 
 export const metadata: Metadata = { title: "Projeto" };
 
@@ -88,20 +89,8 @@ export default async function ProjetoDetailPage({
               {project.title}
             </h1>
             <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-              <span style={{
-                fontSize: "12px", fontWeight: 700, color: st.color,
-                background: `${st.color}18`, border: `1px solid ${st.color}28`,
-                borderRadius: "var(--r-full)", padding: "3px 10px",
-              }}>
-                {st.label}
-              </span>
-              <span style={{
-                fontSize: "12px", fontWeight: 700, color: pr.color,
-                background: `${pr.color}15`, border: `1px solid ${pr.color}28`,
-                borderRadius: "var(--r-full)", padding: "3px 10px",
-              }}>
-                {pr.label}
-              </span>
+              <StatusBadge kind="project" status={project.status} />
+              <StatusBadge kind="project-priority" status={project.priority} />
               {isActive && (
                 <span style={{
                   fontSize: "11px", fontWeight: 600, color: "var(--c-success)",

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowLeft, Calendar, DollarSign, Download, FolderKanban, User } from "lucide-react";
 import { getContract, updateContractStatus } from "@/app/actions/contracts";
 import { CONTRACT_STATUS_MAP, CONTRACT_TYPE_MAP } from "@/app/lib/constants/projects";
+import { StatusBadge } from "@/app/components/ui/StatusBadge";
 import type { ContractStatus } from "@/app/lib/types/projects";
 
 export const metadata: Metadata = { title: "Admin — Contrato" };
@@ -64,7 +65,7 @@ export default async function AdminContratoDetailPage({ params }: { params: Prom
               {contract.title}
             </h1>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-              <span style={{ fontSize: "11px", fontWeight: 700, padding: "3px 10px", borderRadius: 99, background: `${st.color}18`, color: st.color }}>{st.label}</span>
+              <StatusBadge kind="contract" status={contract.status} size="sm" />
               <span style={{ fontSize: "11px", fontWeight: 600, padding: "3px 10px", borderRadius: 99, background: "var(--surface-2)", color: "var(--text-faint)" }}>{typeLabel}</span>
               <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: "12px", color: "var(--text-faint)" }}>
                 <User size={11} /> {contract.client_name ?? "—"}

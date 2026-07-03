@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { FolderOpen, Calendar, ChevronRight, MessageSquarePlus, List, LayoutGrid, CalendarDays } from "lucide-react";
 import { getClientProjects } from "@/app/actions/projects";
-import { PROJECT_STATUSES, PROJECT_PRIORITY_MAP } from "@/app/lib/constants/projects";
+import { PROJECT_STATUSES } from "@/app/lib/constants/projects";
 import { HubEmptyState } from "@/app/components/ui/HubEmptyState";
 import { PageHeader } from "@/app/components/ui/PageHeader";
+import { StatusBadge } from "@/app/components/ui/StatusBadge";
 import { ProjectsKanban } from "@/app/components/projetos/ProjectsKanban";
 import { ProjectsCalendar } from "@/app/components/projetos/ProjectsCalendar";
 
@@ -139,7 +140,6 @@ export default async function ProjetosPage({
           {/* Rows */}
           {projects.map((project, i) => {
             const st       = PROJECT_STATUSES[project.status]       ?? { label: project.status,   color: "#94a3b8", Icon: FolderOpen };
-            const pr       = PROJECT_PRIORITY_MAP[project.priority] ?? { label: project.priority, color: "#94a3b8" };
             const StIcon   = st.Icon;
             const progress = (project as unknown as Record<string, unknown>).progress as number | null ?? null;
 
@@ -176,24 +176,10 @@ export default async function ProjetosPage({
                 </div>
 
                 {/* Status */}
-                <span style={{
-                  fontSize: "11px", fontWeight: 700, color: st.color,
-                  background: `${st.color}15`, border: `1px solid ${st.color}28`,
-                  borderRadius: "var(--r-full)", padding: "3px 10px",
-                  whiteSpace: "nowrap", display: "inline-block",
-                }}>
-                  {st.label}
-                </span>
+                <span><StatusBadge kind="project" status={project.status} size="sm" /></span>
 
                 {/* Prioridade */}
-                <span style={{
-                  fontSize: "11px", fontWeight: 700, color: pr.color,
-                  background: `${pr.color}15`, border: `1px solid ${pr.color}28`,
-                  borderRadius: "var(--r-full)", padding: "3px 10px",
-                  whiteSpace: "nowrap", display: "inline-block",
-                }}>
-                  {pr.label}
-                </span>
+                <span><StatusBadge kind="project-priority" status={project.priority} size="sm" /></span>
 
                 {/* Prazo */}
                 <span style={{ fontSize: "12px", color: "var(--text-faint)", display: "flex", alignItems: "center", gap: 5 }}>
