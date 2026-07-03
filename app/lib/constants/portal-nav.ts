@@ -10,7 +10,6 @@ export interface PortalNavItem {
 /** Rótulos das seções da sidebar do cliente, na ordem de exibição. */
 export const PORTAL_NAV_GROUPS: Record<string, string> = {
   principal:   "Principal",
-  comunicacao: "Comunique-se",
   trabalho:    "Meu Trabalho",
   conta:       "Minha Conta",
   recursos:    "Recursos",
@@ -25,8 +24,7 @@ export const PORTAL_NAV_GROUPS: Record<string, string> = {
  */
 export const PORTAL_NAV_ITEMS: PortalNavItem[] = [
   { id: "dashboard",         href: "/portal/dashboard",         icon: "LayoutDashboard",   label: "Painel",               group: "principal" },
-  { id: "chat",             href: "/portal/chat",              icon: "MessagesSquare",    label: "Chat",                 group: "comunicacao" },
-  { id: "suporte",          href: "/portal/suporte",           icon: "MessageCircle",     label: "Suporte",              group: "comunicacao" },
+  { id: "suporte",          href: "/portal/suporte",           icon: "MessageCircle",     label: "Suporte",              group: "principal" },
   { id: "projetos",         href: "/portal/projetos",          icon: "FolderKanban",      label: "Projetos",             group: "trabalho" },
   { id: "kanban",           href: "/portal/kanban",            icon: "LayoutGrid",        label: "Kanban",               group: "trabalho" },
   { id: "calendario",       href: "/portal/calendario",        icon: "CalendarDays",      label: "Calendário",           group: "trabalho" },

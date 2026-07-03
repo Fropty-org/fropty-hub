@@ -460,8 +460,12 @@ server-side com `searchParams`+`range` para projetos/contratos e suporte admin e
   `tickets.assigned_to` (uuid → profiles, ON DELETE SET NULL) + índice; tipos atualizados. Action
   `assignTicket` (admin-only, valida analista, service role). Fila ganha coluna **Responsável**
   com `<select>` inline por linha e filtro por responsável (Meus chamados / Não atribuídos / por
-  analista). Fim do parasitismo admin→/portal para os itens com tela própria; restam decisões de
-  produto sobre o Chat do cliente (fundir ao Suporte?).
+  analista). Fim do parasitismo admin→/portal para os itens com tela própria.
+- **Chat fundido ao Suporte:** decidido fundir (havia sobreposição total — ambos liam
+  tickets/ticket_messages). `chat` sai da nav do cliente e o Suporte sobe para o grupo "Principal"
+  (ao lado do Painel); `/portal/chat` vira redirect permanente para `/portal/suporte` (preserva
+  links antigos). O Suporte é o canal único: lista de chamados + conversa realtime no detalhe.
+  **Não resta nenhum item de nav (cliente ou admin) apontando para rota duplicada/parasita.**
 
 ## FASE 11 — Implementação & próximos passos
 
