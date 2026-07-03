@@ -7,9 +7,12 @@ import { useRouter } from "next/navigation";
 import {
   Search, LayoutDashboard, MessageCircle, FolderKanban, FileText,
   CreditCard, Map, MessageSquarePlus, BookOpen, UserCircle, ArrowRight,
-  Hash, Loader2, FileSignature, X,
+  Hash, Loader2, FileSignature, X, Plus, SunMoon, type LucideIcon,
 } from "lucide-react";
 import { searchPortal, type SearchResult, type SearchResultType } from "@/app/actions/search";
+import { updateTheme } from "@/app/actions/profile";
+
+interface PaletteAction { id: string; title: string; Icon: LucideIcon; run: () => void; }
 
 // ── Icon per result type ────────────────────────────────────────────────────
 
@@ -36,16 +39,13 @@ function ResultIcon({ type, href }: { type: SearchResultType; href: string }) {
 }
 
 const GROUP_LABELS: Record<string, string> = {
+  action:   "Ações",
   nav:      "Navegar",
   ticket:   "Chamados",
   project:  "Projetos",
   contract: "Contratos",
   kb:       "Base de Conhecimento",
 };
-
-interface FlatResult extends SearchResult {
-  groupKey: string;
-}
 
 // ── Main component ──────────────────────────────────────────────────────────
 
@@ -111,17 +111,45 @@ export function CommandPalette() {
     return () => clearTimeout(debounceRef.current);
   }, [query, open]);
 
-  // ── Flatten results for keyboard nav ──────────────────────────────────
+  // ── Ações rápidas (executam função em vez de navegar) ─────────────────
 
-  const flat: FlatResult[] = results
-    ? [
-        ...results.nav.map(r       => ({ ...r, groupKey: "nav" })),
-        ...results.tickets.map(r   => ({ ...r, groupKey: "ticket" })),
-        ...results.projects.map(r  => ({ ...r, groupKey: "project" })),
-        ...results.contracts.map(r => ({ ...r, groupKey: "contract" })),
-        ...results.kb.map(r        => ({ ...r, groupKey: "kb" })),
-      ]
-    : [];
+  const actionDefs: PaletteAction[] = [
+    { id: "act-novo-chamado", title: "Abrir novo chamado", Icon: Plus, run: () => router.push("/portal/suporte/novo") },
+    {
+      id: "act-tema", title: "Alternar tema (claro / escuro)", Icon: SunMoon,
+      run: () => {
+        const next = !document.documentElement.classList.contains("dark");
+        document.documentElement.classList.toggle("dark", next);
+        try { localStorage.setItem("fropty-theme", next ? "dark" : "light"); } catch {}
+        startTransition(() => { updateTheme(next ? "dark" : "light"); });
+      },
+    },
+  ];
+  const qLower  = query.trim().toLowerCase();
+  const actions = qLower.length === 0 ? actionDefs : actionDefs.filter(a => a.title.toLowerCase().includes(qLower));
+
+  // ── Flatten results for keyboard nav (ações primeiro) ─────────────────
+
+  type FlatItem = { id: string; groupKey: string; run?: () => void; href?: string };
+  const flat: FlatItem[] = [
+    ...actions.map(a => ({ id: a.id, groupKey: "action", run: a.run })),
+    ...(results
+      ? [
+          ...results.nav.map(r       => ({ ...r, groupKey: "nav" })),
+          ...results.tickets.map(r   => ({ ...r, groupKey: "ticket" })),
+          ...results.projects.map(r  => ({ ...r, groupKey: "project" })),
+          ...results.contracts.map(r => ({ ...r, groupKey: "contract" })),
+          ...results.kb.map(r        => ({ ...r, groupKey: "kb" })),
+        ]
+      : []),
+  ];
+
+  const runItem = (item: FlatItem | undefined) => {
+    if (!item) return;
+    if (item.run) item.run();
+    else if (item.href) router.push(item.href);
+    closePalette();
+  };
 
   // ── Keyboard navigation ────────────────────────────────────────────────
 
@@ -134,8 +162,7 @@ export function CommandPalette() {
       setActive(a => Math.max(a - 1, 0));
     } else if (e.key === "Enter") {
       e.preventDefault();
-      const item = flat[active];
-      if (item) { router.push(item.href); closePalette(); }
+      runItem(flat[active]);
     }
   };
 
@@ -232,11 +259,43 @@ export function CommandPalette() {
         </div>
 
         {/* Results */}
-        {groupEntries.length > 0 && (
+        {(actions.length > 0 || groupEntries.length > 0) && (
           <div
             ref={listRef}
             style={{ maxHeight: 360, overflowY: "auto", padding: "8px 0" }}
           >
+            {/* Ações */}
+            {actions.length > 0 && (
+              <Fragment>
+                <p style={{ margin: 0, padding: "6px 16px 3px", fontSize: "10.5px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-faint)" }}>
+                  {GROUP_LABELS.action}
+                </p>
+                {actions.map(a => {
+                  const idx = globalIdx++;
+                  const isActive = idx === active;
+                  return (
+                    <button
+                      key={a.id}
+                      data-idx={idx}
+                      onClick={() => { a.run(); closePalette(); }}
+                      onMouseEnter={() => setActive(idx)}
+                      style={{
+                        display: "flex", alignItems: "center", gap: 10,
+                        width: "100%", padding: "8px 16px",
+                        background: isActive ? "var(--primary)" : "transparent",
+                        border: "none", cursor: "pointer", textAlign: "left",
+                        color: isActive ? "#fff" : "var(--text)",
+                        transition: "background 0.08s",
+                      }}
+                    >
+                      <span style={{ opacity: isActive ? 1 : 0.55 }}><a.Icon size={14} style={{ flexShrink: 0 }} /></span>
+                      <span style={{ flex: 1, fontSize: "13.5px", fontWeight: 500 }}>{a.title}</span>
+                      <ArrowRight size={12} style={{ opacity: isActive ? 0.8 : 0.3, flexShrink: 0 }} />
+                    </button>
+                  );
+                })}
+              </Fragment>
+            )}
             {groupEntries.map(({ key, items }) => (
               <Fragment key={key}>
                 <p style={{
@@ -289,7 +348,7 @@ export function CommandPalette() {
         )}
 
         {/* Empty: query but no results */}
-        {results && query.length >= 2 && groupEntries.length === 0 && !isPending && (
+        {results && query.length >= 2 && groupEntries.length === 0 && actions.length === 0 && !isPending && (
           <div style={{ padding: "28px 16px", textAlign: "center" }}>
             <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>
               Nenhum resultado para <strong style={{ color: "var(--text)" }}>&ldquo;{query}&rdquo;</strong>
