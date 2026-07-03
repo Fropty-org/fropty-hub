@@ -16,6 +16,9 @@ import { PlanRenewalBanner } from "@/app/components/cliente/PlanRenewalBanner";
 import { getOnboardingSteps } from "@/app/lib/onboarding";
 import { StatusBadge } from "@/app/components/ui/StatusBadge";
 import { PROJECT_STATUSES, ACTIVE_PROJECT_STATUSES } from "@/app/lib/constants/projects";
+import { getActivityFeed } from "@/app/actions/activity";
+import { ActivityFeed } from "@/app/components/cliente/ActivityFeed";
+import { Activity } from "lucide-react";
 
 export const metadata: Metadata = { title: "Meu Painel" };
 
@@ -89,6 +92,8 @@ export default async function PortalDashboardPage() {
 
   const hasRecentTickets  = recentTickets.length > 0;
   const hasRecentProjects = recentProjects.length > 0;
+
+  const activity = await getActivityFeed(8);
 
   return (
     <div style={{ padding: "24px 24px", maxWidth: 1060, margin: "0 auto" }}>
@@ -411,6 +416,19 @@ export default async function PortalDashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* ── Atividade recente ── */}
+      {activity.length > 0 && (
+        <div className="hub-card" style={{ padding: 0, overflow: "hidden", marginBottom: 28 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "16px 20px", borderBottom: "1px solid var(--border)" }}>
+            <Activity size={15} style={{ color: "var(--primary)" }} />
+            <span style={{ fontSize: "13.5px", fontWeight: 700, color: "var(--text)" }}>Atividade recente</span>
+          </div>
+          <div style={{ padding: "4px 20px" }}>
+            <ActivityFeed items={activity} />
+          </div>
+        </div>
+      )}
 
       {/* ── Serviços contratados ── */}
       {hasServices && (
