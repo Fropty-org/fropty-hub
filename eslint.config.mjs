@@ -21,6 +21,11 @@ const eslintConfig = [
       // Protótipo de landing separado (não faz parte do Hub); tem seu próprio
       // toolchain e não deve poluir o lint do app.
       "workspace/**",
+      // Scripts de skills/ferramentas (Node .cjs, fora do app).
+      ".agents/**",
+      // Specs Playwright: usam a fixture `use` (não é hook React), o que dispara
+      // react-hooks/rules-of-hooks falsamente. Testes E2E não seguem as regras de RSC.
+      "e2e/**",
     ],
   },
   {
