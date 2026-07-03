@@ -323,6 +323,43 @@ export async function updateTicket(formData: FormData) {
   return { success: true };
 }
 
+// Atribui (ou desatribui) um analista a um chamado. Ação de admin.
+// assigneeId vazio/null → remove a atribuição. Escrita via service role
+// (RLS de tickets restringe UPDATE ao time; alinhado ao updateTicket).
+export async function assignTicket(ticketId: string, assigneeId: string | null) {
+  await requireRole("admin");
+
+  const id = ticketId?.trim();
+  if (!id) return { error: "ID do chamado inválido." };
+
+  const assignee = assigneeId?.trim() || null;
+
+  const supabase = createServiceClient();
+
+  // Valida que, se informado, o responsável é um admin (analista) ativo.
+  if (assignee) {
+    const { data: analyst } = await supabase
+      .from("profiles")
+      .select("id, role")
+      .eq("id", assignee)
+      .single();
+    if (!analyst || analyst.role !== "admin") {
+      return { error: "Responsável inválido." };
+    }
+  }
+
+  const { error } = await supabase
+    .from("tickets")
+    .update({ assigned_to: assignee })
+    .eq("id", id);
+
+  if (error) return { error: "Erro ao atribuir o chamado." };
+
+  revalidatePath("/admin/suporte");
+  revalidatePath(`/portal/suporte/${id}`);
+  return { success: true };
+}
+
 // Cliente avalia a resolução de um chamado que está "resolvido":
 // aprovar → fechado; reprovar → reaberto (volta para a fila do time).
 export async function respondResolution(formData: FormData) {

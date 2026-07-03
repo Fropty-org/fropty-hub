@@ -658,6 +658,7 @@ export type Database = {
       }
       tickets: {
         Row: {
+          assigned_to: string | null
           category: string
           client_id: string
           created_at: string
@@ -671,6 +672,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          assigned_to?: string | null
           category?: string
           client_id: string
           created_at?: string
@@ -684,6 +686,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          assigned_to?: string | null
           category?: string
           client_id?: string
           created_at?: string
