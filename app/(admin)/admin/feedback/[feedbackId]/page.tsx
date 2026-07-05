@@ -2,9 +2,9 @@
 
 import { useTransition, useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { getAllFeedbacksAdmin, respondToFeedback } from "@/app/actions/feedback";
+import { getAllFeedbacksAdmin, respondToFeedback, convertFeedbackToRoadmap } from "@/app/actions/feedback";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Rocket, Check } from "lucide-react";
 import type { Feedback, FeedbackType, FeedbackStatus } from "@/app/lib/types/feedback";
 
 const TYPE_LABEL: Record<FeedbackType, string> = {
@@ -24,6 +24,20 @@ export default function AdminFeedbackDetailPage() {
   const [response, setResponse]     = useState("");
   const [status, setStatus]         = useState("em_analise");
   const [impact, setImpact]         = useState("");
+  const [converting, setConverting] = useState(false);
+  const [converted, setConverted]   = useState(false);
+
+  function handleConvert() {
+    setError(null);
+    setConverting(true);
+    start(async () => {
+      const res = await convertFeedbackToRoadmap(feedbackId);
+      setConverting(false);
+      if (res.error) { setError(res.error); return; }
+      setConverted(true);
+      setStatus("aprovado");
+    });
+  }
 
   useEffect(() => {
     getAllFeedbacksAdmin().then((items) => {
@@ -94,6 +108,28 @@ export default function AdminFeedbackDetailPage() {
         <p style={{ margin: 0, fontSize: "14px", color: "var(--text-muted)", lineHeight: 1.6 }}>
           {feedback.description}
         </p>
+      </div>
+
+      {/* Converter em roadmap */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", marginBottom: 24, padding: "14px 18px", background: "var(--surface-2)", border: "1px solid var(--border)", borderRadius: 12 }}>
+        <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>
+          Boa ideia? Transforme este feedback em um item público de roadmap.
+        </span>
+        {converted ? (
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "13px", fontWeight: 700, color: "var(--c-success)" }}>
+            <Check size={14} /> Adicionado ao roadmap
+          </span>
+        ) : (
+          <button
+            type="button"
+            onClick={handleConvert}
+            disabled={converting || pending}
+            className="hub-btn hub-btn-ghost"
+            style={{ whiteSpace: "nowrap", opacity: converting ? 0.7 : 1 }}
+          >
+            <Rocket size={14} /> {converting ? "Convertendo…" : "Converter em roadmap"}
+          </button>
+        )}
       </div>
 
       <form onSubmit={handleSubmit} style={{

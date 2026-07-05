@@ -3,8 +3,47 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/app/lib/supabase/server";
+import { createServiceClient } from "@/app/lib/supabase/service";
 import { requireAuth, requireRole } from "@/app/lib/auth/require-role";
 import type { Feedback } from "@/app/lib/types/feedback";
+
+/**
+ * Converte um feedback em item de roadmap (ação de 1 clique no admin). Cria o
+ * item como "ideia"/categoria "produto" (o admin ajusta depois em /admin/roadmap)
+ * e marca o feedback como "aprovado". Fecha o loop feedback → roadmap.
+ */
+export async function convertFeedbackToRoadmap(feedbackId: string): Promise<{ error?: string }> {
+  await requireRole("admin");
+  const supabase = createServiceClient();
+
+  const { data: fb } = await supabase
+    .from("feedbacks")
+    .select("title, description")
+    .eq("id", feedbackId)
+    .single();
+
+  if (!fb) return { error: "Feedback não encontrado." };
+
+  const { error } = await supabase.from("roadmap_items").insert({
+    title:       (fb.title ?? "Sem título").slice(0, 200),
+    description: (fb.description ?? "").slice(0, 1000),
+    status:      "ideia",
+    category:    "produto",
+    visibility:  "publico",
+  });
+
+  if (error) {
+    console.error("[feedback] convertFeedbackToRoadmap:", error.message);
+    return { error: "Erro ao criar item de roadmap." };
+  }
+
+  await supabase.from("feedbacks").update({ status: "aprovado" }).eq("id", feedbackId);
+
+  revalidatePath("/admin/roadmap");
+  revalidatePath("/portal/roadmap");
+  revalidatePath("/admin/feedback");
+  return {};
+}
 
 export async function getClientFeedbacks(): Promise<Feedback[]> {
   const userId = await requireAuth();
