@@ -1,9 +1,10 @@
 ﻿import type { Metadata } from "next";
 import { createClient } from "@/app/lib/supabase/server";
-import { TrendingUp, Users, MessageCircle, CheckCircle, Zap, Clock, ShieldCheck, Activity } from "lucide-react";
+import { TrendingUp, Users, MessageCircle, CheckCircle, Zap, Clock, ShieldCheck, Activity, Smile } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { SLA_TARGETS } from "@/app/lib/constants/sla";
 import { TrendBars } from "@/app/components/admin/TrendBars";
+import { getNpsSummary } from "@/app/actions/nps";
 
 export const metadata: Metadata = { title: "Analytics — Admin" };
 
@@ -52,6 +53,8 @@ export default async function AdminAnalyticsPage() {
   }
   const newTicketsSeries     = dailySeries((ticketsCreated30d ?? []) as { created_at: string }[]);
   const tokensConsumedSeries = dailySeries((monthlyTokens ?? []).filter((t) => t.type === "debit") as { created_at: string; amount: number }[], true);
+
+  const nps = await getNpsSummary(90);
 
   const mrr = (mrrData as unknown as number) ?? 0;
 
@@ -106,6 +109,7 @@ export default async function AdminAnalyticsPage() {
     { label: "Tempo médio resolução", value: avgResolutionLabel, Icon: Clock, color: avgResolutionHours != null && avgResolutionHours <= 24 ? "#22c55e" : avgResolutionHours != null && avgResolutionHours <= 72 ? "#f59e0b" : "#94a3b8", sub: `base: ${resolvedList.length} tickets resolvidos` },
     { label: "Conformidade SLA", value: slaCompliance != null ? `${slaCompliance}%` : "—", Icon: ShieldCheck, color: slaCompliance != null && slaCompliance >= 80 ? "#22c55e" : slaCompliance != null && slaCompliance >= 50 ? "#f59e0b" : "#ef4444", sub: `${slaComplianceCount} de ${resolvedList.length} dentro do SLA` },
     { label: "Tokens consumidos (30d)", value: tokensOut, Icon: Zap, color: "var(--brand-accent)", sub: `${tokensIn} adicionados` },
+    { label: "NPS (90d)", value: nps.nps != null ? String(nps.nps) : "—", Icon: Smile, color: nps.nps == null ? "#94a3b8" : nps.nps >= 50 ? "#22c55e" : nps.nps >= 0 ? "#f59e0b" : "#ef4444", sub: nps.count > 0 ? `${nps.promoters} promotores · ${nps.detractors} detratores · ${nps.count} respostas` : "sem respostas ainda" },
   ];
 
   const statusLabels: Record<string, string> = {

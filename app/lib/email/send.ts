@@ -421,3 +421,25 @@ export async function sendMonthlyReport(opts: {
     `),
   }).catch((e) => console.error("[email] sendMonthlyReport:", e));
 }
+
+// ── Pesquisa de NPS ───────────────────────────────────────────────
+export async function sendNpsSurvey(opts: { toEmail: string; toName: string }) {
+  if (!opts.toEmail) return;
+  await getResend()?.emails.send({
+    from: FROM,
+    to:   opts.toEmail,
+    subject: "Como estamos indo? — FroptyHub",
+    html: baseTemplate(`
+      <p style="margin:0 0 6px;font-size:13px;color:#5B57E8;">Sua opinião importa</p>
+      <h2 style="margin:0 0 12px;font-size:18px;font-weight:800;color:#F7F8FC;">Como estamos indo?</h2>
+      <p style="font-size:14px;color:#94a3b8;line-height:1.6;margin:0 0 8px;">
+        Olá, <strong style="color:#F7F8FC;">${esc(opts.toName.split(" ")[0])}</strong>!
+        Leva menos de um minuto: de 0 a 10, quanto você recomendaria a Fropty a um colega?
+      </p>
+      <p style="font-size:13px;color:#94a3b8;line-height:1.6;margin:0;">
+        Sua resposta nos ajuda a melhorar o ecossistema.
+      </p>
+      ${btn("Responder agora", `${HUB_URL}/portal/nps`)}
+    `),
+  }).catch((e) => console.error("[email] sendNpsSurvey:", e));
+}

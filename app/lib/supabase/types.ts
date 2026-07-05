@@ -709,6 +709,30 @@ export type Database = {
           },
         ]
       }
+      nps_responses: {
+        Row: {
+          client_id: string
+          comment: string | null
+          created_at: string
+          id: string
+          score: number
+        }
+        Insert: {
+          client_id: string
+          comment?: string | null
+          created_at?: string
+          id?: string
+          score: number
+        }
+        Update: {
+          client_id?: string
+          comment?: string | null
+          created_at?: string
+          id?: string
+          score?: number
+        }
+        Relationships: []
+      }
       token_transactions: {
         Row: {
           amount: number
