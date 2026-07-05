@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Search, ChevronRight, AlertTriangle, Loader2 } from "lucide-react";
+import { Search, ChevronRight, AlertTriangle, Loader2, Bookmark, Plus, X } from "lucide-react";
 import { StatusBadge } from "@/app/components/ui/StatusBadge";
 import { Pagination } from "@/app/components/ui/Pagination";
 import { HubEmptyState } from "@/app/components/ui/HubEmptyState";
@@ -104,6 +104,12 @@ interface Props {
 type StatusFilter = "todos" | "aberto" | "em_andamento" | "reaberto" | "resolvido" | "fechado" | "atraso";
 type SortMode = "urgencia" | "recente";
 
+interface SavedView {
+  name: string;
+  f: { search: string; client: string; status: StatusFilter; priority: string; assignee: string; sort: SortMode };
+}
+const VIEWS_KEY = "fropty-suporte-views";
+
 export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }: Props) {
   const [search, setSearch]       = useState("");
   const [client, setClient]       = useState("todos");
@@ -120,6 +126,28 @@ export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }:
     const id = setInterval(() => setNow(Date.now()), 30_000);
     return () => clearInterval(id);
   }, []);
+
+  // Views salvas (presets de filtro) — persistidas por navegador em localStorage.
+  const [views, setViews] = useState<SavedView[]>([]);
+  useEffect(() => {
+    try { const raw = localStorage.getItem(VIEWS_KEY); if (raw) setViews(JSON.parse(raw)); } catch {}
+  }, []);
+  function persistViews(next: SavedView[]) {
+    setViews(next);
+    try { localStorage.setItem(VIEWS_KEY, JSON.stringify(next)); } catch {}
+  }
+  function saveCurrentView() {
+    const name = window.prompt("Nome da visão:")?.trim();
+    if (!name) return;
+    persistViews([...views.filter(v => v.name !== name), { name, f: { search, client, status, priority, assignee, sort } }]);
+  }
+  function applyView(v: SavedView) {
+    setSearch(v.f.search); setClient(v.f.client); setStatus(v.f.status);
+    setPriority(v.f.priority); setAssignee(v.f.assignee); setSort(v.f.sort); setPage(1);
+  }
+  function deleteView(name: string) {
+    persistViews(views.filter(v => v.name !== name));
+  }
 
   const enriched = useMemo(
     () => tickets.map((t) => {
@@ -180,6 +208,29 @@ export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }:
             </span>
           </p>
         </div>
+      </div>
+
+      {/* Views salvas */}
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center", marginBottom: 12 }}>
+        <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: "12px", fontWeight: 700, color: "var(--text-faint)" }}>
+          <Bookmark size={13} /> Visões:
+        </span>
+        {views.length === 0 && (
+          <span style={{ fontSize: "12px", color: "var(--text-faint)" }}>nenhuma salva ainda</span>
+        )}
+        {views.map((v) => (
+          <span key={v.name} style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "var(--surface-2)", border: "1px solid var(--border)", borderRadius: "var(--r-full)", padding: "3px 4px 3px 10px", fontSize: "12px" }}>
+            <button type="button" onClick={() => applyView(v)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text)", fontWeight: 600, fontFamily: "inherit", padding: 0 }}>
+              {v.name}
+            </button>
+            <button type="button" onClick={() => deleteView(v.name)} aria-label={`Excluir visão ${v.name}`} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-faint)", display: "flex", padding: 2 }}>
+              <X size={11} />
+            </button>
+          </span>
+        ))}
+        <button type="button" onClick={saveCurrentView} className="hub-btn hub-btn-ghost" style={{ padding: "3px 10px", fontSize: "12px" }}>
+          <Plus size={12} /> Salvar visão atual
+        </button>
       </div>
 
       {/* Filtros */}
