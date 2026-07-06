@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { createServerClient } from "@supabase/ssr";
 
 const LOGIN_PAGE = "/area-cliente";
 const PROTECTED_PREFIXES = ["/admin", "/area-cliente/", "/portal/"];
@@ -15,39 +16,65 @@ function resolveHubHost(): string | null {
   return h.replace(/\/+$/, "").toLowerCase().split(":")[0] || null;
 }
 
-// Middleware totalmente stateless: sem Supabase client, sem chamadas de rede.
-// Verifica apenas a presença do cookie de sessão do Supabase (sb-*-auth-token).
-// A validação real do JWT acontece nos layouts server-side (Node.js runtime).
-export function middleware(request: NextRequest) {
+// Middleware com renovação de sessão (padrão @supabase/ssr).
+// Diferente da versão stateless anterior, aqui a sessão é VALIDADA e RENOVADA:
+// getUser() atualiza o access token expirado e escreve os cookies novos na
+// response (único lugar do Next onde isso é permitido). Isso mantém o usuário
+// logado ao longo do tempo e, quando a sessão é de fato inválida, o cookie ruim
+// é limpo — eliminando o loop de redirect (ERR_TOO_MANY_REDIRECTS) que forçava
+// apagar os cookies manualmente.
+export async function middleware(request: NextRequest) {
   const host = request.headers.get("host") ?? "";
   const path = request.nextUrl.pathname;
 
-  // Subdomínio demo.fropty.com — serve /demo na raiz
+  // Subdomínio demo.fropty.com — serve /demo na raiz (sem necessidade de auth)
   if (host === "demo.fropty.com" && path === "/") {
     const url = request.nextUrl.clone();
     url.pathname = "/demo";
     return NextResponse.rewrite(url);
   }
 
+  // Response que carrega os cookies eventualmente renovados pelo Supabase.
+  let response = NextResponse.next({ request });
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll: () => request.cookies.getAll(),
+        setAll: (cookiesToSet) => {
+          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
+          response = NextResponse.next({ request });
+          cookiesToSet.forEach(({ name, value, options }) =>
+            response.cookies.set(name, value, options)
+          );
+        },
+      },
+    }
+  );
+
+  // Valida + renova a sessão. Em falha de rede (Supabase indisponível), não
+  // decide auth aqui — deixa passar e o layout server-side resolve (fail-open).
+  let user = null;
+  let authKnown = true;
+  try {
+    const { data } = await supabase.auth.getUser();
+    user = data.user;
+  } catch {
+    authKnown = false;
+  }
+  const isAuthed = !!user;
+
   // ── Roteamento do hub (ativa só quando o host do hub está configurado) ──
-  // Aceita NEXT_PUBLIC_HUB_HOST ("hub.fropty.com") ou deriva de
-  // NEXT_PUBLIC_HUB_URL ("https://hub.fropty.com"). Normaliza protocolo/porta/case.
   const HUB_HOST = resolveHubHost();
   const reqHost = host.toLowerCase().split(":")[0];
   const onHub = !!HUB_HOST && reqHost === HUB_HOST;
 
-  // O cookie de sessão do Supabase pode vir fragmentado: sb-<ref>-auth-token
-  // ou sb-<ref>-auth-token.0 / .1 (sessões maiores). Cobre os dois formatos.
-  const hasSession = request.cookies.getAll().some(
-    (c) => c.name.startsWith("sb-") && c.name.includes("-auth-token")
-  );
-
   if (HUB_HOST) {
     if (onHub) {
-      // Raiz do hub: visitante sem sessão vê a landing (app/page.tsx) normalmente.
-      // Com sessão ativa, vai direto para o portal — cliente logado não precisa
-      // rever a landing. (Login continua morando em /area-cliente, URL real.)
-      if (path === "/" && hasSession) {
+      // Raiz do hub: com sessão válida vai direto para o portal; sem sessão vê a landing.
+      if (path === "/" && isAuthed) {
         const url = request.nextUrl.clone();
         url.pathname = "/portal/dashboard";
         return NextResponse.redirect(url);
@@ -63,25 +90,28 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  const isLoginPage = path === LOGIN_PAGE;
-  const isProtected = PROTECTED_PREFIXES.some((p) => path.startsWith(p));
+  // Decisões de auth só quando a validação foi conclusiva (evita logout em falha de rede).
+  if (authKnown) {
+    const isProtected = PROTECTED_PREFIXES.some((p) => path.startsWith(p));
 
-  if (isProtected && !hasSession) {
-    const url = request.nextUrl.clone();
-    url.pathname = LOGIN_PAGE;
-    return NextResponse.redirect(url);
+    // Rota protegida sem sessão válida → login.
+    if (isProtected && !isAuthed) {
+      const url = request.nextUrl.clone();
+      url.pathname = LOGIN_PAGE;
+      return NextResponse.redirect(url);
+    }
+
+    // Já autenticado tentando ver o login → portal. (Baseado no usuário REAL,
+    // então nunca mais entra em loop com cookie inválido presente.)
+    if (path === LOGIN_PAGE && isAuthed) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/portal/dashboard";
+      return NextResponse.redirect(url);
+    }
   }
 
-  // Usuário já autenticado tenta acessar a página de login → manda para o portal
-  if (isLoginPage && hasSession) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/portal/dashboard";
-    return NextResponse.redirect(url);
-  }
-
-  const res = NextResponse.next();
-  res.headers.set("x-pathname", path);
-  return res;
+  response.headers.set("x-pathname", path);
+  return response;
 }
 
 export const config = {
