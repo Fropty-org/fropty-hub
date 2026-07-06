@@ -292,8 +292,8 @@ export default function PasswordChangeForm() {
                 <label style={labelStyle}>Receber via</label>
                 <div style={{ display: "flex", gap: 8 }}>
                   {([
-                    { id: "sms",      label: "SMS",       color: "#3b82f6" },
-                    { id: "whatsapp", label: "WhatsApp",  color: "#22c55e" },
+                    { id: "sms",      label: "SMS",       color: "var(--c-info)" },
+                    { id: "whatsapp", label: "WhatsApp",  color: "var(--c-success)" },
                   ] as { id: "sms" | "whatsapp"; label: string; color: string }[]).map(c => (
                     <button
                       key={c.id}
@@ -302,7 +302,7 @@ export default function PasswordChangeForm() {
                       style={{
                         flex: 1, padding: "9px 12px", borderRadius: 9, fontFamily: "inherit",
                         border: `1.5px solid ${channel === c.id ? c.color : "var(--border)"}`,
-                        background: channel === c.id ? `${c.color}15` : "var(--surface-2)",
+                        background: channel === c.id ? `color-mix(in srgb, ${c.color} 9%, transparent)` : "var(--surface-2)",
                         color: channel === c.id ? c.color : "var(--text-muted)",
                         fontSize: "13px", fontWeight: 700, cursor: "pointer",
                       }}

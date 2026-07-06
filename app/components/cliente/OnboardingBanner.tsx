@@ -24,7 +24,7 @@ export function OnboardingBanner({ name, tokenBalance }: Props) {
       desc: "Escolha o serviço e a gente customiza com a sua marca, cores e identidade.",
       href: WHATSAPP_URL,
       cta: "Falar no WhatsApp",
-      color: "#22c55e",
+      color: "var(--c-success)",
       external: true,
     },
     {
@@ -33,7 +33,7 @@ export function OnboardingBanner({ name, tokenBalance }: Props) {
       desc: "Após a contratação, use a área de cliente para suporte, tokens e o seu contrato financeiro.",
       href: "/portal/suporte",
       cta: "Ver suporte",
-      color: "#EF9F27",
+      color: "var(--brand-accent)",
       external: false,
     },
   ];
@@ -68,8 +68,8 @@ export function OnboardingBanner({ name, tokenBalance }: Props) {
           }}>
             <div style={{
               width: 32, height: 32, borderRadius: "50%",
-              background: `${step.color}22`,
-              border: `1.5px solid ${step.color}40`,
+              background: `color-mix(in srgb, ${step.color} 13%, transparent)`,
+              border: `1.5px solid color-mix(in srgb, ${step.color} 25%, transparent)`,
               display: "flex", alignItems: "center", justifyContent: "center",
               flexShrink: 0,
               fontSize: 13, fontWeight: 800, color: step.color,
