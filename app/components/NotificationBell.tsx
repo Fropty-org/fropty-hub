@@ -51,8 +51,10 @@ export function NotificationBell({ userId }: { userId: string }) {
 
   useEffect(() => {
     fetchNotifications();
+    // Canal único por instância: evita "tried to subscribe multiple times"
+    // quando há mais de um sino montado para o mesmo usuário (ex.: topbar + popover).
     const channel = supabase
-      .channel(`notifications:${userId}`)
+      .channel(`notifications:${userId}:${Math.random().toString(36).slice(2)}`)
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "notifications", filter: `user_id=eq.${userId}` },
