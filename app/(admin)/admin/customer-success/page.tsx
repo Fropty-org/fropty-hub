@@ -68,7 +68,7 @@ export default async function CustomerSuccessPage({
       {/* Métricas */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 16, marginBottom: 36 }}>
         {metricCards.map((m) => (
-          <div key={m.label} style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 16, padding: "22px" }}>
+          <div key={m.label} className="hub-card" style={{ padding: "22px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
               <div style={{ width: 38, height: 38, borderRadius: 10, background: `${m.color}18`, display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <m.Icon size={20} style={{ color: m.color }} />
@@ -86,7 +86,7 @@ export default async function CustomerSuccessPage({
           <h2 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: 14, color: "var(--text)" }}>
             Sem avaliação ({withoutHealth.length})
           </h2>
-          <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, overflow: "hidden" }}>
+          <div className="hub-card" style={{ padding: 0, overflow: "hidden" }}>
             {withoutHealth.map((c, i, arr) => (
               <div
                 key={c.id}
@@ -167,7 +167,7 @@ export default async function CustomerSuccessPage({
       </div>
 
       {/* Tabela de clientes */}
-      <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, overflow: "hidden" }}>
+      <div className="hub-card" style={{ padding: 0, overflow: "hidden" }}>
         {/* Header */}
         <div style={{
           display: "grid",

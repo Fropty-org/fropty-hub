@@ -117,7 +117,7 @@ export default async function AdminUsuariosPage({ searchParams }: Props) {
       {/* Stats cards — compactos, sem bordas grossas */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10, marginBottom: 16 }}>
         {stats.map(s => (
-          <div key={s.label} style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 10, padding: "14px 16px", display: "flex", alignItems: "center", gap: 12 }}>
+          <div key={s.label} className="hub-card" style={{ padding: "14px 16px", display: "flex", alignItems: "center", gap: 12 }}>
             <div style={{ width: 36, height: 36, borderRadius: 9, background: s.bg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, color: s.color }}>
               {s.icon}
             </div>
@@ -130,7 +130,7 @@ export default async function AdminUsuariosPage({ searchParams }: Props) {
       </div>
 
       {/* Table card */}
-      <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 10, overflow: "hidden" }}>
+      <div className="hub-card" style={{ padding: 0, overflow: "hidden" }}>
 
         {/* Toolbar: tabs + search + actions */}
         <div style={{ padding: "0 16px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>

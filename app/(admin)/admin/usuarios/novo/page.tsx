@@ -71,7 +71,7 @@ export default function NovoUsuarioPage() {
       </div>
 
       <form onSubmit={handleSubmit}>
-        <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, overflow: "hidden" }}>
+        <div className="hub-card" style={{ padding: 0, overflow: "hidden" }}>
 
           {/* Avatar upload */}
           <div style={{ padding: "24px 28px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", gap: 18 }}>

@@ -59,7 +59,7 @@ export default function InviteForm() {
   }
 
   return (
-    <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "22px 24px 20px", marginBottom: 28 }}>
+    <div className="hub-card" style={{ padding: "22px 24px 20px", marginBottom: 28 }}>
       <h2 style={{ fontSize: "0.95rem", fontWeight: 700, margin: "0 0 18px", color: "var(--text)", display: "flex", alignItems: "center", gap: 8 }}>
         <Forward size={15} style={{ color: "var(--primary)" }} />
         Convidar novo cliente

@@ -80,7 +80,7 @@ export default async function AdminProjetosPage({
       {/* KPI strip */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 14, marginBottom: 28 }}>
         {kpis.map((k) => (
-          <div key={k.key} style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "18px 20px" }}>
+          <div key={k.key} className="hub-card" style={{ padding: "18px 20px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 12 }}>
               <div style={{ width: 34, height: 34, borderRadius: 9, background: `${k.color}18`, display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <k.Icon size={16} style={{ color: k.color }} />
@@ -116,7 +116,7 @@ export default async function AdminProjetosPage({
 
       {/* Grid de cards */}
       {projects.length === 0 ? (
-        <div style={{ padding: "56px", textAlign: "center", background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14 }}>
+        <div className="hub-card" style={{ padding: "56px", textAlign: "center" }}>
           <FolderKanban size={32} style={{ color: "var(--text-faint)", marginBottom: 12, display: "block", margin: "0 auto 12px" }} />
           <p style={{ margin: 0, fontSize: "14px", fontWeight: 700, color: "var(--text)" }}>Nenhum projeto encontrado</p>
           <p style={{ margin: "6px 0 0", fontSize: "13px", color: "var(--text-faint)" }}>Crie o primeiro projeto para começar.</p>
@@ -131,7 +131,7 @@ export default async function AdminProjetosPage({
             return (
               <div
                 key={project.id}
-                style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "20px", display: "flex", flexDirection: "column", gap: 14 }}
+                className="hub-card" style={{ padding: "20px", display: "flex", flexDirection: "column", gap: 14 }}
               >
                 {/* Card header */}
                 <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 10 }}>

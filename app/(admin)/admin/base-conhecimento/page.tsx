@@ -59,7 +59,7 @@ export default async function AdminBaseConhecimentoPage({
       {/* KPI strip */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 14, marginBottom: 28 }}>
         {kpis.map((k) => (
-          <div key={k.label} style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "18px 20px" }}>
+          <div key={k.label} className="hub-card" style={{ padding: "18px 20px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 12 }}>
               <div style={{ width: 34, height: 34, borderRadius: 9, background: `${k.color}18`, display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <k.Icon size={16} style={{ color: k.color }} />
@@ -90,13 +90,13 @@ export default async function AdminBaseConhecimentoPage({
 
       {/* Tabela */}
       {articles.length === 0 ? (
-        <div style={{ padding: "60px 24px", textAlign: "center", background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14 }}>
+        <div className="hub-card" style={{ padding: "60px 24px", textAlign: "center" }}>
           <BookOpen size={36} style={{ color: "var(--text-faint)", marginBottom: 12, display: "block", margin: "0 auto 12px" }} />
           <p style={{ margin: 0, fontSize: "14px", fontWeight: 700, color: "var(--text)" }}>Nenhum artigo encontrado</p>
           <p style={{ margin: "6px 0 0", fontSize: "13px", color: "var(--text-faint)" }}>Crie o primeiro artigo para começar.</p>
         </div>
       ) : (
-        <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, overflow: "hidden" }}>
+        <div className="hub-card" style={{ padding: 0, overflow: "hidden" }}>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
               <tr style={{ borderBottom: "1px solid var(--border)" }}>

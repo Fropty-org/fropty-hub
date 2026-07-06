@@ -43,9 +43,8 @@ export default async function ClientCSPage({ params }: { params: Promise<{ clien
       </Link>
 
       {/* Header */}
-      <div style={{
-        background: "var(--card-bg)", border: "1px solid var(--card-border)",
-        borderRadius: 16, padding: 24, marginBottom: 24,
+      <div className="hub-card" style={{
+        padding: 24, marginBottom: 24,
         display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16,
       }}>
         <div>
@@ -71,7 +70,7 @@ export default async function ClientCSPage({ params }: { params: Promise<{ clien
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
           {/* Score detalhado */}
           {health && cfg && (
-            <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 16, padding: 24 }}>
+            <div className="hub-card" style={{ padding: 24 }}>
               <h2 style={{ fontSize: "14px", fontWeight: 700, margin: "0 0 20px", color: "var(--text)" }}>Score por dimensão</h2>
               <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                 {SCORE_DIMENSIONS.map(({ key, label, weight }) => {
@@ -98,7 +97,7 @@ export default async function ClientCSPage({ params }: { params: Promise<{ clien
           )}
 
           {/* Notas e histórico */}
-          <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 16, padding: 24 }}>
+          <div className="hub-card" style={{ padding: 24 }}>
             <h2 style={{ fontSize: "14px", fontWeight: 700, margin: "0 0 16px", color: "var(--text)" }}>Notas CS</h2>
             {health?.cs_notes ? (
               <p style={{ margin: 0, fontSize: "13px", color: "var(--text-muted)", lineHeight: 1.6, whiteSpace: "pre-wrap" }}>
@@ -120,7 +119,7 @@ export default async function ClientCSPage({ params }: { params: Promise<{ clien
 
         {/* Sidebar direita */}
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 16, padding: 20 }}>
+          <div className="hub-card" style={{ padding: 20 }}>
             <p style={{ margin: "0 0 14px", fontSize: "12px", fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.04em" }}>
               Links rápidos
             </p>
