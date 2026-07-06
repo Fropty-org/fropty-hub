@@ -20,7 +20,7 @@ export function PlanRenewalBanner({ plan, renewalDate }: Props) {
   const isUrgent   = daysLeft <= 7;
   const isWarning  = daysLeft <= 14;
 
-  const color = isUrgent ? "#ef4444" : isWarning ? "var(--brand-accent)" : "var(--c-success)";
+  const color = isUrgent ? "var(--c-danger)" : isWarning ? "var(--brand-accent)" : "var(--c-success)";
   const bg    = isUrgent ? "rgba(239,68,68,0.08)"   : isWarning ? "rgba(239,159,39,0.08)" : "rgba(34,197,94,0.06)";
   const border= isUrgent ? "rgba(239,68,68,0.25)"   : isWarning ? "rgba(239,159,39,0.25)" : "rgba(34,197,94,0.2)";
   const StatusIcon: LucideIcon = isUrgent ? AlertTriangle : isWarning ? Clock : CheckCircle;

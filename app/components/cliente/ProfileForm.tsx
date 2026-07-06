@@ -69,7 +69,7 @@ export default function ProfileForm({ name, email }: Props) {
             {isPending ? "Salvando…" : "Salvar alterações"}
           </button>
           {msg && (
-            <p style={{ margin: 0, fontSize: "13px", fontWeight: 600, color: msg.type === "success" ? "var(--c-success)" : "#ef4444" }}>
+            <p style={{ margin: 0, fontSize: "13px", fontWeight: 600, color: msg.type === "success" ? "var(--c-success)" : "var(--c-danger)" }}>
               {msg.type === "success" ? <CheckCircle size={14} style={{ marginRight: 5 }} /> : <XCircle size={14} style={{ marginRight: 5 }} />}
               {msg.text}
             </p>

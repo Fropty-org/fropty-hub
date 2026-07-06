@@ -293,7 +293,7 @@ export function ProfileSettings({ name: initialName, email, role, avatarUrl, goo
                     {uploading ? "Enviando…" : "Upload foto"}
                   </button>
                   {uploadMsg && (
-                    <p style={{ margin: "5px 0 0", fontSize: 12, color: uploadMsg.ok ? "var(--c-success)" : "#ef4444", fontWeight: 500 }}>
+                    <p style={{ margin: "5px 0 0", fontSize: 12, color: uploadMsg.ok ? "var(--c-success)" : "var(--c-danger)", fontWeight: 500 }}>
                       {uploadMsg.text}
                     </p>
                   )}
@@ -326,7 +326,7 @@ export function ProfileSettings({ name: initialName, email, role, avatarUrl, goo
                     <button onClick={() => setEditingName(true)} style={editBtnStyle}>Editar</button>
                   </div>
                 )}
-                {nameMsg && <p style={{ margin: "4px 0 0", fontSize: 12, color: nameMsg.ok ? "var(--c-success)" : "#ef4444" }}>{nameMsg.text}</p>}
+                {nameMsg && <p style={{ margin: "4px 0 0", fontSize: 12, color: nameMsg.ok ? "var(--c-success)" : "var(--c-danger)" }}>{nameMsg.text}</p>}
               </FieldRow>
 
               {/* Email */}
@@ -364,7 +364,7 @@ export function ProfileSettings({ name: initialName, email, role, avatarUrl, goo
                     <button onClick={() => setEditingPhone(true)} style={editBtnStyle}>Editar</button>
                   </div>
                 )}
-                {phoneMsg && <p style={{ margin: "4px 0 0", fontSize: 12, color: phoneMsg.ok ? "var(--c-success)" : "#ef4444" }}>{phoneMsg.text}</p>}
+                {phoneMsg && <p style={{ margin: "4px 0 0", fontSize: 12, color: phoneMsg.ok ? "var(--c-success)" : "var(--c-danger)" }}>{phoneMsg.text}</p>}
                 <p style={{ margin: "4px 0 0", fontSize: 11, color: "var(--text-faint)" }}>
                   Usado para verificação via SMS. Formato: +5511999990000
                 </p>
@@ -586,7 +586,7 @@ function TwoFactorSection() {
                   Cancelar
                 </button>
               </div>
-              {error && <p style={{ margin: "8px 0 0", fontSize: 12, color: "#ef4444" }}>{error}</p>}
+              {error && <p style={{ margin: "8px 0 0", fontSize: 12, color: "var(--c-danger)" }}>{error}</p>}
             </div>
           </div>
         </div>
@@ -606,7 +606,7 @@ function TwoFactorSection() {
           <button
             onClick={disable2FA}
             disabled={loading}
-            style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 14px", borderRadius: 8, border: "1px solid #ef4444", background: "transparent", color: "#ef4444", fontSize: "12px", fontWeight: 600, cursor: loading ? "not-allowed" : "pointer", fontFamily: "inherit", flexShrink: 0, whiteSpace: "nowrap", alignSelf: "center" }}
+            style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 14px", borderRadius: 8, border: "1px solid #ef4444", background: "transparent", color: "var(--c-danger)", fontSize: "12px", fontWeight: 600, cursor: loading ? "not-allowed" : "pointer", fontFamily: "inherit", flexShrink: 0, whiteSpace: "nowrap", alignSelf: "center" }}
           >
             {loading ? <Loader2 size={11} style={{ animation: "spin 0.8s linear infinite" }} /> : <X size={11} />}
             Desativar 2FA

@@ -193,7 +193,7 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
               <Link href="/admin/overview" style={{ display: "flex", alignItems: "center", gap: 9, textDecoration: "none", overflow: "hidden" }}>
                 <Image src="/favicon.svg" alt="Fropty Hub" width={28} height={28} unoptimized style={{ flexShrink: 0 }} />
                 <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text)", whiteSpace: "nowrap", letterSpacing: "-0.01em" }}>
-                  Fropty<span style={{ background: "linear-gradient(90deg,#e040fb,#7c3aed,#2563eb,#16a34a,#ea580c)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Hub</span>
+                  Fropty<span style={{ color: "var(--ac)" }}>Hub</span>
                 </span>
               </Link>
               <button onClick={toggleCollapse} title="Recolher menu" className="portal-sidebar-toggle" style={{ width: 26, height: 26, borderRadius: "var(--r-sm)", border: "1px solid var(--border)", background: "var(--surface-2)", cursor: "pointer", color: "var(--text-faint)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
@@ -439,7 +439,7 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
         <Link href="/admin/overview" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none", flex: 1 }}>
           <Image src="/favicon.svg" alt="Fropty Hub" width={22} height={22} unoptimized />
           <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text)" }}>
-            Fropty<span style={{ background: "linear-gradient(90deg,#e040fb,#7c3aed,#2563eb,#16a34a,#ea580c)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Hub</span>
+            Fropty<span style={{ color: "var(--ac)" }}>Hub</span>
             <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--text-faint)", marginLeft: 5 }}>Admin</span>
           </span>
         </Link>

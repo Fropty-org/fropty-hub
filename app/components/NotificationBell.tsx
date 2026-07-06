@@ -15,10 +15,10 @@ const TYPE_ICON: Record<string, LucideIcon> = {
 };
 
 const TYPE_COLOR: Record<string, string> = {
-  ticket_opened:  "#EF9F27",
-  ticket_updated: "#22c55e",
-  ticket_message: "#3b82f6",
-  client_joined:  "#a855f7",
+  ticket_opened:  "var(--brand-accent)",
+  ticket_updated: "var(--c-success)",
+  ticket_message: "var(--c-info)",
+  client_joined:  "var(--c-purple)",
 };
 
 function timeAgo(dateStr: string): string {
@@ -130,7 +130,7 @@ export function NotificationBell({ userId }: { userId: string }) {
           <span style={{
             position: "absolute", top: 2, right: 2,
             minWidth: 14, height: 14, borderRadius: 999,
-            background: "#ef4444", color: "#fff",
+            background: "var(--c-danger)", color: "#fff",
             fontSize: 9, fontWeight: 800,
             display: "flex", alignItems: "center", justifyContent: "center",
             lineHeight: 1, padding: "0 3px", pointerEvents: "none",
@@ -160,7 +160,7 @@ export function NotificationBell({ userId }: { userId: string }) {
         >
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 16px", borderBottom: "1px solid var(--border)" }}>
             <span style={{ fontSize: "13px", fontWeight: 700, color: "var(--text)" }}>
-              Notificacoes{unread > 0 && <span style={{ color: "#ef4444", marginLeft: 4 }}>({unread})</span>}
+              Notificacoes{unread > 0 && <span style={{ color: "var(--c-danger)", marginLeft: 4 }}>({unread})</span>}
             </span>
             {unread > 0 && (
               <button onClick={markAllRead} style={{ fontSize: "11px", color: "var(--text-faint)", background: "none", border: "none", cursor: "pointer", fontFamily: "inherit", fontWeight: 600 }}>
@@ -189,10 +189,10 @@ export function NotificationBell({ userId }: { userId: string }) {
                 >
                   <div style={{
                     width: 32, height: 32, borderRadius: 8, flexShrink: 0,
-                    background: `${TYPE_COLOR[n.type] ?? "#888"}18`,
+                    background: `color-mix(in srgb, ${TYPE_COLOR[n.type] ?? "var(--text-faint)"} 12%, transparent)`,
                     display: "flex", alignItems: "center", justifyContent: "center",
                   }}>
-                    {(() => { const Icon = TYPE_ICON[n.type] ?? Bell; return <Icon size={14} style={{ color: TYPE_COLOR[n.type] ?? "#888" }} />; })()}
+                    {(() => { const Icon = TYPE_ICON[n.type] ?? Bell; return <Icon size={14} style={{ color: TYPE_COLOR[n.type] ?? "var(--text-faint)" }} />; })()}
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <p style={{ margin: "0 0 2px", fontSize: "12px", fontWeight: n.read_at ? 600 : 700, color: "var(--text)", display: "flex", justifyContent: "space-between", gap: 8 }}>
@@ -204,7 +204,7 @@ export function NotificationBell({ userId }: { userId: string }) {
                     )}
                   </div>
                   {!n.read_at && (
-                    <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#ef4444", flexShrink: 0, alignSelf: "center" }} />
+                    <div style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--c-danger)", flexShrink: 0, alignSelf: "center" }} />
                   )}
                 </div>
               ))

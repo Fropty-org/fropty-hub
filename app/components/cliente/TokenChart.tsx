@@ -54,7 +54,7 @@ export function TokenChart({ transactions }: Props) {
             Créditos
           </span>
           <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
-            <span style={{ display: "inline-block", width: 10, height: 10, borderRadius: 3, background: "#ef4444" }} />
+            <span style={{ display: "inline-block", width: 10, height: 10, borderRadius: 3, background: "var(--c-danger)" }} />
             Débitos
           </span>
         </div>
@@ -108,7 +108,7 @@ export function TokenChart({ transactions }: Props) {
                   width={barW}
                   height={debitH}
                   rx={4}
-                  fill="#ef4444"
+                  fill="var(--c-danger)"
                   opacity={0.8}
                 />
                 {/* Month label */}

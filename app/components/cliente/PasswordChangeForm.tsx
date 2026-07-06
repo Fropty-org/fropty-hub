@@ -27,7 +27,7 @@ function analyzePassword(password: string): PasswordStrength {
   if (!/[^A-Za-z0-9]/.test(password)) issues.push("pelo menos 1 caractere especial");
   const score = Math.max(0, 4 - issues.length) as 0 | 1 | 2 | 3 | 4;
   const levels: { label: string; color: string }[] = [
-    { label: "Muito fraca", color: "#ef4444" },
+    { label: "Muito fraca", color: "var(--c-danger)" },
     { label: "Fraca",       color: "#f97316" },
     { label: "Razoável",    color: "var(--brand-accent)" },
     { label: "Boa",         color: "#84cc16" },
@@ -237,7 +237,7 @@ export default function PasswordChangeForm() {
               {isPending ? "Alterando…" : "Alterar senha"}
             </button>
             {msg && (
-              <p style={{ margin: 0, fontSize: "13px", fontWeight: 600, color: msg.type === "success" ? "var(--c-success)" : "#ef4444", display: "flex", alignItems: "center", gap: 5 }}>
+              <p style={{ margin: 0, fontSize: "13px", fontWeight: 600, color: msg.type === "success" ? "var(--c-success)" : "var(--c-danger)", display: "flex", alignItems: "center", gap: 5 }}>
                 {msg.type === "success" ? <CheckCircle size={14} /> : <XCircle size={14} />}
                 {msg.text}
               </p>
@@ -429,7 +429,7 @@ export default function PasswordChangeForm() {
 
           {/* Mensagem global da tab SMS */}
           {smsMsg && (
-            <p style={{ marginTop: 14, fontSize: "13px", fontWeight: 600, color: smsMsg.type === "success" ? "var(--c-success)" : "#ef4444", display: "flex", alignItems: "center", gap: 5 }}>
+            <p style={{ marginTop: 14, fontSize: "13px", fontWeight: 600, color: smsMsg.type === "success" ? "var(--c-success)" : "var(--c-danger)", display: "flex", alignItems: "center", gap: 5 }}>
               {smsMsg.type === "success" ? <CheckCircle size={13} /> : <XCircle size={13} />}
               {smsMsg.text}
             </p>
