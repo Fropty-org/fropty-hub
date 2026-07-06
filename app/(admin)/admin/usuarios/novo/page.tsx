@@ -198,7 +198,7 @@ export default function NovoUsuarioPage() {
           <div style={{ padding: "16px 28px", borderTop: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
             <div>
               {msg && (
-                <p style={{ margin: 0, fontSize: "13px", fontWeight: 600, color: msg.ok ? "var(--c-success)" : "#ef4444", display: "flex", alignItems: "center", gap: 6 }}>
+                <p style={{ margin: 0, fontSize: "13px", fontWeight: 600, color: msg.ok ? "var(--c-success)" : "var(--c-danger)", display: "flex", alignItems: "center", gap: 6 }}>
                   {msg.ok ? <CheckCircle size={13} /> : <XCircle size={13} />}
                   {msg.text}
                 </p>

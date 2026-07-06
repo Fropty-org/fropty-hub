@@ -145,10 +145,10 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
       {/* ── KPI cards ── */}
       <div className="suporte-stats" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: 28 }}>
         <StatCard label="Total" value={tickets.length}  Icon={TicketIcon}     color="var(--primary)" />
-        <StatCard label="Em aberto" value={totalOpen}    Icon={Circle}        color="#3b82f6" />
+        <StatCard label="Em aberto" value={totalOpen}    Icon={Circle}        color="var(--c-info)" />
         {totalHigh > 0
-          ? <StatCard label="Alta prioridade" value={totalHigh}     Icon={AlertTriangle} color="#ef4444" />
-          : <StatCard label="Resolvidos"       value={totalResolved} Icon={CheckCircle}   color="#22c55e" />
+          ? <StatCard label="Alta prioridade" value={totalHigh}     Icon={AlertTriangle} color="var(--c-danger)" />
+          : <StatCard label="Resolvidos"       value={totalResolved} Icon={CheckCircle}   color="var(--c-success)" />
         }
       </div>
 

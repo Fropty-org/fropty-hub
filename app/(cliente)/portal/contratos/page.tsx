@@ -121,7 +121,7 @@ export default async function ContratosPage() {
                       <span style={{
                         display: "inline-flex", alignItems: "center", gap: 4,
                         fontSize: "10.5px", fontWeight: 700,
-                        color: renewalUrgent ? "#ef4444" : "var(--brand-accent)",
+                        color: renewalUrgent ? "var(--c-danger)" : "var(--brand-accent)",
                         marginTop: 2,
                       }}>
                         <AlertTriangle size={10} />

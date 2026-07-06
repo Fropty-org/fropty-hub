@@ -136,7 +136,7 @@ export function AdminTicketActions({ ticketId, currentStatus, currentPriority }:
       {requiresComment && (
         <div>
           <p style={{ margin: "0 0 5px", fontSize: "11px", color: "var(--text-faint)", fontWeight: 600 }}>
-            Comentário da resolução <span style={{ color: "#ef4444" }}>*</span>
+            Comentário da resolução <span style={{ color: "var(--c-danger)" }}>*</span>
           </p>
           <textarea
             value={comment}
@@ -153,7 +153,7 @@ export function AdminTicketActions({ ticketId, currentStatus, currentPriority }:
       )}
 
       {error && (
-        <p style={{ margin: 0, fontSize: "12px", color: "#ef4444", display: "flex", alignItems: "center", gap: 5 }}>
+        <p style={{ margin: 0, fontSize: "12px", color: "var(--c-danger)", display: "flex", alignItems: "center", gap: 5 }}>
           <AlertCircle size={14} /> {error}
         </p>
       )}
@@ -165,7 +165,7 @@ export function AdminTicketActions({ ticketId, currentStatus, currentPriority }:
           disabled={!canSave || pending}
           style={{
             display: "inline-flex", alignItems: "center", gap: 7,
-            background: saved ? "#22c55e" : canSave && !pending ? "var(--primary)" : "var(--surface-2)",
+            background: saved ? "var(--c-success)" : canSave && !pending ? "var(--primary)" : "var(--surface-2)",
             color: saved || (canSave && !pending) ? "#fff" : "var(--text-faint)",
             border: "none",
             borderRadius: 10,

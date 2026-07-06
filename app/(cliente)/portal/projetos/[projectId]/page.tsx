@@ -37,8 +37,8 @@ export default async function ProjetoDetailPage({
   const { project, updates } = await getProject(projectId);
   if (!project) notFound();
 
-  const st     = PROJECT_STATUSES[project.status]       ?? { label: project.status,   color: "#94a3b8", Icon: () => null };
-  const pr     = PROJECT_PRIORITY_MAP[project.priority] ?? { label: project.priority, color: "#94a3b8" };
+  const st     = PROJECT_STATUSES[project.status]       ?? { label: project.status,   color: "var(--text-faint)", Icon: () => null };
+  const pr     = PROJECT_PRIORITY_MAP[project.priority] ?? { label: project.priority, color: "var(--text-faint)" };
   const StIcon = st.Icon;
   const isActive  = !["encerrado"].includes(project.status);
   const progress  = (project as unknown as Record<string, unknown>).progress as number | undefined;
@@ -109,7 +109,7 @@ export default async function ProjetoDetailPage({
             style={{
               display: "inline-flex", alignItems: "center", gap: 6, flexShrink: 0,
               fontSize: "12px", fontWeight: 700, color: "var(--primary)",
-              background: "rgba(91,87,232,0.08)", border: "1px solid rgba(91,87,232,0.20)",
+              background: "color-mix(in srgb, var(--primary) 8%, transparent)", border: "1px solid color-mix(in srgb, var(--primary) 20%, transparent)",
               borderRadius: "var(--r-md)", padding: "7px 13px", textDecoration: "none",
             }}
           >
@@ -203,7 +203,7 @@ export default async function ProjetoDetailPage({
                         width: 10, height: 10, borderRadius: "50%", zIndex: 1,
                         background: isFirst ? "var(--primary)" : "var(--border-2)",
                         border: "2px solid var(--bg)",
-                        boxShadow: isFirst ? "0 0 0 3px rgba(91,87,232,0.18)" : "none",
+                        boxShadow: isFirst ? "0 0 0 3px color-mix(in srgb, var(--primary) 18%, transparent)" : "none",
                       }} />
                     </div>
 

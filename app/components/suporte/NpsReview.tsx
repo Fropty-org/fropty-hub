@@ -131,7 +131,7 @@ export function NpsReview({ ticketId }: Props) {
 
       {/* Error */}
       {error && (
-        <p style={{ margin: 0, fontSize: "13px", color: "#ef4444", display: "flex", alignItems: "center", gap: 6 }}>
+        <p style={{ margin: 0, fontSize: "13px", color: "var(--c-danger)", display: "flex", alignItems: "center", gap: 6 }}>
           <AlertCircle size={14} /> {error}
         </p>
       )}

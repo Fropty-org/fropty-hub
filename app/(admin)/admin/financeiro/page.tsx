@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { createClient } from "@/app/lib/supabase/server";
 import { TrendingUp, Users, ArrowDownLeft, ArrowUpRight } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -26,10 +26,10 @@ export default async function AdminFinanceiroPage() {
   const totalDebits  = txs.filter((t) => t.type === "debit").reduce((s, t) => s + t.amount, 0);
 
   const kpis: { label: string; value: string | number; sub?: string; Icon: LucideIcon; color: string }[] = [
-    { label: "MRR",                           value: `R$${mrr.toFixed(2).replace(".", ",")}`, sub: "receita recorrente mensal", Icon: TrendingUp,    color: "#22c55e" },
+    { label: "MRR",                           value: `R$${mrr.toFixed(2).replace(".", ",")}`, sub: "receita recorrente mensal", Icon: TrendingUp,    color: "var(--c-success)" },
     { label: "Assinantes",                    value: assinantes.length,  sub: "planos ativos",                              Icon: Users,           color: "var(--primary)" },
     { label: "Tokens emitidos",               value: totalCredits,       sub: "últimas 30 transações",                      Icon: ArrowDownLeft,   color: "#EF9F27" },
-    { label: "Tokens consumidos",             value: totalDebits,        sub: "últimas 30 transações",                      Icon: ArrowUpRight,    color: "#ef4444" },
+    { label: "Tokens consumidos",             value: totalDebits,        sub: "últimas 30 transações",                      Icon: ArrowUpRight,    color: "var(--c-danger)" },
   ];
 
   return (
@@ -74,7 +74,7 @@ export default async function AdminFinanceiroPage() {
                   <tr key={u.id} style={{ borderBottom: i < assinantes.length - 1 ? "1px solid var(--border)" : "none" }}>
                     <td style={{ padding: "11px 16px", fontSize: "13px", fontWeight: 600, color: "var(--text)" }}>{u.name}</td>
                     <td style={{ padding: "11px 16px" }}>
-                      <span style={{ fontSize: "11px", fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: u.plan === "pro" ? "rgba(91,87,232,0.12)" : "rgba(34,197,94,0.12)", color: u.plan === "pro" ? "var(--primary)" : "#22c55e" }}>
+                      <span style={{ fontSize: "11px", fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: u.plan === "pro" ? "color-mix(in srgb, var(--primary) 12%, transparent)" : "rgba(34,197,94,0.12)", color: u.plan === "pro" ? "var(--primary)" : "var(--c-success)" }}>
                         {u.plan === "pro" ? "Pro" : "Básico"}
                       </span>
                     </td>
@@ -110,11 +110,11 @@ export default async function AdminFinanceiroPage() {
                       <p style={{ margin: 0, fontSize: "11px", color: "var(--text-faint)" }}>{(tx.profiles as any)?.name ?? ""}</p>
                     </td>
                     <td style={{ padding: "11px 16px" }}>
-                      <span style={{ fontSize: "10px", fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: tx.type === "credit" ? "rgba(34,197,94,0.12)" : "rgba(239,68,68,0.12)", color: tx.type === "credit" ? "#22c55e" : "#ef4444" }}>
+                      <span style={{ fontSize: "10px", fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: tx.type === "credit" ? "rgba(34,197,94,0.12)" : "rgba(239,68,68,0.12)", color: tx.type === "credit" ? "var(--c-success)" : "var(--c-danger)" }}>
                         {tx.type === "credit" ? "Crédito" : "Débito"}
                       </span>
                     </td>
-                    <td style={{ padding: "11px 16px", fontSize: "13px", fontWeight: 700, color: tx.type === "credit" ? "#22c55e" : "#ef4444" }}>
+                    <td style={{ padding: "11px 16px", fontSize: "13px", fontWeight: 700, color: tx.type === "credit" ? "var(--c-success)" : "var(--c-danger)" }}>
                       {tx.type === "credit" ? "+" : "-"}{tx.amount}
                     </td>
                     <td style={{ padding: "11px 16px", fontSize: "11px", color: "var(--text-faint)", whiteSpace: "nowrap" }}>

@@ -132,7 +132,7 @@ export default async function PortalDashboardPage() {
             label: "Projetos ativos",
             value: activeProjects,
             accent: "var(--primary)",
-            bg: "rgba(91,87,232,0.10)",
+            bg: "color-mix(in srgb, var(--primary) 10%, transparent)",
             href: "/portal/projetos",
             hint: undefined as string | undefined,
           },

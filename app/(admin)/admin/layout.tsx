@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import { getProfile } from "@/app/lib/auth/session";
 import { createClient } from "@/app/lib/supabase/server";
 import { AdminSidebar } from "@/app/components/admin/AdminSidebar";
+import { HubTopbar } from "@/app/components/HubTopbar";
+import { CommandPalette } from "@/app/components/CommandPalette";
 
 export const metadata: Metadata = { robots: { index: false, follow: false } };
 
@@ -30,10 +32,19 @@ export default async function AdminPortalLayout({ children }: { children: React.
       <AdminSidebar name={name} initials={initials} userId={user?.id ?? ""} initialTheme={initialTheme} avatarUrl={avatarUrl} />
       <main
         className="portal-main-content hub-bg-diagonal"
-        style={{ flex: 1, overflow: "hidden" }}
+        style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}
       >
-        {children}
+        <HubTopbar
+          userId={user?.id ?? ""}
+          initials={initials}
+          avatarUrl={avatarUrl}
+          profileHref="/admin/perfil"
+        />
+        <div style={{ flex: 1 }}>{children}</div>
       </main>
+
+      {/* Busca global Cmd+K */}
+      <CommandPalette />
     </div>
   );
 }

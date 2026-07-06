@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllRoadmapAdmin } from "@/app/actions/roadmap";
 import { Map, Plus, ThumbsUp, Lightbulb, Calendar, Rocket, CheckCircle2, XCircle, Globe, Lock } from "lucide-react";
@@ -6,11 +6,11 @@ import { Map, Plus, ThumbsUp, Lightbulb, Calendar, Rocket, CheckCircle2, XCircle
 export const metadata: Metadata = { title: "Roadmap — Admin" };
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; Icon: React.ComponentType<{ size?: number; style?: React.CSSProperties }> }> = {
-  ideia:              { label: "Ideia",            color: "#94a3b8",        bg: "rgba(148,163,184,0.12)", Icon: Lightbulb },
-  planejado:          { label: "Planejado",         color: "#3b82f6",        bg: "rgba(59,130,246,0.12)",  Icon: Calendar },
+  ideia:              { label: "Ideia",            color: "var(--text-faint)",        bg: "rgba(148,163,184,0.12)", Icon: Lightbulb },
+  planejado:          { label: "Planejado",         color: "var(--c-info)",        bg: "rgba(59,130,246,0.12)",  Icon: Calendar },
   em_desenvolvimento: { label: "Em Desenvolvimento",color: "#EF9F27",        bg: "rgba(239,159,39,0.12)",  Icon: Rocket },
-  lancado:            { label: "Lançado",           color: "#22c55e",        bg: "rgba(34,197,94,0.12)",   Icon: CheckCircle2 },
-  descartado:         { label: "Descartado",        color: "#ef4444",        bg: "rgba(239,68,68,0.12)",   Icon: XCircle },
+  lancado:            { label: "Lançado",           color: "var(--c-success)",        bg: "rgba(34,197,94,0.12)",   Icon: CheckCircle2 },
+  descartado:         { label: "Descartado",        color: "var(--c-danger)",        bg: "rgba(239,68,68,0.12)",   Icon: XCircle },
 };
 
 const CATEGORY_LABEL: Record<string, string> = {
@@ -113,7 +113,7 @@ export default async function AdminRoadmapPage({
                 </td>
               </tr>
             ) : items.map((item, idx) => {
-              const cfg = STATUS_CONFIG[item.status] ?? { label: item.status, color: "#94a3b8", bg: "rgba(148,163,184,0.12)", Icon: Map };
+              const cfg = STATUS_CONFIG[item.status] ?? { label: item.status, color: "var(--text-faint)", bg: "rgba(148,163,184,0.12)", Icon: Map };
               const CfgIcon = cfg.Icon;
               return (
                 <tr key={item.id} style={{ borderBottom: idx < items.length - 1 ? "1px solid var(--border)" : "none" }}>
@@ -128,7 +128,7 @@ export default async function AdminRoadmapPage({
                     </span>
                   </td>
                   <td style={{ padding: "13px 16px" }}>
-                    <span style={{ fontSize: "11px", fontWeight: 600, padding: "2px 8px", borderRadius: 99, background: "rgba(91,87,232,0.10)", color: "var(--primary)" }}>
+                    <span style={{ fontSize: "11px", fontWeight: 600, padding: "2px 8px", borderRadius: 99, background: "color-mix(in srgb, var(--primary) 10%, transparent)", color: "var(--primary)" }}>
                       {CATEGORY_LABEL[item.category] ?? item.category}
                     </span>
                   </td>

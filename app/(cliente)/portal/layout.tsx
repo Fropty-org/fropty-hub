@@ -10,6 +10,7 @@ import { ACTIVE_PROJECT_STATUSES } from "@/app/lib/constants/projects";
 import { UserAvatarMenu } from "@/app/components/auth/UserAvatarMenu";
 import { PullToRefresh } from "@/app/components/PullToRefresh";
 import { CommandPalette } from "@/app/components/CommandPalette";
+import { HubTopbar } from "@/app/components/HubTopbar";
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -144,6 +145,12 @@ export default async function PortalLayout({
         className="portal-main-content hub-bg-diagonal"
         style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}
       >
+        <HubTopbar
+          userId={profile?.id ?? ""}
+          initials={initials}
+          avatarUrl={avatarUrl}
+          profileHref={isAdmin ? "/admin/perfil" : "/portal/perfil"}
+        />
         <PullToRefresh>{children}</PullToRefresh>
       </main>
 

@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { createClient } from "@/app/lib/supabase/server";
 import { TrendingUp, Users, MessageCircle, CheckCircle, Zap, Clock, ShieldCheck, Activity, Smile } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -102,14 +102,14 @@ export default async function AdminAnalyticsPage() {
   });
 
   const kpis: { label: string; value: string | number; Icon: LucideIcon; color: string; sub: string }[] = [
-    { label: "MRR", value: `R$${mrr.toFixed(2).replace(".", ",")}`, Icon: TrendingUp, color: "#22c55e", sub: `${planCounts.basico} básico · ${planCounts.pro} pro` },
-    { label: "Clientes ativos", value: totalClients ?? 0, Icon: Users, color: "#3b82f6", sub: `${planCounts.sem_plano} sem plano` },
+    { label: "MRR", value: `R$${mrr.toFixed(2).replace(".", ",")}`, Icon: TrendingUp, color: "var(--c-success)", sub: `${planCounts.basico} básico · ${planCounts.pro} pro` },
+    { label: "Clientes ativos", value: totalClients ?? 0, Icon: Users, color: "var(--c-info)", sub: `${planCounts.sem_plano} sem plano` },
     { label: "Tickets abertos", value: openTickets ?? 0, Icon: MessageCircle, color: "var(--brand-accent)", sub: `${resolvedTickets ?? 0} resolvidos/fechados` },
-    { label: "Taxa de resolução", value: `${resolvedRate}%`, Icon: CheckCircle, color: resolvedRate >= 80 ? "#22c55e" : resolvedRate >= 50 ? "#f59e0b" : "#ef4444", sub: `${openTickets ?? 0} abertos · ${resolvedTickets ?? 0} resolvidos` },
-    { label: "Tempo médio resolução", value: avgResolutionLabel, Icon: Clock, color: avgResolutionHours != null && avgResolutionHours <= 24 ? "#22c55e" : avgResolutionHours != null && avgResolutionHours <= 72 ? "#f59e0b" : "#94a3b8", sub: `base: ${resolvedList.length} tickets resolvidos` },
-    { label: "Conformidade SLA", value: slaCompliance != null ? `${slaCompliance}%` : "—", Icon: ShieldCheck, color: slaCompliance != null && slaCompliance >= 80 ? "#22c55e" : slaCompliance != null && slaCompliance >= 50 ? "#f59e0b" : "#ef4444", sub: `${slaComplianceCount} de ${resolvedList.length} dentro do SLA` },
+    { label: "Taxa de resolução", value: `${resolvedRate}%`, Icon: CheckCircle, color: resolvedRate >= 80 ? "var(--c-success)" : resolvedRate >= 50 ? "var(--c-warning)" : "var(--c-danger)", sub: `${openTickets ?? 0} abertos · ${resolvedTickets ?? 0} resolvidos` },
+    { label: "Tempo médio resolução", value: avgResolutionLabel, Icon: Clock, color: avgResolutionHours != null && avgResolutionHours <= 24 ? "var(--c-success)" : avgResolutionHours != null && avgResolutionHours <= 72 ? "var(--c-warning)" : "var(--text-faint)", sub: `base: ${resolvedList.length} tickets resolvidos` },
+    { label: "Conformidade SLA", value: slaCompliance != null ? `${slaCompliance}%` : "—", Icon: ShieldCheck, color: slaCompliance != null && slaCompliance >= 80 ? "var(--c-success)" : slaCompliance != null && slaCompliance >= 50 ? "var(--c-warning)" : "var(--c-danger)", sub: `${slaComplianceCount} de ${resolvedList.length} dentro do SLA` },
     { label: "Tokens consumidos (30d)", value: tokensOut, Icon: Zap, color: "var(--brand-accent)", sub: `${tokensIn} adicionados` },
-    { label: "NPS (90d)", value: nps.nps != null ? String(nps.nps) : "—", Icon: Smile, color: nps.nps == null ? "#94a3b8" : nps.nps >= 50 ? "#22c55e" : nps.nps >= 0 ? "#f59e0b" : "#ef4444", sub: nps.count > 0 ? `${nps.promoters} promotores · ${nps.detractors} detratores · ${nps.count} respostas` : "sem respostas ainda" },
+    { label: "NPS (90d)", value: nps.nps != null ? String(nps.nps) : "—", Icon: Smile, color: nps.nps == null ? "var(--text-faint)" : nps.nps >= 50 ? "var(--c-success)" : nps.nps >= 0 ? "var(--c-warning)" : "var(--c-danger)", sub: nps.count > 0 ? `${nps.promoters} promotores · ${nps.detractors} detratores · ${nps.count} respostas` : "sem respostas ainda" },
   ];
 
   const statusLabels: Record<string, string> = {
@@ -117,24 +117,24 @@ export default async function AdminAnalyticsPage() {
     resolvido: "Resolvido", fechado: "Fechado",
   };
   const statusColors: Record<string, string> = {
-    aberto: "#ef4444", em_andamento: "#f59e0b", reaberto: "#8b5cf6",
-    resolvido: "#22c55e", fechado: "#94a3b8",
+    aberto: "var(--c-danger)", em_andamento: "var(--c-warning)", reaberto: "var(--c-purple)",
+    resolvido: "var(--c-success)", fechado: "var(--text-faint)",
   };
   const priorityLabels: Record<string, string> = { baixa: "Baixa", media: "Média", alta: "Alta", critica: "Crítica" };
-  const priorityColors: Record<string, string> = { baixa: "#22c55e", media: "#3b82f6", alta: "#f59e0b", critica: "#ef4444" };
+  const priorityColors: Record<string, string> = { baixa: "var(--c-success)", media: "var(--c-info)", alta: "var(--c-warning)", critica: "var(--c-danger)" };
   const PLAN_LABEL: Record<string, string> = { sem_plano: "Sem plano", basico: "Básico", pro: "Pro" };
 
   return (
-    <div style={{ padding: "40px 32px", maxWidth: 1400, margin: "0 auto" }}>
-      <div style={{ marginBottom: 32 }}>
-        <h1 style={{ fontSize: "1.5rem", fontWeight: 800, margin: "0 0 4px", color: "var(--text)", letterSpacing: "-0.02em" }}>Analytics</h1>
-        <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>Métricas operacionais e de crescimento do ecossistema</p>
+    <div style={{ padding: "24px 28px", maxWidth: 1400, margin: "0 auto" }}>
+      <div className="hub-page-header">
+        <h1 className="hub-page-title">Analytics</h1>
+        <p className="hub-page-sub">Métricas operacionais e de crescimento do ecossistema</p>
       </div>
 
       {/* KPIs */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16, marginBottom: 28 }}>
         {kpis.map((k) => (
-          <div key={k.label} style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "20px" }}>
+          <div key={k.label} className="hub-card" style={{ padding: "20px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
               <div style={{ width: 36, height: 36, borderRadius: 10, background: `color-mix(in srgb, ${k.color} 12%, transparent)`, display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <k.Icon size={17} style={{ color: k.color }} />
@@ -149,14 +149,14 @@ export default async function AdminAnalyticsPage() {
 
       {/* Tendências (30 dias) */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 20 }}>
-        <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "20px" }}>
+        <div className="hub-card" style={{ padding: "20px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
             <Activity size={14} style={{ color: "var(--text-muted)" }} />
             <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>Novos chamados — últimos 30 dias</h2>
           </div>
           <TrendBars data={newTicketsSeries} color="var(--brand-accent)" unit="chamados" />
         </div>
-        <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "20px" }}>
+        <div className="hub-card" style={{ padding: "20px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
             <Zap size={14} style={{ color: "var(--text-muted)" }} />
             <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>Tokens consumidos — últimos 30 dias</h2>
@@ -169,7 +169,7 @@ export default async function AdminAnalyticsPage() {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 20, marginBottom: 20 }}>
 
         {/* Distribuição de planos */}
-        <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "20px" }}>
+        <div className="hub-card" style={{ padding: "20px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
             <Users size={14} style={{ color: "var(--text-muted)" }} />
             <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>Planos</h2>
@@ -178,7 +178,7 @@ export default async function AdminAnalyticsPage() {
             {(Object.entries(planCounts) as [string, number][]).map(([key, count]) => {
               const total = totalClients ?? 1;
               const pct = total > 0 ? Math.round((count / total) * 100) : 0;
-              const color = key === "pro" ? "var(--primary)" : key === "basico" ? "#3b82f6" : "#94a3b8";
+              const color = key === "pro" ? "var(--primary)" : key === "basico" ? "var(--c-info)" : "var(--text-faint)";
               return (
                 <div key={key}>
                   <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", marginBottom: 6 }}>
@@ -195,7 +195,7 @@ export default async function AdminAnalyticsPage() {
         </div>
 
         {/* Tickets por status */}
-        <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "20px" }}>
+        <div className="hub-card" style={{ padding: "20px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
             <MessageCircle size={14} style={{ color: "var(--text-muted)" }} />
             <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>Tickets por status</h2>
@@ -218,7 +218,7 @@ export default async function AdminAnalyticsPage() {
         </div>
 
         {/* Tickets por prioridade */}
-        <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "20px" }}>
+        <div className="hub-card" style={{ padding: "20px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
             <Zap size={14} style={{ color: "var(--text-muted)" }} />
             <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>Tickets por prioridade</h2>
@@ -245,13 +245,13 @@ export default async function AdminAnalyticsPage() {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
 
         {/* Tokens 30 dias */}
-        <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "20px" }}>
+        <div className="hub-card" style={{ padding: "20px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
             <Clock size={14} style={{ color: "var(--text-muted)" }} />
             <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>Tokens — últimos 30 dias</h2>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-            {([["Emitidos", tokensIn, "#22c55e"], ["Consumidos", tokensOut, "#ef4444"]] as [string, number, string][]).map(([label, val, color]) => (
+            {([["Emitidos", tokensIn, "var(--c-success)"], ["Consumidos", tokensOut, "var(--c-danger)"]] as [string, number, string][]).map(([label, val, color]) => (
               <div key={label}>
                 <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", marginBottom: 6 }}>
                   <span style={{ color: "var(--text-muted)", fontWeight: 600 }}>{label}</span>
@@ -264,7 +264,7 @@ export default async function AdminAnalyticsPage() {
             ))}
             <div style={{ padding: "12px 14px", background: "var(--surface-2)", borderRadius: 10, display: "flex", justifyContent: "space-between", fontSize: "13px", marginTop: 2 }}>
               <span style={{ color: "var(--text-muted)", fontWeight: 600 }}>Saldo líquido</span>
-              <span style={{ fontWeight: 800, color: tokensIn - tokensOut >= 0 ? "#22c55e" : "#ef4444" }}>
+              <span style={{ fontWeight: 800, color: tokensIn - tokensOut >= 0 ? "var(--c-success)" : "var(--c-danger)" }}>
                 {tokensIn - tokensOut >= 0 ? "+" : ""}{(tokensIn - tokensOut).toLocaleString("pt-BR")}
               </span>
             </div>
@@ -272,7 +272,7 @@ export default async function AdminAnalyticsPage() {
         </div>
 
         {/* Clientes recentes */}
-        <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, padding: "20px" }}>
+        <div className="hub-card" style={{ padding: "20px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
             <Users size={14} style={{ color: "var(--text-muted)" }} />
             <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>Clientes recentes</h2>
@@ -283,7 +283,7 @@ export default async function AdminAnalyticsPage() {
             ) : (recentClients ?? []).map((c, i, arr) => {
               const initials = (c.name ?? c.email ?? "?").slice(0, 2).toUpperCase();
               const planLabel = PLAN_LABEL[c.plan ?? "sem_plano"] ?? "";
-              const planColor = c.plan === "pro" ? "var(--primary)" : c.plan === "basico" ? "#3b82f6" : "var(--text-faint)";
+              const planColor = c.plan === "pro" ? "var(--primary)" : c.plan === "basico" ? "var(--c-info)" : "var(--text-faint)";
               return (
                 <div key={c.email} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 0", borderBottom: i < arr.length - 1 ? "1px solid var(--border)" : "none" }}>
                   <div style={{ width: 32, height: 32, borderRadius: "50%", background: "var(--surface-2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", fontWeight: 800, color: "var(--text-muted)", flexShrink: 0 }}>

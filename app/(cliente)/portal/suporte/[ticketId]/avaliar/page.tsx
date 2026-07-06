@@ -67,7 +67,7 @@ export default async function AvaliarPage({ params }: Props) {
         </p>
         <ul style={{ margin: "0 0 24px", padding: "0 0 0 18px", fontSize: "13px", color: "var(--text-muted)", lineHeight: 1.7 }}>
           <li><strong style={{ color: "var(--c-success)" }}>Confirmar:</strong> o chamado é fechado e você recebe a confirmação por e-mail.</li>
-          <li><strong style={{ color: "#ef4444" }}>Não resolveu:</strong> o chamado é reaberto e volta para a fila do time retomar.</li>
+          <li><strong style={{ color: "var(--c-danger)" }}>Não resolveu:</strong> o chamado é reaberto e volta para a fila do time retomar.</li>
         </ul>
 
         <ResolutionReview ticketId={ticketId} />

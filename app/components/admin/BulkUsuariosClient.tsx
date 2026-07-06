@@ -69,8 +69,8 @@ export function BulkUsuariosClient({ users }: Props) {
       {selected.size > 0 && (
         <div style={{
           display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap",
-          padding: "12px 20px", background: "rgba(91,87,232,0.07)",
-          border: "1px solid rgba(91,87,232,0.2)", borderRadius: 12, marginBottom: 12,
+          padding: "12px 20px", background: "color-mix(in srgb, var(--primary) 7%, transparent)",
+          border: "1px solid color-mix(in srgb, var(--primary) 20%, transparent)", borderRadius: 12, marginBottom: 12,
         }}>
           <span style={{ fontSize: "12px", fontWeight: 700, color: "var(--primary)" }}>
             {selected.size} selecionado{selected.size !== 1 ? "s" : ""}
@@ -143,11 +143,11 @@ export function BulkUsuariosClient({ users }: Props) {
                 display: "grid", gridTemplateColumns: "36px minmax(200px,2fr) 140px 100px 120px 110px 80px 120px",
                 padding: "8px 16px", borderBottom: i < users.length - 1 ? "1px solid var(--border)" : "none",
                 alignItems: "center", gap: 8, minWidth: 960,
-                background: selected.has(u.id) ? "rgba(91,87,232,0.04)" : "transparent",
+                background: selected.has(u.id) ? "color-mix(in srgb, var(--primary) 4%, transparent)" : "transparent",
                 transition: "background 0.1s",
               }}
               onMouseEnter={e => { if (!selected.has(u.id)) (e.currentTarget as HTMLDivElement).style.background = "var(--surface-2)"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background = selected.has(u.id) ? "rgba(91,87,232,0.04)" : "transparent"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background = selected.has(u.id) ? "color-mix(in srgb, var(--primary) 4%, transparent)" : "transparent"; }}
             >
               <button onClick={() => toggle(u.id)} style={{ background: "none", border: "none", cursor: "pointer", padding: 0, color: selected.has(u.id) ? "var(--primary)" : "var(--text-faint)", display: "flex", alignItems: "center" }}>
                 {selected.has(u.id) ? <CheckSquare size={14} /> : <Square size={14} />}

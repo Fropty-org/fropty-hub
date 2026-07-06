@@ -145,7 +145,7 @@
   --surface-hover:    rgba(17, 17, 17, 0.04);
   --border-strong:    var(--border-2);
   --ring:             rgba(91, 87, 232, 0.25);
-  --diagonal-line:    rgba(17, 17, 17, 0.07);
+  --diagonal-line:    rgba(17, 17, 17, 0.05);
   --sidebar-active-bg:   rgba(17, 17, 17, 0.06);
   --sidebar-active-text: var(--text);
 
@@ -247,7 +247,7 @@
   --surface-hover:    rgba(255, 255, 255, 0.05);
   --border-strong:    var(--border-2);
   --ring:             rgba(91, 87, 232, 0.45);
-  --diagonal-line:    rgba(255, 255, 255, 0.05);
+  --diagonal-line:    rgba(255, 255, 255, 0.04);
   --sidebar-active-bg:   rgba(255, 255, 255, 0.10);
   --sidebar-active-text: var(--text);
 
@@ -474,14 +474,13 @@ a { color: inherit; text-decoration: none; }
 .hub-btn:active { transform: scale(0.98); }
 .hub-btn:disabled { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
 
+/* Primário flat (Preline: sem glow/sombra em botões) */
 .hub-btn-primary {
   background: var(--primary);
   color:      var(--primary-text);
-  box-shadow: var(--shadow-brand);
 }
 .hub-btn-primary:hover {
   background: var(--primary-hover);
-  box-shadow: 0 6px 24px rgba(91, 87, 232, 0.35);
 }
 
 .hub-btn-ghost {
@@ -612,9 +611,9 @@ a { color: inherit; text-decoration: none; }
   border:       1px solid var(--border);
 }
 .hub-badge-primary {
-  background:   rgba(91, 87, 232, 0.12);
-  color:        var(--brand-500);
-  border:       1px solid rgba(91, 87, 232, 0.22);
+  background:   color-mix(in srgb, var(--primary) 12%, transparent);
+  color:        var(--primary);
+  border:       1px solid color-mix(in srgb, var(--primary) 25%, transparent);
 }
 .hub-badge-accent { background: var(--c-accent-bg); color: var(--c-accent); border: 1px solid rgba(239,159,39,0.24); }
 .hub-badge-purple { background: var(--c-purple-bg); color: var(--c-purple); border: 1px solid rgba(168,85,247,0.24); }
@@ -739,14 +738,15 @@ a { color: inherit; text-decoration: none; }
 .hub-progress-fill.warning { background: var(--c-warning); }
 .hub-progress-fill.danger  { background: var(--c-danger); }
 
-/* ── Avatar ──────────────────────────────────────────────────────── */
+/* ── Avatar (Preline: iniciais neutras sobre superfície) ─────────── */
 .hub-avatar {
   width:         36px; height: 36px;
   border-radius: 50%;
-  background:    linear-gradient(135deg, var(--brand-500), var(--brand-700));
-  color:         #fff;
+  background:    var(--surface-3);
+  border:        1px solid var(--border);
+  color:         var(--text-muted);
   font-size:     13px;
-  font-weight:   700;
+  font-weight:   600;
   display:       flex;
   align-items:   center;
   justify-content: center;
@@ -835,9 +835,9 @@ a { color: inherit; text-decoration: none; }
 }
 .portal-sidebar::-webkit-scrollbar { display: none; }
 
-/* ── Background diagonal tracejado (Enterprise UI) ────────────────
-   Linhas a -45° quebradas em traços por uma máscara a 45°.
-   CSS puro (um pseudo-elemento), tema via --diagonal-line.
+/* ── Background diagonal (Enterprise UI, fiel ao Preline) ─────────
+   Linhas finas contínuas em "\", densas (período 7px), opacidade
+   baixa via --diagonal-line. CSS puro (um pseudo-elemento).
    Aplicar em áreas de respiro (fundo do portal, sidebar, login) —
    nunca atrás de tabelas e formulários. */
 .hub-bg-diagonal { position: relative; }
@@ -848,14 +848,87 @@ a { color: inherit; text-decoration: none; }
   inset: 0;
   z-index: -1;
   background-image: repeating-linear-gradient(
-    -45deg,
+    45deg,
     var(--diagonal-line) 0 1px,
-    transparent 1px 22px
+    transparent 1px 7px
   );
-  -webkit-mask-image: repeating-linear-gradient(45deg, #000 0 6px, transparent 6px 14px);
-          mask-image: repeating-linear-gradient(45deg, #000 0 6px, transparent 6px 14px);
   pointer-events: none;
 }
+
+/* ── Topbar do Hub (desktop, estilo Preline) ─────────────────────── */
+.hub-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 52px;
+  padding: 0 20px;
+  flex-shrink: 0;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.hub-topbar-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  max-width: 400px;
+  padding: 7px 12px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-faint);
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color var(--transition-fast) var(--ease-standard),
+              color var(--transition-fast) var(--ease-standard);
+}
+.hub-topbar-search:hover {
+  border-color: var(--border-strong);
+  color: var(--text-muted);
+}
+.hub-topbar-search kbd {
+  margin-left: auto;
+  font-size: 10.5px;
+  font-family: inherit;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  background: var(--bg-alt);
+  color: var(--text-faint);
+}
+.hub-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hub-topbar-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--surface-3);
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: border-color var(--transition-fast) var(--ease-standard);
+}
+.hub-topbar-avatar:hover { border-color: var(--border-strong); }
+@media (max-width: 768px) { .hub-topbar { display: none; } }
 
 /* Topbar (mobile) */
 .portal-topbar {
@@ -937,6 +1010,29 @@ a { color: inherit; text-decoration: none; }
      (Preline). A landing mantém --cta-bg preto/branco no escopo raiz. */
   --cta-bg: var(--primary);
   --cta-text: var(--primary-text);
+
+  /* Densidade Preline: corpo 14px no Hub (landing segue 15px) */
+  font-size: 14px;
+}
+
+/* ── Enterprise UI: escopo Preline do Hub ─────────────────────────
+   Tipografia Inter + primário azul Preline (#155DFC) apenas nas
+   superfícies do Hub (portal, admin, topbar, login via .hub-inter).
+   Landing e marketing preservam DM Sans + roxo Fropty. */
+.portal-main-content, .portal-sidebar, .portal-topbar, .hub-inter {
+  font-family: var(--font-inter), Inter, ui-sans-serif, system-ui, sans-serif;
+  --primary:       #155DFC;
+  --primary-hover: #1447E6;
+  --ac:            #155DFC;
+  --ring:          rgba(21, 93, 252, 0.30);
+  --input-focus:   rgba(21, 93, 252, 0.22);
+  --border-hover:  rgba(21, 93, 252, 0.45);
+  --border-focus:  rgba(21, 93, 252, 0.70);
+}
+.dark .portal-main-content, .dark .portal-sidebar, .dark .portal-topbar, .dark .hub-inter {
+  --primary-hover: #2B7FFF;
+  --ring:          rgba(21, 93, 252, 0.45);
+  --input-focus:   rgba(21, 93, 252, 0.28);
 }
 
 /* ── RESPONSIVO (mobile ≤ 768px) ─────────────────────────────────── */

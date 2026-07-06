@@ -82,7 +82,7 @@ export default async function FinanceiroPage({ searchParams }: Props) {
   })();
 
   return (
-    <div style={{ padding: "24px 24px", maxWidth: 1020, margin: "0 auto" }}>
+    <div style={{ padding: "24px 28px", maxWidth: 1280, margin: "0 auto" }}>
 
       <PageHeader
         title="Financeiro"
@@ -132,7 +132,7 @@ export default async function FinanceiroPage({ searchParams }: Props) {
         <div className="hub-stat-card">
           <div style={{
             width: 38, height: 38, borderRadius: "var(--r-md)",
-            background: "rgba(91,87,232,0.12)", display: "flex", alignItems: "center", justifyContent: "center",
+            background: "color-mix(in srgb, var(--primary) 12%, transparent)", display: "flex", alignItems: "center", justifyContent: "center",
           }}>
             <BadgeCheck size={18} style={{ color: "var(--primary)" }} />
           </div>
@@ -324,7 +324,7 @@ export default async function FinanceiroPage({ searchParams }: Props) {
                   <input type="hidden" name="plan" value={p} />
                   <div className="hub-card" style={{
                     padding: "20px",
-                    border: p === "pro" ? "1px solid rgba(91,87,232,0.4)" : "1px solid var(--border)",
+                    border: p === "pro" ? "1px solid color-mix(in srgb, var(--primary) 40%, transparent)" : "1px solid var(--border)",
                     position: "relative",
                   }}>
                     {p === "pro" && (
@@ -350,13 +350,11 @@ export default async function FinanceiroPage({ searchParams }: Props) {
                     <p style={{ margin: "0 0 14px", fontSize: "12px", color: "var(--text-faint)", lineHeight: 1.5 }}>
                       Token a R$150 (50% off) · Fidelidade mínima 3 meses
                     </p>
-                    <button type="submit" style={{
-                      width: "100%", padding: "9px",
-                      borderRadius: "var(--r-md)", border: "none",
-                      background: p === "pro" ? "var(--primary)" : "var(--surface-2)",
-                      color: p === "pro" ? "#fff" : "var(--text)",
-                      fontWeight: 700, fontSize: "13px", cursor: "pointer", fontFamily: "inherit",
-                    }}>
+                    <button
+                      type="submit"
+                      className={`hub-btn ${p === "pro" ? "hub-btn-primary" : "hub-btn-secondary"}`}
+                      style={{ width: "100%" }}
+                    >
                       {isUpgrade ? "Migrar para o Pro" : `Assinar Plano ${info.label}`}
                     </button>
                   </div>
@@ -370,8 +368,8 @@ export default async function FinanceiroPage({ searchParams }: Props) {
       {/* ── Compra avulsa ── */}
       <div className="hub-card" style={{
         marginBottom: 28, padding: "18px 22px",
-        background: "linear-gradient(135deg, rgba(91,87,232,0.06), rgba(91,87,232,0.02))",
-        borderColor: "rgba(91,87,232,0.22)",
+        background: "color-mix(in srgb, var(--primary) 5%, var(--card-bg))",
+        borderColor: "color-mix(in srgb, var(--primary) 22%, transparent)",
       }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
           <div>
@@ -381,23 +379,14 @@ export default async function FinanceiroPage({ searchParams }: Props) {
             </p>
           </div>
           <form action={buyTokens} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <select name="qty" defaultValue="1" style={{
-              background: "var(--surface)", border: "1px solid var(--border)",
-              borderRadius: "var(--r-md)", color: "var(--text)",
-              padding: "8px 12px", fontSize: "13px", fontFamily: "inherit", cursor: "pointer",
-            }}>
+            <select name="qty" defaultValue="1" className="hub-input hub-select" style={{ width: "auto" }}>
               {[1, 2, 3, 5, 10].map((n) => (
                 <option key={n} value={n}>
                   {n} token{n > 1 ? "s" : ""} — R${(n * avulsoUnit).toLocaleString("pt-BR")}
                 </option>
               ))}
             </select>
-            <button type="submit" style={{
-              background: "var(--cta-bg)", color: "var(--cta-text)", border: "none",
-              padding: "9px 18px", borderRadius: "var(--r-md)",
-              fontWeight: 700, fontSize: "13px", cursor: "pointer", fontFamily: "inherit",
-              display: "flex", alignItems: "center", gap: 6,
-            }}>
+            <button type="submit" className="hub-btn hub-btn-primary">
               <CreditCard size={14} /> Comprar
             </button>
           </form>

@@ -18,7 +18,7 @@ const STATUS_SECTIONS: {
 }[] = [
   { status: "em_desenvolvimento", label: "Em Desenvolvimento", color: "var(--primary)",      hex: "#5B57E8", Icon: Rocket,        highlight: true },
   { status: "planejado",          label: "Planejado",          color: "var(--brand-accent)",  hex: "#EF9F27", Icon: CalendarCheck },
-  { status: "lancado",            label: "Lançado",            color: "var(--c-success)",     hex: "#16a34a", Icon: CheckCircle2 },
+  { status: "lancado",            label: "Lançado",            color: "var(--c-success)",     hex: "var(--c-success)", Icon: CheckCircle2 },
   { status: "ideia",              label: "Ideias",             color: "var(--text-faint)",    hex: "#aaaaaa", Icon: Lightbulb },
 ];
 

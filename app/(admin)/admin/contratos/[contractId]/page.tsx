@@ -25,7 +25,7 @@ export default async function AdminContratoDetailPage({ params }: { params: Prom
 
   if (!contract) notFound();
 
-  const st = CONTRACT_STATUS_MAP[contract.status] ?? { label: contract.status, color: "#94a3b8" };
+  const st = CONTRACT_STATUS_MAP[contract.status] ?? { label: contract.status, color: "var(--text-faint)" };
   const typeLabel = CONTRACT_TYPE_MAP[contract.type] ?? contract.type;
 
   async function handleStatusUpdate(formData: FormData) {

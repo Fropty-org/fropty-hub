@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Plus, FileSignature, User, Calendar, CheckCircle, Clock, XCircle } from "lucide-react";
 import { getAllContracts } from "@/app/actions/contracts";
@@ -48,9 +48,9 @@ export default async function AdminContratosPage({
 
   const kpis = [
     { label: "Total",      value: total,      color: "var(--primary)",  Icon: FileSignature },
-    { label: "Assinados",  value: assinados,  color: "#22c55e",         Icon: CheckCircle },
-    { label: "Enviados",   value: enviados,   color: "#3b82f6",         Icon: Clock },
-    { label: "Cancelados", value: cancelados, color: "#ef4444",         Icon: XCircle },
+    { label: "Assinados",  value: assinados,  color: "var(--c-success)",         Icon: CheckCircle },
+    { label: "Enviados",   value: enviados,   color: "var(--c-info)",         Icon: Clock },
+    { label: "Cancelados", value: cancelados, color: "var(--c-danger)",         Icon: XCircle },
   ];
 
   return (

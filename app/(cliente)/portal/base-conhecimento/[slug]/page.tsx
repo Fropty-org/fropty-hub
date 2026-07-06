@@ -49,7 +49,7 @@ export default async function ArticlePage({ params }: Props) {
       {/* ── Header ── */}
       <div style={{ marginBottom: 28 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12, flexWrap: "wrap" }}>
-          <span style={{ fontSize: "11px", fontWeight: 700, padding: "3px 10px", borderRadius: "var(--r-full)", color: "var(--primary)", background: "rgba(91,87,232,0.08)", border: "1px solid rgba(91,87,232,0.18)" }}>
+          <span style={{ fontSize: "11px", fontWeight: 700, padding: "3px 10px", borderRadius: "var(--r-full)", color: "var(--primary)", background: "color-mix(in srgb, var(--primary) 8%, transparent)", border: "1px solid color-mix(in srgb, var(--primary) 18%, transparent)" }}>
             {CAT_LABELS[article.category] ?? article.category}
           </span>
           {article.product && (

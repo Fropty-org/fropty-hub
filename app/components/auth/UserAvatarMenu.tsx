@@ -109,7 +109,7 @@ export function UserAvatarMenu({ name, email, initials, role, plan }: Props) {
                 fontWeight: 700,
                 padding: "2px 8px",
                 borderRadius: 6,
-                background: "rgba(91,87,232,0.15)",
+                background: "color-mix(in srgb, var(--primary) 15%, transparent)",
                 color: "var(--primary)",
               }}
             >

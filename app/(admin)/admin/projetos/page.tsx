@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Plus, FolderKanban, Calendar, User, BarChart2 } from "lucide-react";
 import { getAllProjects } from "@/app/actions/projects";
@@ -125,7 +125,7 @@ export default async function AdminProjetosPage({
         <>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 16 }}>
           {pageProjects.map((project) => {
-            const st = PROJECT_STATUSES[project.status] ?? { label: project.status, color: "#94a3b8", Icon: FolderKanban };
+            const st = PROJECT_STATUSES[project.status] ?? { label: project.status, color: "var(--text-faint)", Icon: FolderKanban };
             const StIcon = st.Icon;
 
             return (

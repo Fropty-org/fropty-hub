@@ -23,7 +23,7 @@ import { User, Headphones } from "lucide-react";
 
 // Identidade visual de cada papel na conversa
 const ROLE_META = {
-  cliente: { fallback: "Cliente",       color: "#3b82f6", Icon: User },
+  cliente: { fallback: "Cliente",       color: "var(--c-info)", Icon: User },
   equipe:  { fallback: "Equipe Fropty", color: "var(--primary)", Icon: Headphones },
 };
 
@@ -343,7 +343,7 @@ export function TicketConversation({
       ) : (
         <div className="conv-reply" style={{ padding: "16px 20px" }}>
           {error && (
-            <p style={{ margin: "0 0 10px", fontSize: "12px", color: "#ef4444", display: "flex", alignItems: "center", gap: 5 }}>
+            <p style={{ margin: "0 0 10px", fontSize: "12px", color: "var(--c-danger)", display: "flex", alignItems: "center", gap: 5 }}>
               <AlertCircle size={14} /> {error}
             </p>
           )}

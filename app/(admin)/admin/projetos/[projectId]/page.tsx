@@ -29,7 +29,7 @@ export default async function AdminProjetoDetailPage({ params }: { params: Promi
 
   if (!project) notFound();
 
-  const st = PROJECT_STATUSES[project.status] ?? { label: project.status, color: "#94a3b8", Icon: () => null };
+  const st = PROJECT_STATUSES[project.status] ?? { label: project.status, color: "var(--text-faint)", Icon: () => null };
   const StIcon = st.Icon;
 
   async function handleStatusUpdate(formData: FormData) {
@@ -144,11 +144,11 @@ export default async function AdminProjetoDetailPage({ params }: { params: Promi
                 <div key={u.id} style={{ padding: "14px 16px", background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 12 }}>
                   {u.status_from && u.status_to && (
                     <div style={{ display: "flex", gap: 6, alignItems: "center", marginBottom: 8, flexWrap: "wrap" }}>
-                      <span style={{ fontSize: "11px", fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: `${(PROJECT_STATUSES[u.status_from as ProjectStatus]?.color ?? "#94a3b8")}18`, color: PROJECT_STATUSES[u.status_from as ProjectStatus]?.color ?? "#94a3b8" }}>
+                      <span style={{ fontSize: "11px", fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: `${(PROJECT_STATUSES[u.status_from as ProjectStatus]?.color ?? "var(--text-faint)")}18`, color: PROJECT_STATUSES[u.status_from as ProjectStatus]?.color ?? "var(--text-faint)" }}>
                         {PROJECT_STATUSES[u.status_from as ProjectStatus]?.label ?? u.status_from}
                       </span>
                       <span style={{ fontSize: "11px", color: "var(--text-faint)" }}>→</span>
-                      <span style={{ fontSize: "11px", fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: `${(PROJECT_STATUSES[u.status_to as ProjectStatus]?.color ?? "#94a3b8")}18`, color: PROJECT_STATUSES[u.status_to as ProjectStatus]?.color ?? "#94a3b8" }}>
+                      <span style={{ fontSize: "11px", fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: `${(PROJECT_STATUSES[u.status_to as ProjectStatus]?.color ?? "var(--text-faint)")}18`, color: PROJECT_STATUSES[u.status_to as ProjectStatus]?.color ?? "var(--text-faint)" }}>
                         {PROJECT_STATUSES[u.status_to as ProjectStatus]?.label ?? u.status_to}
                       </span>
                     </div>

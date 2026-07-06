@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllFeedbacksAdmin } from "@/app/actions/feedback";
 import { MessageSquare, Bug, Star, AlertCircle, HelpCircle, Inbox } from "lucide-react";
@@ -7,19 +7,19 @@ import type { FeedbackType, FeedbackStatus } from "@/app/lib/types/feedback";
 export const metadata: Metadata = { title: "Feedback — Admin" };
 
 const TYPE_CONFIG: Record<FeedbackType, { label: string; color: string; bg: string; Icon: React.ComponentType<{ size?: number; style?: React.CSSProperties }> }> = {
-  sugestao: { label: "Sugestão", color: "var(--primary)",  bg: "rgba(91,87,232,0.12)",  Icon: MessageSquare },
-  bug:      { label: "Bug",      color: "#ef4444",         bg: "rgba(239,68,68,0.12)",  Icon: Bug },
-  elogio:   { label: "Elogio",   color: "#22c55e",         bg: "rgba(34,197,94,0.12)",  Icon: Star },
+  sugestao: { label: "Sugestão", color: "var(--primary)",  bg: "color-mix(in srgb, var(--primary) 12%, transparent)",  Icon: MessageSquare },
+  bug:      { label: "Bug",      color: "var(--c-danger)",         bg: "rgba(239,68,68,0.12)",  Icon: Bug },
+  elogio:   { label: "Elogio",   color: "var(--c-success)",         bg: "rgba(34,197,94,0.12)",  Icon: Star },
   critica:  { label: "Crítica",  color: "#EF9F27",         bg: "rgba(239,159,39,0.12)", Icon: AlertCircle },
-  outro:    { label: "Outro",    color: "#94a3b8",         bg: "rgba(148,163,184,0.12)",Icon: HelpCircle },
+  outro:    { label: "Outro",    color: "var(--text-faint)",         bg: "rgba(148,163,184,0.12)",Icon: HelpCircle },
 };
 
 const STATUS_CONFIG: Record<FeedbackStatus, { label: string; color: string }> = {
-  recebido:    { label: "Recebido",    color: "#94a3b8" },
+  recebido:    { label: "Recebido",    color: "var(--text-faint)" },
   em_analise:  { label: "Em Análise",  color: "#EF9F27" },
   aprovado:    { label: "Aprovado",    color: "var(--primary)" },
-  descartado:  { label: "Descartado",  color: "#ef4444" },
-  implementado:{ label: "Implementado",color: "#22c55e" },
+  descartado:  { label: "Descartado",  color: "var(--c-danger)" },
+  implementado:{ label: "Implementado",color: "var(--c-success)" },
 };
 
 export default async function AdminFeedbackPage({
@@ -119,8 +119,8 @@ export default async function AdminFeedbackPage({
               ) : feedbacks.map((fb) => {
                 const type   = fb.type   as FeedbackType;
                 const status = fb.status as FeedbackStatus;
-                const typeCfg   = TYPE_CONFIG[type]   ?? { label: type,   color: "#94a3b8", bg: "rgba(148,163,184,0.12)", Icon: HelpCircle };
-                const statusCfg = STATUS_CONFIG[status] ?? { label: status, color: "#94a3b8" };
+                const typeCfg   = TYPE_CONFIG[type]   ?? { label: type,   color: "var(--text-faint)", bg: "rgba(148,163,184,0.12)", Icon: HelpCircle };
+                const statusCfg = STATUS_CONFIG[status] ?? { label: status, color: "var(--text-faint)" };
                 const TypeIcon = typeCfg.Icon;
                 return (
                   <tr key={fb.id}>

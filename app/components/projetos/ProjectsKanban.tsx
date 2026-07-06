@@ -20,10 +20,10 @@ interface Props {
 
 const COLUMNS: { key: ProjectStatus; label: string; color: string }[] = [
   { key: "lead",      label: "Sem status",   color: "#64748b" },
-  { key: "briefing",  label: "A fazer",      color: "#3b82f6" },
-  { key: "escopo",    label: "Em andamento", color: "#f59e0b" },
-  { key: "proposta",  label: "Revisão",      color: "#8b5cf6" },
-  { key: "execucao",  label: "Concluído",    color: "#22c55e" },
+  { key: "briefing",  label: "A fazer",      color: "var(--c-info)" },
+  { key: "escopo",    label: "Em andamento", color: "var(--c-warning)" },
+  { key: "proposta",  label: "Revisão",      color: "var(--c-purple)" },
+  { key: "execucao",  label: "Concluído",    color: "var(--c-success)" },
   { key: "entrega",   label: "Entregue",     color: "#06b6d4" },
 ];
 
@@ -148,7 +148,7 @@ export function ProjectsKanban({ projects, basePath = "/portal/projetos", showCl
                   </div>
                 )}
                 {cards.map(p => {
-                  const pr = PROJECT_PRIORITY_MAP[p.priority] ?? { label: p.priority, color: "#94a3b8" };
+                  const pr = PROJECT_PRIORITY_MAP[p.priority] ?? { label: p.priority, color: "var(--text-faint)" };
                   const progress = (p as unknown as Record<string,unknown>).progress as number | null ?? null;
                   return (
                     <Link
@@ -208,7 +208,7 @@ export function ProjectsKanban({ projects, basePath = "/portal/projetos", showCl
                           <div style={{ height: 4, background: "var(--border)", borderRadius: 99, overflow: "hidden" }}>
                             <div style={{
                               height: "100%", borderRadius: 99,
-                              background: progress >= 100 ? "var(--c-success)" : "linear-gradient(90deg,#6366f1,#8b5cf6)",
+                              background: progress >= 100 ? "var(--c-success)" : "var(--primary)",
                               width: `${Math.min(progress, 100)}%`,
                             }} />
                           </div>

@@ -11,10 +11,10 @@ interface Props {
 }
 
 function barColor(s: SlaState): string {
-  if (s.done) return s.breached ? "#ef4444" : "#22c55e";
-  if (s.breached) return "#ef4444";
+  if (s.done) return s.breached ? "var(--c-danger)" : "var(--c-success)";
+  if (s.breached) return "var(--c-danger)";
   if (s.ratio >= 0.75) return "#EF9F27";
-  return "#3b82f6";
+  return "var(--c-info)";
 }
 
 function statusText(s: SlaState): string {

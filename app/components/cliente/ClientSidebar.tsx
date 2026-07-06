@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -306,8 +306,8 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
                   <span style={{
                     fontSize: "10px", fontWeight: 700,
                     color: hasPlan ? "var(--primary)" : "var(--text-faint)",
-                    background: hasPlan ? "rgba(91,87,232,0.10)" : "var(--surface-3)",
-                    border: `1px solid ${hasPlan ? "rgba(91,87,232,0.20)" : "var(--border)"}`,
+                    background: hasPlan ? "color-mix(in srgb, var(--primary) 10%, transparent)" : "var(--surface-3)",
+                    border: `1px solid ${hasPlan ? "color-mix(in srgb, var(--primary) 20%, transparent)" : "var(--border)"}`,
                     borderRadius: "var(--r-full)", padding: "1px 7px",
                   }}>
                     {planLabel}

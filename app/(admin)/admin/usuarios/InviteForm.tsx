@@ -153,7 +153,7 @@ export default function InviteForm() {
       </form>
 
       {message && (
-        <p style={{ margin: "12px 0 0", fontSize: "13px", color: message.type === "success" ? "var(--c-success)" : "#ef4444", fontWeight: 600, display: "flex", alignItems: "center", gap: 6 }}>
+        <p style={{ margin: "12px 0 0", fontSize: "13px", color: message.type === "success" ? "var(--c-success)" : "var(--c-danger)", fontWeight: 600, display: "flex", alignItems: "center", gap: 6 }}>
           {message.type === "success" ? <CheckCircle size={14} /> : <XCircle size={14} />}
           {message.text}
         </p>

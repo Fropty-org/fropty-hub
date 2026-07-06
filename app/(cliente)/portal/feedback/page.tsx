@@ -41,7 +41,7 @@ function hexOf(cssVar: string): string {
   const map: Record<string, string> = {
     "var(--primary)":       "#5B57E8",
     "var(--c-danger)":      "#DC2626",
-    "var(--c-success)":     "#16a34a",
+    "var(--c-success)":     "var(--c-success)",
     "var(--brand-accent)":  "#EF9F27",
     "var(--text-faint)":    "#aaaaaa",
   };
@@ -158,7 +158,7 @@ export default async function FeedbackPage() {
                 {fb.admin_response && (
                   <div style={{
                     margin: "0 20px 12px", padding: "11px 14px",
-                    background: "rgba(91,87,232,0.06)", borderRadius: "var(--r-md)",
+                    background: "color-mix(in srgb, var(--primary) 6%, transparent)", borderRadius: "var(--r-md)",
                     borderLeft: "3px solid var(--primary)",
                   }}>
                     <p style={{ margin: "0 0 3px", fontSize: "11px", fontWeight: 700, color: "var(--primary)" }}>

@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Heart, AlertTriangle, AlertCircle, XCircle, ChevronRight, UserCheck } from "lucide-react";
 import { getClientsWithHealth, getCSMetrics, getClientsWithoutHealth } from "@/app/actions/customer-success";
@@ -36,10 +36,10 @@ export default async function CustomerSuccessPage({
   });
 
   const metricCards = [
-    { label: "Saudável",  value: metrics.saudavel, color: "#22c55e", Icon: Heart },
-    { label: "Atenção",   value: metrics.atencao,  color: "#f59e0b", Icon: AlertTriangle },
-    { label: "Risco",     value: metrics.risco,    color: "#ef4444", Icon: AlertCircle },
-    { label: "Crítico",   value: metrics.critico,  color: "#dc2626", Icon: XCircle },
+    { label: "Saudável",  value: metrics.saudavel, color: "var(--c-success)", Icon: Heart },
+    { label: "Atenção",   value: metrics.atencao,  color: "var(--c-warning)", Icon: AlertTriangle },
+    { label: "Risco",     value: metrics.risco,    color: "var(--c-danger)", Icon: AlertCircle },
+    { label: "Crítico",   value: metrics.critico,  color: "var(--c-danger)", Icon: XCircle },
   ];
 
   const riskFilters: { label: string; value: string }[] = [

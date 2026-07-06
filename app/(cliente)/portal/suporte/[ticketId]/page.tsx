@@ -148,7 +148,7 @@ export default async function TicketDetailPage({ params }: Props) {
                 style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 10, border: "1px solid var(--border)", background: "var(--surface-2)", textDecoration: "none", transition: "background 0.1s" }}
                 className="hub-row-link"
               >
-                <div style={{ width: 28, height: 28, borderRadius: 8, background: "rgba(91,87,232,0.10)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <div style={{ width: 28, height: 28, borderRadius: 8, background: "color-mix(in srgb, var(--primary) 10%, transparent)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                   <BookOpen size={13} style={{ color: "var(--primary)" }} />
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>

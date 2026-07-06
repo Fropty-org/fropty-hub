@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllArticlesAdmin } from "@/app/actions/knowledge";
 import { BookOpen, Plus, Eye, ThumbsUp, ThumbsDown, Pencil, FileText, CheckCircle2 } from "lucide-react";
@@ -31,9 +31,9 @@ export default async function AdminBaseConhecimentoPage({
 
   const kpis = [
     { label: "Total de artigos", value: allArticles.length, color: "var(--primary)",  Icon: BookOpen },
-    { label: "Publicados",       value: published,          color: "#22c55e",         Icon: CheckCircle2 },
+    { label: "Publicados",       value: published,          color: "var(--c-success)",         Icon: CheckCircle2 },
     { label: "Rascunhos",        value: drafts,             color: "#EF9F27",         Icon: FileText },
-    { label: "Visualizações",    value: totalViews,         color: "#3b82f6",         Icon: Eye },
+    { label: "Visualizações",    value: totalViews,         color: "var(--c-info)",         Icon: Eye },
   ];
 
   return (
@@ -75,7 +75,7 @@ export default async function AdminBaseConhecimentoPage({
       <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 20 }}>
         {[
           { key: "todos",      label: "Todos",      color: "var(--text-muted)" },
-          { key: "publicado",  label: "Publicados", color: "#22c55e" },
+          { key: "publicado",  label: "Publicados", color: "var(--c-success)" },
           { key: "rascunho",   label: "Rascunhos",  color: "#EF9F27" },
         ].map(({ key, label, color }) => {
           const active = (filterStatus ?? "todos") === key;
@@ -121,7 +121,7 @@ export default async function AdminBaseConhecimentoPage({
                     )}
                   </td>
                   <td style={{ padding: "13px 16px", whiteSpace: "nowrap" }}>
-                    <span style={{ fontSize: "11px", fontWeight: 600, padding: "3px 9px", borderRadius: 99, background: "rgba(91,87,232,0.10)", color: "var(--primary)" }}>
+                    <span style={{ fontSize: "11px", fontWeight: 600, padding: "3px 9px", borderRadius: 99, background: "color-mix(in srgb, var(--primary) 10%, transparent)", color: "var(--primary)" }}>
                       {CATEGORY_LABELS[article.category] ?? article.category}
                     </span>
                   </td>
@@ -140,7 +140,7 @@ export default async function AdminBaseConhecimentoPage({
                         <ThumbsUp size={12} style={{ color: "var(--c-success)" }} />{article.helpful_yes}
                       </span>
                       <span style={{ display: "flex", alignItems: "center", gap: 3 }}>
-                        <ThumbsDown size={12} style={{ color: "#ef4444" }} />{article.helpful_no}
+                        <ThumbsDown size={12} style={{ color: "var(--c-danger)" }} />{article.helpful_no}
                       </span>
                     </span>
                   </td>

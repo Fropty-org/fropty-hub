@@ -33,7 +33,7 @@ export function ResolutionReview({ ticketId }: Props) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       {error && (
-        <p style={{ margin: 0, fontSize: "13px", color: "#ef4444", display: "flex", alignItems: "center", gap: 6 }}>
+        <p style={{ margin: 0, fontSize: "13px", color: "var(--c-danger)", display: "flex", alignItems: "center", gap: 6 }}>
           <AlertCircle size={14} /> {error}
         </p>
       )}
@@ -61,7 +61,7 @@ export function ResolutionReview({ ticketId }: Props) {
             style={{
               flex: "1 1 220px", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
               padding: "16px 20px", borderRadius: 14, border: "1px solid rgba(239,68,68,0.4)",
-              background: "rgba(239,68,68,0.08)", color: "#ef4444", fontSize: "14px", fontWeight: 800,
+              background: "rgba(239,68,68,0.08)", color: "var(--c-danger)", fontSize: "14px", fontWeight: 800,
               cursor: "pointer", fontFamily: "inherit",
             }}
           >

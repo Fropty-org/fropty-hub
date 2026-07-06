@@ -18,9 +18,9 @@ interface Props {
 const CATEGORIES = ["Bug / Erro", "Nova funcionalidade", "Dúvida", "Performance", "Outros"];
 
 const PRIORITIES: { value: string; label: string; color: string; Icon: LucideIcon; desc: string; tokens: number }[] = [
-  { value: "baixa", label: "Baixa",  color: "#94a3b8", Icon: ArrowDown,  desc: "Não urgente",      tokens: 5  },
+  { value: "baixa", label: "Baixa",  color: "var(--text-faint)", Icon: ArrowDown,  desc: "Não urgente",      tokens: 5  },
   { value: "media", label: "Média",  color: "#EF9F27", Icon: ArrowRight, desc: "Impacto moderado", tokens: 10 },
-  { value: "alta",  label: "Alta",   color: "#ef4444", Icon: ArrowUp,    desc: "Bloqueando uso",   tokens: 20 },
+  { value: "alta",  label: "Alta",   color: "var(--c-danger)", Icon: ArrowUp,    desc: "Bloqueando uso",   tokens: 20 },
 ];
 
 const inputStyle: React.CSSProperties = {
@@ -151,7 +151,7 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
           justifyContent: "center",
           margin: "0 auto 16px",
         }}>
-          <CheckCircle size={30} style={{ color: "#22c55e" }} />
+          <CheckCircle size={30} style={{ color: "var(--c-success)" }} />
         </div>
         <p style={{ fontWeight: 800, fontSize: "1rem", color: "var(--text)", margin: "0 0 6px" }}>
           Chamado aberto!
@@ -191,15 +191,15 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
           placeholder="Descreva brevemente o problema"
           value={values.subject}
           onChange={(e) => setValues((v) => ({ ...v, subject: e.target.value }))}
-          style={{ ...inputStyle, borderColor: touched.subject && !values.subject.trim() ? "#ef4444" : "var(--border)" }}
+          style={{ ...inputStyle, borderColor: touched.subject && !values.subject.trim() ? "var(--c-danger)" : "var(--border)" }}
           onFocus={(e) => { if (!(touched.subject && !values.subject.trim())) e.currentTarget.style.borderColor = "var(--primary)"; }}
           onBlur={(e)  => {
             setTouched((t) => ({ ...t, subject: true }));
-            e.currentTarget.style.borderColor = !values.subject.trim() ? "#ef4444" : "var(--border)";
+            e.currentTarget.style.borderColor = !values.subject.trim() ? "var(--c-danger)" : "var(--border)";
           }}
         />
         {touched.subject && !values.subject.trim() && (
-          <p style={{ margin: "5px 0 0", fontSize: "11.5px", color: "#ef4444", display: "flex", alignItems: "center", gap: 4 }}>
+          <p style={{ margin: "5px 0 0", fontSize: "11.5px", color: "var(--c-danger)", display: "flex", alignItems: "center", gap: 4 }}>
             <AlertCircle size={11} /> Campo obrigatório
           </p>
         )}
@@ -310,15 +310,15 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
           placeholder="O que aconteceu? Quando ocorre? O que já tentou?"
           value={values.body}
           onChange={(e) => setValues((v) => ({ ...v, body: e.target.value }))}
-          style={{ ...inputStyle, resize: "vertical", minHeight: 96, lineHeight: 1.6, borderColor: touched.body && !values.body.trim() ? "#ef4444" : "var(--border)" }}
+          style={{ ...inputStyle, resize: "vertical", minHeight: 96, lineHeight: 1.6, borderColor: touched.body && !values.body.trim() ? "var(--c-danger)" : "var(--border)" }}
           onFocus={(e) => { if (!(touched.body && !values.body.trim())) e.currentTarget.style.borderColor = "var(--primary)"; }}
           onBlur={(e) => {
             setTouched((t) => ({ ...t, body: true }));
-            e.currentTarget.style.borderColor = !values.body.trim() ? "#ef4444" : "var(--border)";
+            e.currentTarget.style.borderColor = !values.body.trim() ? "var(--c-danger)" : "var(--border)";
           }}
         />
         {touched.body && !values.body.trim() && (
-          <p style={{ margin: "5px 0 0", fontSize: "11.5px", color: "#ef4444", display: "flex", alignItems: "center", gap: 4 }}>
+          <p style={{ margin: "5px 0 0", fontSize: "11.5px", color: "var(--c-danger)", display: "flex", alignItems: "center", gap: 4 }}>
             <AlertCircle size={11} /> Campo obrigatório
           </p>
         )}
@@ -405,8 +405,8 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
           background: "rgba(239,68,68,0.08)",
           border: "1px solid rgba(239,68,68,0.2)",
         }}>
-          <AlertCircle size={14} style={{ color: "#ef4444", flexShrink: 0 }} />
-          <p style={{ margin: 0, fontSize: "12px", color: "#ef4444" }}>{error}</p>
+          <AlertCircle size={14} style={{ color: "var(--c-danger)", flexShrink: 0 }} />
+          <p style={{ margin: 0, fontSize: "12px", color: "var(--c-danger)" }}>{error}</p>
         </div>
       )}
 

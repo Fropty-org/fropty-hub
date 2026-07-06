@@ -171,7 +171,7 @@ export default function AdminFeedbackDetailPage() {
         </div>
 
         {error && (
-          <p style={{ margin: 0, fontSize: "13px", color: "#ef4444", fontWeight: 600 }}>{error}</p>
+          <p style={{ margin: 0, fontSize: "13px", color: "var(--c-danger)", fontWeight: 600 }}>{error}</p>
         )}
 
         <button

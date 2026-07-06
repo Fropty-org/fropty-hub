@@ -73,8 +73,8 @@ export default async function BaseConhecimentoPage({ searchParams }: Props) {
             <span style={{
               display: "inline-flex", alignItems: "center", gap: 6,
               padding: "4px 12px", borderRadius: "var(--r-full)",
-              background: "rgba(91,87,232,0.10)", color: "var(--primary)",
-              border: "1px solid rgba(91,87,232,0.20)",
+              background: "color-mix(in srgb, var(--primary) 10%, transparent)", color: "var(--primary)",
+              border: "1px solid color-mix(in srgb, var(--primary) 20%, transparent)",
               fontSize: "12px", fontWeight: 700,
             }}>
               <activeCat.Icon size={12} /> {activeCat.label}
@@ -121,7 +121,7 @@ export default async function BaseConhecimentoPage({ searchParams }: Props) {
                 >
                   <div style={{
                     width: 38, height: 38, borderRadius: "var(--r-md)",
-                    background: "rgba(91,87,232,0.08)",
+                    background: "color-mix(in srgb, var(--primary) 8%, transparent)",
                     display: "flex", alignItems: "center", justifyContent: "center",
                     color: "var(--primary)",
                   }}>
@@ -216,8 +216,8 @@ function ArticleTable({ articles }: { articles: KnowledgeArticle[] }) {
           {/* Categoria */}
           <span style={{
             fontSize: "11px", fontWeight: 700,
-            color: "var(--primary)", background: "rgba(91,87,232,0.08)",
-            border: "1px solid rgba(91,87,232,0.18)",
+            color: "var(--primary)", background: "color-mix(in srgb, var(--primary) 8%, transparent)",
+            border: "1px solid color-mix(in srgb, var(--primary) 18%, transparent)",
             borderRadius: "var(--r-full)", padding: "3px 9px",
             whiteSpace: "nowrap", display: "inline-block",
           }}>

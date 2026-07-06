@@ -47,7 +47,7 @@ const PLANS: PlanDef[] = [
     annualNote:   "cobrado anualmente",
     tagline: "Para começar com o ecossistema Fropty.",
     popular: false,
-    color: "#3b82f6",
+    color: "var(--c-info)",
     Icon: Zap,
     features: [
       "500 tokens por mês",
@@ -86,7 +86,7 @@ const PLANS: PlanDef[] = [
     annualNote:   "personalizado",
     tagline: "Solução dedicada para grandes operações.",
     popular: false,
-    color: "#8b5cf6",
+    color: "var(--c-purple)",
     Icon: Building2,
     features: [
       "Tokens customizados",

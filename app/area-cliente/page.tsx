@@ -139,7 +139,7 @@ export default function AreaClientePage() {
   };
 
   return (
-    <div className="hub-bg-diagonal" style={{ minHeight: "100dvh", background: bg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px 16px", transition: "background 0.2s" }}>
+    <div className="hub-bg-diagonal hub-inter" style={{ minHeight: "100dvh", background: bg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px 16px", transition: "background 0.2s", fontFamily: "var(--font-inter), Inter, system-ui, sans-serif" }}>
 
       {/* Theme toggle — mesmo efeito circular do painel */}
       <button
@@ -172,7 +172,7 @@ export default function AreaClientePage() {
             <Image src="/favicon.svg" alt="Fropty Hub" width={36} height={36} unoptimized />
             <span style={{ fontSize: 18, fontWeight: 800, letterSpacing: "-0.03em" }}>
               <span style={{ color: txtMain }}>Fropty </span>
-              <span style={{ color: "#5B57E8" }}>Hub</span>
+              <span style={{ color: "#155DFC" }}>Hub</span>
             </span>
           </div>
 
@@ -222,7 +222,7 @@ export default function AreaClientePage() {
               <div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 7 }}>
                   <label style={{ fontSize: 13.5, fontWeight: 600, color: txtMain }}>Senha</label>
-                  <button type="button" onClick={() => changeMode("reset")} style={{ fontSize: 12.5, fontWeight: 600, color: "#5B57E8", background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "inherit" }}>
+                  <button type="button" onClick={() => changeMode("reset")} style={{ fontSize: 12.5, fontWeight: 600, color: "#155DFC", background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "inherit" }}>
                     Esqueceu?
                   </button>
                 </div>
@@ -251,9 +251,9 @@ export default function AreaClientePage() {
             <button
               type="submit"
               disabled={isLoading}
-              style={{ width: "100%", marginTop: 2, padding: "12px 0", borderRadius: 10, border: "none", background: "#5B57E8", color: "#ffffff", fontSize: 14, fontWeight: 700, fontFamily: "inherit", cursor: isLoading ? "not-allowed" : "pointer", opacity: isLoading ? 0.7 : 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, transition: "opacity 0.15s, background 0.15s", boxShadow: "0 4px 20px rgba(91,87,232,0.25)" }}
-              onMouseEnter={e => { if (!isLoading) (e.currentTarget as HTMLButtonElement).style.background = "#4440C8"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "#5B57E8"; }}
+              style={{ width: "100%", marginTop: 2, padding: "12px 0", borderRadius: 10, border: "none", background: "#155DFC", color: "#ffffff", fontSize: 14, fontWeight: 700, fontFamily: "inherit", cursor: isLoading ? "not-allowed" : "pointer", opacity: isLoading ? 0.7 : 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, transition: "opacity 0.15s, background 0.15s" }}
+              onMouseEnter={e => { if (!isLoading) (e.currentTarget as HTMLButtonElement).style.background = "#1447E6"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "#155DFC"; }}
             >
               {isLoading
                 ? <><Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} /> Aguarde…</>
@@ -302,7 +302,7 @@ export default function AreaClientePage() {
       <style>{`
         @keyframes spin { to { transform: rotate(360deg); } }
         input::placeholder { color: ${txtFaint}; }
-        input:focus { outline: none; border-color: #5B57E8 !important; box-shadow: 0 0 0 3px rgba(91,87,232,0.15); }
+        input:focus { outline: none; border-color: #155DFC !important; box-shadow: 0 0 0 3px rgba(21,93,252,0.15); }
       `}</style>
     </div>
   );

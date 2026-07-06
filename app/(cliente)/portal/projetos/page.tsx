@@ -139,7 +139,7 @@ export default async function ProjetosPage({
 
           {/* Rows */}
           {projects.map((project, i) => {
-            const st       = PROJECT_STATUSES[project.status]       ?? { label: project.status,   color: "#94a3b8", Icon: FolderOpen };
+            const st       = PROJECT_STATUSES[project.status]       ?? { label: project.status,   color: "var(--text-faint)", Icon: FolderOpen };
             const StIcon   = st.Icon;
             const progress = (project as unknown as Record<string, unknown>).progress as number | null ?? null;
 
