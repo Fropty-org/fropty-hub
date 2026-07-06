@@ -301,6 +301,9 @@ export default function AreaClientePage() {
           {" "}e{" "}
           <Link href="/privacidade" style={{ color: txtMuted, textDecoration: "underline" }}>Privacidade</Link>.
         </p>
+        <p style={{ marginTop: 8, fontSize: 10.5, color: txtFaint, textAlign: "center", opacity: 0.7, letterSpacing: "0.02em" }}>
+          Fropty Hub · build 2026.07.06
+        </p>
       </div>
 
       <style>{`

@@ -22,6 +22,7 @@
 
 /* ── Brand scale (imutável) ──────────────────────────────────────── */
 :root {
+  --build: "2026.07.06"; /* marcador de versão — força novo hash de bundle */
   --brand-100: #E9E9FC;
   --brand-200: #C2C0F6;
   --brand-300: #9B98F1;
