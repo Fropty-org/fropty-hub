@@ -372,27 +372,34 @@ function YearView({ cursor, today, byDate, onPickMonth }: {
 }) {
   const y = cursor.getFullYear();
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 14, padding: 18 }}>
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(196px, 1fr))", gap: 22, padding: "20px 22px" }}>
       {Array.from({ length: 12 }, (_, m) => {
-        const first = new Date(y, m, 1);
-        const gridStart = startOfWeek(first);
+        const gridStart = startOfWeek(new Date(y, m, 1));
         const cells = Array.from({ length: 42 }, (_, i) => addDays(gridStart, i));
         return (
-          <button key={m} onClick={() => onPickMonth(m)} className="hub-card-sm" style={{ padding: "12px", cursor: "pointer", textAlign: "left", border: "1px solid var(--border)", background: "var(--card-bg)" }}>
-            <div style={{ fontSize: "12.5px", fontWeight: 700, color: "var(--text)", marginBottom: 8 }}>{MONTH_NAMES[m]}</div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 1 }}>
-              {WEEK_DAYS.map(wd => <span key={wd} style={{ fontSize: "8px", textAlign: "center", color: "var(--text-faint)", fontWeight: 700 }}>{wd[0]}</span>)}
-              {cells.slice(0, 42).map((d, i) => {
+          <button key={m} onClick={() => onPickMonth(m)}
+            style={{ padding: "8px 8px 10px", cursor: "pointer", textAlign: "left", border: "none", background: "transparent", borderRadius: 10, fontFamily: "inherit", transition: "background .15s" }}
+            onMouseEnter={e => (e.currentTarget.style.background = "var(--surface-2)")}
+            onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+            title={`Ver ${MONTH_NAMES[m]}`}>
+            <div style={{ fontSize: "13px", fontWeight: 700, color: "var(--text)", marginBottom: 8, paddingLeft: 2 }}>{MONTH_NAMES[m]}</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 2 }}>
+              {WEEK_DAYS.map(wd => <span key={wd} style={{ fontSize: "9px", textAlign: "center", color: "var(--text-faint)", fontWeight: 600, paddingBottom: 2 }}>{wd[0]}</span>)}
+              {cells.map((d, i) => {
                 const inMonth = d.getMonth() === m;
                 const isToday = sameDay(d, today);
                 const has = inMonth && (byDate[keyOf(d)]?.length ?? 0) > 0;
                 return (
                   <span key={i} style={{
-                    fontSize: "8.5px", textAlign: "center", lineHeight: "13px", height: 13, borderRadius: 3,
-                    color: !inMonth ? "transparent" : isToday ? "#fff" : has ? "var(--primary)" : "var(--text-muted)",
+                    fontSize: "10px", textAlign: "center", lineHeight: "18px", height: 18, borderRadius: "50%",
+                    color: isToday ? "#fff" : has ? "var(--primary)" : "var(--text-muted)",
+                    opacity: inMonth ? 1 : 0.35,
                     fontWeight: has || isToday ? 800 : 400,
                     background: isToday ? "var(--primary)" : "transparent",
-                  }}>{inMonth ? d.getDate() : ""}</span>
+                    textDecoration: has && !isToday ? "underline" : "none",
+                    textDecorationColor: "var(--primary)",
+                    textUnderlineOffset: 2,
+                  }}>{d.getDate()}</span>
                 );
               })}
             </div>
