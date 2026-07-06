@@ -76,10 +76,7 @@ export function HealthScoreForm({ clientId, initial, clientName }: Props) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-      <div style={{
-        background: "var(--card-bg)", border: "1px solid var(--card-border)",
-        borderRadius: 16, padding: 24,
-      }}>
+      <div className="hub-card" style={{ padding: 24 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
           <div>
             <p style={{ margin: "0 0 2px", fontSize: "13px", fontWeight: 700, color: "var(--text)" }}>Editar Health Score</p>
@@ -123,10 +120,7 @@ export function HealthScoreForm({ clientId, initial, clientName }: Props) {
         </div>
       </div>
 
-      <div style={{
-        background: "var(--card-bg)", border: "1px solid var(--card-border)",
-        borderRadius: 16, padding: 24,
-      }}>
+      <div className="hub-card" style={{ padding: 24 }}>
         <label style={{ fontSize: "13px", fontWeight: 700, color: "var(--text)", display: "block", marginBottom: 10 }}>
           Notas internas CS
         </label>

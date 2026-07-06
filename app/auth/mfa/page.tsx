@@ -32,7 +32,7 @@ export default function MFAChallengePagee() {
 
   return (
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)", padding: 20 }}>
-      <div style={{ width: "100%", maxWidth: 380, background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 16, padding: "36px 32px" }}>
+      <div className="hub-card" style={{ width: "100%", maxWidth: 380, padding: "36px 32px" }}>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, marginBottom: 28 }}>
           <div style={{ width: 48, height: 48, borderRadius: "50%", background: "rgba(99,102,241,0.12)", border: "1px solid rgba(99,102,241,0.3)", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <ShieldCheck size={22} color="#6366f1" />

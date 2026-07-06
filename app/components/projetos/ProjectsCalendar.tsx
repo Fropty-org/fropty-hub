@@ -60,7 +60,7 @@ export function ProjectsCalendar({ projects, basePath = "/portal/projetos" }: Pr
     <div style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
 
       {/* Main calendar */}
-      <div style={{ flex: 1, background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 12, overflow: "hidden" }}>
+      <div className="hub-card" style={{ flex: 1, padding: 0, overflow: "hidden" }}>
 
         {/* Header */}
         <div style={{
@@ -183,7 +183,7 @@ export function ProjectsCalendar({ projects, basePath = "/portal/projetos" }: Pr
 
       {/* Side panel */}
       <div style={{ width: 220, flexShrink: 0, display: "flex", flexDirection: "column", gap: 12 }}>
-        <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 12, padding: "16px" }}>
+        <div className="hub-card" style={{ padding: "16px" }}>
           {upcoming.length === 0 ? (
             <>
               <p style={{ margin: "0 0 4px", fontSize: "13px", fontWeight: 700, color: "var(--text)" }}>
@@ -221,7 +221,7 @@ export function ProjectsCalendar({ projects, basePath = "/portal/projetos" }: Pr
           )}
         </div>
 
-        <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 12, padding: "16px" }}>
+        <div className="hub-card" style={{ padding: "16px" }}>
           <p style={{ margin: "0 0 10px", fontSize: "12px", fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.07em" }}>
             Integrar calendário
           </p>

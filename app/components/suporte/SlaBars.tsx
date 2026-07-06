@@ -49,7 +49,7 @@ export function SlaBars({ priority, createdAt, firstResponseAt, resolvedAt, stat
   const { response, resolution } = computeSla({ priority, createdAt, firstResponseAt, resolvedAt, status });
 
   return (
-    <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 16, padding: "20px 22px", marginBottom: 20 }}>
+    <div className="hub-card" style={{ padding: "20px 22px", marginBottom: 20 }}>
       <p style={{ margin: "0 0 16px", fontSize: "11px", fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
         <Gauge size={14} style={{ marginRight: 6 }} />
         SLA — prioridade {priority}

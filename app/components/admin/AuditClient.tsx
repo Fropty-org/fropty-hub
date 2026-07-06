@@ -152,7 +152,7 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
       </div>
 
       {/* Tabela */}
-      <div style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", borderRadius: 14, overflow: "hidden", opacity: pending ? 0.6 : 1, transition: "opacity 0.15s" }}>
+      <div className="hub-card" style={{ padding: 0, overflow: "hidden", opacity: pending ? 0.6 : 1, transition: "opacity 0.15s" }}>
         <div className="audit-head" style={{ display: "grid", gridTemplateColumns: "150px 1fr 130px", padding: "12px 20px", borderBottom: "1px solid var(--border)", fontSize: "11px", fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
           <span>Data</span>
           <span>Ação</span>

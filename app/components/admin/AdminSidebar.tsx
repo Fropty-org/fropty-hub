@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -284,7 +284,7 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
                   );
                 }
 
-                // Regular item (or collapsed with subItems â†’ just show icon, link to main href)
+                // Regular item (or collapsed with subItems → just show icon, link to main href)
                 return (
                   <Link
                     key={id}

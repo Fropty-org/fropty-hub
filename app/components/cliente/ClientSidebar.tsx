@@ -102,7 +102,7 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
         overflow: "hidden",
       }}>
 
-        {/* â”€â”€ Header: logo + collapse toggle â”€â”€ */}
+        {/* ── Header: logo + collapse toggle ── */}
         <div style={{
           display: "flex", alignItems: "center",
           justifyContent: collapsed ? "center" : "space-between",
@@ -163,7 +163,7 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
           )}
         </div>
 
-        {/* â”€â”€ Search â”€â”€ */}
+        {/* ── Search ── */}
         {!collapsed ? (
           <button
             onClick={() => window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", ctrlKey: true, metaKey: true, bubbles: true }))}
@@ -195,7 +195,7 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
           </button>
         )}
 
-        {/* â”€â”€ Nav â”€â”€ */}
+        {/* ── Nav ── */}
         <nav style={{ display: "flex", flexDirection: "column", gap: 1, flex: 1, overflowY: "auto", overflowX: "hidden" }}>
           {Object.entries(
             nav.reduce<Record<string, NavItem[]>>((acc, item) => {
@@ -264,7 +264,7 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
           ))}
         </nav>
 
-        {/* â”€â”€ Footer: theme + user + logout â”€â”€ */}
+        {/* ── Footer: theme + user + logout ── */}
         <div style={{ flexShrink: 0, marginTop: 8 }}>
           <div style={{ height: 1, background: "var(--border)", marginBottom: 8 }} />
 
