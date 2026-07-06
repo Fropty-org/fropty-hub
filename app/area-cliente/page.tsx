@@ -32,6 +32,8 @@ export default function AreaClientePage() {
   const searchParams = useSearchParams();
   const [mode, setMode]       = useState<Mode>("login");
   const [error, setError]     = useState<string | null>(() => {
+    if (searchParams.get("expirado") === "1")
+      return "Sua sessão expirou por segurança. Faça login novamente.";
     const code = searchParams.get("error");
     return code ? LOGIN_ERRORS[code] ?? null : null;
   });
@@ -44,6 +46,8 @@ export default function AreaClientePage() {
   const themeRef              = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
+    // Reinicia a contagem de sessão a cada visita ao login (novo login = 2h cheias)
+    localStorage.removeItem("hub-session-start");
     const saved = (localStorage.getItem("fropty-theme") ?? "dark") as "dark" | "light";
     setIsDark(saved === "dark");
     document.documentElement.classList.toggle("dark", saved === "dark");
