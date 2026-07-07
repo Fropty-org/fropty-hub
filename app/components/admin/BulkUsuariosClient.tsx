@@ -14,6 +14,7 @@ interface User {
   token_balance: number;
   is_active: boolean;
   phone?: string | null;
+  company?: string | null;
   created_at?: string | null;
   avatar_url?: string | null;
 }
@@ -117,7 +118,7 @@ export function BulkUsuariosClient({ users }: Props) {
 
       <div style={{ overflowX: "auto" }}>
         {/* Header */}
-        <div style={{ display: "grid", gridTemplateColumns: "36px minmax(200px,2fr) 140px 100px 120px 110px 80px 120px", padding: "8px 16px", borderBottom: "1px solid var(--border)", fontSize: "10px", fontWeight: 800, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.06em", minWidth: 960, gap: 8 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "36px minmax(200px,2fr) 150px 140px 100px 120px 110px 80px 120px", padding: "8px 16px", borderBottom: "1px solid var(--border)", fontSize: "10px", fontWeight: 800, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.06em", minWidth: 1100, gap: 8 }}>
           <button
             onClick={toggleAll}
             style={{ background: "none", border: "none", cursor: "pointer", padding: 0, color: allSelected ? "var(--primary)" : someSelected ? "var(--primary)" : "var(--text-faint)", display: "flex", alignItems: "center" }}
@@ -125,6 +126,7 @@ export function BulkUsuariosClient({ users }: Props) {
             {allSelected ? <CheckSquare size={14} /> : someSelected ? <CheckSquare size={14} style={{ opacity: 0.5 }} /> : <Square size={14} />}
           </button>
           <span>Usuário</span>
+          <span>Empresa</span>
           <span>Telefone</span>
           <span>Papel</span>
           <span>Plano</span>
@@ -140,9 +142,9 @@ export function BulkUsuariosClient({ users }: Props) {
             <div
               key={u.id}
               style={{
-                display: "grid", gridTemplateColumns: "36px minmax(200px,2fr) 140px 100px 120px 110px 80px 120px",
+                display: "grid", gridTemplateColumns: "36px minmax(200px,2fr) 150px 140px 100px 120px 110px 80px 120px",
                 padding: "8px 16px", borderBottom: i < users.length - 1 ? "1px solid var(--border)" : "none",
-                alignItems: "center", gap: 8, minWidth: 960,
+                alignItems: "center", gap: 8, minWidth: 1100,
                 background: selected.has(u.id) ? "color-mix(in srgb, var(--primary) 4%, transparent)" : "transparent",
                 transition: "background 0.1s",
               }}
@@ -166,6 +168,11 @@ export function BulkUsuariosClient({ users }: Props) {
                   {dateStr && <p style={{ margin: 0, fontSize: "10px", color: "var(--text-faint)", opacity: 0.6 }}>{dateStr}</p>}
                 </div>
               </div>
+
+              {/* Empresa */}
+              <span style={{ fontSize: "12px", color: u.company ? "var(--text)" : "var(--text-faint)", fontWeight: u.company ? 500 : 400, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }} title={u.company ?? ""}>
+                {u.company || "—"}
+              </span>
 
               {/* Telefone */}
               <span style={{ fontSize: "12px", color: u.phone ? "var(--text)" : "var(--text-faint)", fontWeight: u.phone ? 500 : 400 }}>

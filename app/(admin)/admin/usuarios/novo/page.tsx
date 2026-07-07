@@ -7,7 +7,7 @@ import { adminInviteClient } from "@/app/actions/admin";
 import { SERVICES } from "@/app/lib/constants/services";
 import {
   ArrowLeft, UserPlus, Mail, User, Phone, Loader2,
-  CheckCircle, XCircle, CreditCard, Coins, Camera,
+  CheckCircle, XCircle, CreditCard, Coins, Camera, Building2,
 } from "lucide-react";
 
 export default function NovoUsuarioPage() {
@@ -131,14 +131,23 @@ export default function NovoUsuarioPage() {
               </Field>
             </div>
 
-            {/* Telefone */}
-            <Field label="Telefone" icon={<Phone size={13} />}>
-              <input
-                name="phone"
-                placeholder="+5511999990000"
-                style={{ ...inputStyle, maxWidth: 280 }}
-              />
-            </Field>
+            {/* Empresa + Telefone */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+              <Field label="Empresa" icon={<Building2 size={13} />}>
+                <input
+                  name="company"
+                  placeholder="Nome da empresa"
+                  style={inputStyle}
+                />
+              </Field>
+              <Field label="Telefone" icon={<Phone size={13} />}>
+                <input
+                  name="phone"
+                  placeholder="+5511999990000"
+                  style={inputStyle}
+                />
+              </Field>
+            </div>
 
             {/* Plano + Tokens */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>

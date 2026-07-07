@@ -251,7 +251,7 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
 
                       {/* Sub-items */}
                       {isExpanded && (
-                        <div style={{ paddingLeft: 26, paddingTop: 2 }}>
+                        <div style={{ paddingLeft: 26, paddingTop: 2, display: "flex", flexDirection: "column", gap: 2 }}>
                           {subItems.map(sub => {
                             const subActive = pathname === sub.href || pathname.startsWith(sub.href + "/");
                             const SubIcon = sub.Icon;
@@ -261,12 +261,12 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
                                 href={sub.href}
                                 onClick={() => setMobileOpen(false)}
                                 style={{
-                                  display: "flex", alignItems: "center", gap: 8,
-                                  padding: "5px 10px", borderRadius: "var(--r-md)",
-                                  fontSize: "12.5px", fontWeight: subActive ? 600 : 500,
+                                  display: "flex", alignItems: "center", gap: 9,
+                                  padding: "6px 10px", borderRadius: "var(--r-md)",
+                                  fontSize: "13px", fontWeight: subActive ? 600 : 500,
                                   color: subActive ? "var(--text)" : "var(--text-muted)",
                                   background: subActive ? "var(--sidebar-active-bg)" : "transparent",
-                                  textDecoration: "none", marginBottom: 1,
+                                  textDecoration: "none",
                                   transition: "background 0.12s, color 0.12s",
                                   whiteSpace: "nowrap",
                                 }}

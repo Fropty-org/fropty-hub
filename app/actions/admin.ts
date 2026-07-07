@@ -50,6 +50,7 @@ export async function adminInviteClient(formData: FormData): Promise<{ error?: s
   const adminId      = await requireRole("admin");
   const email        = (formData.get("email") as string)?.trim().toLowerCase();
   const name         = (formData.get("name") as string)?.trim() || email.split("@")[0];
+  const company      = (formData.get("company") as string)?.trim() || null;
   const tokenBalance = Math.max(0, parseInt((formData.get("token_balance") as string) ?? "0", 10));
   const plan         = (formData.get("plan") as string)?.trim() || "sem_plano";
   const services     = sanitizeServiceIds(formData.getAll("services").map((s) => String(s)));
@@ -61,12 +62,12 @@ export async function adminInviteClient(formData: FormData): Promise<{ error?: s
   const service = createServiceClient();
   const { data, error } = await service.auth.admin.inviteUserByEmail(email, {
     redirectTo: `${process.env.NEXT_PUBLIC_HUB_URL ?? process.env.NEXT_PUBLIC_APP_URL ?? "https://www.fropty.com"}/auth/callback?next=/area-cliente/nova-senha`,
-    data: { name, role: "cliente", token_balance: tokenBalance, plan, services, contract_start: contractStart },
+    data: { name, role: "cliente", token_balance: tokenBalance, plan, services, contract_start: contractStart, company },
   });
 
   if (error) return { error: error.message };
 
-  logAdminAction({ adminId, action: "invite_client", targetType: "user", targetId: data?.user?.id, metadata: { email, name, plan, tokenBalance, services, contractStart } });
+  logAdminAction({ adminId, action: "invite_client", targetType: "user", targetId: data?.user?.id, metadata: { email, name, company, plan, tokenBalance, services, contractStart } });
   revalidatePath("/admin/usuarios");
   return { success: `Convite enviado para ${email}` };
 }
