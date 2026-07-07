@@ -12,7 +12,7 @@ export default async function AdminCalendarioPage() {
   const projects = await getAllProjects();
 
   return (
-    <div className="hub-page" style={{ maxWidth: 1020, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: "none" }}>
       <PageHeader
         title="Calendário"
         subtitle="Prazos e entregas de todos os projetos"

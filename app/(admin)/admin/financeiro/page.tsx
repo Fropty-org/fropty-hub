@@ -33,7 +33,7 @@ export default async function AdminFinanceiroPage() {
   ];
 
   return (
-    <div className="hub-page" style={{ maxWidth: 1400, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: "none" }}>
       <div style={{ marginBottom: 28 }}>
         <h1 style={{ fontSize: "1.5rem", fontWeight: 800, margin: "0 0 4px", color: "var(--text)", letterSpacing: "-0.02em" }}>Financeiro</h1>
         <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>Receita, assinantes e movimentação de tokens</p>

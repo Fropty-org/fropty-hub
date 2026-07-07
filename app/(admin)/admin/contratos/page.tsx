@@ -54,7 +54,7 @@ export default async function AdminContratosPage({
   ];
 
   return (
-    <div className="hub-page">
+    <div className="hub-page" style={{ maxWidth: "none" }}>
 
       {/* ── Page header ── */}
       <div className="hub-page-header" style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>

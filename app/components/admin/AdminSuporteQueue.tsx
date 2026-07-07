@@ -194,7 +194,7 @@ export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }:
   }
 
   return (
-    <div style={{ padding: "24px 24px", maxWidth: 1180, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: "none" }}>
       {/* Header + resumo */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 16, marginBottom: 20, flexWrap: "wrap" }}>
         <div>
