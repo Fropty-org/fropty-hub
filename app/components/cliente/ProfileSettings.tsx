@@ -18,9 +18,10 @@ interface Props {
   avatarUrl?:      string | null;
   googlePhotoUrl?: string | null;
   phoneNumber?:    string | null;
+  company?:        string | null;
 }
 
-export function ProfileSettings({ name: initialName, email, role, avatarUrl, googlePhotoUrl, phoneNumber: initialPhone }: Props) {
+export function ProfileSettings({ name: initialName, email, role, avatarUrl, googlePhotoUrl, phoneNumber: initialPhone, company }: Props) {
   const [section, setSection]         = useState<Section>("info");
   const [editingName, setEditingName] = useState(false);
   const [nameValue, setNameValue]     = useState(initialName);
@@ -368,6 +369,13 @@ export function ProfileSettings({ name: initialName, email, role, avatarUrl, goo
                 <p style={{ margin: "4px 0 0", fontSize: 11, color: "var(--text-faint)" }}>
                   Usado para verificação via SMS. Formato: +5511999990000
                 </p>
+              </FieldRow>
+
+              {/* Empresa */}
+              <FieldRow label="Empresa">
+                <span style={{ fontSize: 14, color: company ? "var(--text)" : "var(--text-faint)", fontWeight: company ? 500 : 400 }}>
+                  {company || "N/A"}
+                </span>
               </FieldRow>
 
               {/* Papel */}

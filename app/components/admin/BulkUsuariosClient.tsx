@@ -118,7 +118,7 @@ export function BulkUsuariosClient({ users }: Props) {
 
       <div style={{ overflowX: "auto" }}>
         {/* Header */}
-        <div style={{ display: "grid", gridTemplateColumns: "36px minmax(200px,2fr) 150px 140px 100px 120px 110px 80px 120px", padding: "8px 16px", borderBottom: "1px solid var(--border)", fontSize: "10px", fontWeight: 800, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.06em", minWidth: 1100, gap: 8 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "36px minmax(150px,1.2fr) 130px minmax(170px,1.3fr) 120px 95px 100px 120px 110px 80px 120px", padding: "8px 16px", borderBottom: "1px solid var(--border)", fontSize: "10px", fontWeight: 800, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.06em", minWidth: 1300, gap: 8 }}>
           <button
             onClick={toggleAll}
             style={{ background: "none", border: "none", cursor: "pointer", padding: 0, color: allSelected ? "var(--primary)" : someSelected ? "var(--primary)" : "var(--text-faint)", display: "flex", alignItems: "center" }}
@@ -127,7 +127,9 @@ export function BulkUsuariosClient({ users }: Props) {
           </button>
           <span>Usuário</span>
           <span>Empresa</span>
+          <span>Email</span>
           <span>Telefone</span>
+          <span>Data</span>
           <span>Papel</span>
           <span>Plano</span>
           <span>Tokens</span>
@@ -142,9 +144,9 @@ export function BulkUsuariosClient({ users }: Props) {
             <div
               key={u.id}
               style={{
-                display: "grid", gridTemplateColumns: "36px minmax(200px,2fr) 150px 140px 100px 120px 110px 80px 120px",
+                display: "grid", gridTemplateColumns: "36px minmax(150px,1.2fr) 130px minmax(170px,1.3fr) 120px 95px 100px 120px 110px 80px 120px",
                 padding: "8px 16px", borderBottom: i < users.length - 1 ? "1px solid var(--border)" : "none",
-                alignItems: "center", gap: 8, minWidth: 1100,
+                alignItems: "center", gap: 8, minWidth: 1300,
                 background: selected.has(u.id) ? "color-mix(in srgb, var(--primary) 4%, transparent)" : "transparent",
                 transition: "background 0.1s",
               }}
@@ -155,18 +157,16 @@ export function BulkUsuariosClient({ users }: Props) {
                 {selected.has(u.id) ? <CheckSquare size={14} /> : <Square size={14} />}
               </button>
 
-              {/* Avatar + Nome + Email */}
+              {/* Avatar + Nome */}
               <div style={{ display: "flex", alignItems: "center", gap: 9, minWidth: 0 }}>
                 <div style={{ width: 30, height: 30, borderRadius: "50%", background: "var(--surface-2)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", fontWeight: 800, color: "var(--text)", flexShrink: 0, overflow: "hidden" }}>
                   {u.avatar_url
                     ? <img src={u.avatar_url} alt={u.name ?? ""} style={{ width: "100%", height: "100%", objectFit: "cover" }} referrerPolicy="no-referrer" onError={e => { (e.currentTarget as HTMLImageElement).style.display = "none"; }} />
                     : initials}
                 </div>
-                <div style={{ minWidth: 0 }}>
-                  <p style={{ margin: 0, fontSize: "12.5px", fontWeight: 600, color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{u.name || <span style={{ color: "var(--text-faint)", fontWeight: 400 }}>—</span>}</p>
-                  <p style={{ margin: 0, fontSize: "11px", color: "var(--text-faint)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }} title={u.email ?? ""}>{u.email ?? ""}</p>
-                  {dateStr && <p style={{ margin: 0, fontSize: "10px", color: "var(--text-faint)", opacity: 0.6 }}>{dateStr}</p>}
-                </div>
+                <p style={{ margin: 0, fontSize: "12.5px", fontWeight: 600, color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", minWidth: 0 }}>
+                  {u.name || <span style={{ color: "var(--text-faint)", fontWeight: 400 }}>—</span>}
+                </p>
               </div>
 
               {/* Empresa */}
@@ -174,9 +174,19 @@ export function BulkUsuariosClient({ users }: Props) {
                 {u.company || "—"}
               </span>
 
+              {/* Email */}
+              <span style={{ fontSize: "12px", color: "var(--text-muted)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }} title={u.email ?? ""}>
+                {u.email || "—"}
+              </span>
+
               {/* Telefone */}
               <span style={{ fontSize: "12px", color: u.phone ? "var(--text)" : "var(--text-faint)", fontWeight: u.phone ? 500 : 400 }}>
                 {u.phone || "—"}
+              </span>
+
+              {/* Data de cadastro */}
+              <span style={{ fontSize: "11.5px", color: "var(--text-faint)" }}>
+                {dateStr || "—"}
               </span>
 
               <UserRowActions
