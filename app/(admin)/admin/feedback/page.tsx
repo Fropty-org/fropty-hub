@@ -46,7 +46,7 @@ export default async function AdminFeedbackPage({
   }));
 
   return (
-    <div className="hub-page">
+    <div className="hub-page" style={{ maxWidth: "none" }}>
 
       {/* ── Page header ── */}
       <div className="hub-page-header">

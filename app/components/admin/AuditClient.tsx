@@ -72,7 +72,7 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
   const hasActiveFilters = !!(filters.action || filters.adminId || filters.from || filters.to || filters.q);
 
   return (
-    <div style={{ padding: "40px 32px", maxWidth: 1400, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: "none" }}>
       <style>{`
         @media (max-width: 760px) {
           .audit-row, .audit-head { grid-template-columns: 1fr !important; gap: 4px !important; }

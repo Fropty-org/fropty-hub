@@ -46,7 +46,7 @@ export default async function AdminRoadmapPage({
   }));
 
   return (
-    <div className="hub-page" style={{ maxWidth: 1400, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: "none" }}>
       {/* Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28, gap: 16 }}>
         <div>
