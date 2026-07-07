@@ -52,7 +52,7 @@ export default async function FeedbackPage() {
   const feedbacks = await getClientFeedbacks();
 
   return (
-    <div className="hub-page" style={{ maxWidth: 1020, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: "none" }}>
 
       <PageHeader
         title="Feedback"

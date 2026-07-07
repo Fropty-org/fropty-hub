@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useToast } from "@/app/components/ui/Toast";
-import { Lock, LockOpen } from "lucide-react";
+import { Lock, LockOpen, Check } from "lucide-react";
 import {
   adminSetTokenBalance,
   adminUpdateUserPlan,
@@ -14,6 +14,12 @@ import {
 const ROLE_COLOR: Record<string, string> = {
   cliente: "var(--c-info)",
   admin:   "var(--brand-accent)",
+};
+
+const PLAN_COLOR: Record<string, string> = {
+  sem_plano: "var(--text-faint)",
+  basico:    "var(--c-info)",
+  pro:       "var(--primary)",
 };
 
 const PLAN_LABEL: Record<string, string> = {
@@ -31,14 +37,30 @@ interface Props {
   isActive:     boolean;
 }
 
-const selectStyle: React.CSSProperties = {
-  background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 7,
-  padding: "4px 5px", fontSize: "11px", fontFamily: "inherit", cursor: "pointer", width: "100%",
-};
+// Select estilizado como badge/pill (Preline): fundo suave da cor do valor,
+// sem chrome de <select> nativo além de uma seta neutra discreta.
+function pillSelectStyle(color: string): React.CSSProperties {
+  return {
+    appearance: "none",
+    background: `color-mix(in srgb, ${color} 14%, transparent)`,
+    border: `1px solid color-mix(in srgb, ${color} 26%, transparent)`,
+    borderRadius: 999,
+    color,
+    padding: "4px 22px 4px 10px",
+    fontSize: "11px",
+    fontWeight: 700,
+    fontFamily: "inherit",
+    cursor: "pointer",
+    width: "100%",
+    backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='3'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E\")",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "right 7px center",
+  };
+}
 const saveBtnStyle: React.CSSProperties = {
-  padding: "4px 6px", borderRadius: 6, border: "1px solid var(--border)",
-  background: "var(--surface)", color: "var(--text-muted)", fontSize: "10px",
-  cursor: "pointer", fontFamily: "inherit", flexShrink: 0,
+  width: 22, height: 22, borderRadius: "50%", flexShrink: 0,
+  border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text-muted)",
+  cursor: "pointer", fontFamily: "inherit", display: "flex", alignItems: "center", justifyContent: "center",
 };
 
 export function UserRowActions({ userId, name, role: roleInit, plan: planInit, tokenBalance: tokenInit, isActive: activeInit }: Props) {
@@ -93,23 +115,27 @@ export function UserRowActions({ userId, name, role: roleInit, plan: planInit, t
 
   return (
     <>
-      {/* Role */}
-      <div style={{ display: "flex", gap: 3, alignItems: "center" }}>
-        <select value={role} onChange={(e) => setRole(e.target.value as "cliente" | "admin")} style={{ ...selectStyle, color: ROLE_COLOR[role] ?? "var(--text)", fontWeight: 700 }}>
-          <option value="cliente">cliente</option>
-          <option value="admin">admin</option>
+      {/* Role — badge/pill estilo Preline, editável */}
+      <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+        <select value={role} onChange={(e) => setRole(e.target.value as "cliente" | "admin")} style={pillSelectStyle(ROLE_COLOR[role] ?? "var(--text-muted)")}>
+          <option value="cliente">Cliente</option>
+          <option value="admin">Admin</option>
         </select>
-        <button type="button" onClick={saveRole} disabled={pending} title="Salvar papel" style={saveBtnStyle}>✓</button>
+        {role !== roleInit && (
+          <button type="button" onClick={saveRole} disabled={pending} title="Salvar papel" style={saveBtnStyle}><Check size={12} /></button>
+        )}
       </div>
 
-      {/* Plano */}
-      <div style={{ display: "flex", gap: 3, alignItems: "center" }}>
-        <select value={plan} onChange={(e) => setPlan(e.target.value as Props["plan"])} style={{ ...selectStyle, color: "var(--text)" }}>
+      {/* Plano — badge/pill estilo Preline, editável */}
+      <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+        <select value={plan} onChange={(e) => setPlan(e.target.value as Props["plan"])} style={pillSelectStyle(PLAN_COLOR[plan])}>
           <option value="sem_plano">Sem plano</option>
           <option value="basico">Básico</option>
           <option value="pro">Pro</option>
         </select>
-        <button type="button" onClick={savePlan} disabled={pending} title="Salvar plano" style={saveBtnStyle}>✓</button>
+        {plan !== planInit && (
+          <button type="button" onClick={savePlan} disabled={pending} title="Salvar plano" style={saveBtnStyle}><Check size={12} /></button>
+        )}
       </div>
 
       {/* Tokens — define o saldo direto */}

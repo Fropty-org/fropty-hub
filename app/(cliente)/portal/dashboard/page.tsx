@@ -96,7 +96,7 @@ export default async function PortalDashboardPage() {
   const activity = await getActivityFeed(8);
 
   return (
-    <div className="hub-page" style={{ maxWidth: 1280, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: "none" }}>
 
       {/* ── Page header ── */}
       <div style={{ marginBottom: 32, display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>

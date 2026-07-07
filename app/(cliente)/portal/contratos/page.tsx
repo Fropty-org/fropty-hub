@@ -28,7 +28,7 @@ export default async function ContratosPage() {
   const contracts = await getClientContracts();
 
   return (
-    <div className="hub-page" style={{ maxWidth: 1020, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: "none" }}>
 
       <PageHeader
         title="Contratos"
