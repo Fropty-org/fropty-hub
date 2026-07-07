@@ -12,7 +12,7 @@ export default async function AdminKanbanPage() {
   const projects = await getAllProjects();
 
   return (
-    <div style={{ padding: "24px 24px", margin: "0 auto", maxWidth: "none" }}>
+    <div className="hub-page" style={{ margin: "0 auto", maxWidth: "none" }}>
       <PageHeader
         title="Kanban"
         subtitle="Projetos de todos os clientes por status — arraste os cards para mudar o status"

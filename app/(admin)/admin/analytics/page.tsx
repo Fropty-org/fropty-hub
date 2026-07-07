@@ -125,7 +125,7 @@ export default async function AdminAnalyticsPage() {
   const PLAN_LABEL: Record<string, string> = { sem_plano: "Sem plano", basico: "Básico", pro: "Pro" };
 
   return (
-    <div style={{ padding: "24px 28px", maxWidth: 1400, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: 1400, margin: "0 auto" }}>
       <div className="hub-page-header">
         <h1 className="hub-page-title">Analytics</h1>
         <p className="hub-page-sub">Métricas operacionais e de crescimento do ecossistema</p>

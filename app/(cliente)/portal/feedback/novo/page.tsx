@@ -37,7 +37,7 @@ export default function NovoFeedbackPage() {
   }
 
   return (
-    <div style={{ padding: "36px 32px", maxWidth: 640, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: 640, margin: "0 auto" }}>
 
       {/* ── Breadcrumb ── */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 24, fontSize: "12px" }}>

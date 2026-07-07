@@ -54,7 +54,7 @@ export default function NovoUsuarioPage() {
   }
 
   return (
-    <div style={{ padding: "36px 32px", maxWidth: 780, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: 780, margin: "0 auto" }}>
 
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 28 }}>

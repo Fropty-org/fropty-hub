@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "Novo Artigo — Admin" };
 
 export default function NovoArtigoPage() {
   return (
-    <div style={{ padding: "32px 32px 48px", maxWidth: 800, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: 800, margin: "0 auto" }}>
       <div style={{ marginBottom: 24 }}>
         <Link
           href="/admin/base-conhecimento"

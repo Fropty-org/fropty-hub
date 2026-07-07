@@ -37,7 +37,7 @@ export default async function AdminBaseConhecimentoPage({
   ];
 
   return (
-    <div style={{ padding: "32px 32px 48px", maxWidth: 1400, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: 1400, margin: "0 auto" }}>
       {/* Header */}
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 28, gap: 16 }}>
         <div>

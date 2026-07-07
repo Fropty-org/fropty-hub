@@ -36,7 +36,7 @@ export default async function BaseConhecimentoPage({ searchParams }: Props) {
   const activeCat    = CATEGORIES.find(c => c.id === categoria);
 
   return (
-    <div style={{ padding: "24px 24px", maxWidth: 1020, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: 1020, margin: "0 auto" }}>
 
       <PageHeader
         title="Base de Conhecimento"

@@ -46,7 +46,7 @@ export default function NovoRoadmapItemPage() {
   };
 
   return (
-    <div style={{ padding: "40px 32px", maxWidth: 600, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: 600, margin: "0 auto" }}>
       <Link href="/admin/roadmap" style={{
         display: "inline-flex", alignItems: "center", gap: 6,
         fontSize: "13px", color: "var(--text-faint)", textDecoration: "none", marginBottom: 24,

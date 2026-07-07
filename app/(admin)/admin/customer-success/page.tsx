@@ -57,7 +57,7 @@ export default async function CustomerSuccessPage({
   ];
 
   return (
-    <div style={{ padding: "40px 32px", maxWidth: 1400, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: 1400, margin: "0 auto" }}>
       <div style={{ marginBottom: 32 }}>
         <h1 style={{ fontSize: "1.75rem", fontWeight: 800, margin: "0 0 4px", color: "var(--text)" }}>Customer Success</h1>
         <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>

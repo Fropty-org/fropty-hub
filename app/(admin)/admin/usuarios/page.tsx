@@ -96,7 +96,7 @@ export default async function AdminUsuariosPage({ searchParams }: Props) {
   }
 
   return (
-    <div style={{ padding: "24px 24px", maxWidth: 1400, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: 1400, margin: "0 auto" }}>
 
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", marginBottom: 20 }}>

@@ -82,7 +82,7 @@ export default async function FinanceiroPage({ searchParams }: Props) {
   })();
 
   return (
-    <div style={{ padding: "24px 28px", maxWidth: 1280, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: 1280, margin: "0 auto" }}>
 
       <PageHeader
         title="Financeiro"

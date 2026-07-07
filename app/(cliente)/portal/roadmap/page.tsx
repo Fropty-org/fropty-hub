@@ -38,7 +38,7 @@ export default async function RoadmapPage() {
   const hasAny = items.length > 0;
 
   return (
-    <div style={{ padding: "24px 24px", maxWidth: 1020, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: 1020, margin: "0 auto" }}>
 
       <PageHeader
         title="Roadmap"

@@ -83,7 +83,7 @@ export default function AdminFeedbackDetailPage() {
   }
 
   return (
-    <div style={{ padding: "40px 32px", maxWidth: 700, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: 700, margin: "0 auto" }}>
       <Link href="/admin/feedback" style={{
         display: "inline-flex", alignItems: "center", gap: 6,
         fontSize: "13px", color: "var(--text-faint)", textDecoration: "none", marginBottom: 24,

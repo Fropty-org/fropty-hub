@@ -53,7 +53,7 @@ export default async function ProjetoDetailPage({
   ].filter(Boolean) as { icon: React.ReactNode; label: string; value: string }[];
 
   return (
-    <div style={{ padding: "36px 32px", maxWidth: 860, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: 860, margin: "0 auto" }}>
 
       {/* ── Breadcrumb ── */}
       <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 24, flexWrap: "wrap" }}>

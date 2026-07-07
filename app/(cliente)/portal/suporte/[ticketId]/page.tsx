@@ -31,7 +31,7 @@ export default async function TicketDetailPage({ params }: Props) {
   const ticketNum    = ticket.ticket_number ? `UFT${String(ticket.ticket_number).padStart(4, "0")}` : null;
 
   return (
-    <div style={{ padding: "36px 32px", maxWidth: 820, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: 820, margin: "0 auto" }}>
 
       {/* ── Breadcrumb ── */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 24, fontSize: "12px" }}>

@@ -33,7 +33,7 @@ export default async function ClientCSPage({ params }: { params: Promise<{ clien
   ];
 
   return (
-    <div style={{ padding: "40px 32px", maxWidth: 900, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: 900, margin: "0 auto" }}>
       <Link
         href="/admin/customer-success"
         style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "13px", color: "var(--text-muted)", textDecoration: "none", marginBottom: 24 }}

@@ -27,7 +27,7 @@ export default async function ArticlePage({ params }: Props) {
   const readMinutes = Math.max(1, Math.ceil(article.content.split(/\s+/).length / 200));
 
   return (
-    <div style={{ padding: "36px 32px", maxWidth: 820, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: 820, margin: "0 auto" }}>
 
       {/* ── Breadcrumb ── */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 24, fontSize: "12px" }}>

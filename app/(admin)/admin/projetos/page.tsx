@@ -45,7 +45,7 @@ export default async function AdminProjetosPage({
   }));
 
   return (
-    <div style={{ padding: "32px 24px", maxWidth: 1400, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: 1400, margin: "0 auto" }}>
       {/* Header */}
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 28, flexWrap: "wrap", gap: 12 }}>
         <div>

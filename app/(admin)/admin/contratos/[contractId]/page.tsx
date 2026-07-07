@@ -42,7 +42,7 @@ export default async function AdminContratoDetailPage({ params }: { params: Prom
   };
 
   return (
-    <div style={{ padding: "32px 24px", maxWidth: 860, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: 860, margin: "0 auto" }}>
       <Link
         href="/admin/contratos"
         style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "13px", color: "var(--text-muted)", textDecoration: "none", marginBottom: 20 }}

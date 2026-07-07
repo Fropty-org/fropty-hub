@@ -12,7 +12,7 @@ export default async function KanbanPage() {
   const projects = await getClientProjects();
 
   return (
-    <div style={{ padding: "24px 24px 24px", margin: "0 auto", maxWidth: "none" }}>
+    <div className="hub-page" style={{ margin: "0 auto", maxWidth: "none" }}>
 
       <PageHeader
         title="Kanban"

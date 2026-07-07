@@ -105,7 +105,7 @@ export default function PlanosPage() {
   const [currentPlan] = useState<PlanKey>("pro"); // TODO: fetch from server via props/action
 
   return (
-    <div style={{ padding: "24px 24px", maxWidth: 1160, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: 1160, margin: "0 auto" }}>
 
       {/* Header centrado */}
       <div style={{ textAlign: "center", marginBottom: 36 }}>

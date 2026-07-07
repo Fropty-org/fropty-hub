@@ -6,7 +6,7 @@ import { Skeleton } from "@/app/components/ui/Skeleton";
  */
 export default function Loading() {
   return (
-    <div style={{ padding: "24px 24px", maxWidth: 1020, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: 1020, margin: "0 auto" }}>
       {/* Header */}
       <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 28 }}>
         <Skeleton width={150} height={28} />
