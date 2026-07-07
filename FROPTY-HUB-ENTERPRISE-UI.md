@@ -1,8 +1,12 @@
 # Fropty Hub Enterprise UI System
 
-> Fases 2–5 da auditoria de design baseada no benchmark Preline.
+> Fases 2–5: auditoria original e plano de implementação (histórico — mantido para contexto).
 > Fase 1 (DNA visual extraído) está em `DNA-VISUAL-PRELINE.md`.
-> **Status: aguardando aprovação — nada foi implementado.**
+> Fase 6 (final deste documento): **registro do que foi de fato implementado e publicado
+> em produção** — inclui decisões que divergem do plano original da Fase 3.
+>
+> **Status: IMPLEMENTADO E PUBLICADO em `hub.fropty.com`.** Leia a Fase 6 para o estado real;
+> as Fases 2–5 abaixo são o plano como foi originalmente pensado, antes da aprovação.
 
 ---
 
@@ -212,4 +216,103 @@ Regra de ouro: **novas telas nunca usam hex nem valores mágicos** — só token
 
 ---
 
-**Próximo passo: aprovação explícita do usuário para iniciar a Fase 6 (implementação), começando pelo passo 1 (tokens).**
+# FASE 6 — O que foi de fato implementado (registro pós-produção)
+
+> Diferente das fases acima (plano), esta seção documenta o **estado real** do Hub após
+> implementação, verificação (`tsc`/build de produção a cada lote) e publicação em
+> `hub.fropty.com`. Atualizado após a última rodada de ajustes (commit `f1bdcfb`).
+
+## 6.1 Decisão de marca que mudou o plano original
+
+A Fase 3 original previa manter o roxo `#5B57E8` da Fropty com "disciplina" Preline por cima.
+Na prática, ao ver as primeiras imagens de referência, o usuário pediu fidelidade **idêntica**
+ao Preline no Hub — não "inspirada". Decisão final, confirmada explicitamente via pergunta
+direta ao usuário:
+
+| Item | Plano original (Fase 3) | Implementado |
+|---|---|---|
+| Cor primária do Hub | Roxo `#5B57E8` (marca Fropty) | **Azul Preline `#155DFC`** |
+| Fonte do Hub | DM Sans (marca Fropty) | **Inter** |
+| Botão primário | Com glow/sombra de marca | **Flat, sem sombra** (padrão Preline) |
+| Landing / marketing | — | **Inalterados**: roxo `#5B57E8` + DM Sans + CTA preto — só o Hub (portal/admin/login) mudou |
+
+## 6.2 O que está no ar, por área
+
+**Fundação (tokens, `globals.css`)**
+- Motion: `--transition-fast/default/slow` (150/200/300ms) + `--ease-standard/emphasized`
+- Tipografia: `--fs-xs..2xl`, `--fw-*`, `--lh-*` · Spacing: `--sp-1..12`
+- Superfícies dark recalibradas (mais claras, tom frio/slate): `--surface: #1e2027`,
+  `--surface-2: #252831`, `--surface-3: #2d303b`, `--bg: #0a0a0a`
+- `--sidebar-bg` = `--surface` (sidebar e cards na mesma cor, pedido explícito)
+- `.hub-topbar` e `.portal-topbar` (mobile) também usam `--sidebar-bg` — topbar, sidebar e
+  cards todos na mesma cor, sólidos, sem blur/transparência
+- `.hub-page`: gutter responsivo enxuto (`20px 24px` base, breakpoints em 1280/1024/768/480px) —
+  substituiu o padding fixo (24–40px) que cada tela reimplementava por conta própria
+
+**Background diagonal**
+- `.hub-bg-diagonal`: linhas **contínuas e densas** em `\` (não tracejadas), aplicado no fundo
+  do portal, admin, sidebar e login — versão final diverge da proposta original da Fase 3
+  (que previa traços curtos espaçados), ajustada por feedback direto do usuário
+
+**Primitivos e design system**
+- `Button`/`Card`/`Input` migrados para as classes `hub-*` (fim do hover via `filter: brightness()`)
+- 23+ cards bespoke das telas migrados para `.hub-card`
+- Sidebar: item ativo em bloco neutro (sem barra lateral colorida); submenu de "Usuários"
+  com o mesmo padding/tamanho dos itens principais
+- Wordmark sem gradiente rainbow; mojibake nos comentários corrigido
+
+**Largura das páginas — padronizada em todo o Hub**
+- Telas de **lista/dashboard** (admin: Visão Geral, Usuários, Customer Success, Projetos,
+  Contratos, Financeiro, Suporte, Kanban, Calendário, Roadmap, Feedback, Base de Conhecimento,
+  Analytics, Auditoria · cliente: Dashboard, Financeiro, Projetos, Contratos, Roadmap,
+  Feedback, Base de Conhecimento, Kanban, Calendário) usam `maxWidth: "none"` — largura total.
+- Telas de **detalhe/formulário/leitura** (tickets, projetos, contratos, artigos, formulários
+  de novo registro, avaliação, NPS, Planos) mantêm largura de leitura (~640–900px) —
+  decisão consciente, não lacuna.
+
+**Kanban** (`ProjectsKanban` + `ProjectDetailModal`, novo)
+- Cards estilo Preline: avatar do responsável, badge de prioridade (dot + label), barra de
+  progresso, data de entrega — sem os contadores falsos (`Math.random()`) que existiam antes
+- Clique no card abre modal de detalhe com thread de atualizações real (`getProject`) e
+  composer para o admin publicar (`addProjectUpdate`)
+
+**Calendário** (`ProjectsCalendar`, reescrito)
+- 4 visões funcionais: Dia / Semana / Mês / Ano (antes só Mês renderizava)
+- Painel esquerdo: mini-mês navegável + filtro "Etapas" (checkboxes por status)
+- Painel direito: próximos prazos + integrações de calendário
+- Visão Ano fiel ao Preline: 12 meses completos, dias de meses vizinhos esmaecidos
+
+**Tabela de Usuários**
+- Coluna **Empresa** nova (lista + formulário de convite), ponta a ponta com o banco
+- Papel/Plano: de `<select>` de navegador para badges/pills coloridas editáveis (visual
+  Preline, mesma funcionalidade de edição inline)
+
+**Segurança**
+- Logoff automático após 2h de sessão (`SessionTimeout`), com aviso na tela de login
+
+## 6.3 Bugs corrigidos durante a implementação (não introduzidos por ela)
+
+| Bug | Causa | Correção |
+|---|---|---|
+| `ERR_TOO_MANY_REDIRECTS` / "preciso apagar cookies toda hora" | Middleware stateless só checava a *presença* do cookie de sessão, nunca validava nem renovava o token expirado — token velho gerava loop de redirect | Middleware reescrito no padrão `@supabase/ssr`: valida e renova a sessão a cada request |
+| Kanban/Calendário/Projetos do admin sempre vazios | `projects.client_id`, `contracts.client_id`, `project_updates.author_id` apontavam para `auth.users` em vez de `profiles` — os embeds PostgREST (`select("*, profiles:client_id(name)")`) exigem FK direta e falhavam em silêncio | Migration `0041`: adiciona as FKs faltantes para `profiles.id` |
+| Menu de usuário do admin quebrava ao abrir | Dois `NotificationBell` (topbar + popover) assinando o mesmo canal realtime de tópico fixo — segunda inscrição lançava erro | Nome de canal único por instância |
+
+## 6.4 Migrations aplicadas em produção
+
+- `0041_fix_project_contract_profile_relationships.sql` — FKs `profiles`
+- `0042_add_company_to_profiles.sql` — coluna `company` + trigger de provisionamento
+
+## 6.5 O que ficou fora do escopo (decisão, não esquecimento)
+
+- Gráficos do analytics não usam biblioteca de chart (`TrendBars` caseiro, barras simples)
+- Tabelas admin (Suporte, Auditoria) não têm um redesenho visual completo linha a linha —
+  só a largura/margem foi padronizada
+- Não há edição inline de "Empresa" para usuários já cadastrados (só na criação) — consistente
+  com o resto do formulário (nome/telefone também não são editáveis depois do convite)
+
+---
+
+**Este documento reflete o estado publicado em produção. Para mudanças futuras, abrir uma
+nova rodada de ajustes a partir daqui — as Fases 2–5 acima são material de referência histórico,
+não um plano ainda pendente.**

@@ -124,3 +124,23 @@ cinza de fundo numa mesma tela. O contraste vem de texto forte sobre fundo quase
 8. **Motion 150/200/300ms ease-in-out** — três durações, um easing, zero espetáculo.
 9. **Tabela como componente-estrela** — toolbar, th uppercase, hover de linha, paginação com contagem.
 10. **Dark mode espelhado 1:1** — cada token light tem o equivalente dark; nada "esquecido".
+
+---
+
+## Status de adoção no Fropty Hub (atualizado)
+
+Este documento é a pesquisa de benchmark (Fase 1) — permanece válido como referência do
+que é o Preline. O que foi **de fato implementado e publicado** no Hub está registrado em
+`FROPTY-HUB-ENTERPRISE-UI.md` (Fase 6). Resumo rápido do que aderiu 1:1 vs. o que a Fropty
+manteve com identidade própria:
+
+| Princípio Preline | No Hub hoje |
+|---|---|
+| Accent azul `#155DFC` | ✅ Adotado tal qual — decisão explícita do usuário de ir "idêntico ao Preline" no Hub (portal + admin + login). A landing/marketing preserva o roxo `#5B57E8` da marca Fropty. |
+| Fonte Inter | ✅ Adotada no Hub; a landing preserva DM Sans. |
+| Borda antes de sombra, badges soft, densidade 14px, motion 150/200/300ms | ✅ Implementados via tokens em `globals.css` e as classes `hub-*`. |
+| Sidebar com item ativo em bloco neutro | ✅ Adotado (sem barra lateral colorida). |
+| Container fluido (sem `max-w` fixo em páginas de lista) | ✅ Adotado em todas as telas de lista/dashboard do admin e do portal do cliente; páginas de detalhe/formulário/leitura mantêm largura de leitura (~640–900px), por ser mais legível — não é uma lacuna, é a mesma distinção que o Preline faz entre dashboard e conteúdo de leitura. |
+| Linhas diagonais tracejadas de baixa opacidade em heros/banners | ✅ Adotado (`.hub-bg-diagonal`), com um ajuste: no Hub as linhas são **contínuas e densas** (não tracejadas em traços curtos) — preferência visual confirmada pelo usuário a partir de referências enviadas. |
+| Charts (ApexCharts, paleta tokenizada) | ⚠️ Parcial — o analytics do admin usa barras simples feitas à mão (`TrendBars`), sem biblioteca de chart. |
+| Notification panel / Command search | ✅ Sino de notificações realtime + Command Palette (⌘K) já existiam e foram mantidos. |
