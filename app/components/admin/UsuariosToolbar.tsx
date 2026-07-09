@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useTransition } from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { Upload, Download, SlidersHorizontal, Loader2, X, FileUp, CheckCircle, AlertTriangle } from "lucide-react";
 import { useToast } from "@/app/components/ui/Toast";
@@ -63,15 +64,31 @@ export function UsuariosToolbar({ tab, q, role, plan }: Props) {
   const [exporting, setExporting] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
-  const filterRef = useRef<HTMLDivElement>(null);
+  const [menuPos, setMenuPos] = useState<{ top: number; right: number } | null>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  function openFilter() {
+    const r = triggerRef.current?.getBoundingClientRect();
+    if (r) setMenuPos({ top: r.bottom + 6, right: Math.max(8, window.innerWidth - r.right) });
+    setFilterOpen(true);
+  }
 
   useEffect(() => {
     if (!filterOpen) return;
     function onDown(e: MouseEvent) {
-      if (filterRef.current && !filterRef.current.contains(e.target as Node)) setFilterOpen(false);
+      const t = e.target as Node;
+      if (!triggerRef.current?.contains(t) && !panelRef.current?.contains(t)) setFilterOpen(false);
     }
+    function onScrollOrResize() { setFilterOpen(false); }
     document.addEventListener("mousedown", onDown);
-    return () => document.removeEventListener("mousedown", onDown);
+    window.addEventListener("resize", onScrollOrResize);
+    window.addEventListener("scroll", onScrollOrResize, true);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      window.removeEventListener("resize", onScrollOrResize);
+      window.removeEventListener("scroll", onScrollOrResize, true);
+    };
   }, [filterOpen]);
 
   async function handleExport() {
@@ -122,25 +139,28 @@ export function UsuariosToolbar({ tab, q, role, plan }: Props) {
       </div>
 
       {/* Filter */}
-      <div ref={filterRef} style={{ position: "relative" }}>
-        <button
-          type="button"
-          onClick={() => setFilterOpen((o) => !o)}
-          style={{ ...actionBtn, border: "1px solid var(--border)", borderRadius: 7, padding: "5px 10px", gap: 5, color: activeFilters ? "var(--primary)" : "var(--text-muted)", borderColor: activeFilters ? "var(--primary)" : "var(--border)" }}
-        >
-          <SlidersHorizontal size={12} />
-          <span>Filtrar</span>
-          {activeFilters > 0 && (
-            <span style={{ fontSize: "10px", background: "var(--primary)", color: "#fff", borderRadius: 999, padding: "0 5px", fontWeight: 800 }}>{activeFilters}</span>
-          )}
-        </button>
-
-        {filterOpen && (
-          <div style={{ position: "absolute", top: "calc(100% + 6px)", right: 0, zIndex: 30, width: 240, background: "var(--surface-elevated, var(--card-bg))", border: "1px solid var(--border)", borderRadius: 10, boxShadow: "var(--shadow-dropdown, 0 8px 24px rgba(0,0,0,0.18))", padding: 14 }}>
-            <FilterBody role={role} plan={plan} onApply={applyFilter} />
-          </div>
+      <button
+        ref={triggerRef}
+        type="button"
+        onClick={() => (filterOpen ? setFilterOpen(false) : openFilter())}
+        style={{ ...actionBtn, border: "1px solid var(--border)", borderRadius: 7, padding: "5px 10px", gap: 5, color: activeFilters ? "var(--primary)" : "var(--text-muted)", borderColor: activeFilters ? "var(--primary)" : "var(--border)" }}
+      >
+        <SlidersHorizontal size={12} />
+        <span>Filtrar</span>
+        {activeFilters > 0 && (
+          <span style={{ fontSize: "10px", background: "var(--primary)", color: "#fff", borderRadius: 999, padding: "0 5px", fontWeight: 800 }}>{activeFilters}</span>
         )}
-      </div>
+      </button>
+
+      {filterOpen && menuPos && typeof document !== "undefined" && createPortal(
+        <div
+          ref={panelRef}
+          style={{ position: "fixed", top: menuPos.top, right: menuPos.right, zIndex: 1000, width: 240, background: "var(--surface-elevated, var(--card-bg))", border: "1px solid var(--border)", borderRadius: 10, boxShadow: "var(--shadow-dropdown, 0 8px 24px rgba(0,0,0,0.18))", padding: 14 }}
+        >
+          <FilterBody role={role} plan={plan} onApply={applyFilter} />
+        </div>,
+        document.body,
+      )}
 
       {importOpen && (
         <ImportModal
