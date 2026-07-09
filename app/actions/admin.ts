@@ -72,6 +72,142 @@ export async function adminInviteClient(formData: FormData): Promise<{ error?: s
   return { success: `Convite enviado para ${email}` };
 }
 
+export async function adminUpdateUserProfile(formData: FormData): Promise<{ error?: string; success?: string }> {
+  const adminId = await requireRole("admin");
+  const userId  = (formData.get("user_id") as string)?.trim();
+  if (!userId) return { error: "Usuário inválido." };
+
+  const email   = (formData.get("email") as string)?.trim().toLowerCase() || "";
+  const name    = (formData.get("name") as string)?.trim() || email.split("@")[0] || "cliente";
+  const company = (formData.get("company") as string)?.trim() || null;
+  const phone   = (formData.get("phone") as string)?.trim() || null;
+  const plan    = (formData.get("plan") as string)?.trim() || "sem_plano";
+  const services = sanitizeServiceIds(formData.getAll("services").map((s) => String(s)));
+  const balance = parseInt((formData.get("token_balance") as string) ?? "0", 10);
+  const contractRaw   = (formData.get("contract_start") as string | null)?.trim() || "";
+  const contractStart = /^\d{4}-\d{2}-\d{2}$/.test(contractRaw) ? contractRaw : null;
+
+  if (!email) return { error: "Informe o e-mail." };
+  if (!["sem_plano", "basico", "pro"].includes(plan)) return { error: "Plano inválido." };
+  if (isNaN(balance) || balance < 0 || balance > 99999) return { error: "Saldo de tokens inválido (0–99999)." };
+
+  const service = createServiceClient();
+  const { data: target } = await service.from("profiles").select("email").eq("id", userId).single();
+  if (!target) return { error: "Usuário não encontrado." };
+
+  // E-mail mudou → atualiza no Auth (confirmado) antes de refletir em profiles
+  if (email !== target.email) {
+    const { error: authErr } = await service.auth.admin.updateUserById(userId, { email, email_confirm: true });
+    if (authErr) return { error: `E-mail: ${authErr.message}` };
+  }
+
+  const { error } = await service
+    .from("profiles")
+    .update({
+      name,
+      email,
+      company,
+      phone_number: phone,
+      plan: plan as "sem_plano" | "basico" | "pro",
+      token_balance: balance,
+      services,
+      contract_start: contractStart,
+    })
+    .eq("id", userId);
+
+  if (error) return { error: error.message };
+
+  logAdminAction({ adminId, action: "update_profile", targetType: "user", targetId: userId, metadata: { name, company, email, plan, balance, services, contractStart } });
+  revalidatePath("/admin/usuarios");
+  revalidatePath(`/admin/usuarios/${userId}/editar`);
+  return { success: "Alterações salvas." };
+}
+
+export async function adminExportUsers(): Promise<{ rows: Record<string, unknown>[]; error?: string }> {
+  await requireRole("admin");
+  const service = createServiceClient();
+  const { data, error } = await service
+    .from("profiles")
+    .select("name,email,company,phone_number,role,plan,token_balance,is_active,contract_start,created_at")
+    .order("created_at", { ascending: false });
+  if (error) return { rows: [], error: error.message };
+  const rows = (data ?? []).map((u) => ({
+    nome:          u.name ?? "",
+    email:         u.email ?? "",
+    empresa:       u.company ?? "",
+    telefone:      u.phone_number ?? "",
+    papel:         u.role ?? "",
+    plano:         u.plan ?? "",
+    tokens:        u.token_balance ?? 0,
+    status:        u.is_active === false ? "bloqueado" : "ativo",
+    inicio_contrato: u.contract_start ?? "",
+    criado_em:     u.created_at ?? "",
+  }));
+  return { rows };
+}
+
+export interface BulkInviteRow {
+  email: string;
+  name?: string;
+  company?: string;
+  plan?: string;
+  token_balance?: number;
+}
+
+export async function adminBulkInviteClients(
+  rows: BulkInviteRow[],
+): Promise<{ invited: number; failed: { email: string; error: string }[] }> {
+  const adminId = await requireRole("admin");
+  const service = createServiceClient();
+  const redirectTo = `${process.env.NEXT_PUBLIC_HUB_URL ?? process.env.NEXT_PUBLIC_APP_URL ?? "https://www.fropty.com"}/auth/callback?next=/area-cliente/nova-senha`;
+
+  let invited = 0;
+  const failed: { email: string; error: string }[] = [];
+
+  for (const r of rows.slice(0, 200)) {
+    const email = r.email?.trim().toLowerCase() ?? "";
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      failed.push({ email: r.email || "(vazio)", error: "e-mail inválido" });
+      continue;
+    }
+    const plan = ["sem_plano", "basico", "pro"].includes(r.plan ?? "") ? (r.plan as string) : "sem_plano";
+    const tokenBalance = Math.max(0, Math.min(99999, Math.trunc(Number(r.token_balance) || 0)));
+    const name = r.name?.trim() || email.split("@")[0];
+    const company = r.company?.trim() || null;
+
+    const { error } = await service.auth.admin.inviteUserByEmail(email, {
+      redirectTo,
+      data: { name, role: "cliente", token_balance: tokenBalance, plan, services: [], contract_start: null, company },
+    });
+    if (error) failed.push({ email, error: error.message });
+    else invited++;
+  }
+
+  logAdminAction({ adminId, action: "bulk_invite", targetType: "user", metadata: { invited, failed: failed.length } });
+  revalidatePath("/admin/usuarios");
+  return { invited, failed };
+}
+
+export async function adminDeleteUser(formData: FormData): Promise<{ error?: string }> {
+  const adminId = await requireRole("admin");
+  const userId  = (formData.get("user_id") as string)?.trim();
+  if (!userId) return { error: "Usuário inválido." };
+  if (userId === adminId) return { error: "Você não pode excluir a própria conta." };
+
+  const service = createServiceClient();
+  const { data: target } = await service.from("profiles").select("role, name, email").eq("id", userId).single();
+  if (!target) return { error: "Usuário não encontrado." };
+  if (target.role === "admin") return { error: "Não é possível excluir outro administrador." };
+
+  // Remove do Auth; FKs em cascata limpam profiles + dados relacionados
+  const { error } = await service.auth.admin.deleteUser(userId);
+  if (error) return { error: error.message };
+
+  logAdminAction({ adminId, action: "delete_user", targetType: "user", targetId: userId, metadata: { name: target.name, email: target.email } });
+  revalidatePath("/admin/usuarios");
+  return {};
+}
+
 export async function adminRevokeAccess(formData: FormData): Promise<void> {
   const adminId = await requireRole("admin");
   const userId  = (formData.get("user_id") as string)?.trim();

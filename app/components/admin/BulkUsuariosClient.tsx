@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { UserRowActions } from "./UserRowActions";
+import { UserRowMenu } from "./UserRowMenu";
 import { adminBulkUpdatePlan } from "@/app/actions/admin";
 import { CheckSquare, Square, ChevronDown, Loader2 } from "lucide-react";
 
@@ -118,7 +119,7 @@ export function BulkUsuariosClient({ users }: Props) {
 
       <div style={{ overflowX: "auto" }}>
         {/* Header */}
-        <div style={{ display: "grid", gridTemplateColumns: "36px minmax(150px,1.2fr) 130px minmax(170px,1.3fr) 120px 95px 100px 120px 110px 80px 120px", padding: "8px 16px", borderBottom: "1px solid var(--border)", fontSize: "10px", fontWeight: 800, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.06em", minWidth: 1300, gap: 8 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "36px minmax(150px,1.2fr) 130px minmax(170px,1.3fr) 120px 95px 100px 120px 110px 80px 120px 48px", padding: "8px 16px", borderBottom: "1px solid var(--border)", fontSize: "10px", fontWeight: 800, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.06em", minWidth: 1348, gap: 8 }}>
           <button
             onClick={toggleAll}
             style={{ background: "none", border: "none", cursor: "pointer", padding: 0, color: allSelected ? "var(--primary)" : someSelected ? "var(--primary)" : "var(--text-faint)", display: "flex", alignItems: "center" }}
@@ -135,6 +136,7 @@ export function BulkUsuariosClient({ users }: Props) {
           <span>Tokens</span>
           <span style={{ textAlign: "center" }}>Status</span>
           <span style={{ textAlign: "center" }}>Acesso</span>
+          <span style={{ textAlign: "center" }}>Ações</span>
         </div>
 
         {users.map((u, i) => {
@@ -144,9 +146,9 @@ export function BulkUsuariosClient({ users }: Props) {
             <div
               key={u.id}
               style={{
-                display: "grid", gridTemplateColumns: "36px minmax(150px,1.2fr) 130px minmax(170px,1.3fr) 120px 95px 100px 120px 110px 80px 120px",
+                display: "grid", gridTemplateColumns: "36px minmax(150px,1.2fr) 130px minmax(170px,1.3fr) 120px 95px 100px 120px 110px 80px 120px 48px",
                 padding: "8px 16px", borderBottom: i < users.length - 1 ? "1px solid var(--border)" : "none",
-                alignItems: "center", gap: 8, minWidth: 1300,
+                alignItems: "center", gap: 8, minWidth: 1348,
                 background: selected.has(u.id) ? "color-mix(in srgb, var(--primary) 4%, transparent)" : "transparent",
                 transition: "background 0.1s",
               }}
@@ -196,6 +198,13 @@ export function BulkUsuariosClient({ users }: Props) {
                 plan={u.plan}
                 tokenBalance={u.token_balance}
                 isActive={u.is_active}
+              />
+
+              <UserRowMenu
+                userId={u.id}
+                name={u.name ?? ""}
+                email={u.email ?? ""}
+                role={u.role}
               />
             </div>
           );
