@@ -408,16 +408,6 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
           </div>
           <div style={{ height: 1, background: "var(--border)" }} />
           <div style={{ padding: "6px" }}>
-            <p style={{ margin: "2px 10px 3px", fontSize: "9.5px", fontWeight: 800, letterSpacing: "0.09em", textTransform: "uppercase", color: "var(--text-faint)" }}>Sistema</p>
-            <Link href="/admin/analytics" onClick={() => setMenuOpen(false)} style={dropItem} onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.background = "var(--surface-2)"} onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.background = "transparent"}>
-              <BarChart2 size={14} /> Analytics
-            </Link>
-            <Link href="/admin/audit" onClick={() => setMenuOpen(false)} style={dropItem} onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.background = "var(--surface-2)"} onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.background = "transparent"}>
-              <ShieldCheck size={14} /> Auditoria
-            </Link>
-          </div>
-          <div style={{ height: 1, background: "var(--border)" }} />
-          <div style={{ padding: "6px" }}>
             <button
               onClick={handleSignOut}
               disabled={pending}
