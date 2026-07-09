@@ -3,18 +3,21 @@ import Link from "next/link";
 import { createClient } from "@/app/lib/supabase/server";
 import { createServiceClient } from "@/app/lib/supabase/service";
 import { BulkUsuariosClient } from "@/app/components/admin/BulkUsuariosClient";
-import { ChevronLeft, ChevronRight, UserPlus, Users, UserCheck, UserX, ShieldCheck, Download, Upload, SlidersHorizontal } from "lucide-react";
+import { UsuariosToolbar } from "@/app/components/admin/UsuariosToolbar";
+import { ChevronLeft, ChevronRight, UserPlus, Users, UserCheck, UserX, ShieldCheck } from "lucide-react";
 
 export const metadata: Metadata = { title: "Usuários — Admin" };
 
 const PAGE_SIZE = 20;
 
 interface Props {
-  searchParams: Promise<{ page?: string; tab?: string; q?: string }>;
+  searchParams: Promise<{ page?: string; tab?: string; q?: string; role?: string; plan?: string }>;
 }
 
 export default async function AdminUsuariosPage({ searchParams }: Props) {
-  const { page: pageParam, tab = "todos", q = "" } = await searchParams;
+  const { page: pageParam, tab = "todos", q = "", role: roleRaw = "", plan: planRaw = "" } = await searchParams;
+  const roleFilter = ["cliente", "admin"].includes(roleRaw) ? roleRaw : "";
+  const planFilter = ["sem_plano", "basico", "pro"].includes(planRaw) ? planRaw : "";
   const page   = Math.max(1, parseInt(pageParam ?? "1", 10));
   const offset = (page - 1) * PAGE_SIZE;
   const supabase = await createClient();
@@ -38,6 +41,8 @@ export default async function AdminUsuariosPage({ searchParams }: Props) {
 
   if (tab === "ativos")   query = query.eq("is_active", true);
   if (tab === "inativos") query = query.eq("is_active", false);
+  if (roleFilter) query = query.eq("role", roleFilter);
+  if (planFilter) query = query.eq("plan", planFilter);
   if (q) query = query.or(`name.ilike.%${q}%,email.ilike.%${q}%`);
 
   const [{ data: usersFiltered }, { count: filteredTotal }] = await Promise.all([
@@ -46,6 +51,8 @@ export default async function AdminUsuariosPage({ searchParams }: Props) {
       let cq = supabase.from("profiles").select("*", { count: "exact", head: true });
       if (tab === "ativos")   cq = cq.eq("is_active", true);
       if (tab === "inativos") cq = cq.eq("is_active", false);
+      if (roleFilter) cq = cq.eq("role", roleFilter);
+      if (planFilter) cq = cq.eq("plan", planFilter);
       if (q) cq = cq.or(`name.ilike.%${q}%,email.ilike.%${q}%`);
       return cq;
     })(),
@@ -91,8 +98,20 @@ export default async function AdminUsuariosPage({ searchParams }: Props) {
     const p = new URLSearchParams();
     if (t !== "todos") p.set("tab", t);
     if (q) p.set("q", q);
+    if (roleFilter) p.set("role", roleFilter);
+    if (planFilter) p.set("plan", planFilter);
     const s = p.toString();
     return `/admin/usuarios${s ? `?${s}` : ""}`;
+  }
+
+  function pageHref(target: number) {
+    const p = new URLSearchParams();
+    p.set("page", String(target));
+    if (tab !== "todos") p.set("tab", tab);
+    if (q) p.set("q", q);
+    if (roleFilter) p.set("role", roleFilter);
+    if (planFilter) p.set("plan", planFilter);
+    return `/admin/usuarios?${p.toString()}`;
   }
 
   return (
@@ -163,6 +182,8 @@ export default async function AdminUsuariosPage({ searchParams }: Props) {
           <div style={{ display: "flex", gap: 6, alignItems: "center", padding: "8px 0" }}>
             <form method="GET" action="/admin/usuarios" style={{ display: "flex" }}>
               {tab !== "todos" && <input type="hidden" name="tab" value={tab} />}
+              {roleFilter && <input type="hidden" name="role" value={roleFilter} />}
+              {planFilter && <input type="hidden" name="plan" value={planFilter} />}
               <div style={{ position: "relative" }}>
                 <svg style={{ position: "absolute", left: 9, top: "50%", transform: "translateY(-50%)", color: "var(--text-faint)", pointerEvents: "none" }} width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                 <input
@@ -174,18 +195,7 @@ export default async function AdminUsuariosPage({ searchParams }: Props) {
               </div>
             </form>
 
-            {/* Import / Export split button */}
-            <div style={{ display: "inline-flex", borderRadius: 7, border: "1px solid var(--border)", overflow: "hidden" }}>
-              <button style={actionBtn}><Upload size={12} /><span>Importar</span></button>
-              <div style={{ width: 1, background: "var(--border)" }} />
-              <button style={actionBtn}><Download size={12} /><span>Exportar</span></button>
-            </div>
-
-            {/* Filter */}
-            <button style={{ ...actionBtn, border: "1px solid var(--border)", borderRadius: 7, padding: "5px 10px", gap: 5 }}>
-              <SlidersHorizontal size={12} />
-              <span>Filtrar</span>
-            </button>
+            <UsuariosToolbar tab={tab} q={q} role={roleFilter} plan={planFilter} />
           </div>
         </div>
 
@@ -214,12 +224,12 @@ export default async function AdminUsuariosPage({ searchParams }: Props) {
             </span>
             <div style={{ display: "flex", gap: 5 }}>
               {page > 1 && (
-                <Link href={`/admin/usuarios?page=${page - 1}${tab !== "todos" ? `&tab=${tab}` : ""}${q ? `&q=${q}` : ""}`} style={paginBtn}>
+                <Link href={pageHref(page - 1)} style={paginBtn}>
                   <ChevronLeft size={12} /> Anterior
                 </Link>
               )}
               {page < totalPages && (
-                <Link href={`/admin/usuarios?page=${page + 1}${tab !== "todos" ? `&tab=${tab}` : ""}${q ? `&q=${q}` : ""}`} style={paginBtn}>
+                <Link href={pageHref(page + 1)} style={paginBtn}>
                   Próxima <ChevronRight size={12} />
                 </Link>
               )}
@@ -230,13 +240,6 @@ export default async function AdminUsuariosPage({ searchParams }: Props) {
     </div>
   );
 }
-
-const actionBtn: React.CSSProperties = {
-  display: "inline-flex", alignItems: "center", gap: 5,
-  padding: "5px 10px", background: "var(--surface)", color: "var(--text-muted)",
-  border: "none", fontSize: "12px", fontWeight: 600, cursor: "pointer",
-  fontFamily: "inherit", whiteSpace: "nowrap",
-};
 
 const paginBtn: React.CSSProperties = {
   display: "inline-flex", alignItems: "center", gap: 4,
