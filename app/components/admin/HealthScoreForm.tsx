@@ -141,7 +141,7 @@ export function HealthScoreForm({ clientId, initial, clientName }: Props) {
       </div>
 
       {error && (
-        <p style={{ margin: 0, fontSize: "13px", color: "#ef4444", padding: "10px 14px", background: "rgba(239,68,68,0.08)", borderRadius: 10, border: "1px solid rgba(239,68,68,0.2)" }}>
+        <p style={{ margin: 0, fontSize: "13px", color: "var(--c-danger)", padding: "10px 14px", background: "var(--c-danger-bg)", borderRadius: 10, border: "1px solid color-mix(in srgb, var(--c-danger) 20%, transparent)" }}>
           {error}
         </p>
       )}

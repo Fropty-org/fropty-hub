@@ -18,7 +18,7 @@ export default async function AdminPerfilPage() {
   const company        = (profile as { company?: string | null })?.company ?? null;
 
   return (
-    <div style={{ padding: "40px 40px" }}>
+    <div className="hub-page" style={{ maxWidth: 720, margin: "0 auto" }}>
       <div style={{ marginBottom: 32 }}>
         <h1 style={{ margin: 0, fontSize: "1.25rem", fontWeight: 800, color: "var(--text)", letterSpacing: "-0.02em" }}>Conta</h1>
         <p style={{ margin: "4px 0 0", fontSize: "13px", color: "var(--text-faint)" }}>Gerencie suas informações pessoais e segurança.</p>

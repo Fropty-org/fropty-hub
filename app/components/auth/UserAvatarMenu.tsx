@@ -136,7 +136,7 @@ export function UserAvatarMenu({ name, email, initials, role, plan }: Props) {
               background: "none",
               border: "none",
               cursor: pending ? "not-allowed" : "pointer",
-              color: "#ef4444",
+              color: "var(--c-danger)",
               fontSize: "13px",
               fontWeight: 600,
               fontFamily: "inherit",

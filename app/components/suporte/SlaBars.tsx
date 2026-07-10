@@ -13,7 +13,7 @@ interface Props {
 function barColor(s: SlaState): string {
   if (s.done) return s.breached ? "var(--c-danger)" : "var(--c-success)";
   if (s.breached) return "var(--c-danger)";
-  if (s.ratio >= 0.75) return "#EF9F27";
+  if (s.ratio >= 0.75) return "var(--brand-accent)";
   return "var(--c-info)";
 }
 

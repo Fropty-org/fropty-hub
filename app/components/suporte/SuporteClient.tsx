@@ -97,7 +97,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
   const totalHigh     = tickets.filter((t) => t.priority === "alta" && t.status !== "fechado").length;
 
   return (
-    <div style={{ padding: "24px 24px", maxWidth: 1020, margin: "0 auto" }}>
+    <div className="hub-page" style={{ maxWidth: "none" }}>
       <style>{`
         @media (max-width: 640px) {
           .suporte-root-wrap { padding: 16px 14px !important; }

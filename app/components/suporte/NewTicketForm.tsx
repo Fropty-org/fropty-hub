@@ -19,7 +19,7 @@ const CATEGORIES = ["Bug / Erro", "Nova funcionalidade", "Dúvida", "Performance
 
 const PRIORITIES: { value: string; label: string; color: string; Icon: LucideIcon; desc: string; tokens: number }[] = [
   { value: "baixa", label: "Baixa",  color: "var(--text-faint)", Icon: ArrowDown,  desc: "Não urgente",      tokens: 5  },
-  { value: "media", label: "Média",  color: "#EF9F27", Icon: ArrowRight, desc: "Impacto moderado", tokens: 10 },
+  { value: "media", label: "Média",  color: "var(--brand-accent)", Icon: ArrowRight, desc: "Impacto moderado", tokens: 10 },
   { value: "alta",  label: "Alta",   color: "var(--c-danger)", Icon: ArrowUp,    desc: "Bloqueando uso",   tokens: 20 },
 ];
 
@@ -264,7 +264,7 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 7 }}>
           <label style={{ ...labelStyle, marginBottom: 0 }}>Prioridade</label>
           {!isAdmin && (
-            <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: "11px", fontWeight: 700, color: "#EF9F27", background: "rgba(239,159,39,0.10)", border: "1px solid rgba(239,159,39,0.25)", borderRadius: 99, padding: "2px 10px" }}>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: "11px", fontWeight: 700, color: "var(--brand-accent)", background: "color-mix(in srgb, var(--brand-accent) 10%, transparent)", border: "1px solid color-mix(in srgb, var(--brand-accent) 25%, transparent)", borderRadius: 99, padding: "2px 10px" }}>
               <Coins size={11} />
               {PRIORITIES.find((p) => p.value === priority)?.tokens ?? 10} tokens
             </span>
