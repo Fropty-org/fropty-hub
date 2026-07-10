@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import { NotificationBell } from "@/app/components/NotificationBell";
+import { SessionGuard } from "@/app/components/session/SessionGuard";
 
 interface Props {
   userId: string;
@@ -46,6 +47,7 @@ export function HubTopbar({ userId, initials, avatarUrl, profileHref }: Props) {
       </button>
 
       <div className="hub-topbar-right">
+        <SessionGuard />
         <NotificationBell userId={userId} />
         <Link href={profileHref} className="hub-topbar-avatar" title="Meu perfil">
           {avatarUrl ? (

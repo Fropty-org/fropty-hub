@@ -118,7 +118,9 @@ kanban, calendario, roadmap, feedback, base-conhecimento, analytics, audit` (+ `
   **projetos** (`app/components/projetos/*` — `ProjectsKanban`, `ProjectsCalendar`, `ProjectDetailModal`),
   **admin** (`app/components/admin/*` — `AdminSuporteQueue`, `TrendBars`), **cliente**
   (`ActivityFeed`, `NpsForm`), **demos** (`app/components/demos/*` e `app/demo/*`).
-- `HubTopbar.tsx` (topbar do Hub), `SessionTimeout.tsx` (**logoff automático após 2h**),
+- `HubTopbar.tsx` (topbar do Hub), `session/SessionGuard.tsx` (**logout por inatividade de 30 min**:
+  anel de sessão no topbar + modal "você ainda está aí?" nos últimos 30s + logout automático; idle
+  compartilhado entre abas via `localStorage`),
   `CommandPalette.tsx` (⌘K, busca global via `app/actions/search.ts`), `NotificationBell.tsx`
   (**realtime real**: subscription na tabela `notifications`; canal único por instância).
 

@@ -11,7 +11,6 @@ import { UserAvatarMenu } from "@/app/components/auth/UserAvatarMenu";
 import { PullToRefresh } from "@/app/components/PullToRefresh";
 import { CommandPalette } from "@/app/components/CommandPalette";
 import { HubTopbar } from "@/app/components/HubTopbar";
-import { SessionTimeout } from "@/app/components/SessionTimeout";
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -157,9 +156,6 @@ export default async function PortalLayout({
 
       {/* Busca global Cmd+K */}
       <CommandPalette />
-
-      {/* Logoff automático após 2h de sessão */}
-      <SessionTimeout />
 
     </div>
   );

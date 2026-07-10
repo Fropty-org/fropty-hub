@@ -46,8 +46,9 @@ export default function AreaClientePage() {
   const themeRef              = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    // Reinicia a contagem de sessão a cada visita ao login (novo login = 2h cheias)
-    localStorage.removeItem("hub-session-start");
+    // Reinicia a contagem de sessão a cada visita ao login (idle de 30 min começa do zero)
+    localStorage.removeItem("hub-session-start"); // legado
+    localStorage.setItem("hub-session-activity", String(Date.now()));
     const saved = (localStorage.getItem("fropty-theme") ?? "dark") as "dark" | "light";
     setIsDark(saved === "dark");
     document.documentElement.classList.toggle("dark", saved === "dark");
