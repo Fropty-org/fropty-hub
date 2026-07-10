@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { signOut } from "@/app/actions/auth";
-import { ShieldAlert, Loader2 } from "lucide-react";
+import { ShieldAlert, Loader2, Clock } from "lucide-react";
 
 /**
  * Guardião de sessão por inatividade (idle timeout).
@@ -15,15 +15,10 @@ import { ShieldAlert, Loader2 } from "lucide-react";
  *   NÃO estende — só o botão — para que "sem resposta" resulte em logout.
  * - Um anel no topbar mostra o tempo restante de sessão.
  */
-// TESTE: valores curtos para validar o fluxo. Voltar para 30min/30s depois.
-const IDLE_MS    = 60 * 1000; // 1 minuto (teste — produção: 30 * 60 * 1000)
-const WARNING_MS = 15 * 1000; // aviso nos últimos 15s (teste — produção: 30 * 1000)
+const IDLE_MS    = 30 * 60 * 1000; // 30 minutos
+const WARNING_MS = 30 * 1000;      // aviso nos últimos 30s
 const TICK_MS    = 250;
 const ACTIVITY_KEY = "hub-session-activity";
-
-const RING_SIZE = 30;
-const RING_R    = 9;
-const RING_C    = 2 * Math.PI * RING_R;
 
 function fmt(ms: number): string {
   const s = Math.max(0, Math.ceil(ms / 1000));
@@ -93,23 +88,24 @@ export function SessionGuard() {
 
   return (
     <>
-      {/* Anel de sessão no topbar */}
+      {/* Barra de sessão no topbar (estilo Preline: pill soft + barra fina) */}
       <span
         title={`Sessão expira em ${fmt(remaining)} de inatividade`}
         aria-label={`Tempo de sessão restante: ${fmt(remaining)}`}
-        style={{ position: "relative", width: RING_SIZE, height: RING_SIZE, display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}
+        style={{
+          display: "inline-flex", alignItems: "center", gap: 7, flexShrink: 0,
+          padding: "5px 9px", borderRadius: 999,
+          background: `color-mix(in srgb, ${ringColor} 10%, transparent)`,
+          border: `1px solid color-mix(in srgb, ${ringColor} 22%, transparent)`,
+          transition: "background 0.3s, border-color 0.3s",
+        }}
       >
-        <svg width={RING_SIZE} height={RING_SIZE} style={{ transform: "rotate(-90deg)" }}>
-          <circle cx={RING_SIZE / 2} cy={RING_SIZE / 2} r={RING_R} fill="none" stroke="var(--border)" strokeWidth={2.5} />
-          <circle
-            cx={RING_SIZE / 2} cy={RING_SIZE / 2} r={RING_R} fill="none"
-            stroke={ringColor} strokeWidth={2.5} strokeLinecap="round"
-            strokeDasharray={RING_C} strokeDashoffset={RING_C * (1 - frac)}
-            style={{ transition: "stroke-dashoffset 0.25s linear, stroke 0.3s" }}
-          />
-        </svg>
-        <span style={{ position: "absolute", fontSize: "8.5px", fontWeight: 800, color: ringColor, fontVariantNumeric: "tabular-nums", lineHeight: 1 }}>
-          {remaining <= 60 * 1000 ? Math.ceil(remaining / 1000) : Math.ceil(remaining / 60000)}
+        <Clock size={12} style={{ color: ringColor, flexShrink: 0, transition: "color 0.3s" }} />
+        <span style={{ width: 40, height: 5, borderRadius: 999, background: "color-mix(in srgb, var(--text-faint) 22%, transparent)", overflow: "hidden", flexShrink: 0 }}>
+          <span style={{ display: "block", height: "100%", width: `${frac * 100}%`, borderRadius: 999, background: ringColor, transition: "width 0.25s linear, background 0.3s" }} />
+        </span>
+        <span style={{ fontSize: "11px", fontWeight: 700, color: ringColor, fontVariantNumeric: "tabular-nums", lineHeight: 1, minWidth: 34, textAlign: "right", transition: "color 0.3s" }}>
+          {fmt(remaining)}
         </span>
       </span>
 

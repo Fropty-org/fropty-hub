@@ -3,12 +3,13 @@ import Link from "next/link";
 import { createClient } from "@/app/lib/supabase/server";
 import {
   Users, MessageCircle, DollarSign, ChevronRight,
-  AlertTriangle, TrendingUp, CheckCircle, Activity,
+  AlertTriangle, TrendingUp, CheckCircle,
   FolderKanban, FileText, Heart, ArrowUpRight,
   BarChart2, Settings, BookOpen, Star, Zap,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { ACTIVE_PROJECT_STATUSES } from "@/app/lib/constants/projects";
+import { RefreshStatus } from "@/app/components/ui/RefreshStatus";
 
 export const metadata: Metadata = { title: "Visão Geral — Admin" };
 
@@ -151,10 +152,7 @@ export default async function AdminOverviewPage() {
           <h1 className="hub-page-title">Visão Geral</h1>
           <p className="hub-page-sub">Resumo operacional do ecossistema Fropty</p>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 12px", borderRadius: 8, background: "var(--surface-2)", border: "1px solid var(--border)" }}>
-          <Activity size={12} style={{ color: "var(--c-success)" }} />
-          <span style={{ fontSize: "12px", color: "var(--text-faint)", fontWeight: 500 }}>Atualizado agora</span>
-        </div>
+        <RefreshStatus />
       </div>
 
       {/* ── KPI cards (4 cols) ── */}
