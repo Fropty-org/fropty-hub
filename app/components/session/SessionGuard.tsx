@@ -15,8 +15,9 @@ import { ShieldAlert, Loader2 } from "lucide-react";
  *   NÃO estende — só o botão — para que "sem resposta" resulte em logout.
  * - Um anel no topbar mostra o tempo restante de sessão.
  */
-const IDLE_MS    = 30 * 60 * 1000; // 30 minutos
-const WARNING_MS = 30 * 1000;      // aviso nos últimos 30s
+// TESTE: valores curtos para validar o fluxo. Voltar para 30min/30s depois.
+const IDLE_MS    = 60 * 1000; // 1 minuto (teste — produção: 30 * 60 * 1000)
+const WARNING_MS = 15 * 1000; // aviso nos últimos 15s (teste — produção: 30 * 1000)
 const TICK_MS    = 250;
 const ACTIVITY_KEY = "hub-session-activity";
 
@@ -87,7 +88,7 @@ export function SessionGuard() {
   }, [bump, expire]);
 
   const frac    = Math.max(0, Math.min(1, remaining / IDLE_MS));
-  const isLow    = remaining <= 5 * 60 * 1000;
+  const isLow    = remaining <= Math.min(5 * 60 * 1000, IDLE_MS * 0.5);
   const ringColor = warning ? "var(--c-danger)" : isLow ? "var(--c-warning)" : "var(--primary)";
 
   return (
