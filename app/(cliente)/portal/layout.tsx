@@ -89,10 +89,13 @@ export default async function PortalLayout({
     projetos:  activeProjects,
     contratos: pendingContracts,
   };
-  const portalNav = PORTAL_NAV_ITEMS.map(item => ({
-    ...item,
-    ...(BADGES[item.id] !== undefined ? { badge: BADGES[item.id] } : {}),
-  }));
+  const clientServices = (profile?.services ?? []) as string[];
+  const portalNav = PORTAL_NAV_ITEMS
+    .filter(item => !item.requiresService || clientServices.includes(item.requiresService))
+    .map(item => ({
+      ...item,
+      ...(BADGES[item.id] !== undefined ? { badge: BADGES[item.id] } : {}),
+    }));
 
   // Objeto compatível com ClientUser (campos mínimos necessários)
   const sidebarUser = {

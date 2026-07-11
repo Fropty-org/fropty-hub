@@ -1,43 +1,20 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { Plus } from "lucide-react";
-import { getAllProjects } from "@/app/actions/projects";
-import { ProjectsKanban } from "@/app/components/projetos/ProjectsKanban";
-import { HubEmptyState } from "@/app/components/ui/HubEmptyState";
+import { getKanbanTasks } from "@/app/actions/kanban";
+import { PersonalKanban } from "@/app/components/kanban/PersonalKanban";
 import { PageHeader } from "@/app/components/ui/PageHeader";
 
 export const metadata: Metadata = { title: "Kanban" };
 
 export default async function AdminKanbanPage() {
-  const projects = await getAllProjects();
+  const tasks = await getKanbanTasks();
 
   return (
     <div className="hub-page" style={{ margin: "0 auto", maxWidth: "none" }}>
       <PageHeader
-        title="Kanban"
-        subtitle="Projetos de todos os clientes por status — arraste os cards para mudar o status"
-        action={
-          <Link
-            href="/admin/projetos/novo"
-            style={{
-              display: "inline-flex", alignItems: "center", gap: 7,
-              background: "var(--grad-brand)", color: "#fff",
-              borderRadius: 9, padding: "8px 16px",
-              fontSize: "12.5px", fontWeight: 700, textDecoration: "none",
-            }}
-          >
-            <Plus size={13} /> Novo projeto
-          </Link>
-        }
+        title="Kanban da equipe"
+        subtitle="Quadro compartilhado da equipe Fropty — organize as atividades internas"
       />
-
-      {projects.length === 0 ? (
-        <div className="hub-card">
-          <HubEmptyState variant="projetos" title="Nenhum projeto cadastrado" description="Projetos criados para os clientes aparecerão aqui, organizados por status." />
-        </div>
-      ) : (
-        <ProjectsKanban projects={projects} basePath="/admin/projetos" showClient editable />
-      )}
+      <PersonalKanban initialTasks={tasks} />
     </div>
   );
 }

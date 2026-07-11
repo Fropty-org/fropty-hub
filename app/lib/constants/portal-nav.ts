@@ -5,6 +5,8 @@ export interface PortalNavItem {
   label:  string;
   /** Grupo de navegação (renderizado como seção na sidebar). */
   group?: string;
+  /** Se definido, só aparece quando o cliente tem este serviço em profiles.services. */
+  requiresService?: string;
 }
 
 /** Rótulos das seções da sidebar do cliente, na ordem de exibição. */
@@ -26,7 +28,7 @@ export const PORTAL_NAV_ITEMS: PortalNavItem[] = [
   { id: "dashboard",         href: "/portal/dashboard",         icon: "LayoutDashboard",   label: "Painel",               group: "principal" },
   { id: "suporte",          href: "/portal/suporte",           icon: "MessageCircle",     label: "Suporte",              group: "principal" },
   { id: "projetos",         href: "/portal/projetos",          icon: "FolderKanban",      label: "Projetos",             group: "trabalho" },
-  { id: "kanban",           href: "/portal/kanban",            icon: "LayoutGrid",        label: "Kanban",               group: "trabalho" },
+  { id: "kanban",           href: "/portal/kanban",            icon: "LayoutGrid",        label: "Kanban",               group: "trabalho", requiresService: "kanban" },
   { id: "calendario",       href: "/portal/calendario",        icon: "CalendarDays",      label: "Calendário",           group: "trabalho" },
   { id: "contratos",        href: "/portal/contratos",         icon: "FileSignature",     label: "Contratos",            group: "conta" },
   { id: "financeiro",       href: "/portal/financeiro",        icon: "CreditCard",        label: "Financeiro",           group: "conta" },

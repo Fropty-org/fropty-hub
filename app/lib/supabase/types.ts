@@ -712,6 +712,50 @@ export type Database = {
           },
         ]
       }
+      kanban_tasks: {
+        Row: {
+          id: string
+          scope: string
+          owner_id: string | null
+          column_key: string
+          title: string
+          description: string | null
+          position: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          scope: string
+          owner_id?: string | null
+          column_key?: string
+          title: string
+          description?: string | null
+          position?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          scope?: string
+          owner_id?: string | null
+          column_key?: string
+          title?: string
+          description?: string | null
+          position?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kanban_tasks_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       nps_responses: {
         Row: {
           client_id: string
