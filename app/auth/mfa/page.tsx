@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { createClient } from "@/app/lib/supabase/browser";
-import { ShieldCheck, Loader2, ArrowRight } from "lucide-react";
+import { Loader2, ArrowRight } from "lucide-react";
+import { SentinelBadge } from "@/app/components/auth/SentinelBadge";
 
 export default function MFAChallengePagee() {
   const router = useRouter();
@@ -34,8 +36,8 @@ export default function MFAChallengePagee() {
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)", padding: 20 }}>
       <div className="hub-card" style={{ width: "100%", maxWidth: 380, padding: "36px 32px" }}>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, marginBottom: 28 }}>
-          <div style={{ width: 48, height: 48, borderRadius: "50%", background: "rgba(99,102,241,0.12)", border: "1px solid rgba(99,102,241,0.3)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <ShieldCheck size={22} color="#6366f1" />
+          <div style={{ width: 56, height: 56, borderRadius: "50%", background: "color-mix(in srgb, #ef4444 10%, transparent)", border: "1px solid color-mix(in srgb, #ef4444 26%, transparent)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Image src="/sentinel-logo.png" alt="FroptySentinel" width={32} height={32} style={{ objectFit: "contain" }} />
           </div>
           <div style={{ textAlign: "center" }}>
             <h1 style={{ margin: 0, fontSize: "1.1rem", fontWeight: 800, color: "var(--text)" }}>Verificação em dois fatores</h1>
@@ -86,6 +88,10 @@ export default function MFAChallengePagee() {
               Voltar ao login
             </a>
           </p>
+
+          <div style={{ display: "flex", justifyContent: "center", marginTop: 4 }}>
+            <SentinelBadge subtitle="Verificação de acesso em dois fatores" />
+          </div>
         </div>
       </div>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>

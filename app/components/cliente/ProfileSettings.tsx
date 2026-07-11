@@ -4,6 +4,7 @@ import { useState, useTransition, useRef } from "react";
 import { saveAvatarUrl, updateProfile } from "@/app/actions/profile";
 import { createClient } from "@/app/lib/supabase/browser";
 import PasswordChangeForm from "@/app/components/cliente/PasswordChangeForm";
+import { SentinelBadge } from "@/app/components/auth/SentinelBadge";
 import {
   User, Bell, Lock, Shield, AlertTriangle, Camera, Loader2,
   Check, X, Copy, CheckCircle, QrCode,
@@ -561,9 +562,12 @@ function TwoFactorSection() {
           <p style={{ margin: "0 0 6px", fontSize: 14, fontWeight: 700, color: "var(--text)", display: "flex", alignItems: "center", gap: 7 }}>
             <QrCode size={15} /> Configure o autenticador
           </p>
-          <p style={{ margin: "0 0 20px", fontSize: 13, color: "var(--text-faint)", lineHeight: 1.5 }}>
+          <p style={{ margin: "0 0 14px", fontSize: 13, color: "var(--text-faint)", lineHeight: 1.5 }}>
             Escaneie o QR code com Google Authenticator, Authy ou similar, depois insira o código gerado.
           </p>
+          <div style={{ marginBottom: 20 }}>
+            <SentinelBadge subtitle="Configuração de acesso em dois fatores" />
+          </div>
           <div className="ps-2fa-qr">
             <div style={{ background: "#fff", padding: 10, borderRadius: 12, border: "1px solid var(--border)", flexShrink: 0 }} dangerouslySetInnerHTML={{ __html: qrCode }} />
             <div style={{ flex: 1, minWidth: 200 }}>
