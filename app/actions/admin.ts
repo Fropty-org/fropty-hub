@@ -21,7 +21,7 @@ export async function adminBulkUpdatePlan(
     .in("id", userIds);
 
   if (error) return { error: error.message };
-  logAdminAction({ adminId, action: "bulk_update_plan", targetType: "user", targetId: userIds.join(","), metadata: { plan, count: userIds.length } });
+  await logAdminAction({ adminId, action: "bulk_update_plan", targetType: "user", targetId: userIds.join(","), metadata: { plan, count: userIds.length } });
   revalidatePath("/admin/usuarios");
   return {};
 }
@@ -41,7 +41,7 @@ export async function adminCreditTokens(formData: FormData): Promise<void> {
     type:        "credit" as const,
     description: `${description} [admin:${adminId.slice(0, 8)}]`,
   });
-  logAdminAction({ adminId, action: "credit_tokens", targetType: "user", targetId: userId, metadata: { amount, description } });
+  await logAdminAction({ adminId, action: "credit_tokens", targetType: "user", targetId: userId, metadata: { amount, description } });
   revalidatePath("/admin/usuarios");
   revalidatePath("/admin/financeiro");
 }
@@ -67,7 +67,7 @@ export async function adminInviteClient(formData: FormData): Promise<{ error?: s
 
   if (error) return { error: error.message };
 
-  logAdminAction({ adminId, action: "invite_client", targetType: "user", targetId: data?.user?.id, metadata: { email, name, company, plan, tokenBalance, services, contractStart } });
+  await logAdminAction({ adminId, action: "invite_client", targetType: "user", targetId: data?.user?.id, metadata: { email, name, company, plan, tokenBalance, services, contractStart } });
   revalidatePath("/admin/usuarios");
   return { success: `Convite enviado para ${email}` };
 }
@@ -117,7 +117,7 @@ export async function adminUpdateUserProfile(formData: FormData): Promise<{ erro
 
   if (error) return { error: error.message };
 
-  logAdminAction({ adminId, action: "update_profile", targetType: "user", targetId: userId, metadata: { name, company, email, plan, balance, services, contractStart } });
+  await logAdminAction({ adminId, action: "update_profile", targetType: "user", targetId: userId, metadata: { name, company, email, plan, balance, services, contractStart } });
   revalidatePath("/admin/usuarios");
   revalidatePath(`/admin/usuarios/${userId}/editar`);
   return { success: "Alterações salvas." };
@@ -183,7 +183,7 @@ export async function adminBulkInviteClients(
     else invited++;
   }
 
-  logAdminAction({ adminId, action: "bulk_invite", targetType: "user", metadata: { invited, failed: failed.length } });
+  await logAdminAction({ adminId, action: "bulk_invite", targetType: "user", metadata: { invited, failed: failed.length } });
   revalidatePath("/admin/usuarios");
   return { invited, failed };
 }
@@ -203,7 +203,7 @@ export async function adminDeleteUser(formData: FormData): Promise<{ error?: str
   const { error } = await service.auth.admin.deleteUser(userId);
   if (error) return { error: error.message };
 
-  logAdminAction({ adminId, action: "delete_user", targetType: "user", targetId: userId, metadata: { name: target.name, email: target.email } });
+  await logAdminAction({ adminId, action: "delete_user", targetType: "user", targetId: userId, metadata: { name: target.name, email: target.email } });
   revalidatePath("/admin/usuarios");
   return {};
 }
@@ -219,7 +219,7 @@ export async function adminRevokeAccess(formData: FormData): Promise<void> {
 
   await service.auth.admin.updateUserById(userId, { ban_duration: "87600h" });
   await service.from("profiles").update({ is_active: false }).eq("id", userId);
-  logAdminAction({ adminId, action: "revoke_access", targetType: "user", targetId: userId, metadata: { name: target?.name, email: target?.email } });
+  await logAdminAction({ adminId, action: "revoke_access", targetType: "user", targetId: userId, metadata: { name: target?.name, email: target?.email } });
   revalidatePath("/admin/usuarios");
 }
 
@@ -232,7 +232,7 @@ export async function adminRestoreAccess(formData: FormData): Promise<void> {
   const { data: target } = await service.from("profiles").select("name, email").eq("id", userId).single();
   await service.auth.admin.updateUserById(userId, { ban_duration: "none" });
   await service.from("profiles").update({ is_active: true }).eq("id", userId);
-  logAdminAction({ adminId, action: "restore_access", targetType: "user", targetId: userId, metadata: { name: target?.name, email: target?.email } });
+  await logAdminAction({ adminId, action: "restore_access", targetType: "user", targetId: userId, metadata: { name: target?.name, email: target?.email } });
   revalidatePath("/admin/usuarios");
 }
 
@@ -245,7 +245,7 @@ export async function adminSetTokenBalance(formData: FormData): Promise<void> {
 
   const supabase = await createClient();
   await supabase.from("profiles").update({ token_balance: balance }).eq("id", userId);
-  logAdminAction({ adminId, action: "set_token_balance", targetType: "user", targetId: userId, metadata: { balance } });
+  await logAdminAction({ adminId, action: "set_token_balance", targetType: "user", targetId: userId, metadata: { balance } });
   revalidatePath("/admin/usuarios");
 }
 
@@ -258,7 +258,7 @@ export async function adminUpdateUserPlan(formData: FormData): Promise<void> {
 
   const supabase = await createClient();
   await supabase.from("profiles").update({ plan: plan as "sem_plano" | "basico" | "pro" }).eq("id", userId);
-  logAdminAction({ adminId, action: "update_plan", targetType: "user", targetId: userId, metadata: { plan } });
+  await logAdminAction({ adminId, action: "update_plan", targetType: "user", targetId: userId, metadata: { plan } });
   revalidatePath("/admin/usuarios");
 }
 
@@ -271,6 +271,6 @@ export async function adminUpdateUserRole(formData: FormData): Promise<void> {
 
   const supabase = await createClient();
   await supabase.from("profiles").update({ role: role as "cliente" | "admin" }).eq("id", userId);
-  logAdminAction({ adminId, action: "update_role", targetType: "user", targetId: userId, metadata: { role } });
+  await logAdminAction({ adminId, action: "update_role", targetType: "user", targetId: userId, metadata: { role } });
   revalidatePath("/admin/usuarios");
 }

@@ -1,4 +1,5 @@
 import { createClient } from "@/app/lib/supabase/server";
+import { createServiceClient } from "@/app/lib/supabase/service";
 
 export interface AuditFilters {
   action?:  string;
@@ -113,7 +114,9 @@ export async function logAdminAction(opts: {
   metadata?:   Record<string, unknown>;
 }): Promise<void> {
   try {
-    const supabase = await createClient();
+    // Service client: a tabela é append-only e sem policy de INSERT — o log
+    // é gravado bypassa-RLS pelo servidor (nunca pelo usuário).
+    const supabase = createServiceClient();
     await supabase.from("admin_audit_log").insert({
       admin_id:    opts.adminId,
       action:      opts.action,
