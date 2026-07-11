@@ -7,7 +7,7 @@ import { adminInviteClient } from "@/app/actions/admin";
 import { SERVICES } from "@/app/lib/constants/services";
 import {
   ArrowLeft, UserPlus, Mail, User, Phone, Loader2,
-  CheckCircle, XCircle, CreditCard, Coins, Camera, Building2,
+  CheckCircle, XCircle, CreditCard, Coins, Camera, Building2, CalendarDays,
 } from "lucide-react";
 
 export default function NovoUsuarioPage() {
@@ -168,7 +168,7 @@ export default function NovoUsuarioPage() {
                   style={inputStyle}
                 />
               </Field>
-              <Field label="Início do contrato" icon={<span style={{ fontSize: 13 }}>📅</span>}>
+              <Field label="Início do contrato" icon={<CalendarDays size={13} />}>
                 <input name="contract_start" type="date" style={{ ...inputStyle, colorScheme: "dark" }} />
               </Field>
             </div>

@@ -5,12 +5,12 @@ import { useRouter } from "next/navigation";
 import { submitTicketNps } from "@/app/actions/suporte";
 import { AlertCircle, Loader2, Send, CheckCircle2 } from "lucide-react";
 
-const EMOJIS: { label: string; emoji: string }[] = [
-  { label: "Péssimo",  emoji: "😞" },
-  { label: "Ruim",     emoji: "😐" },
-  { label: "Ok",       emoji: "🙂" },
-  { label: "Bom",      emoji: "😊" },
-  { label: "Ótimo",    emoji: "🤩" },
+const RATINGS: { label: string }[] = [
+  { label: "Péssimo" },
+  { label: "Ruim" },
+  { label: "Ok" },
+  { label: "Bom" },
+  { label: "Ótimo" },
 ];
 
 interface Props {
@@ -68,7 +68,7 @@ export function NpsReview({ ticketId }: Props) {
           Como você avalia o atendimento recebido?
         </p>
         <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
-          {EMOJIS.map((item, idx) => {
+          {RATINGS.map((item, idx) => {
             const value = idx + 1;
             const isActive = activeRating !== null && value <= activeRating;
             const isSelected = rating === value;
@@ -81,21 +81,25 @@ export function NpsReview({ ticketId }: Props) {
                 onMouseEnter={() => setHovered(value)}
                 onMouseLeave={() => setHovered(null)}
                 style={{
-                  display: "flex", flexDirection: "column", alignItems: "center", gap: 5,
-                  background: isSelected
-                    ? "rgba(91,87,232,0.14)"
-                    : isActive ? "rgba(91,87,232,0.07)" : "var(--surface-2)",
-                  border: isSelected
-                    ? "2px solid var(--primary)"
-                    : "2px solid transparent",
-                  borderRadius: 14, padding: "10px 14px",
+                  display: "flex", flexDirection: "column", alignItems: "center", gap: 7,
+                  background: "transparent", border: "none",
                   cursor: "pointer", fontFamily: "inherit",
-                  transition: "background 0.15s, border-color 0.15s, transform 0.1s",
-                  transform: isActive ? "scale(1.12)" : "scale(1)",
+                  transition: "transform 0.1s", transform: isActive ? "scale(1.06)" : "scale(1)",
                   minWidth: 60,
                 }}
               >
-                <span style={{ fontSize: "1.9rem", lineHeight: 1 }}>{item.emoji}</span>
+                <span style={{
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  width: 42, height: 42, borderRadius: "50%",
+                  fontSize: "16px", fontWeight: 800, fontVariantNumeric: "tabular-nums",
+                  background: isActive ? "var(--primary)" : "var(--surface-2)",
+                  color: isActive ? "#fff" : "var(--text-muted)",
+                  border: isSelected ? "2px solid var(--primary)" : "2px solid transparent",
+                  boxShadow: isSelected ? "0 0 0 3px color-mix(in srgb, var(--primary) 20%, transparent)" : "none",
+                  transition: "background 0.15s, color 0.15s, border-color 0.15s",
+                }}>
+                  {value}
+                </span>
                 <span style={{ fontSize: "10px", fontWeight: 700, color: isSelected ? "var(--primary)" : "var(--text-faint)", letterSpacing: "0.03em" }}>
                   {item.label}
                 </span>
@@ -105,7 +109,7 @@ export function NpsReview({ ticketId }: Props) {
         </div>
         {rating !== null && (
           <p style={{ margin: "10px 0 0", textAlign: "center", fontSize: "12px", color: "var(--text-faint)" }}>
-            {EMOJIS[rating - 1].emoji} {EMOJIS[rating - 1].label} — {rating}/5
+            {RATINGS[rating - 1].label} — {rating}/5
           </p>
         )}
       </div>

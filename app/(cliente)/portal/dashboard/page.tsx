@@ -8,6 +8,7 @@ import {
   CreditCard, ArrowRight, Zap, FolderKanban, ChevronRight,
   Clock, CheckCircle2, AlertCircle, CircleDot, Heart, ShieldAlert,
 } from "lucide-react";
+import { RefreshStatus } from "@/app/components/ui/RefreshStatus";
 import { OnboardingBanner } from "@/app/components/cliente/OnboardingBanner";
 import { OnboardingChecklist } from "@/app/components/cliente/OnboardingChecklist";
 import { WHATSAPP_URL } from "@/app/lib/config";
@@ -105,7 +106,7 @@ export default async function PortalDashboardPage() {
             {greeting},
           </p>
           <h1 style={{ fontSize: "1.65rem", fontWeight: 800, margin: 0, color: "var(--text)", letterSpacing: "-0.03em" }}>
-            {firstName} 👋
+            {firstName}
           </h1>
           {contractStart && (
             <p style={{ margin: "6px 0 0", fontSize: "12px", color: "var(--text-faint)", display: "flex", alignItems: "center", gap: 5 }}>
@@ -115,9 +116,12 @@ export default async function PortalDashboardPage() {
           )}
         </div>
 
-        <Link href="/portal/suporte/novo" className="hub-btn hub-btn-primary" style={{ flexShrink: 0 }}>
-          <MessageSquarePlus size={14} /> Abrir chamado
-        </Link>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
+          <RefreshStatus />
+          <Link href="/portal/suporte/novo" className="hub-btn hub-btn-primary">
+            <MessageSquarePlus size={14} /> Abrir chamado
+          </Link>
+        </div>
       </div>
 
       {/* ── KPI cards ── */}

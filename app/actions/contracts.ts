@@ -84,6 +84,9 @@ export async function createContract(formData: FormData): Promise<{ error?: stri
   const fileUrl     = (formData.get("file_url") as string)?.trim() || null;
 
   if (!clientId || !title) return { error: "Cliente e título são obrigatórios." };
+  if (startDate && endDate && endDate < startDate) {
+    return { error: "A data de término não pode ser anterior à data de início." };
+  }
 
   const { data, error } = await supabase
     .from("contracts")

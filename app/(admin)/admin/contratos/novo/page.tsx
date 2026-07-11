@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { createServiceClient } from "@/app/lib/supabase/service";
 import { createContract } from "@/app/actions/contracts";
+import { ContractDateFields } from "@/app/components/admin/ContractDateFields";
 import { CONTRACT_STATUS_MAP, CONTRACT_TYPE_MAP } from "@/app/lib/constants/projects";
 
 export const metadata: Metadata = { title: "Novo Contrato" };
@@ -99,16 +100,7 @@ export default async function NovoContratoPage() {
             </div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-            <div>
-              <label style={labelStyle}>Data de início</label>
-              <input name="start_date" type="date" style={inputStyle} />
-            </div>
-            <div>
-              <label style={labelStyle}>Data de término</label>
-              <input name="end_date" type="date" style={inputStyle} />
-            </div>
-          </div>
+          <ContractDateFields labelStyle={labelStyle} inputStyle={inputStyle} />
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
             <div>
