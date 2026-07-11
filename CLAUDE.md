@@ -74,9 +74,15 @@ feedback, base-conhecimento, perfil` (+ `onboarding`, `nps`). O **chat saiu do m
 - **chat** (fora do menu) — canal de conversa lendo `tickets`/`ticket_messages` reais.
   **Sobrepõe-se ao Suporte** (débito conhecido; despriorizado da navegação).
 - **projetos** — lista + updates + timeline (`projects`, `project_updates`).
-- **kanban** / **calendario** — visualizações dos mesmos `projects`. O **calendário tem export iCal**
-  (`/api/calendar` → `.ics`) e 4 visões (Dia/Semana/Mês/Ano, `ProjectsCalendar`). O kanban do cliente
-  é read-only; o **admin tem drag-and-drop persistente** (ver abaixo). Card abre `ProjectDetailModal`.
+- **kanban** — **módulo pessoal** (migration 0043, tabela `kanban_tasks`): quadro de tarefas
+  **privado por dono**, zerado, o usuário cria/edita/move/exclui os próprios cards (colunas
+  A fazer/Em andamento/Concluído). **Não** é o pipeline de projetos. RLS estrita: cliente vê só o seu
+  quadro; admins compartilham **um único quadro da equipe** (`scope='admin_team'`); ninguém vê o do
+  outro. Gated pelo serviço `kanban` em `profiles.services` (senão upsell + some do menu). Componente
+  `kanban/PersonalKanban.tsx`, actions em `app/actions/kanban.ts`.
+- **calendario** — visualização dos `projects` (pipeline). **Export iCal** (`/api/calendar` → `.ics`)
+  e 4 visões (Dia/Semana/Mês/Ano, `ProjectsCalendar`). O pipeline de entrega continua em **Projetos**
+  (views Lista/Kanban/Calendário via `ProjectsKanban`/`ProjectsCalendar`; admin com DnD persistente).
 - **nps** — coleta de NPS periódica (`nps_responses`, `NpsForm`; cron `nps-survey`).
 - **contratos** — serviços + início + renovação + `file_url` (`contracts`).
 - **financeiro** — saldo de tokens, plano, extrato (`token_transactions`), Stripe.
@@ -97,7 +103,8 @@ kanban, calendario, roadmap, feedback, base-conhecimento, analytics, audit` (+ `
 - **projetos, contratos, financeiro, roadmap, feedback, base-conhecimento** — CRUD/gestão admin.
 - **suporte** — fila própria do admin (`AdminSuporteQueue.tsx`, views salvas/presets de filtro;
   atribuição de ticket via migration 0039).
-- **kanban** — board com **drag-and-drop persistente** (`ProjectsKanban` + `ProjectDetailModal`).
+- **kanban** — **quadro único da equipe Fropty** (mesmo `PersonalKanban`, `scope='admin_team'`) para
+  organizar as atividades internas. **Não** mostra os kanbans dos clientes (isolamento por RLS).
 - **calendario** — visão própria dos prazos (mesmo `ProjectsCalendar`, com export iCal).
 - **analytics** — métricas + gráficos caseiros (`TrendBars`, sem lib de chart): MRR, tempo de
   resolução, SLA, NPS, tendências.
@@ -156,9 +163,10 @@ Tabelas principais:
 - `notifications` — notificações in-app (realtime; policies em 0025; INSERT via triggers; ampliados
   na 0036 p/ projeto/feedback/contrato, além de ticket)
 - `nps_responses` — respostas de NPS (0040)
+- `kanban_tasks` — tarefas do módulo Kanban pessoal (0043); `scope` client|admin_team, RLS por dono
 - `admin_audit_log` — ações admin · `processed_webhook_events` — idempotência Stripe · `low_token_alerts` · `leads`
 
-Migrations em `supabase/migrations/` (0001→0042). Últimas relevantes: 0036 (triggers de notificação
+Migrations em `supabase/migrations/` (0001→0043). Últimas relevantes: 0036 (triggers de notificação
 ampliados), 0037 (hardening `search_path`), 0038 (índices de FK), 0039 (atribuição de ticket),
 0040 (`nps_responses`), 0041 (**FKs `projects/contracts/project_updates` → `profiles`** — sem elas os
 embeds PostgREST do admin falhavam em silêncio), 0042 (coluna `company`). `is_active = false` +
