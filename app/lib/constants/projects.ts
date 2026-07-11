@@ -27,6 +27,19 @@ export const ACTIVE_PROJECT_STATUSES: ProjectStatus[] = [
   "briefing", "escopo", "proposta", "contrato", "execucao", "entrega", "suporte",
 ];
 
+/**
+ * Progresso (%) derivado do estágio do pipeline. Não há coluna `progress` no
+ * banco — o avanço é inferido do `status`, mantendo lista/kanban/modal coerentes.
+ */
+const STATUS_PROGRESS: Record<ProjectStatus, number> = {
+  lead: 5, briefing: 15, escopo: 30, proposta: 45, contrato: 60,
+  execucao: 80, entrega: 95, suporte: 100, encerrado: 100,
+};
+
+export function projectProgress(status: string): number {
+  return STATUS_PROGRESS[status as ProjectStatus] ?? 0;
+}
+
 export const PROJECT_PRIORITY_MAP: Record<string, { label: string; tone: BadgeTone; color: string }> = {
   critica: { label: "Crítica", tone: "danger",  color: "#ef4444" },
   alta:    { label: "Alta",    tone: "warning", color: "#f97316" },

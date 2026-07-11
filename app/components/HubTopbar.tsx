@@ -27,10 +27,8 @@ export function HubTopbar({ userId, initials, avatarUrl, profileHref }: Props) {
   }, []);
 
   function openSearch() {
-    // O CommandPalette escuta ⌘K/Ctrl+K no window — dispara o mesmo atalho.
-    window.dispatchEvent(
-      new KeyboardEvent("keydown", { key: "k", ctrlKey: true, metaKey: true, bubbles: true })
-    );
+    // O CommandPalette escuta este evento dedicado no window.
+    window.dispatchEvent(new CustomEvent("hub:open-search"));
   }
 
   return (

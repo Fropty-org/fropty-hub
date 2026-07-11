@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { FolderOpen, Calendar, ChevronRight, MessageSquarePlus, List, LayoutGrid, CalendarDays } from "lucide-react";
 import { getClientProjects } from "@/app/actions/projects";
-import { PROJECT_STATUSES } from "@/app/lib/constants/projects";
+import { PROJECT_STATUSES, projectProgress } from "@/app/lib/constants/projects";
 import { HubEmptyState } from "@/app/components/ui/HubEmptyState";
 import { PageHeader } from "@/app/components/ui/PageHeader";
 import { StatusBadge } from "@/app/components/ui/StatusBadge";
@@ -141,7 +141,7 @@ export default async function ProjetosPage({
           {projects.map((project, i) => {
             const st       = PROJECT_STATUSES[project.status]       ?? { label: project.status,   color: "var(--text-faint)", Icon: FolderOpen };
             const StIcon   = st.Icon;
-            const progress = (project as unknown as Record<string, unknown>).progress as number | null ?? null;
+            const progress = projectProgress(project.status);
 
             return (
               <Link

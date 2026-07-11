@@ -1,16 +1,15 @@
-﻿{
-    "version":  "0.0.1",
-    "configurations":  [
-                           {
-                               "name":  "fropty-hub",
-                               "runtimeExecutable":  "C:\\Program Files\\nodejs\\npm.cmd",
-                               "runtimeArgs":  [
-                                                   "run",
-                                                   "dev"
-                                               ],
-                               "port":  3000,
-                               "autoPort":  false,
-                               "cwd":  "C:\\Claude\\Projetos\\Fropty\\operations\\fropty-hub"
-                           }
-                       ]
+{
+    "version": "0.0.1",
+    "configurations": [
+        {
+            "name": "fropty-hub",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "dev"
+            ],
+            "port": 3000,
+            "autoPort": false
+        }
+    ]
 }

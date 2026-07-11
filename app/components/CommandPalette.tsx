@@ -96,6 +96,13 @@ export function CommandPalette() {
     return () => window.removeEventListener("keydown", handler);
   }, [open, openPalette, closePalette]);
 
+  // Abertura por evento dedicado (botão "Buscar no Hub…" do topbar)
+  useEffect(() => {
+    const onOpen = () => openPalette();
+    window.addEventListener("hub:open-search", onOpen);
+    return () => window.removeEventListener("hub:open-search", onOpen);
+  }, [openPalette]);
+
   // ── Search ─────────────────────────────────────────────────────────────
 
   useEffect(() => {

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Plus, LayoutGrid, ArrowDownWideNarrow, ListFilter, CalendarDays } from "lucide-react";
 import type { Project, ProjectStatus } from "@/app/lib/types/projects";
-import { PROJECT_STATUSES, PROJECT_PRIORITY_MAP } from "@/app/lib/constants/projects";
+import { PROJECT_STATUSES, PROJECT_PRIORITY_MAP, projectProgress } from "@/app/lib/constants/projects";
 import { updateProjectStatus } from "@/app/actions/projects";
 import { ProjectDetailModal } from "./ProjectDetailModal";
 
@@ -19,22 +19,24 @@ interface Props {
   editable?: boolean;
 }
 
-const COLUMNS: { key: ProjectStatus; label: string; color: string }[] = [
-  { key: "lead",      label: "Sem status",   color: "#64748b" },
-  { key: "briefing",  label: "A fazer",      color: "var(--c-info)" },
-  { key: "escopo",    label: "Em andamento", color: "var(--c-warning)" },
-  { key: "proposta",  label: "Revisão",      color: "var(--c-purple)" },
-  { key: "execucao",  label: "Concluído",    color: "var(--c-success)" },
-  { key: "entrega",   label: "Entregue",     color: "#06b6d4" },
+// Colunas = estágios reais do projeto (mesma taxonomia de status.ts/Calendário),
+// na ordem do pipeline. Rótulos e cores vêm do PROJECT_STATUSES canônico para
+// não divergir do resto do Hub.
+const COLUMN_ORDER: ProjectStatus[] = [
+  "lead", "briefing", "escopo", "proposta", "contrato", "execucao", "entrega", "suporte", "encerrado",
 ];
+const COLUMNS: { key: ProjectStatus; label: string; color: string }[] = COLUMN_ORDER.map((key) => ({
+  key,
+  label: PROJECT_STATUSES[key].label,
+  color: PROJECT_STATUSES[key].color,
+}));
 
 function initials(name?: string) {
   if (!name) return "—";
   return name.trim().split(/\s+/).slice(0, 2).map(w => w[0]).join("").toUpperCase();
 }
 function progressOf(p: Project): number | null {
-  const v = (p as unknown as Record<string, unknown>).progress;
-  return typeof v === "number" ? v : null;
+  return projectProgress(p.status);
 }
 
 export function ProjectsKanban({ projects, basePath = "/portal/projetos", showClient = false, editable = false }: Props) {
