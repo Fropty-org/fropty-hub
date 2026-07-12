@@ -1,7 +1,7 @@
 // Configuração central das ações de auditoria — rótulo, ícone, cor e severidade.
 // Severidade: "critical" (acesso/permissão), "high" (mudança sensível), "normal".
 
-import { Ban, RotateCcw, ShieldCheck, UserPlus, Coins, CreditCard, Dot, type LucideIcon } from "lucide-react";
+import { Ban, RotateCcw, ShieldCheck, UserPlus, Coins, CreditCard, Dot, Pencil, Trash2, Users, type LucideIcon } from "lucide-react";
 
 export type AuditSeverity = "critical" | "high" | "normal";
 
@@ -22,6 +22,10 @@ export const AUDIT_ACTIONS: Record<string, AuditActionInfo> = {
   credit_tokens:     { label: "Crédito de tokens",        icon: "ti-coins",        Icon: Coins,       color: "#EF9F27", severity: "normal" },
   set_token_balance: { label: "Saldo de tokens definido", icon: "ti-coins",        Icon: Coins,       color: "#EF9F27", severity: "high" },
   update_plan:       { label: "Plano alterado",           icon: "ti-credit-card",  Icon: CreditCard,  color: "#3b82f6", severity: "normal" },
+  bulk_update_plan:  { label: "Plano alterado (lote)",    icon: "ti-credit-card",  Icon: CreditCard,  color: "#3b82f6", severity: "normal" },
+  update_profile:    { label: "Perfil atualizado",        icon: "ti-pencil",       Icon: Pencil,      color: "#3b82f6", severity: "high" },
+  delete_user:       { label: "Usuário excluído",         icon: "ti-trash",        Icon: Trash2,      color: "#ef4444", severity: "critical" },
+  bulk_invite:       { label: "Convite em lote",          icon: "ti-users",        Icon: Users,       color: "#22c55e", severity: "high" },
 };
 
 export function auditActionInfo(action: string): AuditActionInfo {
