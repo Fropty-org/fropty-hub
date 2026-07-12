@@ -86,6 +86,8 @@ export async function adminUpdateUserProfile(formData: FormData): Promise<{ erro
   const balance = parseInt((formData.get("token_balance") as string) ?? "0", 10);
   const contractRaw   = (formData.get("contract_start") as string | null)?.trim() || "";
   const contractStart = /^\d{4}-\d{2}-\d{2}$/.test(contractRaw) ? contractRaw : null;
+  const renewalRaw    = (formData.get("plan_renewal") as string | null)?.trim() || "";
+  const planRenewal   = /^\d{4}-\d{2}-\d{2}$/.test(renewalRaw) ? renewalRaw : null;
 
   if (!email) return { error: "Informe o e-mail." };
   if (!["sem_plano", "basico", "pro"].includes(plan)) return { error: "Plano inválido." };
@@ -112,12 +114,13 @@ export async function adminUpdateUserProfile(formData: FormData): Promise<{ erro
       token_balance: balance,
       services,
       contract_start: contractStart,
+      plan_renewal: planRenewal,
     })
     .eq("id", userId);
 
   if (error) return { error: error.message };
 
-  await logAdminAction({ adminId, action: "update_profile", targetType: "user", targetId: userId, metadata: { name, company, email, plan, balance, services, contractStart } });
+  await logAdminAction({ adminId, action: "update_profile", targetType: "user", targetId: userId, metadata: { name, company, email, plan, balance, services, contractStart, planRenewal } });
   revalidatePath("/admin/usuarios");
   revalidatePath(`/admin/usuarios/${userId}/editar`);
   return { success: "Alterações salvas." };
@@ -186,6 +189,31 @@ export async function adminBulkInviteClients(
   await logAdminAction({ adminId, action: "bulk_invite", targetType: "user", metadata: { invited, failed: failed.length } });
   revalidatePath("/admin/usuarios");
   return { invited, failed };
+}
+
+/**
+ * Restabelece/estende o acesso do cliente definindo plan_renewal para hoje + N
+ * dias. Uso rápido a partir da lista de usuários — flexibiliza o atendimento
+ * (ex.: cliente vencido volta na hora).
+ */
+export async function adminRenewAccess(formData: FormData): Promise<{ error?: string }> {
+  const adminId = await requireRole("admin");
+  const userId  = (formData.get("user_id") as string)?.trim();
+  const days    = parseInt((formData.get("days") as string) ?? "30", 10);
+  if (!userId) return { error: "Usuário inválido." };
+  const d = [15, 30, 60, 90].includes(days) ? days : 30;
+
+  const renewal = new Date();
+  renewal.setDate(renewal.getDate() + d);
+  const iso = renewal.toISOString().slice(0, 10);
+
+  const service = createServiceClient();
+  const { error } = await service.from("profiles").update({ plan_renewal: iso }).eq("id", userId);
+  if (error) return { error: error.message };
+
+  await logAdminAction({ adminId, action: "renew_access", targetType: "user", targetId: userId, metadata: { days: d, plan_renewal: iso } });
+  revalidatePath("/admin/usuarios");
+  return {};
 }
 
 export async function adminDeleteUser(formData: FormData): Promise<{ error?: string }> {

@@ -21,6 +21,7 @@ interface EditUser {
   token_balance: number;
   services: string[];
   contract_start: string;
+  plan_renewal: string;
 }
 
 export function EditUsuarioForm({ user }: { user: EditUser }) {
@@ -112,6 +113,16 @@ export function EditUsuarioForm({ user }: { user: EditUser }) {
               </Field>
               <Field label="Início do contrato" icon={<CalendarDays size={13} />}>
                 <input name="contract_start" type="date" defaultValue={user.contract_start} style={{ ...inputStyle, colorScheme: "dark" }} />
+              </Field>
+            </div>
+
+            {/* Vigência do acesso */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 6 }}>
+              <Field label="Vigência do acesso (renovação)" icon={<CalendarDays size={13} />}>
+                <input name="plan_renewal" type="date" defaultValue={user.plan_renewal} style={{ ...inputStyle, colorScheme: "dark" }} />
+                <span style={{ fontSize: "11px", color: "var(--text-faint)", marginTop: 4, display: "block" }}>
+                  Data até quando o cliente tem acesso ao portal. Vazio = sem bloqueio por vigência.
+                </span>
               </Field>
             </div>
 

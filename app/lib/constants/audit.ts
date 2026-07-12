@@ -26,6 +26,7 @@ export const AUDIT_ACTIONS: Record<string, AuditActionInfo> = {
   update_profile:    { label: "Perfil atualizado",        icon: "ti-pencil",       Icon: Pencil,      color: "#3b82f6", severity: "high" },
   delete_user:       { label: "Usuário excluído",         icon: "ti-trash",        Icon: Trash2,      color: "#ef4444", severity: "critical" },
   bulk_invite:       { label: "Convite em lote",          icon: "ti-users",        Icon: Users,       color: "#22c55e", severity: "high" },
+  renew_access:      { label: "Acesso renovado",          icon: "ti-calendar",     Icon: RotateCcw,   color: "#22c55e", severity: "high" },
 };
 
 export function auditActionInfo(action: string): AuditActionInfo {

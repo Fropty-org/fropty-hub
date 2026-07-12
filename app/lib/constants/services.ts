@@ -3,7 +3,7 @@
 // o catálogo de micro-SaaS, apps mobile e dashboards de onde os clientes escolhem.
 // O `id` é o que fica gravado em profiles.services (text[]).
 
-import { LayoutGrid, CandlestickChart, Wallet, Rocket, ShieldCheck, KanbanSquare, type LucideIcon } from "lucide-react";
+import { LayoutGrid, CandlestickChart, Wallet, Rocket, ShieldCheck, KanbanSquare, Headphones, type LucideIcon } from "lucide-react";
 
 export interface FroptyService {
   id: string;
@@ -21,6 +21,7 @@ export const SERVICES: FroptyService[] = [
   { id: "froptyboost",    label: "Fropty Boost",    icon: "ti-rocket",       Icon: Rocket,             color: "#f97316" },
   { id: "froptysentinel", label: "Fropty Sentinel", icon: "ti-shield-lock",  Icon: ShieldCheck,        color: "#ef4444" },
   { id: "kanban",         label: "Kanban",          icon: "ti-layout-kanban", Icon: KanbanSquare,       color: "#155DFC" },
+  { id: "servicedesk",    label: "Service Desk",    icon: "ti-headphones",    Icon: Headphones,         color: "#8b5cf6" },
 ];
 
 export const SERVICE_IDS = SERVICES.map((s) => s.id);

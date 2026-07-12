@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/app/lib/supabase/server";
 import { getProfile } from "@/app/lib/auth/session";
 import { SuporteClient } from "@/app/components/suporte/SuporteClient";
+import { ServiceDeskUpsell } from "@/app/components/suporte/ServiceDeskUpsell";
 import type { Ticket, TicketStatus, TicketPriority } from "@/app/lib/types/cliente";
 import type { Database } from "@/app/lib/supabase/types";
 
@@ -50,6 +51,16 @@ export default async function SuportePage() {
     const clients = (clientsResult.data ?? []).map((c) => ({ id: c.id, name: c.name ?? c.id }));
 
     return <SuporteClient tickets={tickets} isAdmin clients={clients} />;
+  }
+
+  // Service Desk é um módulo pago — cliente sem o serviço vê o upsell.
+  const clientServices = (profile?.services ?? []) as string[];
+  if (!clientServices.includes("servicedesk")) {
+    return (
+      <div className="hub-page" style={{ margin: "0 auto", maxWidth: "none" }}>
+        <ServiceDeskUpsell />
+      </div>
+    );
   }
 
   const ticketsResult = await supabase

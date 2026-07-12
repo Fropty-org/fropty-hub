@@ -3,9 +3,9 @@
 import { useState, useRef, useEffect, useTransition } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
-import { MoreHorizontal, Pencil, Trash2, Loader2, AlertTriangle } from "lucide-react";
+import { MoreHorizontal, Pencil, Trash2, Loader2, AlertTriangle, CalendarCheck } from "lucide-react";
 import { useToast } from "@/app/components/ui/Toast";
-import { adminDeleteUser } from "@/app/actions/admin";
+import { adminDeleteUser, adminRenewAccess } from "@/app/actions/admin";
 
 interface Props {
   userId: string;
@@ -66,6 +66,18 @@ export function UserRowMenu({ userId, name, email, role }: Props) {
     });
   }
 
+  function renew() {
+    const fd = new FormData();
+    fd.set("user_id", userId);
+    fd.set("days", "30");
+    setOpen(false);
+    startTransition(async () => {
+      const res = await adminRenewAccess(fd);
+      if (res?.error) show(res.error, "error");
+      else { show(`Acesso de ${who} renovado por 30 dias.`, "success"); router.refresh(); }
+    });
+  }
+
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <button
@@ -84,6 +96,11 @@ export function UserRowMenu({ userId, name, email, role }: Props) {
             <button type="button" onClick={() => { setOpen(false); router.push(`/admin/usuarios/${userId}/editar`); }} style={menuItem}>
               <Pencil size={13} /> Editar
             </button>
+            {role === "cliente" && (
+              <button type="button" onClick={renew} disabled={pending} style={menuItem} title="Define a vigência para hoje + 30 dias (restabelece o acesso)">
+                <CalendarCheck size={13} /> Renovar acesso +30d
+              </button>
+            )}
             <button
               type="button"
               onClick={() => setConfirm(true)}

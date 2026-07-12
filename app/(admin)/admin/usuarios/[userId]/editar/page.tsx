@@ -17,7 +17,7 @@ export default async function EditarUsuarioPage({ params }: Props) {
   const service = createServiceClient();
   const { data: user } = await service
     .from("profiles")
-    .select("id,name,email,company,phone_number,role,plan,token_balance,services,contract_start")
+    .select("id,name,email,company,phone_number,role,plan,token_balance,services,contract_start,plan_renewal")
     .eq("id", userId)
     .single();
 
@@ -36,6 +36,7 @@ export default async function EditarUsuarioPage({ params }: Props) {
         token_balance:  user.token_balance ?? 0,
         services:       (user.services ?? []) as string[],
         contract_start: user.contract_start ?? "",
+        plan_renewal:   user.plan_renewal ?? "",
       }}
     />
   );

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { createClient } from "@/app/lib/supabase/server";
 import { getProfile } from "@/app/lib/auth/session";
 import { NewTicketForm } from "@/app/components/suporte/NewTicketForm";
@@ -11,6 +12,11 @@ export default async function NovoChamadoPage() {
   const supabase = await createClient();
   const profile  = await getProfile();
   const isAdmin = profile?.role === "admin";
+
+  // Service Desk é módulo pago — sem o serviço, não há abertura de chamado.
+  if (!isAdmin && !((profile?.services ?? []) as string[]).includes("servicedesk")) {
+    redirect("/portal/suporte");
+  }
 
   // Clientes sem tokens não podem abrir chamados
   if (!isAdmin && (profile?.token_balance ?? 0) <= 0) {

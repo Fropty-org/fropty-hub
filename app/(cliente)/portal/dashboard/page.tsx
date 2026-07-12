@@ -83,6 +83,7 @@ export default async function PortalDashboardPage() {
   const services      = profile?.services ?? [];
   const contractStart = profile?.contract_start ?? null;
   const hasServices   = services.length > 0;
+  const hasServiceDesk = services.includes("servicedesk");
 
   const showOnboarding     = profile && !profile.onboarding_completed;
   const onboardingSteps    = showOnboarding ? await getOnboardingSteps(profile, supabase) : null;
@@ -118,9 +119,11 @@ export default async function PortalDashboardPage() {
 
         <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
           <RefreshStatus />
-          <Link href="/portal/suporte/novo" className="hub-btn hub-btn-primary">
-            <MessageSquarePlus size={14} /> Abrir chamado
-          </Link>
+          {hasServiceDesk && (
+            <Link href="/portal/suporte/novo" className="hub-btn hub-btn-primary">
+              <MessageSquarePlus size={14} /> Abrir chamado
+            </Link>
+          )}
         </div>
       </div>
 
