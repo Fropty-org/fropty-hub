@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getArticle, getRelatedArticles } from "@/app/actions/knowledge";
 import { ArrowLeft, ChevronRight, Eye, ThumbsUp, Clock } from "lucide-react";
 import { ArticleRating } from "@/app/components/knowledge/ArticleRating";
+import { sanitizeArticleHtml } from "@/app/lib/sanitize";
 
 interface Props { params: Promise<{ slug: string }> }
 
@@ -80,7 +81,7 @@ export default async function ArticlePage({ params }: Props) {
       <div className="hub-card" style={{ padding: "28px 32px", marginBottom: 24 }}>
         <div
           style={{ fontSize: "14.5px", lineHeight: 1.75, color: "var(--text)" }}
-          dangerouslySetInnerHTML={{ __html: article.content }}
+          dangerouslySetInnerHTML={{ __html: sanitizeArticleHtml(article.content) }}
         />
       </div>
 
