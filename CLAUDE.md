@@ -11,6 +11,9 @@ fropty.com — landing page, configurador, **Fropty Hub** (portal de cliente + p
 - A **Fropty** vende módulos/serviços do ecossistema: FroptyCash, FroptyInvest, FroptyBoost, FroptySentinel (security), FroptyAI, FroptyAds, FroptyCRM, FroptyApps.
 - **FroptyApps** é uma perna à parte: um **catálogo** de micro-SaaS, apps mobile e dashboards. É onde a pessoa olha o que existe e escolhe o que se aplica; a Fropty então copia e customiza (logo, cores, identidade do cliente). **Não** é uma ferramenta para o cliente montar o próprio app.
 - A **área de cliente** (`/area-cliente` → `/portal/*`) é para quem **já contratou**. A lista de serviços disponíveis fica em `app/lib/constants/services.ts` (`SERVICES`), gravada em `profiles.services` (text[]).
+- **Módulos pagos por cliente:** alguns itens do portal são **gated por serviço** em `profiles.services` — hoje `kanban` e `servicedesk`. Sem o serviço, o item some do menu (via `requiresService` em `portal-nav.ts`, filtrado no layout do cliente) e a rota mostra um **upsell**. O admin habilita marcando o serviço na edição do usuário.
+- **Acesso por vigência:** o acesso ao portal segue `profiles.plan_renewal` (data). Vencido → o portal é substituído pela **tela de pagamento/contato** (`PaymentDueScreen`). Cliente **sem** `plan_renewal` (ex.: `sem_plano`) e **admins** nunca bloqueiam. Aviso informativo na janela de 10 dias (`RenewalNotice`). Lógica em `app/lib/auth/access.ts` (`getAccessStatus`), aplicada no layout do cliente. Admin restabelece rápido (ver seção admin).
+- **FroptySentinel (segurança) é visível ao cliente:** selo "Protegido pelo FroptySentinel" nas telas de 2FA (`SentinelBadge`), scanner na validação de senha (`SentinelScan`), assinatura na tela de pagamento e um **heartbeat** (`SentinelHeartbeat`) — toast leve a cada 5 min ("nenhum problema encontrado"), hoje fake.
 
 > **Estado real do Hub (2026-07):** o portal evoluiu para muito além de suporte+tokens+contrato.
 > A migration `0019_drop_projects.sql` removeu projetos, mas a `0029_projects.sql` **os recriou**.
@@ -65,12 +68,16 @@ agrupada em **Principal / Meu trabalho / Minha conta / Recursos**:
 feedback, base-conhecimento, perfil` (+ `onboarding`, `nps`). O **chat saiu do menu** (a rota
 `/portal/chat` ainda existe, mas foi despriorizada por duplicar o Suporte).
 - **dashboard** — visão geral: KPIs (projetos, tokens, chamados, serviços), health score, onboarding, ações rápidas.
-- **suporte** — chamados **UFT** (`UFT0000`), consomem 1 token na abertura. Conversa realtime
-  (`TicketConversation.tsx`) identificando **Cliente** vs **Equipe Fropty**. Fluxo de resolução:
-  analista marca **Resolvido** (= "Aguardando validação") → cliente avalia em
-  `/portal/suporte/[ticketId]/avaliar` → aprova (**Fechado**) ou reprova (**Reaberto** →
-  volta para a fila; analista move `reaberto → em_andamento`). Status em
-  `app/lib/constants/status.ts` (migration 0018 adiciona `reaberto`). SLA em `sla.ts` + timestamps (0026).
+- **suporte / Service Desk** — **módulo pago** (serviço `servicedesk`; sem ele: some do menu +
+  upsell + `/suporte/novo` redireciona). Chamados **UFT** (`UFT0000`), consomem 1 token na abertura.
+  Lista com busca, abas (todos/abertos/fechados), **filtro por prioridade** e **SLA por linha**.
+  Detalhe com **stepper de jornada** (`TicketStatusStepper`), SLA bars, avaliação e conversa realtime
+  (`TicketConversation.tsx`) com **anexos** (bucket privado `ticket-attachments` + signed URLs).
+  Abertura (`NewTicketForm`) tem **copiloto** (sugere artigos da KB), prioridade visual com **custo em
+  tokens** e anexos. Fluxo: analista marca **Resolvido** (= "Aguardando validação") → cliente avalia em
+  `/portal/suporte/[ticketId]/avaliar` → aprova (**Fechado**) ou reprova (**Reaberto** → volta para a
+  fila; analista move `reaberto → em_andamento`). Status em `app/lib/constants/status.ts` (migration
+  0018 adiciona `reaberto`). SLA em `sla.ts` + timestamps (0026).
 - **chat** (fora do menu) — canal de conversa lendo `tickets`/`ticket_messages` reais.
   **Sobrepõe-se ao Suporte** (débito conhecido; despriorizado da navegação).
 - **projetos** — lista + updates + timeline (`projects`, `project_updates`).
@@ -98,7 +105,11 @@ Navegação (`AdminSidebar.tsx`, agrupada em Principal / Operações / Produto /
 kanban, calendario, roadmap, feedback, base-conhecimento, analytics, audit` (+ `perfil`).
 - **overview** — métricas gerais.
 - **usuarios** — lista + convite (`InviteForm.tsx`, com coluna/campo **Empresa**) + bulk
-  (`BulkUsuariosClient.tsx`) + roles (papel/plano editáveis via pills).
+  (`BulkUsuariosClient.tsx`) + roles (papel/plano editáveis via pills). **Editar/excluir** usuário
+  (`UserRowMenu` + `/usuarios/[id]/editar` → `EditUsuarioForm`/`adminUpdateUserProfile`; exclusão via
+  `adminDeleteUser`, sem auto-exclusão nem excluir outro admin). **Restabelecer acesso rápido:** ação
+  "Renovar acesso +30d" no menu (`adminRenewAccess` define `plan_renewal = hoje+30`) e campo "Vigência
+  do acesso" na edição. Toolbar Importar (CSV em lote)/Exportar (CSV)/Filtrar (papel/plano) funcional.
 - **customer-success** — health scores (`health_scores`, `HealthScoreBadge`, risk levels), notas de CS.
 - **projetos, contratos, financeiro, roadmap, feedback, base-conhecimento** — CRUD/gestão admin.
 - **suporte** — fila própria do admin (`AdminSuporteQueue.tsx`, views salvas/presets de filtro;
@@ -108,7 +119,10 @@ kanban, calendario, roadmap, feedback, base-conhecimento, analytics, audit` (+ `
 - **calendario** — visão própria dos prazos (mesmo `ProjectsCalendar`, com export iCal).
 - **analytics** — métricas + gráficos caseiros (`TrendBars`, sem lib de chart): MRR, tempo de
   resolução, SLA, NPS, tendências.
-- **audit** — `admin_audit_log` (`AuditClient.tsx`).
+- **audit** — `admin_audit_log` (`AuditClient.tsx`), **imutável (append-only)** e paginado. O log é
+  gravado pelo **service client** (`logAdminAction` em `app/lib/db/audit.ts`, sempre **awaited**) —
+  antes o INSERT via client do usuário era negado pela RLS e a tabela ficava vazia. Rótulos de ação em
+  `app/lib/constants/audit.ts`.
 - **Nota:** `suporte`, `kanban` e `calendario` **já têm telas admin próprias** (fim do parasitismo
   de `/portal/*`). `chat` e `planos` saíram do menu admin.
 
@@ -140,7 +154,8 @@ kanban, calendario, roadmap, feedback, base-conhecimento, analytics, audit` (+ `
   (`role`/`token_balance`/`plan`), **não** por `invited_at` (NULL no INSERT do GoTrue; ver 0017).
 - Auth flow de email (invite/reset): `token_hash` + `verifyOtp` — **não** PKCE, para evitar
   problemas de cookie em SSR.
-- MFA disponível (`app/auth/mfa/page.tsx`); pwned password check (`app/lib/auth/pwned.ts`).
+- MFA disponível (`app/auth/mfa/page.tsx`); pwned password check (`app/lib/auth/pwned.ts`). As telas de
+  2FA (desafio no login + QR em `ProfileSettings`) levam a marca **FroptySentinel** (`SentinelBadge`).
 - `createClient()` — SSR anon key, tipado com `<Database>` (cookies do usuário).
 - `createServiceClient()` — service role, bypassa RLS. Usar apenas em server actions admin.
 
@@ -164,9 +179,11 @@ Tabelas principais:
   na 0036 p/ projeto/feedback/contrato, além de ticket)
 - `nps_responses` — respostas de NPS (0040)
 - `kanban_tasks` — tarefas do módulo Kanban pessoal (0043); `scope` client|admin_team, RLS por dono
-- `admin_audit_log` — ações admin · `processed_webhook_events` — idempotência Stripe · `low_token_alerts` · `leads`
+- `admin_audit_log` — ações admin, **append-only** (0044: trigger bloqueia UPDATE/DELETE; FK cascade de
+  `admin_id` removida) · `processed_webhook_events` — idempotência Stripe · `low_token_alerts` · `leads`
 
-Migrations em `supabase/migrations/` (0001→0043). Últimas relevantes: 0036 (triggers de notificação
+Migrations em `supabase/migrations/` (0001→0044). Últimas: 0043 (`kanban_tasks`), 0044 (auditoria
+append-only). Anteriores relevantes: 0036 (triggers de notificação
 ampliados), 0037 (hardening `search_path`), 0038 (índices de FK), 0039 (atribuição de ticket),
 0040 (`nps_responses`), 0041 (**FKs `projects/contracts/project_updates` → `profiles`** — sem elas os
 embeds PostgREST do admin falhavam em silêncio), 0042 (coluna `company`). `is_active = false` +
