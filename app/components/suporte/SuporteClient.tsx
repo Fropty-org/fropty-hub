@@ -4,16 +4,31 @@ import { useState, useMemo, useEffect } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { TICKET_PRIORITY_MAP } from "@/app/lib/constants/status";
+import { SLA_TARGETS } from "@/app/lib/constants/sla";
 import { StatusBadge } from "@/app/components/ui/StatusBadge";
 import { Pagination } from "@/app/components/ui/Pagination";
 import type { Ticket } from "@/app/lib/types/cliente";
 import {
   Coins, Headphones, Plus, Search, X,
-  Circle, CheckCircle, AlertTriangle,
+  Circle, CheckCircle, AlertTriangle, Clock,
   Ticket as TicketIcon, ChevronRight, LucideIcon,
 } from "lucide-react";
 
 type FilterMode = "todos" | "abertos" | "fechados";
+type PriorityFilter = "todas" | "alta" | "media" | "baixa";
+
+/** SLA da linha para chamados abertos: resposta (aberto/reaberto) ou resolução (em andamento). */
+function openSla(createdAt: string, priority: string, status: string): { text: string; color: string } | null {
+  if (status === "fechado" || status === "resolvido") return null;
+  const t = SLA_TARGETS[priority as "alta" | "media" | "baixa"] ?? SLA_TARGETS.media;
+  const inProgress = status === "em_andamento";
+  const targetH = inProgress ? t.resolution : t.response;
+  const label   = inProgress ? "resolução" : "resposta";
+  const remMin  = Math.round((new Date(createdAt).getTime() + targetH * 3_600_000 - Date.now()) / 60_000);
+  if (remMin < 0)   return { text: `SLA de ${label} estourado`, color: "var(--c-danger)" };
+  if (remMin < 120) return { text: `${label} em ${remMin}min`, color: "var(--c-warning)" };
+  return { text: `${label} em ${Math.round(remMin / 60)}h`, color: "var(--text-faint)" };
+}
 
 interface Props {
   tickets:       Ticket[];
@@ -64,6 +79,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
   const PAGE_SIZE = 15;
   const [search,      setSearch]      = useState("");
   const [filter,      setFilter]      = useState<FilterMode>("todos");
+  const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>("todas");
   const [showNoToken, setShowNoToken] = useState(false);
   const [page,        setPage]        = useState(1);
 
@@ -76,12 +92,13 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
         filter === "todos"   ? true :
         filter === "abertos" ? isOpen :
         !isOpen;
-      return matchSearch && matchFilter;
+      const matchPriority = priorityFilter === "todas" || t.priority === priorityFilter;
+      return matchSearch && matchFilter && matchPriority;
     });
-  }, [tickets, search, filter]);
+  }, [tickets, search, filter, priorityFilter]);
 
   // Reinicia a paginação sempre que o conjunto filtrado muda (busca/filtro).
-  useEffect(() => { setPage(1); }, [search, filter]);
+  useEffect(() => { setPage(1); }, [search, filter, priorityFilter]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const safePage   = Math.min(page, totalPages);
@@ -192,6 +209,29 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
             </button>
           ))}
         </div>
+
+        {/* Filtro por prioridade */}
+        <div style={{ display: "flex", gap: 6 }}>
+          {(["todas", "alta", "media", "baixa"] as PriorityFilter[]).map((p) => {
+            const active = priorityFilter === p;
+            const col = p === "alta" ? "var(--c-danger)" : p === "media" ? "var(--brand-accent)" : p === "baixa" ? "var(--text-faint)" : "var(--primary)";
+            return (
+              <button
+                key={p}
+                onClick={() => setPriorityFilter(p)}
+                style={{
+                  padding: "7px 12px", borderRadius: "var(--r-md)", border: "1px solid",
+                  borderColor: active ? `color-mix(in srgb, ${col} 45%, transparent)` : "var(--border)",
+                  background: active ? `color-mix(in srgb, ${col} 10%, transparent)` : "var(--surface)",
+                  color: active ? col : "var(--text-muted)",
+                  fontWeight: 600, fontSize: "12px", cursor: "pointer", fontFamily: "inherit", textTransform: "capitalize",
+                }}
+              >
+                {p === "todas" ? "Toda prioridade" : p === "media" ? "Média" : p}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* ── Tabela Preline ── */}
@@ -250,6 +290,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
             {paged.map((t, i) => {
               const pri = TICKET_PRIORITY_MAP[t.priority];
               const updatedDate = new Date(t.updatedAt).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
+              const sla = openSla(t.createdAt, t.priority, t.status);
 
               return (
                 <Link
@@ -271,9 +312,14 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
                     <p style={{ margin: 0, fontSize: "13.5px", fontWeight: 600, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                       {t.subject}
                     </p>
-                    <p style={{ margin: "2px 0 0", fontSize: "11px", color: "var(--text-faint)" }}>
-                      {t.ticketNumber && <span style={{ fontWeight: 700, marginRight: 4 }}>UFT{String(t.ticketNumber).padStart(4, "0")} ·</span>}
-                      {isAdmin && t.clientName && <span style={{ color: "var(--text-muted)", fontWeight: 600 }}>{t.clientName} · </span>}
+                    <p style={{ margin: "2px 0 0", fontSize: "11px", color: "var(--text-faint)", display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                      {t.ticketNumber && <span style={{ fontWeight: 700 }}>UFT{String(t.ticketNumber).padStart(4, "0")}</span>}
+                      {isAdmin && t.clientName && <span style={{ color: "var(--text-muted)", fontWeight: 600 }}>· {t.clientName}</span>}
+                      {sla && (
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: 3, fontWeight: 700, color: sla.color }}>
+                          <Clock size={10} /> {sla.text}
+                        </span>
+                      )}
                     </p>
                   </div>
                   <span style={{ fontSize: "12px", color: "var(--text-muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>

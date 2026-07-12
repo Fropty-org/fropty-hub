@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useTransition, useCallback } from "react";
 import { createClient } from "@/app/lib/supabase/browser";
 import { sendMessage } from "@/app/actions/suporte";
-import { Loader2, Image as ImageIcon, File, X, Lock, AlertCircle, Paperclip } from "lucide-react";
+import { Loader2, Image as ImageIcon, File, X, Lock, AlertCircle, Paperclip, Send } from "lucide-react";
 import type { Database } from "@/app/lib/supabase/types";
 import type { TicketStatus } from "@/app/lib/types/cliente";
 
@@ -466,14 +466,10 @@ export function TicketConversation({
                 transition: "background 0.15s",
               }}
             >
-              <i
-                className={`ti ${isPending ? "ti-loader-2" : "ti-send"}`}
-                style={{
-                  fontSize: 16,
-                  color: (body.trim() || files.length > 0) && !isPending ? "#fff" : "var(--text-faint)",
-                  animation: isPending ? "spin 1s linear infinite" : "none",
-                }}
-              />
+              {isPending
+                ? <Loader2 size={16} style={{ color: "#fff", animation: "spin 1s linear infinite" }} />
+                : <Send size={16} style={{ color: (body.trim() || files.length > 0) ? "#fff" : "var(--text-faint)" }} />
+              }
             </button>
           </div>
           <p style={{ margin: "6px 0 0", fontSize: "11px", color: "var(--text-faint)" }}>
