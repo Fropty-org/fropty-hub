@@ -1,8 +1,25 @@
 import type { NextConfig } from "next";
 
+// 'unsafe-eval' só é necessário no dev (HMR do Turbopack). Em produção ele é
+// removido — o runtime do Next não precisa de eval e mantê-lo enfraquece a CSP.
+// Nota: 'unsafe-inline' em script-src permanece por ora porque o layout usa dois
+// <script> inline (theme-init anti-flash + JSON-LD) e o Next injeta seus próprios
+// scripts inline de bootstrap. Eliminá-lo exige migrar a CSP para nonce por
+// request (via middleware, com strict-dynamic), o que torna todas as rotas
+// dinâmicas (SEO/perf da landing) — mudança maior a ser feita em modo
+// Report-Only primeiro (ver SECURITY.md §5). style-src mantém 'unsafe-inline'
+// porque o app usa estilos inline extensivamente (o próprio exemplo do
+// SECURITY.md mantém).
+const isDev = process.env.NODE_ENV !== "production";
+
+const scriptSrc = [
+  "script-src 'self' 'unsafe-inline'",
+  isDev ? "'unsafe-eval'" : "",
+].filter(Boolean).join(" ");
+
 const securityHeaders = [
   { key: "X-DNS-Prefetch-Control", value: "on" },
-  { key: "X-Frame-Options", value: "SAMEORIGIN" },
+  { key: "X-Frame-Options", value: "DENY" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
@@ -11,12 +28,16 @@ const securityHeaders = [
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+      scriptSrc,
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com data:",
       `img-src 'self' data: blob: https://cdn.jsdelivr.net https://randomuser.me https://loremflickr.com https://loremflickr.com/cache https://lh3.googleusercontent.com https://avatars.githubusercontent.com ${process.env.NEXT_PUBLIC_SUPABASE_URL ?? ""}`,
       "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.resend.com",
       "frame-ancestors 'none'",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+      "upgrade-insecure-requests",
     ].join("; "),
   },
 ];
