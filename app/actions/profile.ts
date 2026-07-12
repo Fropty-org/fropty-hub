@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/app/lib/supabase/server";
+import { createServiceClient } from "@/app/lib/supabase/service";
 import { requireAuth } from "@/app/lib/auth/require-role";
 import { isWeakPasswordError, SENTINEL_PASSWORD_MESSAGE } from "@/app/lib/auth/password-error";
 import { isPwnedPassword } from "@/app/lib/auth/pwned";
@@ -171,17 +172,32 @@ export async function requestPlanUpgrade(plan: string): Promise<{ error?: string
   const userId = await requireAuth();
   const planLabel = PLAN_NAME[plan] ?? plan;
 
-  const supabase = await createClient();
-  const { error } = await supabase.from("tickets").insert({
-    client_id: userId,
-    subject:   `Upgrade de plano para ${planLabel}`,
-    category:  "Comercial",
-    body:      `Solicitação de upgrade para o plano ${planLabel}.`,
-    priority:  "alta",
-    status:    "aberto",
-  } as never);
+  // Insert via service role: a tabela `tickets` não tem policy de INSERT para o
+  // cliente (migration 0045) — a criação é sempre feita no servidor. Este
+  // chamado comercial é gratuito (não debita token, diferente do Service Desk).
+  const supabase = createServiceClient();
+  const { data: ticket, error } = await supabase
+    .from("tickets")
+    .insert({
+      client_id: userId,
+      subject:   `Upgrade de plano para ${planLabel}`,
+      category:  "Comercial",
+      priority:  "alta",
+      status:    "aberto",
+    })
+    .select("id")
+    .single();
 
-  if (error) return { error: "Não foi possível criar o chamado. Tente novamente." };
+  if (error || !ticket) return { error: "Não foi possível criar o chamado. Tente novamente." };
+
+  // Registra a solicitação como primeira mensagem do chamado (a tabela `tickets`
+  // não guarda corpo; o texto vive em `ticket_messages`).
+  await supabase.from("ticket_messages").insert({
+    ticket_id:   ticket.id,
+    sender_id:   userId,
+    sender_role: "cliente",
+    body:        `Solicitação de upgrade para o plano ${planLabel}.`,
+  });
 
   revalidatePath("/portal/planos");
   revalidatePath("/portal/suporte");

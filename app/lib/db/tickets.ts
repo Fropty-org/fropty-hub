@@ -1,4 +1,3 @@
-import { createClient } from "@/app/lib/supabase/server";
 import { createServiceClient } from "@/app/lib/supabase/service";
 
 type TicketPriority = "baixa" | "media" | "alta";
@@ -12,12 +11,19 @@ interface CreateTicketInput {
   senderId:    string;
   senderRole:  "cliente" | "admin";
   attachments?: string[];
-  // Quando true, usa service role (bypassa RLS) — necessário p/ admin abrir em nome de cliente
+  // Mantido por compatibilidade de chamada; hoje a criação é SEMPRE via service
+  // role (ver nota abaixo). Não altera o comportamento.
   useService?: boolean;
 }
 
+// A criação de chamado passa SEMPRE pelo service client (bypassa RLS). A tabela
+// `tickets` não tem mais policy de INSERT para o cliente (migration 0045): abrir
+// chamado direto no PostgREST pulava o débito de token da server action. Com o
+// insert restrito ao servidor, o único caminho é a server action, que valida
+// saldo e debita o token. O `client_id` é sempre definido no servidor a partir
+// do usuário autenticado (ou do alvo validado, no fluxo admin-em-nome-de).
 export async function dbCreateTicket(input: CreateTicketInput) {
-  const supabase = input.useService ? createServiceClient() : await createClient();
+  const supabase = createServiceClient();
 
   const { data: ticket, error: ticketError } = await supabase
     .from("tickets")
