@@ -84,6 +84,41 @@ const cspHeader = `
   - `Permissions-Policy` restringindo APIs sensíveis não usadas (câmera, microfone, geolocalização) — `camera=(), microphone=(), geolocation=()` como padrão, liberando só o que o produto realmente usa.
 - Testar CSP em modo `Content-Security-Policy-Report-Only` antes de aplicar em modo bloqueante, pra não quebrar nada em produção sem perceber.
 
+### 5.1 — Rollout da CSP com nonce (⏳ EM OBSERVAÇÃO — não esquecer de fechar)
+
+**Contexto.** O header enforced (`Content-Security-Policy`, em `next.config.ts`,
+aplicado a todo o site) ainda tem `'unsafe-inline'` em `script-src` — necessário
+enquanto o `app/layout.tsx` usa dois `<script>` inline (theme-init anti-flash e
+JSON-LD) e o Next injeta seus próprios scripts inline. Eliminar `'unsafe-inline'`
+exige CSP com **nonce por request**, que só o middleware consegue gerar.
+
+**O que já está no ar (desde 2026-07-12).** O Hub (`/portal`, `/admin`,
+`/area-cliente`) passou a enviar um **segundo** header
+`Content-Security-Policy-Report-Only` com a política ESTRITA (script-src com
+`'nonce-<x>' 'strict-dynamic'`, **sem** `'unsafe-inline'` e **sem**
+`'unsafe-eval'`). Ele **não bloqueia nada** — o enforced permissivo continua
+valendo; o Report-Only só relata no console do navegador o que QUEBRARIA sob a
+política estrita. Implementado no `middleware.ts` (nonce por request; o Next
+usa esse nonce nos próprios scripts). A landing (`/`) e o marketing ficam de
+fora de propósito (para não virarem dinâmicos).
+
+**O que esperar nos relatórios.** Os dois `<script>` inline do `app/layout.tsx`
+vão aparecer como violação — são NOSSOS e conhecidos. O sinal a caçar é
+QUALQUER OUTRA coisa além desses dois.
+
+> **⏰ LEMBRETE — responder aqui após ~10 dias observando (até ~2026-07-22).**
+> Abrir o Hub logado, navegar por várias telas (dashboard, suporte, kanban,
+> base de conhecimento, perfil/2FA) com o DevTools › Console aberto e anotar as
+> violações de CSP (`Report-Only`). Depois marcar:
+>
+> - [ ] Só apareceram os 2 scripts conhecidos (theme-init + JSON-LD) → **seguro
+>   para virar bloqueante**: mover a política estrita para o header enforced e
+>   dar nonce/hash aos 2 scripts inline do layout.
+> - [ ] Apareceram outras violações → listar quais: `______________________` e
+>   ajustar a política antes de virar bloqueante.
+>
+> **Resultado observado em ____/____/______:** `__________________________________`
+
 ## 6. Autenticação e sessão (Supabase Auth)
 
 - Fluxo PKCE (padrão do `@supabase/ssr`) em vez do fluxo implícito — o token não fica exposto na URL de redirect.

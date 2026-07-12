@@ -5,6 +5,8 @@ const LOGIN_PAGE = "/area-cliente";
 const PROTECTED_PREFIXES = ["/admin", "/area-cliente/", "/portal/"];
 // Área autenticada (cliente + admin) — quando o hub está configurado, vive só lá.
 const HUB_PREFIXES = ["/area-cliente", "/portal", "/admin"];
+// Rotas do Hub que recebem a CSP estrita em Report-Only (ver abaixo e SECURITY.md §5.1).
+const CSP_PREFIXES = ["/area-cliente", "/portal", "/admin"];
 
 // Resolve o host do hub a partir de NEXT_PUBLIC_HUB_HOST ou NEXT_PUBLIC_HUB_URL,
 // tolerando protocolo, barra final, porta e maiúsculas.
@@ -14,6 +16,27 @@ function resolveHubHost(): string | null {
   let h = raw.trim();
   if (h.includes("://")) { try { h = new URL(h).host; } catch { /* mantém raw */ } }
   return h.replace(/\/+$/, "").toLowerCase().split(":")[0] || null;
+}
+
+// CSP ESTRITA usada SÓ em Report-Only (observação — SECURITY.md §5.1). Não
+// bloqueia nada: o header enforced (permissivo, em next.config.ts) continua
+// valendo. Isto só reporta o que QUEBRARIA sob uma CSP com nonce, sem
+// 'unsafe-inline'/'unsafe-eval'. style-src mantém 'unsafe-inline' (só o script
+// está sendo endurecido).
+function buildReportOnlyCsp(nonce: string): string {
+  return [
+    "default-src 'self'",
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'`,
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com data:",
+    `img-src 'self' data: blob: https://cdn.jsdelivr.net https://randomuser.me https://loremflickr.com https://loremflickr.com/cache https://lh3.googleusercontent.com https://avatars.githubusercontent.com ${process.env.NEXT_PUBLIC_SUPABASE_URL ?? ""}`,
+    "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.resend.com",
+    "frame-ancestors 'none'",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "upgrade-insecure-requests",
+  ].join("; ");
 }
 
 // Middleware com renovação de sessão (padrão @supabase/ssr).
@@ -34,8 +57,31 @@ export async function middleware(request: NextRequest) {
     return NextResponse.rewrite(url);
   }
 
+  // Nonce por request para navegações HTML do Hub — habilita a CSP Report-Only
+  // com nonce (o Next lê o header CSP do request e injeta o mesmo nonce nos
+  // próprios <script>). Só para GET de página no Hub; assets/data/redirects e a
+  // landing não precisam (e a landing não deve virar dinâmica).
+  const isHtmlGet =
+    request.method === "GET" &&
+    (request.headers.get("accept") ?? "").includes("text/html");
+  const onCspPath = CSP_PREFIXES.some((p) => path === p || path.startsWith(p + "/"));
+  const nonce = isHtmlGet && onCspPath ? btoa(crypto.randomUUID()) : null;
+  const reportOnlyCsp = nonce ? buildReportOnlyCsp(nonce) : null;
+
+  // Headers do request repassados ao app. Quando há nonce, o Next os lê para
+  // noncear os scripts. Reconstruído dentro do setAll para não perder os cookies
+  // renovados pela sessão (ver nota do repasse de cookie abaixo).
+  function buildRequestHeaders(): Headers {
+    const h = new Headers(request.headers);
+    if (nonce && reportOnlyCsp) {
+      h.set("x-nonce", nonce);
+      h.set("content-security-policy", reportOnlyCsp); // header de REQUEST (interno; não vai ao browser)
+    }
+    return h;
+  }
+
   // Response que carrega os cookies eventualmente renovados pelo Supabase.
-  let response = NextResponse.next({ request });
+  let response = NextResponse.next({ request: { headers: buildRequestHeaders() } });
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -45,7 +91,9 @@ export async function middleware(request: NextRequest) {
         getAll: () => request.cookies.getAll(),
         setAll: (cookiesToSet) => {
           cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
-          response = NextResponse.next({ request });
+          // buildRequestHeaders() reflete os cookies recém-setados em request.cookies
+          // (além do nonce), então os Server Components enxergam a sessão renovada.
+          response = NextResponse.next({ request: { headers: buildRequestHeaders() } });
           cookiesToSet.forEach(({ name, value, options }) =>
             response.cookies.set(name, value, options)
           );
@@ -111,6 +159,9 @@ export async function middleware(request: NextRequest) {
   }
 
   response.headers.set("x-pathname", path);
+  // CSP estrita SÓ em Report-Only (não bloqueia). O header enforced vem do
+  // next.config.ts. Ver SECURITY.md §5.1.
+  if (reportOnlyCsp) response.headers.set("content-security-policy-report-only", reportOnlyCsp);
   return response;
 }
 
