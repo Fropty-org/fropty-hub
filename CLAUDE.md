@@ -224,3 +224,27 @@ via migration. Já cobrem `health_scores`, `notifications`, `tickets` SLA cols, 
 - **Encoding**: arquivos em UTF-8. Evitar mojibake (ex. `Ã£`/`âŒ˜`) ao editar strings pt-BR.
 - Mensagens de commit em português, descrevendo a mudança do ponto de vista do produto.
 - **Nunca criar PRs** — commitar e pushar direto no master.
+
+## Changelog (marcos recentes)
+
+Resumo cronológico das evoluções mais recentes (o detalhe fica nas seções acima e no histórico git).
+Registro estratégico correspondente em `AUDITORIA-FROPTY-HUB.md` ("Registro de execução — Sprint 6").
+
+- **2026-07 — Módulos pagos por cliente.** `kanban` (quadro de tarefas pessoal, privado por dono,
+  migration 0043) e `servicedesk` viram serviços em `profiles.services`; gating por `requiresService`
+  na nav + upsell. Kanban admin = quadro único da equipe (`scope='admin_team'`, RLS por dono).
+- **2026-07 — Acesso por vigência + pagamento.** Portal bloqueia por `plan_renewal` vencido
+  (`PaymentDueScreen` com WhatsApp/e-mail/Stripe placeholder + logo Sentinel); aviso em 10 dias
+  (`RenewalNotice`). Admin restabelece rápido (`adminRenewAccess` +30d / campo vigência na edição).
+- **2026-07 — FroptySentinel visível na segurança.** Selo nas telas de 2FA (`SentinelBadge`),
+  assinatura no pagamento e heartbeat de 5 min (`SentinelHeartbeat`, fake por enquanto).
+- **2026-07 — Service Desk reforçado.** Stepper de jornada, filtro por prioridade + SLA na lista,
+  copiloto de KB e custo em tokens na abertura, anexos (bucket privado + signed URLs); ícone de enviar
+  corrigido (era Tabler não carregado no Hub).
+- **2026-07 — Auditoria funcional e imutável.** `logAdminAction` grava via service client (antes a RLS
+  negava e a tabela ficava vazia); `admin_audit_log` append-only (0044, trigger bloqueia UPDATE/DELETE).
+- **2026-07 — Gestão de usuários.** Editar/excluir usuário no Hub, toolbar Importar/Exportar/Filtrar
+  funcional, coluna Empresa.
+- **2026-07 — Correções de percepção.** Dark mode persistente (toggle não sobrescreve mais o
+  localStorage ao montar); botão de busca do topo abre o ⌘K; "Atualizado agora" vira polling real
+  (`RefreshStatus`); plano atual real na tela de Planos; Kanban do pipeline usa os estágios canônicos.

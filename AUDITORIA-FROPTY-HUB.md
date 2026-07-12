@@ -489,6 +489,42 @@ Todos no `master`, build verde, sem dependências novas (decisão consciente de 
   reduzindo abertura de chamados. É o **seam pluggável** para trocar por embeddings/pgvector + LLM
   depois, sem mudar os consumidores. (Copiloto com IA de fato aguarda API key de LLM.)
 
+## Registro de execução — Sprint 6 (módulos pagos, acesso, segurança) — 2026-07
+
+Leva focada em **monetização por módulo**, **controle de acesso por vigência** e **presença do
+FroptySentinel** na experiência de segurança. Migrations `0043`–`0044` aplicadas em produção; build
+verde a cada leva. Detalhe vivo em `CLAUDE.md` (seção Changelog).
+
+- **Kanban vira módulo pessoal pago (0043).** Reinterpretado: de "visão do pipeline de projetos" para
+  **quadro de tarefas privado por dono** (`kanban_tasks`, `scope` client|admin_team). RLS estrita —
+  cliente só vê o seu; admins compartilham um único quadro da equipe; ninguém vê o do outro. Gated pelo
+  serviço `kanban` (senão upsell + some do menu). O pipeline de entrega **coexiste** em Projetos.
+- **Service Desk vira módulo pago.** Serviço `servicedesk`: sem ele, o Suporte some do menu, a rota
+  mostra upsell e `/suporte/novo` redireciona. Reforço do módulo: **stepper de jornada**
+  (`TicketStatusStepper`), **filtro por prioridade + SLA por linha** na lista, **copiloto de KB** e
+  **custo em tokens** na abertura, **anexos** (bucket privado `ticket-attachments` + signed URLs).
+  Bug corrigido: botão de enviar da conversa usava webfont Tabler (não carregado no Hub) → Lucide.
+- **Acesso por vigência + tela de pagamento.** Portal bloqueia quando `plan_renewal` vence
+  (`getAccessStatus` em `access.ts` → `PaymentDueScreen` com WhatsApp/e-mail/Stripe placeholder + logo
+  Sentinel); aviso informativo em 10 dias (`RenewalNotice`). Cliente sem vigência (ex. sem_plano) e
+  admins nunca bloqueiam. **Restauração rápida pelo admin**: `adminRenewAccess` (+30d, menu da lista)
+  e campo "Vigência do acesso" na edição. *(Stripe é gratuito de integrar; custo só por transação.)*
+- **FroptySentinel visível na segurança.** Selo "Protegido pelo FroptySentinel" nas telas de 2FA
+  (`SentinelBadge`), assinatura na tela de pagamento e **heartbeat** de 5 min (`SentinelHeartbeat`,
+  fake por ora — a varredura real será plugada depois).
+- **Auditoria funcional e imutável (0044).** Bug de origem: `logAdminAction` inseria pelo client do
+  usuário (RLS sem policy de INSERT) → tabela sempre vazia. Correção: grava via **service client** e é
+  **awaited** em todos os call sites. `admin_audit_log` passa a **append-only** (trigger bloqueia
+  UPDATE/DELETE; FK cascade de `admin_id` removida para o log sobreviver à exclusão de um admin).
+- **Gestão de usuários no Hub.** Editar/excluir usuário (`UserRowMenu` + `EditUsuarioForm` +
+  `adminDeleteUser`, sem auto-exclusão nem excluir outro admin), toolbar Importar (CSV lote)/Exportar
+  (CSV)/Filtrar (papel/plano) e coluna Empresa.
+- **Correções de percepção (QW tardios).** Dark mode persistente (o `PortalThemeToggle` não sobrescreve
+  mais o `localStorage` ao montar — o menu do usuário deixava de reverter para claro); botão "Buscar no
+  Hub…" passa a abrir o ⌘K (evento dedicado); "Atualizado agora" vira **polling real** (`RefreshStatus`,
+  5 min + refresh forçado, verde→amarelo); "Plano atual" na tela de Planos passa a ler o plano real;
+  colunas do Kanban de pipeline voltam aos estágios canônicos (nenhum projeto some).
+
 ## FASE 11 — Implementação & próximos passos
 
 **Nada implementado.** Proposta de execução em sprints temáticos, do fundacional ao visível:
