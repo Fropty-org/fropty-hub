@@ -8,6 +8,7 @@ import { AdminTicketActions } from "@/app/components/suporte/AdminTicketActions"
 import { StatusBadge } from "@/app/components/ui/StatusBadge";
 import { ArrowLeft, BookOpen, ChevronRight, Clock, ClipboardCheck } from "lucide-react";
 import { SlaBars } from "@/app/components/suporte/SlaBars";
+import { TicketStatusStepper } from "@/app/components/suporte/TicketStatusStepper";
 
 export const metadata: Metadata = { title: "Chamado" };
 
@@ -75,6 +76,8 @@ export default async function TicketDetailPage({ params }: Props) {
           </div>
         </div>
 
+        {/* Jornada do chamado */}
+        <TicketStatusStepper status={ticket.status} />
       </div>
 
       {/* ── Banner "Avaliar solução" (cliente + status resolvido) ── */}
