@@ -11,6 +11,14 @@ import { UserAvatarMenu } from "@/app/components/auth/UserAvatarMenu";
 import { PullToRefresh } from "@/app/components/PullToRefresh";
 import { CommandPalette } from "@/app/components/CommandPalette";
 import { HubTopbar } from "@/app/components/HubTopbar";
+import { getAccessStatus } from "@/app/lib/auth/access";
+import { PaymentDueScreen } from "@/app/components/cliente/PaymentDueScreen";
+import { RenewalNotice } from "@/app/components/cliente/RenewalNotice";
+import { SentinelHeartbeat } from "@/app/components/cliente/SentinelHeartbeat";
+
+const PLAN_LABELS: Record<string, string> = { basico: "Básico", pro: "Pro", sem_plano: "Gratuito" };
+const fmtDate = (iso: string | null) =>
+  iso ? new Date(`${iso}T12:00:00`).toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" }) : "";
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -110,6 +118,20 @@ export default async function PortalLayout({
     tokenHistory:   [],
   };
 
+  // Acesso por vigência do plano — admin nunca bloqueia; cliente sem plan_renewal também não.
+  const access = isAdmin ? { state: "ok" as const, daysLeft: null, renewal: null } : getAccessStatus(profile?.plan_renewal ?? null);
+
+  // Vigência vencida → substitui o portal pela tela de pagamento/contato.
+  if (access.state === "overdue") {
+    return (
+      <PaymentDueScreen
+        name={displayName}
+        planLabel={PLAN_LABELS[profile?.plan ?? ""] ?? undefined}
+        renewalStr={fmtDate(access.renewal)}
+      />
+    );
+  }
+
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg)", color: "var(--text)" }}>
       {/* Admin mantém a navegação completa do painel mesmo no suporte;
@@ -154,11 +176,17 @@ export default async function PortalLayout({
           avatarUrl={avatarUrl}
           profileHref={isAdmin ? "/admin/perfil" : "/portal/perfil"}
         />
+        {access.state === "expiring" && access.daysLeft !== null && (
+          <RenewalNotice daysLeft={access.daysLeft} renewalStr={fmtDate(access.renewal)} />
+        )}
         <PullToRefresh>{children}</PullToRefresh>
       </main>
 
       {/* Busca global Cmd+K */}
       <CommandPalette />
+
+      {/* FroptySentinel: reforço de segurança visível ao cliente */}
+      {!isAdmin && <SentinelHeartbeat />}
 
     </div>
   );
