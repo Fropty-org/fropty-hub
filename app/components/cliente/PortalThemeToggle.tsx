@@ -17,8 +17,15 @@ export function PortalThemeToggle({ initialTheme, size = 32 }: Props) {
   const [, startTransition]     = useTransition();
 
   useEffect(() => {
-    document.documentElement.classList.toggle("dark", initialTheme === "dark");
-    localStorage.setItem("fropty-theme", initialTheme);
+    // A escolha viva da sessão fica no localStorage — ele é a fonte de verdade.
+    // O initialTheme (perfil no DB) é só fallback quando ainda não há nada salvo.
+    // NUNCA sobrescrever o localStorage/DOM aqui, senão remontar o toggle (ex.:
+    // ao abrir o menu do usuário) reverteria o tema escolhido.
+    const stored = localStorage.getItem("fropty-theme");
+    const current: Theme = stored === "dark" || stored === "light" ? stored : initialTheme;
+    document.documentElement.classList.toggle("dark", current === "dark");
+    if (stored !== current) localStorage.setItem("fropty-theme", current);
+    setIsDark(current === "dark");
     setMounted(true);
   }, [initialTheme]);
 
