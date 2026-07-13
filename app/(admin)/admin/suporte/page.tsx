@@ -5,7 +5,7 @@ import type { Database } from "@/app/lib/supabase/types";
 
 type TicketRow = Database["public"]["Tables"]["tickets"]["Row"];
 
-export const metadata: Metadata = { title: "Fila de Suporte" };
+export const metadata: Metadata = { title: "Service Desk" };
 
 export default async function AdminSuportePage() {
   const supabase = await createClient();

@@ -3,7 +3,10 @@
 import { useState, useEffect, useRef, useTransition, useCallback } from "react";
 import { createClient } from "@/app/lib/supabase/browser";
 import { sendMessage } from "@/app/actions/suporte";
-import { Loader2, Image as ImageIcon, File, X, Lock, AlertCircle, Paperclip, Send } from "lucide-react";
+import {
+  Loader2, Image as ImageIcon, File, X, Lock, AlertCircle, Paperclip, Send,
+  Bold, Italic, Strikethrough, Link2, List, ListOrdered, Clock, ChevronsUpDown, ChevronDown,
+} from "lucide-react";
 import type { Database } from "@/app/lib/supabase/types";
 import type { TicketStatus } from "@/app/lib/types/cliente";
 
@@ -17,6 +20,8 @@ interface Props {
   ticketStatus:    TicketStatus;
   senderRole?:     "cliente" | "admin";
   clientName?:     string;
+  /** "chat" = bolhas (padrão); "panel" = timeline lateral estilo Service Desk. */
+  variant?:        "chat" | "panel";
 }
 
 import { User, Headphones } from "lucide-react";
@@ -35,6 +40,7 @@ export function TicketConversation({
   ticketStatus,
   senderRole = "cliente",
   clientName,
+  variant = "chat",
 }: Props) {
   const [messages,    setMessages]    = useState<MessageRow[]>(initialMessages);
   const [body,        setBody]        = useState("");
@@ -172,6 +178,170 @@ export function TicketConversation({
     setBody(e.target.value);
     e.target.style.height = "auto";
     e.target.style.height = `${Math.min(e.target.scrollHeight, 160)}px`;
+  }
+
+  // Envolve a seleção do textarea (ou insere marcador) — toolbar do composer "painel".
+  function wrapSelection(before: string, after: string = before, linePrefix?: string) {
+    const ta = textareaRef.current;
+    if (!ta) return;
+    const start = ta.selectionStart ?? body.length;
+    const end   = ta.selectionEnd ?? body.length;
+    const sel   = body.slice(start, end);
+    let next: string;
+    if (linePrefix) {
+      const block = (sel || "item").split("\n").map((l) => `${linePrefix}${l}`).join("\n");
+      next = body.slice(0, start) + block + body.slice(end);
+    } else {
+      next = body.slice(0, start) + before + (sel || "texto") + after + body.slice(end);
+    }
+    setBody(next);
+    requestAnimationFrame(() => ta.focus());
+  }
+
+  const fileInput = (
+    <input
+      ref={fileInputRef}
+      type="file"
+      multiple
+      accept="image/*,application/pdf,video/*"
+      style={{ display: "none" }}
+      onChange={(e) => {
+        const selected = Array.from(e.target.files ?? []).filter((f) => f.size <= 10 * 1024 * 1024);
+        setFiles((prev) => [...prev, ...selected].slice(0, 5));
+        e.target.value = "";
+      }}
+    />
+  );
+
+  /* ── Variant "panel": timeline lateral (Service Desk) ── */
+  if (variant === "panel") {
+    const ToolBtn = ({ onClick, title, children, disabled }: { onClick?: () => void; title: string; children: React.ReactNode; disabled?: boolean }) => (
+      <button type="button" title={title} onClick={onClick} disabled={disabled}
+        style={{ width: 28, height: 28, borderRadius: 6, background: "none", border: "none", cursor: disabled ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-faint)", opacity: disabled ? 0.4 : 1 }}>
+        {children}
+      </button>
+    );
+
+    return (
+      <div style={{ display: "flex", flexDirection: "column", minHeight: 0, flex: 1 }}>
+        {/* Timeline */}
+        <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: 22, padding: "4px 2px 16px" }}>
+          {messages.length === 0 && (
+            <div style={{ textAlign: "center", color: "var(--text-faint)", fontSize: "13px", padding: "24px 0" }}>
+              Nenhuma ação registrada ainda.
+            </div>
+          )}
+          {messages.map((msg) => {
+            const isClienteMsg = msg.sender_role === "cliente";
+            const meta = isClienteMsg ? ROLE_META.cliente : ROLE_META.equipe;
+            const senderLabel = isClienteMsg
+              ? (clientName ?? ROLE_META.cliente.fallback)
+              : (currentUserName && msg.sender_id === currentUserId ? currentUserName : ROLE_META.equipe.fallback);
+            const stamp = new Date(msg.created_at).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" }) +
+              " • " + new Date(msg.created_at).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+            const atts = msg.attachments ?? [];
+            return (
+              <div key={msg.id} style={{ display: "flex", gap: 10, opacity: msg.id.startsWith("opt-") ? 0.7 : 1 }}>
+                <div style={{ width: 30, height: 30, borderRadius: "50%", flexShrink: 0, background: `${meta.color}1f`, border: `1px solid ${meta.color}40`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <meta.Icon size={14} style={{ color: meta.color }} />
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 8 }}>
+                    <span style={{ fontSize: "13px", fontWeight: 700, color: "var(--text)" }}>{senderLabel}</span>
+                    <span style={{ fontSize: "11px", color: "var(--text-faint)", flexShrink: 0 }}>{stamp}</span>
+                  </div>
+                  <p style={{ margin: "4px 0 0", fontSize: "13px", lineHeight: 1.55, color: "var(--text-muted)", whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
+                    {msg.body}
+                  </p>
+                  {atts.length > 0 && (
+                    <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 3 }}>
+                      {atts.map((path) => {
+                        const url = signedUrls[path];
+                        const name = path.split("/").pop() ?? path;
+                        const isImg = /\.(png|jpe?g|gif|webp|svg)$/i.test(path);
+                        return (
+                          <a key={path} href={url ?? "#"} target="_blank" rel="noopener noreferrer"
+                            style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "12px", fontWeight: 600, color: "var(--primary)", textDecoration: "none", opacity: url ? 1 : 0.5 }}>
+                            {isImg ? <ImageIcon size={13} /> : <File size={13} />}
+                            {name.length > 30 ? name.slice(0, 27) + "…" : name}
+                          </a>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+          <div ref={bottomRef} />
+        </div>
+
+        {/* Composer */}
+        {isClosed ? (
+          <div style={{ padding: "14px", textAlign: "center", fontSize: "13px", color: "var(--text-faint)", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, borderTop: "1px solid var(--border)" }}>
+            <Lock size={14} /> Este chamado está encerrado.
+          </div>
+        ) : (
+          <div style={{ borderTop: "1px solid var(--border)", paddingTop: 12 }}>
+            {error && (
+              <p style={{ margin: "0 0 8px", fontSize: "12px", color: "var(--c-danger)", display: "flex", alignItems: "center", gap: 5 }}>
+                <AlertCircle size={14} /> {error}
+              </p>
+            )}
+            {files.length > 0 && (
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
+                {files.map((f, i) => (
+                  <div key={i} style={{ display: "inline-flex", alignItems: "center", gap: 5, background: "var(--surface-2)", border: "1px solid var(--border)", borderRadius: 7, padding: "4px 8px", fontSize: "11px", color: "var(--text-muted)" }}>
+                    <File size={12} />
+                    <span style={{ maxWidth: 110, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{f.name}</span>
+                    <button type="button" onClick={() => setFiles((prev) => prev.filter((_, j) => j !== i))} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-faint)", padding: 0, display: "flex" }}><X size={11} /></button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div style={{ border: "1px solid var(--border)", borderRadius: 10, background: "var(--surface)", overflow: "hidden" }}>
+              {/* Toolbar */}
+              <div style={{ display: "flex", alignItems: "center", gap: 2, padding: "4px 6px", borderBottom: "1px solid var(--border)" }}>
+                <ToolBtn title="Negrito" onClick={() => wrapSelection("**")}><Bold size={15} /></ToolBtn>
+                <ToolBtn title="Itálico" onClick={() => wrapSelection("_")}><Italic size={15} /></ToolBtn>
+                <ToolBtn title="Tachado" onClick={() => wrapSelection("~~")}><Strikethrough size={15} /></ToolBtn>
+                <ToolBtn title="Link" onClick={() => wrapSelection("[", "](url)")}><Link2 size={15} /></ToolBtn>
+                <ToolBtn title="Lista" onClick={() => wrapSelection("", "", "- ")}><List size={15} /></ToolBtn>
+                <ToolBtn title="Lista numerada" onClick={() => wrapSelection("", "", "1. ")}><ListOrdered size={15} /></ToolBtn>
+                <ToolBtn title="Anexar" onClick={() => fileInputRef.current?.click()} disabled={files.length >= 5}><Paperclip size={15} /></ToolBtn>
+                <div style={{ flex: 1 }} />
+                <ToolBtn title="Registrar tempo"><Clock size={15} /></ToolBtn>
+                <ToolBtn title="Expandir"><ChevronsUpDown size={15} /></ToolBtn>
+              </div>
+              {fileInput}
+              <textarea
+                ref={textareaRef}
+                value={body}
+                onChange={autoResize}
+                onKeyDown={handleKeyDown}
+                placeholder="O que gostaria de registrar?"
+                rows={2}
+                disabled={isPending}
+                style={{ width: "100%", background: "none", border: "none", outline: "none", color: "var(--text)", fontSize: "13.5px", fontFamily: "inherit", resize: "none", lineHeight: 1.5, padding: "12px 14px", minHeight: 56, boxSizing: "border-box" }}
+              />
+              {/* Rodapé: selecionar ação + enviar */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, padding: "8px 10px", borderTop: "1px solid var(--border)", background: "var(--surface-2)" }}>
+                <button type="button" style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, padding: "6px 10px", fontSize: "12.5px", fontWeight: 600, color: "var(--text-muted)", cursor: "pointer", fontFamily: "inherit" }}>
+                  Selecionar ação <ChevronDown size={13} />
+                </button>
+                <button onClick={handleSend} disabled={(!body.trim() && files.length === 0) || isPending}
+                  title="Enviar"
+                  style={{ width: 34, height: 34, borderRadius: 8, background: (body.trim() || files.length > 0) && !isPending ? "var(--primary)" : "var(--surface)", border: (body.trim() || files.length > 0) && !isPending ? "none" : "1px solid var(--border)", cursor: (body.trim() || files.length > 0) && !isPending ? "pointer" : "not-allowed", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "background 0.15s" }}>
+                  {isPending
+                    ? <Loader2 size={15} style={{ color: "#fff", animation: "spin 1s linear infinite" }} />
+                    : <Send size={15} style={{ color: (body.trim() || files.length > 0) ? "#fff" : "var(--text-faint)" }} />}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
   }
 
   return (

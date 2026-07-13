@@ -199,7 +199,7 @@ export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }:
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 16, marginBottom: 20, flexWrap: "wrap" }}>
         <div>
           <h1 style={{ margin: 0, fontSize: "1.5rem", fontWeight: 800, color: "var(--text)", letterSpacing: "-0.02em" }}>
-            Fila de Suporte
+            Fila do Service Desk
           </h1>
           <p style={{ margin: "4px 0 0", fontSize: "13px", color: "var(--text-muted)" }}>
             {tickets.length} chamados · {openCount} em aberto ·{" "}

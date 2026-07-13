@@ -132,7 +132,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, marginBottom: 28, flexWrap: "wrap" }}>
         <div>
           <h1 style={{ margin: 0, fontSize: "1.5rem", fontWeight: 800, color: "var(--text)", letterSpacing: "-0.03em" }}>
-            {isAdmin ? "Service Desk" : "Suporte"}
+            Service Desk
           </h1>
           <p style={{ margin: "5px 0 0", fontSize: "13px", color: "var(--text-faint)" }}>
             {isAdmin

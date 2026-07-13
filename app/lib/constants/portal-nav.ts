@@ -26,7 +26,7 @@ export const PORTAL_NAV_GROUPS: Record<string, string> = {
  */
 export const PORTAL_NAV_ITEMS: PortalNavItem[] = [
   { id: "dashboard",         href: "/portal/dashboard",         icon: "LayoutDashboard",   label: "Painel",               group: "principal" },
-  { id: "suporte",          href: "/portal/suporte",           icon: "MessageCircle",     label: "Suporte",              group: "principal", requiresService: "servicedesk" },
+  { id: "suporte",          href: "/portal/suporte",           icon: "MessageCircle",     label: "Service Desk",         group: "principal", requiresService: "servicedesk" },
   { id: "projetos",         href: "/portal/projetos",          icon: "FolderKanban",      label: "Projetos",             group: "trabalho" },
   { id: "kanban",           href: "/portal/kanban",            icon: "LayoutGrid",        label: "Kanban",               group: "trabalho", requiresService: "kanban" },
   { id: "calendario",       href: "/portal/calendario",        icon: "CalendarDays",      label: "Calendário",           group: "trabalho" },
