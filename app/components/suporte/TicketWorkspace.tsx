@@ -138,8 +138,8 @@ export function TicketWorkspace({ ticket, messages, currentUserId, currentUserNa
   return (
     <div className="ticket-ws">
       <style>{`
-        .ticket-ws { display: grid; grid-template-columns: minmax(0,1fr) 380px; gap: 0; align-items: start; }
-        .ticket-ws__aside { border-left: 1px solid var(--border); padding-left: 24px; position: sticky; top: 16px; }
+        .ticket-ws { display: grid; grid-template-columns: minmax(0,1fr) 380px; gap: 0; align-items: start; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 22px 24px; }
+        .ticket-ws__aside { border-left: 1px solid var(--border); padding-left: 24px; align-self: stretch; }
         .ticket-tab { position: relative; background: none; border: none; padding: 12px 2px; margin-right: 22px; font-size: 14px; font-weight: 600; color: var(--text-faint); cursor: pointer; font-family: inherit; }
         .ticket-tab[data-active="true"] { color: var(--primary); }
         .ticket-tab[data-active="true"]::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--primary); border-radius: 2px; }
