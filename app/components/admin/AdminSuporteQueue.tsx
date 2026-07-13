@@ -208,6 +208,13 @@ export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }:
             </span>
           </p>
         </div>
+        <Link
+          href="/portal/suporte/novo"
+          className="hub-btn hub-btn-primary"
+          style={{ textDecoration: "none", flexShrink: 0 }}
+        >
+          <Plus size={15} /> Novo chamado
+        </Link>
       </div>
 
       {/* Views salvas */}

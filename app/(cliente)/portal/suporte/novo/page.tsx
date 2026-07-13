@@ -24,7 +24,7 @@ export default async function NovoChamadoPage() {
       <div className="hub-page" style={{ maxWidth: 720, margin: "0 auto" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20, fontSize: "12px" }}>
           <Link href="/portal/suporte" style={{ color: "var(--text-faint)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 5, padding: "5px 10px 5px 8px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--surface)", fontWeight: 600 }}>
-            <ArrowLeft size={13} /> Suporte
+            <ArrowLeft size={13} /> Service Desk
           </Link>
         </div>
         <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 20, padding: "48px 32px", textAlign: "center" }}>
@@ -42,7 +42,7 @@ export default async function NovoChamadoPage() {
               <Coins size={14} /> Ver planos e tokens
             </Link>
             <Link href="/portal/suporte" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "10px 22px", background: "var(--surface)", color: "var(--text-muted)", fontWeight: 600, fontSize: "13px", borderRadius: 10, textDecoration: "none", border: "1px solid var(--border)" }}>
-              Voltar ao suporte
+              Voltar ao Service Desk
             </Link>
           </div>
         </div>
@@ -88,7 +88,7 @@ export default async function NovoChamadoPage() {
           }}
         >
           <ArrowLeft size={13} />
-          Suporte
+          Service Desk
         </Link>
         <ChevronRight size={12} style={{ color: "var(--text-faint)" }} />
         <span style={{ color: "var(--text-muted)" }}>Novo chamado</span>
