@@ -22,6 +22,8 @@ interface Props {
   clientName?:     string;
   /** "chat" = bolhas (padrão); "panel" = timeline lateral estilo Service Desk. */
   variant?:        "chat" | "panel";
+  /** Nome + avatar por sender_id (mesma foto do perfil). */
+  participants?:   Record<string, { name: string; avatarUrl: string | null }>;
 }
 
 import { User, Headphones } from "lucide-react";
@@ -41,6 +43,7 @@ export function TicketConversation({
   senderRole = "cliente",
   clientName,
   variant = "chat",
+  participants,
 }: Props) {
   const [messages,    setMessages]    = useState<MessageRow[]>(initialMessages);
   const [body,        setBody]        = useState("");
@@ -100,10 +103,16 @@ export function TicketConversation({
         },
         (payload) => {
           const newMsg = payload.new as MessageRow;
-          // Evita duplicar mensagem enviada pelo próprio cliente (já adicionada otimisticamente)
-          setMessages((prev) =>
-            prev.some((m) => m.id === newMsg.id) ? prev : [...prev, newMsg]
-          );
+          setMessages((prev) => {
+            // Já presente (mesma id) → ignora.
+            if (prev.some((m) => m.id === newMsg.id)) return prev;
+            // Reconcilia o eco otimista: remove a versão local (opt-*) do mesmo
+            // autor/corpo para não duplicar quando o realtime traz a real.
+            const withoutOpt = prev.filter(
+              (m) => !(m.id.startsWith("opt-") && m.sender_id === newMsg.sender_id && m.body === newMsg.body)
+            );
+            return [...withoutOpt, newMsg];
+          });
         }
       )
       .subscribe();
@@ -234,16 +243,21 @@ export function TicketConversation({
           {messages.map((msg) => {
             const isClienteMsg = msg.sender_role === "cliente";
             const meta = isClienteMsg ? ROLE_META.cliente : ROLE_META.equipe;
-            const senderLabel = isClienteMsg
-              ? (clientName ?? ROLE_META.cliente.fallback)
-              : (currentUserName && msg.sender_id === currentUserId ? currentUserName : ROLE_META.equipe.fallback);
+            const person = participants?.[msg.sender_id];
+            const senderLabel = person?.name
+              ?? (isClienteMsg
+                ? (clientName ?? ROLE_META.cliente.fallback)
+                : (currentUserName && msg.sender_id === currentUserId ? currentUserName : ROLE_META.equipe.fallback));
+            const avatarUrl = person?.avatarUrl ?? null;
             const stamp = new Date(msg.created_at).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" }) +
               " • " + new Date(msg.created_at).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
             const atts = msg.attachments ?? [];
             return (
               <div key={msg.id} style={{ display: "flex", gap: 10, opacity: msg.id.startsWith("opt-") ? 0.7 : 1 }}>
-                <div style={{ width: 30, height: 30, borderRadius: "50%", flexShrink: 0, background: `${meta.color}1f`, border: `1px solid ${meta.color}40`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <meta.Icon size={14} style={{ color: meta.color }} />
+                <div style={{ width: 30, height: 30, borderRadius: "50%", flexShrink: 0, background: `${meta.color}1f`, border: `1px solid ${meta.color}40`, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+                  {avatarUrl
+                    ? <img src={avatarUrl} alt={senderLabel} referrerPolicy="no-referrer" style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }} />
+                    : <meta.Icon size={14} style={{ color: meta.color }} />}
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 8 }}>

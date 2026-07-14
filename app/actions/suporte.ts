@@ -515,6 +515,31 @@ export async function getTicketDetail(ticketId: string) {
 
   const analystName = (ticket.analyst as { name?: string } | null)?.name ?? null;
 
+  // Participantes da conversa: nome + avatar (mesma foto do perfil) por sender.
+  // Via service client porque a RLS de profiles não expõe a equipe ao cliente.
+  const participants: Record<string, { name: string; avatarUrl: string | null }> = {};
+  const senderIds = Array.from(new Set((messages ?? []).map((m) => m.sender_id).filter(Boolean)));
+  if (senderIds.length > 0) {
+    const service = createServiceClient();
+    const { data: profs } = await service
+      .from("profiles")
+      .select("id, name, avatar_url")
+      .in("id", senderIds);
+    (profs ?? []).forEach((p) => {
+      participants[p.id] = { name: p.name ?? "Usuário", avatarUrl: (p as { avatar_url?: string | null }).avatar_url ?? null };
+    });
+    // Fallback: foto vinda do OAuth (Google) no metadata do auth.users.
+    for (const id of senderIds) {
+      if (!participants[id]) participants[id] = { name: "Usuário", avatarUrl: null };
+      if (!participants[id].avatarUrl) {
+        const { data } = await service.auth.admin.getUserById(id);
+        const meta = data?.user?.user_metadata as { avatar_url?: string; picture?: string } | undefined;
+        const url = meta?.avatar_url ?? meta?.picture ?? null;
+        if (url) participants[id].avatarUrl = url;
+      }
+    }
+  }
+
   return {
     ticket: {
       ...ticket,
@@ -523,6 +548,7 @@ export async function getTicketDetail(ticketId: string) {
       analyst_name: analystName,
     },
     messages: messages ?? [],
+    participants,
     currentUserId:   userId,
     currentUserName: profile?.name ?? "",
     isAdmin,

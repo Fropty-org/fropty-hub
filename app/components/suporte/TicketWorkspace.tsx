@@ -37,6 +37,7 @@ interface Props {
   isAdmin: boolean;
   senderRole: "cliente" | "admin";
   ticketNum: string | null;
+  participants?: Record<string, { name: string; avatarUrl: string | null }>;
 }
 
 type TabId = "formulario" | "associados" | "aprovacao" | "equipamento" | "anexos";
@@ -90,7 +91,10 @@ function DetailRow({ label, children }: { label: string; children: React.ReactNo
   );
 }
 
-export function TicketWorkspace({ ticket, messages, currentUserId, currentUserName, isAdmin, senderRole, ticketNum }: Props) {
+export function TicketWorkspace({ ticket, messages, currentUserId, currentUserName, isAdmin, senderRole, ticketNum, participants }: Props) {
+  // A descrição do chamado (1ª mensagem) vive na aba Formulário — fora da timeline.
+  const descriptionId = messages[0]?.id;
+  const actionMessages = messages.filter((m) => m.id !== descriptionId);
   const [tab, setTab] = useState<TabId>("formulario");
   const [detailsOpen, setDetailsOpen] = useState(true);
   const [attView, setAttView] = useState<"table" | "grid">("table");
@@ -248,12 +252,13 @@ export function TicketWorkspace({ ticket, messages, currentUserId, currentUserNa
           <TicketConversation
             variant="panel"
             ticketId={ticket.id}
-            initialMessages={messages}
+            initialMessages={actionMessages}
             currentUserId={currentUserId}
             currentUserName={currentUserName}
             ticketStatus={ticket.status}
             senderRole={senderRole}
             clientName={ticket.client_name}
+            participants={participants}
           />
         </div>
       </aside>

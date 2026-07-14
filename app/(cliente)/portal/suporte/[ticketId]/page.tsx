@@ -15,7 +15,7 @@ export default async function TicketDetailPage({ params }: Props) {
   const detail = await getTicketDetail(ticketId);
   if (!detail) notFound();
 
-  const { ticket, messages, currentUserId, currentUserName, isAdmin, senderRole } = detail;
+  const { ticket, messages, participants, currentUserId, currentUserName, isAdmin, senderRole } = detail;
 
   const ticketNum = ticket.ticket_number ? `UFT${String(ticket.ticket_number).padStart(4, "0")}` : null;
 
@@ -102,6 +102,7 @@ export default async function TicketDetailPage({ params }: Props) {
         isAdmin={isAdmin}
         senderRole={senderRole}
         ticketNum={ticketNum}
+        participants={participants}
       />
     </div>
   );
