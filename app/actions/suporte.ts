@@ -29,6 +29,7 @@ export async function createTicket(formData: FormData) {
   const category    = (formData.get("category")      as string)?.trim();
   const body        = (formData.get("body")           as string)?.trim().slice(0, 10000);
   const onBehalfOf  = (formData.get("on_behalf_of")  as string)?.trim() || null;
+  const debitToken  = formData.get("debit_token") != null; // checkbox: presente = marcado
   const priorityRaw = ((formData.get("priority")     as string) ?? "").trim();
   const priority    = (["baixa", "media", "alta"].includes(priorityRaw) ? priorityRaw : "media") as "baixa" | "media" | "alta";
   const attachments = formData.getAll("attachments[]")
@@ -100,14 +101,18 @@ export async function createTicket(formData: FormData) {
   // Abrir um chamado consome 1 token do cliente. Inserir a transação de débito
   // dispara o trigger trg_token_balance, que atualiza profiles.token_balance.
   // Usa service client porque o ledger (token_transactions) é protegido por RLS.
-  const ledger = createServiceClient();
-  const { error: debitError } = await ledger.from("token_transactions").insert({
-    client_id:   clientId,
-    amount:      1,
-    type:        "debit" as const,
-    description: `Abertura de chamado${result.ticketNumber ? ` #${result.ticketNumber}` : ""}: ${subject}`.slice(0, 255),
-  });
-  if (debitError) console.error("[createTicket] falha ao debitar token:", debitError.message);
+  // Cliente sempre debita o próprio token; admin escolhe debitar ou não (cortesia).
+  const shouldDebit = isAdmin ? debitToken : true;
+  if (shouldDebit) {
+    const ledger = createServiceClient();
+    const { error: debitError } = await ledger.from("token_transactions").insert({
+      client_id:   clientId,
+      amount:      1,
+      type:        "debit" as const,
+      description: `Abertura de chamado${result.ticketNumber ? ` #${result.ticketNumber}` : ""}: ${subject}`.slice(0, 255),
+    });
+    if (debitError) console.error("[createTicket] falha ao debitar token:", debitError.message);
+  }
 
   // Alerta para o time interno
   sendNewTicketAlert({

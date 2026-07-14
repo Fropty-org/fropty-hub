@@ -56,6 +56,7 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
   const [success,   setSuccess]   = useState(false);
   const [files,     setFiles]     = useState<File[]>([]);
   const [priority,  setPriority]  = useState("media");
+  const [debitToken, setDebitToken] = useState(true);
   const [touched,   setTouched]   = useState({ subject: false, body: false });
   const [values,    setValues]    = useState({ subject: "", body: "" });
   const [suggestions, setSuggestions] = useState<KnowledgeArticle[]>([]);
@@ -166,20 +167,55 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
   return (
     <form ref={formRef} onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
 
-      {/* Seletor de cliente — somente admin */}
-      {isAdmin && clients && clients.length > 0 && (
+      {/* Seletor de cliente + débito de token — somente admin */}
+      {isAdmin && (
         <div>
           <label style={labelStyle}>Cliente *</label>
-          <select
-            name="on_behalf_of"
-            required
-            style={{ ...inputStyle, appearance: "none", cursor: "pointer" }}
-            onFocus={(e) => { e.currentTarget.style.borderColor = "var(--primary)"; }}
-            onBlur={(e)  => { e.currentTarget.style.borderColor = "var(--border)"; }}
+          {clients && clients.length > 0 ? (
+            <select
+              name="on_behalf_of"
+              required
+              defaultValue=""
+              style={{ ...inputStyle, appearance: "none", cursor: "pointer" }}
+              onFocus={(e) => { e.currentTarget.style.borderColor = "var(--primary)"; }}
+              onBlur={(e)  => { e.currentTarget.style.borderColor = "var(--border)"; }}
+            >
+              <option value="" disabled>Selecione o cliente</option>
+              {clients.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+            </select>
+          ) : (
+            <p style={{ margin: 0, fontSize: "12px", color: "var(--c-danger)", display: "flex", alignItems: "center", gap: 6 }}>
+              <AlertCircle size={13} /> Nenhum cliente ativo encontrado para abrir o chamado.
+            </p>
+          )}
+
+          {/* Débito de token do cliente */}
+          <label
+            style={{
+              display: "flex", alignItems: "center", gap: 10, marginTop: 12,
+              padding: "10px 14px", borderRadius: 10,
+              border: "1px solid var(--border)", background: "var(--input-bg)",
+              cursor: "pointer",
+            }}
           >
-            <option value="">Selecione o cliente</option>
-            {clients.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
-          </select>
+            <input
+              type="checkbox"
+              name="debit_token"
+              checked={debitToken}
+              onChange={(e) => setDebitToken(e.target.checked)}
+              style={{ width: 16, height: 16, accentColor: "var(--primary)", cursor: "pointer", flexShrink: 0 }}
+            />
+            <span style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              <span style={{ fontSize: "12.5px", fontWeight: 600, color: "var(--text)" }}>
+                Debitar 1 token do cliente
+              </span>
+              <span style={{ fontSize: "11px", color: "var(--text-faint)" }}>
+                {debitToken
+                  ? "1 token será descontado do saldo do cliente ao abrir."
+                  : "Cortesia — nenhum token será descontado do cliente."}
+              </span>
+            </span>
+          </label>
         </div>
       )}
 

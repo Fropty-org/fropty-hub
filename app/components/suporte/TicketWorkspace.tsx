@@ -8,7 +8,7 @@ import { computeSla, SLA_TARGETS, type SlaState } from "@/app/lib/constants/sla"
 import type { TicketPriority, TicketStatus } from "@/app/lib/constants/status";
 import type { Database } from "@/app/lib/supabase/types";
 import {
-  ChevronUp, ChevronDown, MoreVertical, Clock, Search, SlidersHorizontal,
+  ChevronUp, ChevronDown, MoreVertical, Search, SlidersHorizontal,
   Eye, Download, LayoutGrid, Table as TableIcon, RefreshCw, Plus,
   User, Headphones, FileText, FileArchive, ClipboardCheck, MonitorSmartphone, Link as LinkIcon,
 } from "lucide-react";
@@ -66,15 +66,18 @@ function slaColor(s: SlaState | null): string {
   return "var(--c-info)";
 }
 
-/* Relógio "meia-lua" que reflete o quanto do SLA já decorreu. */
+/* Pizza de progresso do SLA: fatia preenchida = fração do prazo decorrida. */
 function SlaClock({ s }: { s: SlaState | null }) {
   const color = slaColor(s);
   const pct = s ? Math.min(1, s.ratio) : 0;
   return (
-    <span style={{ position: "relative", width: 18, height: 18, display: "inline-flex", flexShrink: 0 }}>
-      <span style={{ position: "absolute", inset: 0, borderRadius: "50%", background: `conic-gradient(${color} ${pct * 360}deg, color-mix(in srgb, ${color} 18%, transparent) 0)` }} />
-      <Clock size={11} style={{ color, position: "absolute", top: 3.5, left: 3.5 }} />
-    </span>
+    <span
+      style={{
+        width: 16, height: 16, borderRadius: "50%", flexShrink: 0, boxSizing: "border-box",
+        border: `1.5px solid ${color}`,
+        background: `conic-gradient(${color} ${pct * 360}deg, var(--surface) 0)`,
+      }}
+    />
   );
 }
 
@@ -138,8 +141,10 @@ export function TicketWorkspace({ ticket, messages, currentUserId, currentUserNa
   return (
     <div className="ticket-ws">
       <style>{`
-        .ticket-ws { display: grid; grid-template-columns: minmax(0,1fr) 380px; gap: 0; align-items: start; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 22px 24px; }
-        .ticket-ws__aside { border-left: 1px solid var(--border); padding-left: 24px; align-self: stretch; }
+        .ticket-ws { display: grid; grid-template-columns: minmax(0,1fr) 372px; gap: 20px; align-items: start; }
+        .ticket-ws__main { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 22px 24px; min-width: 0; }
+        .ticket-ws__aside { display: flex; flex-direction: column; gap: 20px; }
+        .ticket-ws__panel { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 18px 20px; }
         .ticket-tab { position: relative; background: none; border: none; padding: 12px 2px; margin-right: 22px; font-size: 14px; font-weight: 600; color: var(--text-faint); cursor: pointer; font-family: inherit; }
         .ticket-tab[data-active="true"] { color: var(--primary); }
         .ticket-tab[data-active="true"]::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--primary); border-radius: 2px; }
@@ -148,12 +153,11 @@ export function TicketWorkspace({ ticket, messages, currentUserId, currentUserNa
         .ticket-iconbtn[data-active="true"] { color: var(--primary); border-color: color-mix(in srgb, var(--primary) 40%, var(--border)); }
         @media (max-width: 940px) {
           .ticket-ws { grid-template-columns: 1fr; }
-          .ticket-ws__aside { border-left: none; border-top: 1px solid var(--border); padding-left: 0; padding-top: 24px; margin-top: 8px; position: static; }
         }
       `}</style>
 
       {/* ── Coluna principal ── */}
-      <div style={{ paddingRight: 24, minWidth: 0 }}>
+      <div className="ticket-ws__main">
         {/* Header */}
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
@@ -211,9 +215,9 @@ export function TicketWorkspace({ ticket, messages, currentUserId, currentUserNa
       {/* ── Painel lateral ── */}
       <aside className="ticket-ws__aside">
         {/* Detalhes */}
-        <div style={{ marginBottom: 8 }}>
+        <div className="ticket-ws__panel">
           <button onClick={() => setDetailsOpen((v) => !v)}
-            style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", background: "none", border: "none", padding: "2px 0 10px", cursor: "pointer", fontFamily: "inherit" }}>
+            style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", background: "none", border: "none", padding: detailsOpen ? "2px 0 10px" : "2px 0", cursor: "pointer", fontFamily: "inherit" }}>
             <span style={{ fontSize: "15px", fontWeight: 700, color: "var(--text)" }}>Detalhes</span>
             {detailsOpen ? <ChevronUp size={18} style={{ color: "var(--text-faint)" }} /> : <ChevronDown size={18} style={{ color: "var(--text-faint)" }} />}
           </button>
@@ -233,7 +237,7 @@ export function TicketWorkspace({ ticket, messages, currentUserId, currentUserNa
         </div>
 
         {/* Ações adicionadas */}
-        <div style={{ display: "flex", flexDirection: "column", marginTop: 20, height: "min(620px, calc(100vh - 220px))" }}>
+        <div className="ticket-ws__panel" style={{ display: "flex", flexDirection: "column", height: "min(620px, calc(100vh - 200px))" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
             <span style={{ fontSize: "15px", fontWeight: 700, color: "var(--text)" }}>Ações adicionadas</span>
             <div style={{ display: "flex", gap: 4 }}>

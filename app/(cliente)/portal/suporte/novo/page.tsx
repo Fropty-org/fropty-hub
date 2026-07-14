@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/app/lib/supabase/server";
+import { createServiceClient } from "@/app/lib/supabase/service";
 import { getProfile } from "@/app/lib/auth/session";
 import { NewTicketForm } from "@/app/components/suporte/NewTicketForm";
 import { ArrowLeft, Coins, ChevronRight, Headphones } from "lucide-react";
@@ -53,7 +54,10 @@ export default async function NovoChamadoPage() {
   let clients:  { id: string; name: string }[] = [];
 
   if (isAdmin) {
-    const { data } = await supabase
+    // Service client: a RLS de profiles pode não expor todos os clientes ao
+    // client do usuário — admin precisa enxergar todos para abrir em nome de.
+    const service = createServiceClient();
+    const { data } = await service
       .from("profiles")
       .select("id, name")
       .eq("role", "cliente")
