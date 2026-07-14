@@ -67,18 +67,28 @@ function slaColor(s: SlaState | null): string {
   return "var(--c-info)";
 }
 
-/* Pizza de progresso do SLA: fatia preenchida = fração do prazo decorrida. */
+/* Pizza de progresso do SLA: disco preenchido (fatia = fração do prazo
+   decorrida) dentro de um anel externo claro, separado por um gap — como no
+   modelo. */
 function SlaClock({ s }: { s: SlaState | null }) {
   const color = slaColor(s);
   const pct = s ? Math.min(1, s.ratio) : 0;
   return (
     <span
       style={{
-        width: 16, height: 16, borderRadius: "50%", flexShrink: 0, boxSizing: "border-box",
-        border: `1.5px solid ${color}`,
-        background: `conic-gradient(${color} ${pct * 360}deg, var(--surface) 0)`,
+        width: 22, height: 22, borderRadius: "50%", flexShrink: 0, boxSizing: "border-box",
+        padding: 2.5,
+        border: `2px solid ${`color-mix(in srgb, ${color} 40%, transparent)`}`,
+        display: "inline-flex",
       }}
-    />
+    >
+      <span
+        style={{
+          width: "100%", height: "100%", borderRadius: "50%",
+          background: `conic-gradient(${color} ${pct * 360}deg, var(--surface) 0)`,
+        }}
+      />
+    </span>
   );
 }
 
