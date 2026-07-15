@@ -6,6 +6,9 @@ import { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import { NotificationBell } from "@/app/components/NotificationBell";
 import { SessionGuard } from "@/app/components/session/SessionGuard";
+import { HelpMenu } from "@/app/components/HelpMenu";
+import { LanguageSwitcher } from "@/app/components/LanguageSwitcher";
+import { useT } from "@/app/lib/i18n/I18nProvider";
 
 interface Props {
   userId: string;
@@ -20,6 +23,7 @@ interface Props {
  * mobile já cobre esse caso).
  */
 export function HubTopbar({ userId, initials, avatarUrl, profileHref }: Props) {
+  const t = useT();
   const [isMac, setIsMac] = useState(false);
 
   useEffect(() => {
@@ -37,17 +41,19 @@ export function HubTopbar({ userId, initials, avatarUrl, profileHref }: Props) {
         type="button"
         className="hub-topbar-search"
         onClick={openSearch}
-        aria-label="Abrir busca global"
+        aria-label={t("common.searchHub")}
       >
         <Search size={14} />
-        <span>Buscar no Hub…</span>
+        <span>{t("common.searchHub")}</span>
         <kbd>{isMac ? "⌘K" : "Ctrl K"}</kbd>
       </button>
 
       <div className="hub-topbar-right">
         <SessionGuard />
+        <LanguageSwitcher />
+        <HelpMenu />
         <NotificationBell userId={userId} />
-        <Link href={profileHref} className="hub-topbar-avatar" title="Meu perfil">
+        <Link href={profileHref} className="hub-topbar-avatar" title={t("common.myProfile")}>
           {avatarUrl ? (
             <Image
               src={avatarUrl}

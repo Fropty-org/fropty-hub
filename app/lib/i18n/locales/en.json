@@ -1,0 +1,61 @@
+{
+  "common": {
+    "searchHub": "Search the Hub…",
+    "myProfile": "My profile",
+    "help": "Help",
+    "language": "Language",
+    "backToHub": "Back to the Hub",
+    "lastUpdated": "Last updated"
+  },
+  "help": {
+    "about": "About Fropty Hub",
+    "terms": "Terms of Use",
+    "privacy": "Privacy Policy",
+    "licenses": "Licenses"
+  },
+  "languages": {
+    "pt": "Português",
+    "en": "English",
+    "es": "Español"
+  },
+  "legal": {
+    "about": {
+      "title": "About Fropty Hub",
+      "intro": "Fropty Hub is the client portal of the Fropty ecosystem — the place where everything connects.",
+      "sections": [
+        { "h": "What the Hub is", "p": "A single environment to track support tickets, projects, contracts, billing, knowledge base, roadmap and much more. Each client only sees what they subscribed to." },
+        { "h": "Fropty ecosystem", "p": "Fropty offers digital modules and services for companies — such as FroptyCash, FroptyInvest, FroptySentinel, FroptyCRM and FroptyApps — brought together and integrated in the Hub." },
+        { "h": "Security", "p": "The Hub is protected by FroptySentinel, with two-factor authentication, leaked-password checks and continuous monitoring." }
+      ]
+    },
+    "terms": {
+      "title": "Terms of Use",
+      "intro": "By accessing and using Fropty Hub, you agree to the terms described below.",
+      "sections": [
+        { "h": "1. Use of the platform", "p": "Access is personal and intended for clients with an active contract. You are responsible for keeping your credentials confidential." },
+        { "h": "2. Content and data", "p": "The data you enter in the Hub belongs to the client. Fropty uses it only to provide the contracted services." },
+        { "h": "3. Availability", "p": "We aim for high availability, but the service may undergo scheduled maintenance, announced in advance whenever possible." },
+        { "h": "4. Changes", "p": "These terms may be updated. Significant changes will be communicated through the official channels." }
+      ]
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "intro": "We take your privacy seriously. This policy explains how we handle your data.",
+      "sections": [
+        { "h": "Data we collect", "p": "We collect only the data needed to run the Hub: account information, usage activity and the content you create (tickets, projects, feedback)." },
+        { "h": "How we use it", "p": "We use the data to authenticate access, provide support, improve the platform and comply with legal obligations. We do not sell your data." },
+        { "h": "Your rights", "p": "You may request access to, correction of, or deletion of your data at any time through our contact channels." },
+        { "h": "Contact", "p": "Privacy questions can be sent to suporte@fropty.com." }
+      ]
+    },
+    "licenses": {
+      "title": "Licenses",
+      "intro": "Fropty Hub is built with free and open-source software. Thanks to the open source community.",
+      "sections": [
+        { "h": "Core technologies", "p": "Next.js, React and Tailwind CSS — MIT license. Supabase (Postgres, Auth, Storage, Realtime) — Apache 2.0 license." },
+        { "h": "Icons and fonts", "p": "Lucide icons (ISC license). Inter and DM Sans fonts (SIL Open Font License 1.1)." },
+        { "h": "Trademarks", "p": "Fropty, Fropty Hub and the module names are trademarks of Fropty. All other trademarks belong to their respective owners." }
+      ]
+    }
+  }
+}

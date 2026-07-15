@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { DM_Sans, Inter } from "next/font/google";
+import { cookies } from "next/headers";
 import "./globals.css";
+import { I18nProvider } from "@/app/lib/i18n/I18nProvider";
+import { LOCALE_COOKIE, LOCALE_LABELS, DEFAULT_LOCALE, isLocale } from "@/app/lib/i18n/config";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -130,11 +133,15 @@ const schemaOrg = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const cookieStore = await cookies();
+  const cookieLocale = cookieStore.get(LOCALE_COOKIE)?.value;
+  const locale = isLocale(cookieLocale) ? cookieLocale : DEFAULT_LOCALE;
+
   return (
-    <html lang="pt-BR">
+    <html lang={LOCALE_LABELS[locale].htmlLang}>
       <head>
         <meta charSet="utf-8" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -168,7 +175,9 @@ export default function RootLayout({
         <meta name="theme-color" content="#0d0d12" />
       </head>
       <body className={`${dmSans.variable} ${inter.variable} antialiased`}>
-        {children}
+        <I18nProvider initialLocale={locale}>
+          {children}
+        </I18nProvider>
       </body>
     </html>
   );
