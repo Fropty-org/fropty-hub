@@ -9,10 +9,12 @@ export function TrendBars({
   data,
   color = "var(--primary)",
   unit = "",
+  periodLabel = "no período",
 }: {
   data: TrendPoint[];
   color?: string;
   unit?: string;
+  periodLabel?: string;
 }) {
   const max = Math.max(1, ...data.map((d) => d.value));
   const total = data.reduce((s, d) => s + d.value, 0);
@@ -43,7 +45,7 @@ export function TrendBars({
       <div style={{ display: "flex", justifyContent: "space-between", fontSize: "11px", color: "var(--text-faint)" }}>
         <span>{data[0]?.label ?? ""}</span>
         <span style={{ fontWeight: 700, color: "var(--text-muted)" }}>
-          {total}{unit ? ` ${unit}` : ""} no período
+          {total}{unit ? ` ${unit}` : ""} {periodLabel}
         </span>
         <span>{data[data.length - 1]?.label ?? ""}</span>
       </div>

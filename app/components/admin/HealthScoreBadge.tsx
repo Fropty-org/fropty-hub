@@ -1,6 +1,9 @@
+"use client"
+
 import { Minus } from "lucide-react"
 import { RISK_CONFIG } from "@/app/lib/constants/customer-success"
 import type { RiskLevel } from "@/app/lib/types/customer-success"
+import { useT } from "@/app/lib/i18n/I18nProvider"
 
 interface Props {
   score: number | null
@@ -9,6 +12,7 @@ interface Props {
 }
 
 export function HealthScoreBadge({ score, risk, showScore = true }: Props) {
+  const t = useT()
   if (score === null || risk === null) {
     return (
       <span style={{
@@ -18,7 +22,7 @@ export function HealthScoreBadge({ score, risk, showScore = true }: Props) {
         fontSize: "11px", fontWeight: 600, color: "var(--text-faint)",
       }}>
         <Minus size={12} />
-        Sem avaliação
+        {t("admin.riskLevels.noEval")}
       </span>
     )
   }
@@ -35,7 +39,7 @@ export function HealthScoreBadge({ score, risk, showScore = true }: Props) {
       fontSize: "11px", fontWeight: 700, color: cfg.color,
     }}>
       <Icon size={12} />
-      {cfg.label}
+      {t("admin.riskLevels." + risk)}
       {showScore && <span style={{ opacity: 0.8 }}>{score}</span>}
     </span>
   )

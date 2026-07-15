@@ -55,7 +55,7 @@ const PLAN_LABELS: Record<string, string> = {
   pro:       "Pro",
 };
 
-export function formatAuditMeta(metadata: Record<string, unknown> | null): { label: string; value: string }[] {
+export function formatAuditMeta(metadata: Record<string, unknown> | null): { key: string; label: string; value: string }[] {
   if (!metadata) return [];
   return Object.entries(metadata)
     .filter(([, v]) => v !== null && v !== undefined && v !== "")
@@ -65,6 +65,6 @@ export function formatAuditMeta(metadata: Record<string, unknown> | null): { lab
       if (key === "role") value = value === "admin" ? "Admin" : "Cliente";
       if (key === "progress") value = `${value}%`;
       if (value.length > 60) value = value.slice(0, 60) + "…";
-      return { label: META_LABELS[key] ?? key, value };
+      return { key, label: META_LABELS[key] ?? key, value };
     });
 }

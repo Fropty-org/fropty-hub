@@ -6,6 +6,7 @@ import { getClientHealth } from "@/app/actions/customer-success";
 import { HealthScoreBadge } from "@/app/components/admin/HealthScoreBadge";
 import { HealthScoreForm } from "@/app/components/admin/HealthScoreForm";
 import { RISK_CONFIG, SCORE_DIMENSIONS } from "@/app/lib/constants/customer-success";
+import { getServerI18n } from "@/app/lib/i18n/server";
 
 export const metadata: Metadata = { title: "Perfil CS — Admin" };
 
@@ -16,6 +17,7 @@ const PLAN_LABELS: Record<string, string> = {
 };
 
 export default async function ClientCSPage({ params }: { params: Promise<{ clientId: string }> }) {
+  const { t } = await getServerI18n();
   const { clientId } = await params;
   const client = await getClientHealth(clientId);
   if (!client) notFound();
@@ -27,9 +29,9 @@ export default async function ClientCSPage({ params }: { params: Promise<{ clien
     : null;
 
   const quickLinks = [
-    { href: `/portal/suporte?client=${clientId}`, label: "Ver tickets", Icon: MessageCircle },
-    { href: `/admin/projetos?client=${clientId}`, label: "Ver projetos", Icon: FolderKanban },
-    { href: `/admin/contratos?client=${clientId}`, label: "Ver contratos", Icon: FileSignature },
+    { href: `/portal/suporte?client=${clientId}`, label: t("admin.customerSuccess.viewTickets"), Icon: MessageCircle },
+    { href: `/admin/projetos?client=${clientId}`, label: t("admin.customerSuccess.viewProjects"), Icon: FolderKanban },
+    { href: `/admin/contratos?client=${clientId}`, label: t("admin.customerSuccess.viewContracts"), Icon: FileSignature },
   ];
 
   return (
@@ -39,7 +41,7 @@ export default async function ClientCSPage({ params }: { params: Promise<{ clien
         style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "13px", color: "var(--text-muted)", textDecoration: "none", marginBottom: 24 }}
       >
         <ArrowLeft size={14} />
-        Customer Success
+        {t("admin.customerSuccess.back")}
       </Link>
 
       {/* Header */}
@@ -58,9 +60,9 @@ export default async function ClientCSPage({ params }: { params: Promise<{ clien
               background: "rgba(59,130,246,0.1)", border: "1px solid rgba(59,130,246,0.3)",
               fontSize: "11px", fontWeight: 700, color: "var(--c-info)",
             }}>
-              {PLAN_LABELS[client.plan] ?? client.plan}
+              {t("admin.plans." + client.plan, {}) !== "admin.plans." + client.plan ? t("admin.plans." + client.plan) : (PLAN_LABELS[client.plan] ?? client.plan)}
             </span>
-            <span style={{ fontSize: "12px", color: "var(--text-faint)" }}>{client.token_balance} tokens</span>
+            <span style={{ fontSize: "12px", color: "var(--text-faint)" }}>{t("admin.customerSuccess.tokens", { n: client.token_balance })}</span>
           </div>
         </div>
         <HealthScoreBadge score={health?.score_total ?? null} risk={health?.risk_level ?? null} />
@@ -71,7 +73,7 @@ export default async function ClientCSPage({ params }: { params: Promise<{ clien
           {/* Score detalhado */}
           {health && cfg && (
             <div className="hub-card" style={{ padding: 24 }}>
-              <h2 style={{ fontSize: "14px", fontWeight: 700, margin: "0 0 20px", color: "var(--text)" }}>Score por dimensão</h2>
+              <h2 style={{ fontSize: "14px", fontWeight: 700, margin: "0 0 20px", color: "var(--text)" }}>{t("admin.customerSuccess.scoreByDimension")}</h2>
               <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                 {SCORE_DIMENSIONS.map(({ key, label, weight }) => {
                   const val = health[key as keyof typeof health] as number;
@@ -81,7 +83,7 @@ export default async function ClientCSPage({ params }: { params: Promise<{ clien
                     <div key={key}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                          <span style={{ fontSize: "13px", fontWeight: 600, color: "var(--text)" }}>{label}</span>
+                          <span style={{ fontSize: "13px", fontWeight: 600, color: "var(--text)" }}>{t("admin.scoreDimensions." + key)}</span>
                           <span style={{ fontSize: "11px", color: "var(--text-faint)", padding: "1px 6px", background: "var(--surface-2)", borderRadius: 999 }}>{weight}</span>
                         </div>
                         <span style={{ fontSize: "14px", fontWeight: 800, color }}>{val}</span>
@@ -98,17 +100,17 @@ export default async function ClientCSPage({ params }: { params: Promise<{ clien
 
           {/* Notas e histórico */}
           <div className="hub-card" style={{ padding: 24 }}>
-            <h2 style={{ fontSize: "14px", fontWeight: 700, margin: "0 0 16px", color: "var(--text)" }}>Notas CS</h2>
+            <h2 style={{ fontSize: "14px", fontWeight: 700, margin: "0 0 16px", color: "var(--text)" }}>{t("admin.customerSuccess.csNotes")}</h2>
             {health?.cs_notes ? (
               <p style={{ margin: 0, fontSize: "13px", color: "var(--text-muted)", lineHeight: 1.6, whiteSpace: "pre-wrap" }}>
                 {health.cs_notes}
               </p>
             ) : (
-              <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>Nenhuma nota registrada.</p>
+              <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>{t("admin.customerSuccess.noNotes")}</p>
             )}
             {updatedAt && (
               <p style={{ margin: "12px 0 0", fontSize: "11px", color: "var(--text-faint)" }}>
-                Última atualização: {updatedAt}
+                {t("admin.customerSuccess.lastUpdate")} {updatedAt}
               </p>
             )}
           </div>
@@ -121,7 +123,7 @@ export default async function ClientCSPage({ params }: { params: Promise<{ clien
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           <div className="hub-card" style={{ padding: 20 }}>
             <p style={{ margin: "0 0 14px", fontSize: "12px", fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.04em" }}>
-              Links rápidos
+              {t("admin.customerSuccess.quickLinks")}
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {quickLinks.map(({ href, label, Icon }) => (

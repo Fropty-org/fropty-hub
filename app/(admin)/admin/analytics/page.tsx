@@ -5,11 +5,13 @@ import type { LucideIcon } from "lucide-react";
 import { SLA_TARGETS } from "@/app/lib/constants/sla";
 import { TrendBars } from "@/app/components/admin/TrendBars";
 import { getNpsSummary } from "@/app/actions/nps";
+import { getServerI18n } from "@/app/lib/i18n/server";
 
 export const metadata: Metadata = { title: "Analytics — Admin" };
 
 export default async function AdminAnalyticsPage() {
   const supabase = await createClient();
+  const { t } = await getServerI18n();
 
   const [
     { data: mrrData },
@@ -102,33 +104,33 @@ export default async function AdminAnalyticsPage() {
   });
 
   const kpis: { label: string; value: string | number; Icon: LucideIcon; color: string; sub: string }[] = [
-    { label: "MRR", value: `R$${mrr.toFixed(2).replace(".", ",")}`, Icon: TrendingUp, color: "var(--c-success)", sub: `${planCounts.basico} básico · ${planCounts.pro} pro` },
-    { label: "Clientes ativos", value: totalClients ?? 0, Icon: Users, color: "var(--c-info)", sub: `${planCounts.sem_plano} sem plano` },
-    { label: "Tickets abertos", value: openTickets ?? 0, Icon: MessageCircle, color: "var(--brand-accent)", sub: `${resolvedTickets ?? 0} resolvidos/fechados` },
-    { label: "Taxa de resolução", value: `${resolvedRate}%`, Icon: CheckCircle, color: resolvedRate >= 80 ? "var(--c-success)" : resolvedRate >= 50 ? "var(--c-warning)" : "var(--c-danger)", sub: `${openTickets ?? 0} abertos · ${resolvedTickets ?? 0} resolvidos` },
-    { label: "Tempo médio resolução", value: avgResolutionLabel, Icon: Clock, color: avgResolutionHours != null && avgResolutionHours <= 24 ? "var(--c-success)" : avgResolutionHours != null && avgResolutionHours <= 72 ? "var(--c-warning)" : "var(--text-faint)", sub: `base: ${resolvedList.length} tickets resolvidos` },
-    { label: "Conformidade SLA", value: slaCompliance != null ? `${slaCompliance}%` : "—", Icon: ShieldCheck, color: slaCompliance != null && slaCompliance >= 80 ? "var(--c-success)" : slaCompliance != null && slaCompliance >= 50 ? "var(--c-warning)" : "var(--c-danger)", sub: `${slaComplianceCount} de ${resolvedList.length} dentro do SLA` },
-    { label: "Tokens consumidos (30d)", value: tokensOut, Icon: Zap, color: "var(--brand-accent)", sub: `${tokensIn} adicionados` },
-    { label: "NPS (90d)", value: nps.nps != null ? String(nps.nps) : "—", Icon: Smile, color: nps.nps == null ? "var(--text-faint)" : nps.nps >= 50 ? "var(--c-success)" : nps.nps >= 0 ? "var(--c-warning)" : "var(--c-danger)", sub: nps.count > 0 ? `${nps.promoters} promotores · ${nps.detractors} detratores · ${nps.count} respostas` : "sem respostas ainda" },
+    { label: t("admin.analytics.kpi.mrr"), value: `R$${mrr.toFixed(2).replace(".", ",")}`, Icon: TrendingUp, color: "var(--c-success)", sub: t("admin.analytics.sub.mrr", { basico: planCounts.basico, pro: planCounts.pro }) },
+    { label: t("admin.analytics.kpi.activeClients"), value: totalClients ?? 0, Icon: Users, color: "var(--c-info)", sub: t("admin.analytics.sub.activeClients", { n: planCounts.sem_plano }) },
+    { label: t("admin.analytics.kpi.openTickets"), value: openTickets ?? 0, Icon: MessageCircle, color: "var(--brand-accent)", sub: t("admin.analytics.sub.openTickets", { n: resolvedTickets ?? 0 }) },
+    { label: t("admin.analytics.kpi.resolutionRate"), value: `${resolvedRate}%`, Icon: CheckCircle, color: resolvedRate >= 80 ? "var(--c-success)" : resolvedRate >= 50 ? "var(--c-warning)" : "var(--c-danger)", sub: t("admin.analytics.sub.resolutionRate", { open: openTickets ?? 0, resolved: resolvedTickets ?? 0 }) },
+    { label: t("admin.analytics.kpi.avgResolution"), value: avgResolutionLabel, Icon: Clock, color: avgResolutionHours != null && avgResolutionHours <= 24 ? "var(--c-success)" : avgResolutionHours != null && avgResolutionHours <= 72 ? "var(--c-warning)" : "var(--text-faint)", sub: t("admin.analytics.sub.avgResolution", { n: resolvedList.length }) },
+    { label: t("admin.analytics.kpi.slaCompliance"), value: slaCompliance != null ? `${slaCompliance}%` : "—", Icon: ShieldCheck, color: slaCompliance != null && slaCompliance >= 80 ? "var(--c-success)" : slaCompliance != null && slaCompliance >= 50 ? "var(--c-warning)" : "var(--c-danger)", sub: t("admin.analytics.sub.slaCompliance", { ok: slaComplianceCount, total: resolvedList.length }) },
+    { label: t("admin.analytics.kpi.tokensConsumed"), value: tokensOut, Icon: Zap, color: "var(--brand-accent)", sub: t("admin.analytics.sub.tokensConsumed", { n: tokensIn }) },
+    { label: t("admin.analytics.kpi.nps"), value: nps.nps != null ? String(nps.nps) : "—", Icon: Smile, color: nps.nps == null ? "var(--text-faint)" : nps.nps >= 50 ? "var(--c-success)" : nps.nps >= 0 ? "var(--c-warning)" : "var(--c-danger)", sub: nps.count > 0 ? t("admin.analytics.sub.npsCounts", { promoters: nps.promoters, detractors: nps.detractors, count: nps.count }) : t("admin.analytics.sub.npsEmpty") },
   ];
 
   const statusLabels: Record<string, string> = {
-    aberto: "Aberto", em_andamento: "Em andamento", reaberto: "Reaberto",
-    resolvido: "Resolvido", fechado: "Fechado",
+    aberto: t("admin.overview.status.aberto"), em_andamento: t("admin.overview.status.em_andamento"), reaberto: t("admin.overview.status.reaberto"),
+    resolvido: t("admin.overview.status.resolvido"), fechado: t("admin.overview.status.fechado"),
   };
   const statusColors: Record<string, string> = {
     aberto: "var(--c-danger)", em_andamento: "var(--c-warning)", reaberto: "var(--c-purple)",
     resolvido: "var(--c-success)", fechado: "var(--text-faint)",
   };
-  const priorityLabels: Record<string, string> = { baixa: "Baixa", media: "Média", alta: "Alta", critica: "Crítica" };
+  const priorityLabels: Record<string, string> = { baixa: t("admin.analytics.priority.baixa"), media: t("admin.analytics.priority.media"), alta: t("admin.analytics.priority.alta"), critica: t("admin.analytics.priority.critica") };
   const priorityColors: Record<string, string> = { baixa: "var(--c-success)", media: "var(--c-info)", alta: "var(--c-warning)", critica: "var(--c-danger)" };
-  const PLAN_LABEL: Record<string, string> = { sem_plano: "Sem plano", basico: "Básico", pro: "Pro" };
+  const PLAN_LABEL: Record<string, string> = { sem_plano: t("admin.plans.sem_plano"), basico: t("admin.plans.basico"), pro: t("admin.plans.pro") };
 
   return (
     <div className="hub-page" style={{ maxWidth: "none" }}>
       <div className="hub-page-header">
-        <h1 className="hub-page-title">Analytics</h1>
-        <p className="hub-page-sub">Métricas operacionais e de crescimento do ecossistema</p>
+        <h1 className="hub-page-title">{t("admin.analytics.title")}</h1>
+        <p className="hub-page-sub">{t("admin.analytics.subtitle")}</p>
       </div>
 
       {/* KPIs */}
@@ -152,16 +154,16 @@ export default async function AdminAnalyticsPage() {
         <div className="hub-card" style={{ padding: "20px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
             <Activity size={14} style={{ color: "var(--text-muted)" }} />
-            <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>Novos chamados — últimos 30 dias</h2>
+            <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>{t("admin.analytics.newTickets30d")}</h2>
           </div>
-          <TrendBars data={newTicketsSeries} color="var(--brand-accent)" unit="chamados" />
+          <TrendBars data={newTicketsSeries} color="var(--brand-accent)" unit={t("admin.analytics.unitTickets")} periodLabel={t("admin.analytics.inPeriod")} />
         </div>
         <div className="hub-card" style={{ padding: "20px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
             <Zap size={14} style={{ color: "var(--text-muted)" }} />
-            <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>Tokens consumidos — últimos 30 dias</h2>
+            <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>{t("admin.analytics.tokensConsumed30d")}</h2>
           </div>
-          <TrendBars data={tokensConsumedSeries} color="var(--primary)" unit="tokens" />
+          <TrendBars data={tokensConsumedSeries} color="var(--primary)" unit={t("admin.analytics.unitTokens")} periodLabel={t("admin.analytics.inPeriod")} />
         </div>
       </div>
 
@@ -172,7 +174,7 @@ export default async function AdminAnalyticsPage() {
         <div className="hub-card" style={{ padding: "20px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
             <Users size={14} style={{ color: "var(--text-muted)" }} />
-            <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>Planos</h2>
+            <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>{t("admin.analytics.plans")}</h2>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {(Object.entries(planCounts) as [string, number][]).map(([key, count]) => {
@@ -198,7 +200,7 @@ export default async function AdminAnalyticsPage() {
         <div className="hub-card" style={{ padding: "20px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
             <MessageCircle size={14} style={{ color: "var(--text-muted)" }} />
-            <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>Tickets por status</h2>
+            <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>{t("admin.analytics.ticketsByStatus")}</h2>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {Object.entries(statusLabels).map(([key, label]) => {
@@ -221,7 +223,7 @@ export default async function AdminAnalyticsPage() {
         <div className="hub-card" style={{ padding: "20px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
             <Zap size={14} style={{ color: "var(--text-muted)" }} />
-            <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>Tickets por prioridade</h2>
+            <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>{t("admin.analytics.ticketsByPriority")}</h2>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {Object.entries(priorityLabels).map(([key, label]) => {
@@ -248,10 +250,10 @@ export default async function AdminAnalyticsPage() {
         <div className="hub-card" style={{ padding: "20px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
             <Clock size={14} style={{ color: "var(--text-muted)" }} />
-            <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>Tokens — últimos 30 dias</h2>
+            <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>{t("admin.analytics.tokens30d")}</h2>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-            {([["Emitidos", tokensIn, "var(--c-success)"], ["Consumidos", tokensOut, "var(--c-danger)"]] as [string, number, string][]).map(([label, val, color]) => (
+            {([[t("admin.analytics.issued"), tokensIn, "var(--c-success)"], [t("admin.analytics.consumed"), tokensOut, "var(--c-danger)"]] as [string, number, string][]).map(([label, val, color]) => (
               <div key={label}>
                 <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", marginBottom: 6 }}>
                   <span style={{ color: "var(--text-muted)", fontWeight: 600 }}>{label}</span>
@@ -263,7 +265,7 @@ export default async function AdminAnalyticsPage() {
               </div>
             ))}
             <div style={{ padding: "12px 14px", background: "var(--surface-2)", borderRadius: 10, display: "flex", justifyContent: "space-between", fontSize: "13px", marginTop: 2 }}>
-              <span style={{ color: "var(--text-muted)", fontWeight: 600 }}>Saldo líquido</span>
+              <span style={{ color: "var(--text-muted)", fontWeight: 600 }}>{t("admin.analytics.netBalance")}</span>
               <span style={{ fontWeight: 800, color: tokensIn - tokensOut >= 0 ? "var(--c-success)" : "var(--c-danger)" }}>
                 {tokensIn - tokensOut >= 0 ? "+" : ""}{(tokensIn - tokensOut).toLocaleString("pt-BR")}
               </span>
@@ -275,11 +277,11 @@ export default async function AdminAnalyticsPage() {
         <div className="hub-card" style={{ padding: "20px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
             <Users size={14} style={{ color: "var(--text-muted)" }} />
-            <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>Clientes recentes</h2>
+            <h2 style={{ margin: 0, fontSize: "0.875rem", fontWeight: 700, color: "var(--text)" }}>{t("admin.analytics.recentClients")}</h2>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
             {(recentClients ?? []).length === 0 ? (
-              <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>Nenhum cliente ainda.</p>
+              <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>{t("admin.analytics.noClients")}</p>
             ) : (recentClients ?? []).map((c, i, arr) => {
               const initials = (c.name ?? c.email ?? "?").slice(0, 2).toUpperCase();
               const planLabel = PLAN_LABEL[c.plan ?? "sem_plano"] ?? "";

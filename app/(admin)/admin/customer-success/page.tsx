@@ -5,6 +5,7 @@ import { getClientsWithHealth, getCSMetrics, getClientsWithoutHealth } from "@/a
 import { HealthScoreBadge } from "@/app/components/admin/HealthScoreBadge";
 import { RISK_CONFIG, SCORE_DIMENSIONS } from "@/app/lib/constants/customer-success";
 import type { RiskLevel } from "@/app/lib/types/customer-success";
+import { getServerI18n } from "@/app/lib/i18n/server";
 
 export const metadata: Metadata = { title: "Customer Success — Admin" };
 
@@ -19,6 +20,7 @@ export default async function CustomerSuccessPage({
 }: {
   searchParams: Promise<{ risk?: string; plan?: string }>;
 }) {
+  const { t } = await getServerI18n();
   const params = await searchParams;
   const filterRisk = params.risk as RiskLevel | undefined;
   const filterPlan = params.plan;
@@ -36,32 +38,32 @@ export default async function CustomerSuccessPage({
   });
 
   const metricCards = [
-    { label: "Saudável",  value: metrics.saudavel, color: "var(--c-success)", Icon: Heart },
-    { label: "Atenção",   value: metrics.atencao,  color: "var(--c-warning)", Icon: AlertTriangle },
-    { label: "Risco",     value: metrics.risco,    color: "var(--c-danger)", Icon: AlertCircle },
-    { label: "Crítico",   value: metrics.critico,  color: "var(--c-danger)", Icon: XCircle },
+    { label: t("admin.riskLevels.saudavel"),  value: metrics.saudavel, color: "var(--c-success)", Icon: Heart },
+    { label: t("admin.riskLevels.atencao"),   value: metrics.atencao,  color: "var(--c-warning)", Icon: AlertTriangle },
+    { label: t("admin.riskLevels.risco"),     value: metrics.risco,    color: "var(--c-danger)", Icon: AlertCircle },
+    { label: t("admin.riskLevels.critico"),   value: metrics.critico,  color: "var(--c-danger)", Icon: XCircle },
   ];
 
   const riskFilters: { label: string; value: string }[] = [
-    { label: "Todos", value: "" },
-    { label: "Saudável", value: "saudavel" },
-    { label: "Atenção", value: "atencao" },
-    { label: "Risco", value: "risco" },
-    { label: "Crítico", value: "critico" },
+    { label: t("admin.riskLevels.all"), value: "" },
+    { label: t("admin.riskLevels.saudavel"), value: "saudavel" },
+    { label: t("admin.riskLevels.atencao"), value: "atencao" },
+    { label: t("admin.riskLevels.risco"), value: "risco" },
+    { label: t("admin.riskLevels.critico"), value: "critico" },
   ];
 
   const planFilters = [
-    { label: "Todos os planos", value: "" },
-    { label: "Básico", value: "basico" },
-    { label: "Pro", value: "pro" },
+    { label: t("admin.customerSuccess.allPlans"), value: "" },
+    { label: t("admin.plans.basico"), value: "basico" },
+    { label: t("admin.plans.pro"), value: "pro" },
   ];
 
   return (
     <div className="hub-page" style={{ maxWidth: "none" }}>
       <div style={{ marginBottom: 32 }}>
-        <h1 style={{ fontSize: "1.75rem", fontWeight: 800, margin: "0 0 4px", color: "var(--text)" }}>Customer Success</h1>
+        <h1 style={{ fontSize: "1.75rem", fontWeight: 800, margin: "0 0 4px", color: "var(--text)" }}>{t("admin.customerSuccess.title")}</h1>
         <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>
-          {metrics.total_clients} clientes · Score médio {metrics.avg_score} · {metrics.sem_avaliacao} sem avaliação
+          {t("admin.customerSuccess.subtitle", { total: metrics.total_clients, avg: metrics.avg_score, noEval: metrics.sem_avaliacao })}
         </p>
       </div>
 
@@ -84,7 +86,7 @@ export default async function CustomerSuccessPage({
       {withoutHealth.length > 0 && (
         <div style={{ marginBottom: 36 }}>
           <h2 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: 14, color: "var(--text)" }}>
-            Sem avaliação ({withoutHealth.length})
+            {t("admin.customerSuccess.noEval", { n: withoutHealth.length })}
           </h2>
           <div className="hub-card" style={{ padding: 0, overflow: "hidden" }}>
             {withoutHealth.map((c, i, arr) => (
@@ -101,7 +103,7 @@ export default async function CustomerSuccessPage({
                     {c.full_name || c.email}
                   </p>
                   <p style={{ margin: 0, fontSize: "11px", color: "var(--text-faint)" }}>
-                    {PLAN_LABELS[c.plan] ?? c.plan} · {c.email}
+                    {t("admin.plans." + c.plan, {}) !== "admin.plans." + c.plan ? t("admin.plans." + c.plan) : (PLAN_LABELS[c.plan] ?? c.plan)} · {c.email}
                   </p>
                 </div>
                 <Link
@@ -114,7 +116,7 @@ export default async function CustomerSuccessPage({
                   }}
                 >
                   <UserCheck size={13} />
-                  Avaliar
+                  {t("admin.customerSuccess.evaluate")}
                 </Link>
               </div>
             ))}
@@ -176,14 +178,15 @@ export default async function CustomerSuccessPage({
           borderBottom: "1px solid var(--border)",
           gap: 12,
         }}>
-          {["Cliente", "Plano", "Score", "Dimensões", "Atualizado", ""].map((h) => (
-            <span key={h} style={{ fontSize: "11px", fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.04em" }}>{h}</span>
+          {[t("admin.customerSuccess.colClient"), t("admin.customerSuccess.colPlan"), t("admin.customerSuccess.colScore"), t("admin.customerSuccess.colDimensions"), t("admin.customerSuccess.colUpdated"), ""].map((h, hi) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <span key={hi} style={{ fontSize: "11px", fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.04em" }}>{h}</span>
           ))}
         </div>
 
         {filtered.length === 0 && (
           <p style={{ padding: "28px", textAlign: "center", color: "var(--text-faint)", fontSize: "13px", margin: 0 }}>
-            Nenhum cliente encontrado com os filtros selecionados.
+            {t("admin.customerSuccess.emptyFiltered")}
           </p>
         )}
 
@@ -214,7 +217,7 @@ export default async function CustomerSuccessPage({
               </div>
 
               <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--text-muted)" }}>
-                {PLAN_LABELS[c.plan] ?? c.plan}
+                {t("admin.plans." + c.plan, {}) !== "admin.plans." + c.plan ? t("admin.plans." + c.plan) : (PLAN_LABELS[c.plan] ?? c.plan)}
               </span>
 
               <div>
@@ -224,7 +227,7 @@ export default async function CustomerSuccessPage({
               <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                 {c.health ? SCORE_DIMENSIONS.map(({ key, label }) => (
                   <span key={key} style={{ fontSize: "10px", fontWeight: 600, color: "var(--text-faint)", padding: "2px 6px", background: "var(--surface-2)", borderRadius: 6 }}>
-                    {label.slice(0, 3)} {(c.health as NonNullable<typeof c.health>)[key as keyof typeof c.health]}
+                    {t("admin.scoreDimensions." + key).slice(0, 3)} {(c.health as NonNullable<typeof c.health>)[key as keyof typeof c.health]}
                   </span>
                 )) : <span style={{ fontSize: "11px", color: "var(--text-faint)" }}>—</span>}
               </div>
@@ -243,7 +246,7 @@ export default async function CustomerSuccessPage({
                   textDecoration: "none",
                 }}
               >
-                Ver
+                {t("admin.customerSuccess.view")}
                 <ChevronRight size={12} />
               </Link>
             </div>

@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { upsertHealthScore } from "@/app/actions/customer-success";
 import { RISK_CONFIG, SCORE_DIMENSIONS } from "@/app/lib/constants/customer-success";
 import type { HealthScore, RiskLevel } from "@/app/lib/types/customer-success";
+import { useT } from "@/app/lib/i18n/I18nProvider";
 
 interface Props {
   clientId: string;
@@ -29,6 +30,7 @@ function calcRisk(score: number): RiskLevel {
 }
 
 export function HealthScoreForm({ clientId, initial, clientName }: Props) {
+  const t = useT();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -79,7 +81,7 @@ export function HealthScoreForm({ clientId, initial, clientName }: Props) {
       <div className="hub-card" style={{ padding: 24 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
           <div>
-            <p style={{ margin: "0 0 2px", fontSize: "13px", fontWeight: 700, color: "var(--text)" }}>Editar Health Score</p>
+            <p style={{ margin: "0 0 2px", fontSize: "13px", fontWeight: 700, color: "var(--text)" }}>{t("admin.customerSuccess.editHealthScore")}</p>
             <p style={{ margin: 0, fontSize: "12px", color: "var(--text-faint)" }}>{clientName}</p>
           </div>
           <div style={{
@@ -89,7 +91,7 @@ export function HealthScoreForm({ clientId, initial, clientName }: Props) {
           }}>
             <Icon size={18} style={{ color: cfg.color }} />
             <span style={{ fontSize: "1.5rem", fontWeight: 900, color: cfg.color, lineHeight: 1 }}>{score_total}</span>
-            <span style={{ fontSize: "12px", fontWeight: 700, color: cfg.color }}>{cfg.label}</span>
+            <span style={{ fontSize: "12px", fontWeight: 700, color: cfg.color }}>{t("admin.riskLevels." + risk)}</span>
           </div>
         </div>
 
@@ -98,7 +100,7 @@ export function HealthScoreForm({ clientId, initial, clientName }: Props) {
             <div key={key}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ fontSize: "13px", fontWeight: 600, color: "var(--text)" }}>{label}</span>
+                  <span style={{ fontSize: "13px", fontWeight: 600, color: "var(--text)" }}>{t("admin.scoreDimensions." + key)}</span>
                   <span style={{ fontSize: "11px", color: "var(--text-faint)", padding: "2px 7px", borderRadius: 999, background: "var(--surface-2)" }}>{weight}</span>
                 </div>
                 <span style={{ fontSize: "14px", fontWeight: 800, color: "var(--text)", minWidth: 32, textAlign: "right" }}>{vals[key]}</span>
@@ -122,12 +124,12 @@ export function HealthScoreForm({ clientId, initial, clientName }: Props) {
 
       <div className="hub-card" style={{ padding: 24 }}>
         <label style={{ fontSize: "13px", fontWeight: 700, color: "var(--text)", display: "block", marginBottom: 10 }}>
-          Notas internas CS
+          {t("admin.customerSuccess.internalNotes")}
         </label>
         <textarea
           value={notes}
           onChange={(e) => { setNotes(e.target.value); setSuccess(false); }}
-          placeholder="Observações sobre o cliente, histórico de conversas, ações planejadas..."
+          placeholder={t("admin.customerSuccess.notesPlaceholder")}
           rows={4}
           style={{
             width: "100%", boxSizing: "border-box",
@@ -163,7 +165,7 @@ export function HealthScoreForm({ clientId, initial, clientName }: Props) {
           alignSelf: "flex-start",
         }}
       >
-        {pending ? "Salvando..." : "Salvar Score"}
+        {pending ? t("admin.customerSuccess.saving") : t("admin.customerSuccess.saveScore")}
       </button>
     </div>
   );

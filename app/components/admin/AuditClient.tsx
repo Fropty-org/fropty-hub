@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Download, Loader2, Search, X, ClipboardX, ChevronLeft, ChevronRight } from "lucide-react";
 import { AUDIT_ACTIONS, auditActionInfo, formatAuditMeta } from "@/app/lib/constants/audit";
 import type { ResolvedAuditLog } from "@/app/lib/db/audit";
+import { useT } from "@/app/lib/i18n/I18nProvider";
 
 const SEV_DOT: Record<string, string> = {
   critical: "#ef4444",
@@ -22,6 +23,7 @@ interface Props {
 }
 
 export function AuditClient({ rows, total, page, pageSize, admins, filters }: Props) {
+  const t = useT();
   const router       = useRouter();
   const searchParams = useSearchParams();
   const [search, setSearch] = useState(filters.q);
@@ -83,10 +85,10 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
 
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16, flexWrap: "wrap", marginBottom: 24 }}>
         <div>
-          <h1 style={{ fontSize: "1.75rem", fontWeight: 800, margin: "0 0 4px", color: "var(--text)" }}>Auditoria</h1>
+          <h1 style={{ fontSize: "1.75rem", fontWeight: 800, margin: "0 0 4px", color: "var(--text)" }}>{t("admin.audit.title")}</h1>
           <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>
-            {total} {total === 1 ? "ação registrada" : "ações registradas"}
-            {hasActiveFilters && " (filtrado)"}
+            {total} {total === 1 ? t("admin.audit.countOne") : t("admin.audit.countMany")}
+            {hasActiveFilters && ` ${t("admin.audit.filtered")}`}
           </p>
         </div>
         <button
@@ -101,7 +103,7 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
           }}
         >
           {exporting ? <Loader2 size={15} style={{ animation: "spin 1s linear infinite" }} /> : <Download size={15} />}
-          {exporting ? "Exportando…" : "Exportar CSV"}
+          {exporting ? t("admin.audit.exporting") : t("admin.audit.exportCsv")}
         </button>
       </div>
 
@@ -116,7 +118,7 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Buscar por admin, alvo ou detalhe…"
+            placeholder={t("admin.audit.searchPlaceholder")}
             style={{ flex: 1, background: "none", border: "none", outline: "none", color: "var(--text)", fontSize: "13px", fontFamily: "inherit" }}
           />
         </form>
@@ -126,9 +128,9 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
           onChange={(e) => applyFilter({ action: e.target.value })}
           style={selectStyle}
         >
-          <option value="">Todas as ações</option>
-          {Object.entries(AUDIT_ACTIONS).map(([key, info]) => (
-            <option key={key} value={key}>{info.label}</option>
+          <option value="">{t("admin.audit.allActions")}</option>
+          {Object.entries(AUDIT_ACTIONS).map(([key]) => (
+            <option key={key} value={key}>{t("admin.audit.actions." + key)}</option>
           ))}
         </select>
 
@@ -137,16 +139,16 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
           onChange={(e) => applyFilter({ admin: e.target.value })}
           style={selectStyle}
         >
-          <option value="">Todos os admins</option>
+          <option value="">{t("admin.audit.allAdmins")}</option>
           {admins.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
         </select>
 
-        <input type="date" value={filters.from} onChange={(e) => applyFilter({ from: e.target.value })} style={selectStyle} title="De" />
-        <input type="date" value={filters.to}   onChange={(e) => applyFilter({ to: e.target.value })}   style={selectStyle} title="Até" />
+        <input type="date" value={filters.from} onChange={(e) => applyFilter({ from: e.target.value })} style={selectStyle} title={t("admin.audit.from")} />
+        <input type="date" value={filters.to}   onChange={(e) => applyFilter({ to: e.target.value })}   style={selectStyle} title={t("admin.audit.to")} />
 
         {hasActiveFilters && (
           <button onClick={clearFilters} style={{ background: "none", border: "1px solid var(--border)", borderRadius: 9, padding: "8px 12px", fontSize: "12px", fontWeight: 600, color: "var(--text-faint)", cursor: "pointer", fontFamily: "inherit" }}>
-            <X size={14} style={{ marginRight: 4 }} /> Limpar
+            <X size={14} style={{ marginRight: 4 }} /> {t("admin.audit.clear")}
           </button>
         )}
       </div>
@@ -154,9 +156,9 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
       {/* Tabela */}
       <div className="hub-card" style={{ padding: 0, overflow: "hidden", opacity: pending ? 0.6 : 1, transition: "opacity 0.15s" }}>
         <div className="audit-head" style={{ display: "grid", gridTemplateColumns: "150px 1fr 130px", padding: "12px 20px", borderBottom: "1px solid var(--border)", fontSize: "11px", fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-          <span>Data</span>
-          <span>Ação</span>
-          <span>Admin</span>
+          <span>{t("admin.audit.colDate")}</span>
+          <span>{t("admin.audit.colAction")}</span>
+          <span>{t("admin.audit.colAdmin")}</span>
         </div>
 
         {rows.map((log, i) => {
@@ -176,7 +178,7 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
                 </div>
                 <div style={{ minWidth: 0 }}>
                   <p style={{ margin: "0 0 2px", fontWeight: 700, color: "var(--text)", display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                    {info.label}
+                    {t("admin.audit.actions." + log.action, {}) !== "admin.audit.actions." + log.action ? t("admin.audit.actions." + log.action) : info.label}
                     {log.targetName && (
                       <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--text-muted)", background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 999, padding: "1px 9px" }}>
                         {log.targetName}
@@ -188,7 +190,7 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
                       {meta.map((m, idx) => (
                         <span key={m.label}>
                           {idx > 0 && " · "}
-                          <span style={{ fontWeight: 600 }}>{m.label}:</span> {m.value}
+                          <span style={{ fontWeight: 600 }}>{t("admin.audit.meta." + m.key, {}) !== "admin.audit.meta." + m.key ? t("admin.audit.meta." + m.key) : m.label}:</span> {m.value}
                         </span>
                       ))}
                     </p>
@@ -204,7 +206,7 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
         {rows.length === 0 && (
           <p style={{ padding: "48px", textAlign: "center", color: "var(--text-faint)", fontSize: "13px", margin: 0 }}>
             <ClipboardX size={26} style={{ display: "block", marginBottom: 10 }} />
-            {hasActiveFilters ? "Nenhuma ação encontrada com esses filtros." : "Nenhuma ação registrada ainda."}
+            {hasActiveFilters ? t("admin.audit.emptyFiltered") : t("admin.audit.empty")}
           </p>
         )}
       </div>
@@ -217,17 +219,17 @@ export function AuditClient({ rows, total, page, pageSize, admins, filters }: Pr
             onClick={() => applyFilter({ page: String(page - 1) })}
             style={pagerStyle(page <= 0)}
           >
-            <ChevronLeft size={14} /> Anterior
+            <ChevronLeft size={14} /> {t("admin.audit.prev")}
           </button>
           <span style={{ fontSize: "12px", color: "var(--text-faint)", fontWeight: 600 }}>
-            Página {page + 1} de {totalPages}
+            {t("admin.audit.page", { page: page + 1, total: totalPages })}
           </span>
           <button
             disabled={page >= totalPages - 1}
             onClick={() => applyFilter({ page: String(page + 1) })}
             style={pagerStyle(page >= totalPages - 1)}
           >
-            Próxima <ChevronRight size={14} />
+            {t("admin.audit.next")} <ChevronRight size={14} />
           </button>
         </div>
       )}
