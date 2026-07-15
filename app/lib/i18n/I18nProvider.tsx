@@ -6,8 +6,9 @@ import { DICTS, DEFAULT_LOCALE, LOCALE_COOKIE, LOCALE_LABELS, isLocale, type Loc
 interface I18nValue {
   locale: Locale;
   setLocale: (l: Locale) => void;
-  /** Tradução por caminho pontilhado (ex.: "help.terms"). Cai no PT e depois na própria chave. */
-  t: (path: string) => string;
+  /** Tradução por caminho pontilhado (ex.: "help.terms"). Interpola {chaves} via `vars`.
+   *  Cai no PT e depois na própria chave. */
+  t: (path: string, vars?: Record<string, string | number>) => string;
   /** Dicionário ativo — útil para conteúdo estruturado (ex.: seções das páginas legais). */
   dict: Dict;
 }
@@ -49,7 +50,12 @@ export function I18nProvider({ initialLocale, children }: { initialLocale?: Loca
   const dict = DICTS[locale] ?? DICTS[DEFAULT_LOCALE];
 
   const t = useCallback(
-    (path: string) => lookup(dict, path) ?? lookup(DICTS[DEFAULT_LOCALE], path) ?? path,
+    (path: string, vars?: Record<string, string | number>) => {
+      const raw = lookup(dict, path) ?? lookup(DICTS[DEFAULT_LOCALE], path) ?? path;
+      return vars
+        ? raw.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? String(vars[k]) : m))
+        : raw;
+    },
     [dict],
   );
 
@@ -63,7 +69,10 @@ export function useI18n(): I18nValue {
     return {
       locale: DEFAULT_LOCALE,
       setLocale: () => {},
-      t: (path) => lookup(DICTS[DEFAULT_LOCALE], path) ?? path,
+      t: (path: string, vars?: Record<string, string | number>) => {
+        const raw = lookup(DICTS[DEFAULT_LOCALE], path) ?? path;
+        return vars ? raw.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? String(vars[k]) : m)) : raw;
+      },
       dict: DICTS[DEFAULT_LOCALE],
     };
   }

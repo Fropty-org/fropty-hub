@@ -5,6 +5,7 @@ import { createClient } from "@/app/lib/supabase/server";
 import { createServiceClient } from "@/app/lib/supabase/service";
 import { getProfile } from "@/app/lib/auth/session";
 import { NewTicketForm } from "@/app/components/suporte/NewTicketForm";
+import { getServerI18n } from "@/app/lib/i18n/server";
 import { ArrowLeft, Coins, ChevronRight, Headphones } from "lucide-react";
 
 export const metadata: Metadata = { title: "Novo chamado — Fropty" };
@@ -12,6 +13,7 @@ export const metadata: Metadata = { title: "Novo chamado — Fropty" };
 export default async function NovoChamadoPage() {
   const supabase = await createClient();
   const profile  = await getProfile();
+  const { t } = await getServerI18n();
   const isAdmin = profile?.role === "admin";
 
   // Service Desk é módulo pago — sem o serviço, não há abertura de chamado.
@@ -33,17 +35,17 @@ export default async function NovoChamadoPage() {
             <Coins size={26} style={{ color: "var(--brand-accent)" }} />
           </div>
           <h2 style={{ fontSize: "1.2rem", fontWeight: 800, margin: "0 0 8px", color: "var(--text)" }}>
-            Tokens insuficientes
+            {t("serviceDesk.noToken.title")}
           </h2>
           <p style={{ fontSize: "14px", color: "var(--text-muted)", margin: "0 0 28px", lineHeight: 1.6, maxWidth: 380, marginLeft: "auto", marginRight: "auto" }}>
-            Você não possui tokens disponíveis para abrir um chamado de suporte. Adquira tokens para continuar.
+            {t("serviceDesk.noToken.desc")}
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <Link href="/portal/financeiro" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "10px 22px", background: "var(--cta-bg)", color: "var(--cta-text)", fontWeight: 700, fontSize: "13px", borderRadius: 10, textDecoration: "none" }}>
-              <Coins size={14} /> Ver planos e tokens
+              <Coins size={14} /> {t("serviceDesk.noToken.cta")}
             </Link>
             <Link href="/portal/suporte" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "10px 22px", background: "var(--surface)", color: "var(--text-muted)", fontWeight: 600, fontSize: "13px", borderRadius: 10, textDecoration: "none", border: "1px solid var(--border)" }}>
-              Voltar ao Service Desk
+              {t("common.backToHub")}
             </Link>
           </div>
         </div>
@@ -95,7 +97,7 @@ export default async function NovoChamadoPage() {
           Service Desk
         </Link>
         <ChevronRight size={12} style={{ color: "var(--text-faint)" }} />
-        <span style={{ color: "var(--text-muted)" }}>Novo chamado</span>
+        <span style={{ color: "var(--text-muted)" }}>{t("serviceDesk.form.newTicketCrumb")}</span>
       </div>
 
       {/* Header */}
@@ -105,12 +107,10 @@ export default async function NovoChamadoPage() {
           Service Desk
         </span>
         <h1 style={{ fontSize: "1.6rem", fontWeight: 800, margin: "0 0 4px", color: "var(--text)", letterSpacing: "-0.02em" }}>
-          Abrir chamado
+          {t("serviceDesk.form.title")}
         </h1>
         <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>
-          {isAdmin
-            ? "Abra um chamado em nome de um cliente. Respondemos em até 24h."
-            : "Descreva o problema com detalhes — respondemos em até 24h."}
+          {isAdmin ? t("serviceDesk.form.subtitleAdmin") : t("serviceDesk.form.subtitleClient")}
         </p>
       </div>
 

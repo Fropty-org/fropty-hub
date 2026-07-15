@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import type { Database } from "@/app/lib/supabase/types";
 import type { TicketStatus } from "@/app/lib/types/cliente";
+import { useT } from "@/app/lib/i18n/I18nProvider";
 
 type MessageRow = Database["public"]["Tables"]["ticket_messages"]["Row"];
 
@@ -82,6 +83,7 @@ export function TicketConversation({
   variant = "chat",
   participants,
 }: Props) {
+  const tr = useT();
   const [messages,    setMessages]    = useState<MessageRow[]>(initialMessages);
   const [body,        setBody]        = useState("");
   const [error,       setError]       = useState("");
@@ -283,7 +285,7 @@ export function TicketConversation({
         <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: 22, padding: "4px 2px 16px" }}>
           {messages.length === 0 && (
             <div style={{ textAlign: "center", color: "var(--text-faint)", fontSize: "13px", padding: "24px 0" }}>
-              Nenhuma ação registrada ainda.
+              {tr("serviceDesk.detail.actions.empty")}
             </div>
           )}
           {messages.map((msg) => {
@@ -293,7 +295,7 @@ export function TicketConversation({
             const senderLabel = person?.name
               ?? (isClienteMsg
                 ? (clientName ?? ROLE_META.cliente.fallback)
-                : (currentUserName && msg.sender_id === currentUserId ? currentUserName : ROLE_META.equipe.fallback));
+                : (currentUserName && msg.sender_id === currentUserId ? currentUserName : tr("serviceDesk.detail.team")));
             const avatarUrl = person?.avatarUrl ?? null;
             const stamp = new Date(msg.created_at).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" }) +
               " • " + new Date(msg.created_at).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
@@ -341,7 +343,7 @@ export function TicketConversation({
         {/* Composer */}
         {isClosed ? (
           <div style={{ padding: "14px", textAlign: "center", fontSize: "13px", color: "var(--text-faint)", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, borderTop: "1px solid var(--border)" }}>
-            <Lock size={14} /> Este chamado está encerrado.
+            <Lock size={14} /> {tr("serviceDesk.detail.actions.closed")}
           </div>
         ) : (
           <div style={{ borderTop: "1px solid var(--border)", paddingTop: 12 }}>
@@ -364,16 +366,16 @@ export function TicketConversation({
             <div style={{ border: "1px solid var(--border)", borderRadius: 10, background: "var(--surface)", overflow: "hidden" }}>
               {/* Toolbar */}
               <div style={{ display: "flex", alignItems: "center", gap: 2, padding: "4px 6px", borderBottom: "1px solid var(--border)" }}>
-                <ToolBtn title="Negrito" onClick={() => wrapSelection("**")}><Bold size={15} /></ToolBtn>
-                <ToolBtn title="Itálico" onClick={() => wrapSelection("_")}><Italic size={15} /></ToolBtn>
-                <ToolBtn title="Tachado" onClick={() => wrapSelection("~~")}><Strikethrough size={15} /></ToolBtn>
-                <ToolBtn title="Link" onClick={() => wrapSelection("[", "](url)")}><Link2 size={15} /></ToolBtn>
-                <ToolBtn title="Lista" onClick={() => wrapSelection("", "", "- ")}><List size={15} /></ToolBtn>
-                <ToolBtn title="Lista numerada" onClick={() => wrapSelection("", "", "1. ")}><ListOrdered size={15} /></ToolBtn>
-                <ToolBtn title="Anexar" onClick={() => fileInputRef.current?.click()} disabled={files.length >= 5}><Paperclip size={15} /></ToolBtn>
+                <ToolBtn title={tr("serviceDesk.detail.composer.bold")} onClick={() => wrapSelection("**")}><Bold size={15} /></ToolBtn>
+                <ToolBtn title={tr("serviceDesk.detail.composer.italic")} onClick={() => wrapSelection("_")}><Italic size={15} /></ToolBtn>
+                <ToolBtn title={tr("serviceDesk.detail.composer.strike")} onClick={() => wrapSelection("~~")}><Strikethrough size={15} /></ToolBtn>
+                <ToolBtn title={tr("serviceDesk.detail.composer.link")} onClick={() => wrapSelection("[", "](url)")}><Link2 size={15} /></ToolBtn>
+                <ToolBtn title={tr("serviceDesk.detail.composer.list")} onClick={() => wrapSelection("", "", "- ")}><List size={15} /></ToolBtn>
+                <ToolBtn title={tr("serviceDesk.detail.composer.orderedList")} onClick={() => wrapSelection("", "", "1. ")}><ListOrdered size={15} /></ToolBtn>
+                <ToolBtn title={tr("serviceDesk.detail.composer.attach")} onClick={() => fileInputRef.current?.click()} disabled={files.length >= 5}><Paperclip size={15} /></ToolBtn>
                 <div style={{ flex: 1 }} />
-                <ToolBtn title="Registrar tempo"><Clock size={15} /></ToolBtn>
-                <ToolBtn title="Expandir"><ChevronsUpDown size={15} /></ToolBtn>
+                <ToolBtn title={tr("serviceDesk.detail.composer.logTime")}><Clock size={15} /></ToolBtn>
+                <ToolBtn title={tr("serviceDesk.detail.composer.expand")}><ChevronsUpDown size={15} /></ToolBtn>
               </div>
               {fileInput}
               <textarea
@@ -381,7 +383,7 @@ export function TicketConversation({
                 value={body}
                 onChange={autoResize}
                 onKeyDown={handleKeyDown}
-                placeholder="O que gostaria de registrar?"
+                placeholder={tr("serviceDesk.detail.composer.placeholder")}
                 rows={2}
                 disabled={isPending}
                 style={{ width: "100%", background: "none", border: "none", outline: "none", color: "var(--text)", fontSize: "13.5px", fontFamily: "inherit", resize: "none", lineHeight: 1.5, padding: "12px 14px", minHeight: 56, boxSizing: "border-box" }}
@@ -389,10 +391,10 @@ export function TicketConversation({
               {/* Rodapé: selecionar ação + enviar */}
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, padding: "8px 10px", borderTop: "1px solid var(--border)", background: "var(--surface-2)" }}>
                 <button type="button" style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, padding: "6px 10px", fontSize: "12.5px", fontWeight: 600, color: "var(--text-muted)", cursor: "pointer", fontFamily: "inherit" }}>
-                  Selecionar ação <ChevronDown size={13} />
+                  {tr("serviceDesk.detail.composer.selectAction")} <ChevronDown size={13} />
                 </button>
                 <button onClick={handleSend} disabled={(!body.trim() && files.length === 0) || isPending}
-                  title="Enviar"
+                  title={tr("serviceDesk.detail.composer.send")}
                   style={{ width: 34, height: 34, borderRadius: 8, background: (body.trim() || files.length > 0) && !isPending ? "var(--primary)" : "var(--surface)", border: (body.trim() || files.length > 0) && !isPending ? "none" : "1px solid var(--border)", cursor: (body.trim() || files.length > 0) && !isPending ? "pointer" : "not-allowed", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "background 0.15s" }}>
                   {isPending
                     ? <Loader2 size={15} style={{ color: "#fff", animation: "spin 1s linear infinite" }} />

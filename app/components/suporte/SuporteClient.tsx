@@ -5,7 +5,8 @@ import { createPortal } from "react-dom";
 import Link from "next/link";
 import { TICKET_PRIORITY_MAP } from "@/app/lib/constants/status";
 import { SLA_TARGETS } from "@/app/lib/constants/sla";
-import { StatusBadge } from "@/app/components/ui/StatusBadge";
+import { TicketBadge } from "@/app/components/suporte/TicketBadge";
+import { useT } from "@/app/lib/i18n/I18nProvider";
 import { Pagination } from "@/app/components/ui/Pagination";
 import type { Ticket } from "@/app/lib/types/cliente";
 import {
@@ -39,6 +40,7 @@ interface Props {
 
 /* ── NoToken modal ─────────────────────────────────────────────────── */
 function NoTokenModal({ onClose }: { onClose: () => void }) {
+  const tr = useT();
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
@@ -56,16 +58,16 @@ function NoTokenModal({ onClose }: { onClose: () => void }) {
         <div style={{ width: 52, height: 52, borderRadius: 14, background: "rgba(239,159,39,0.1)", border: "1px solid rgba(239,159,39,0.25)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 18px" }}>
           <Coins size={24} style={{ color: "var(--brand-accent)" }} />
         </div>
-        <h3 style={{ margin: "0 0 10px", fontSize: "1.1rem", fontWeight: 800, color: "var(--text)" }}>Tokens insuficientes</h3>
+        <h3 style={{ margin: "0 0 10px", fontSize: "1.1rem", fontWeight: 800, color: "var(--text)" }}>{tr("serviceDesk.noToken.title")}</h3>
         <p style={{ margin: "0 0 24px", fontSize: "13px", color: "var(--text-muted)", lineHeight: 1.65 }}>
-          Você precisa de tokens para abrir chamados de suporte. Adquira tokens ou um plano para continuar.
+          {tr("serviceDesk.noToken.desc")}
         </p>
         <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
           <Link href="/portal/financeiro" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "10px 20px", background: "var(--cta-bg)", color: "var(--cta-text)", fontWeight: 700, fontSize: "13px", borderRadius: 10, textDecoration: "none" }}>
-            <Coins size={13} /> Ver tokens
+            <Coins size={13} /> {tr("serviceDesk.noToken.cta")}
           </Link>
           <button onClick={onClose} style={{ padding: "10px 18px", background: "var(--surface-2)", color: "var(--text-muted)", fontWeight: 600, fontSize: "13px", borderRadius: 10, border: "1px solid var(--border)", cursor: "pointer", fontFamily: "inherit" }}>
-            Fechar
+            {tr("serviceDesk.noToken.close")}
           </button>
         </div>
       </div>
@@ -76,6 +78,7 @@ function NoTokenModal({ onClose }: { onClose: () => void }) {
 
 /* ── SuporteClient ─────────────────────────────────────────────────── */
 export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
+  const tr = useT();
   const PAGE_SIZE = 15;
   const [search,      setSearch]      = useState("");
   const [filter,      setFilter]      = useState<FilterMode>("todos");
@@ -135,9 +138,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
             Service Desk
           </h1>
           <p style={{ margin: "5px 0 0", fontSize: "13px", color: "var(--text-faint)" }}>
-            {isAdmin
-              ? "Todos os chamados — abra em nome de um cliente quando necessário"
-              : "Acompanhe e abra chamados de suporte em tempo real"}
+            {isAdmin ? tr("serviceDesk.subtitleAdmin") : tr("serviceDesk.subtitleClient")}
           </p>
         </div>
 
@@ -146,14 +147,14 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
             onClick={() => setShowNoToken(true)}
             style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "var(--cta-bg)", color: "var(--cta-text)", border: "none", padding: "9px 18px", borderRadius: "var(--r-md)", fontWeight: 700, cursor: "pointer", fontSize: "13px", fontFamily: "inherit", boxShadow: "var(--shadow-brand)" }}
           >
-            <Plus size={14} /> Novo chamado
+            <Plus size={14} /> {tr("serviceDesk.newTicket")}
           </button>
         ) : (
           <Link
             href="/portal/suporte/novo"
             style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "var(--cta-bg)", color: "var(--cta-text)", padding: "9px 18px", borderRadius: "var(--r-md)", fontWeight: 700, fontSize: "13px", textDecoration: "none", boxShadow: "var(--shadow-brand)" }}
           >
-            <Plus size={14} /> Novo chamado
+            <Plus size={14} /> {tr("serviceDesk.newTicket")}
           </Link>
         )}
         {showNoToken && <NoTokenModal onClose={() => setShowNoToken(false)} />}
@@ -161,11 +162,11 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
 
       {/* ── KPI cards ── */}
       <div className="suporte-stats" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: 28 }}>
-        <StatCard label="Total" value={tickets.length}  Icon={TicketIcon}     color="var(--primary)" />
-        <StatCard label="Em aberto" value={totalOpen}    Icon={Circle}        color="var(--c-info)" />
+        <StatCard label={tr("serviceDesk.kpi.total")} value={tickets.length}  Icon={TicketIcon}     color="var(--primary)" />
+        <StatCard label={tr("serviceDesk.kpi.open")} value={totalOpen}    Icon={Circle}        color="var(--c-info)" />
         {totalHigh > 0
-          ? <StatCard label="Alta prioridade" value={totalHigh}     Icon={AlertTriangle} color="var(--c-danger)" />
-          : <StatCard label="Resolvidos"       value={totalResolved} Icon={CheckCircle}   color="var(--c-success)" />
+          ? <StatCard label={tr("serviceDesk.kpi.highPriority")} value={totalHigh}     Icon={AlertTriangle} color="var(--c-danger)" />
+          : <StatCard label={tr("serviceDesk.kpi.resolved")} value={totalResolved} Icon={CheckCircle}   color="var(--c-success)" />
         }
       </div>
 
@@ -181,7 +182,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Buscar por assunto ou categoria…"
+            placeholder={tr("serviceDesk.searchPlaceholder")}
             style={{ flex: 1, background: "none", border: "none", outline: "none", color: "var(--text)", fontSize: "13px", fontFamily: "inherit" }}
           />
           {search && (
@@ -202,10 +203,10 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
                 background: filter === f ? "rgba(91,87,232,0.10)" : "var(--surface)",
                 color: filter === f ? "var(--primary)" : "var(--text-muted)",
                 fontWeight: 600, fontSize: "12px", cursor: "pointer",
-                fontFamily: "inherit", textTransform: "capitalize",
+                fontFamily: "inherit",
               }}
             >
-              {f}
+              {tr(`serviceDesk.filter.${f === "todos" ? "all" : f === "abertos" ? "open" : "closed"}`)}
             </button>
           ))}
         </div>
@@ -224,10 +225,10 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
                   borderColor: active ? `color-mix(in srgb, ${col} 45%, transparent)` : "var(--border)",
                   background: active ? `color-mix(in srgb, ${col} 10%, transparent)` : "var(--surface)",
                   color: active ? col : "var(--text-muted)",
-                  fontWeight: 600, fontSize: "12px", cursor: "pointer", fontFamily: "inherit", textTransform: "capitalize",
+                  fontWeight: 600, fontSize: "12px", cursor: "pointer", fontFamily: "inherit",
                 }}
               >
-                {p === "todas" ? "Toda prioridade" : p === "media" ? "Média" : p}
+                {p === "todas" ? tr("serviceDesk.filter.anyPriority") : tr(`serviceDesk.priority.${p}`)}
               </button>
             );
           })}
@@ -240,26 +241,26 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
           <div style={{ width: 52, height: 52, borderRadius: "50%", background: "rgba(91,87,232,0.10)", border: "1px solid rgba(91,87,232,0.2)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }}>
             <Headphones size={24} style={{ color: "var(--primary)" }} />
           </div>
-          <p style={{ fontWeight: 700, fontSize: "15px", color: "var(--text)", margin: "0 0 6px" }}>Nenhum chamado ainda</p>
+          <p style={{ fontWeight: 700, fontSize: "15px", color: "var(--text)", margin: "0 0 6px" }}>{tr("serviceDesk.empty.title")}</p>
           <p style={{ color: "var(--text-faint)", margin: isAdmin ? 0 : "0 0 22px", fontSize: "13px" }}>
-            {isAdmin ? "Nenhum cliente abriu chamado ainda." : "Quando precisar de suporte, estamos aqui."}
+            {isAdmin ? tr("serviceDesk.empty.descAdmin") : tr("serviceDesk.empty.descClient")}
           </p>
           {!isAdmin && (
             <Link href="/portal/suporte/novo" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "9px 20px", background: "var(--cta-bg)", color: "var(--cta-text)", borderRadius: "var(--r-md)", fontWeight: 700, fontSize: "13px", textDecoration: "none" }}>
-              <Plus size={14} /> Abrir primeiro chamado
+              <Plus size={14} /> {tr("serviceDesk.empty.openFirst")}
             </Link>
           )}
         </div>
       ) : filtered.length === 0 ? (
         <div className="hub-card" style={{ padding: "32px 24px", textAlign: "center", color: "var(--text-faint)", fontSize: "13px" }}>
-          Nenhum chamado encontrado para &ldquo;{search}&rdquo;
+          {tr("serviceDesk.noResults")} &ldquo;{search}&rdquo;
         </div>
       ) : (
         <div className="hub-card" style={{ overflow: "hidden" }}>
           {/* Toolbar */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 20px", borderBottom: "1px solid var(--border)" }}>
             <span style={{ fontSize: "13px", fontWeight: 700, color: "var(--text)" }}>
-              {filtered.length} chamado{filtered.length !== 1 ? "s" : ""}
+              {tr("serviceDesk.ticketsCount", { n: filtered.length })}
             </span>
             {totalPages > 1 && (
               <span style={{ fontSize: "12px", color: "var(--text-faint)" }}>
@@ -325,8 +326,8 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
                   <span style={{ fontSize: "12px", color: "var(--text-muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                     {t.category}
                   </span>
-                  <StatusBadge kind="ticket" status={t.status} size="sm" />
-                  <StatusBadge kind="ticket-priority" status={t.priority} size="sm" />
+                  <TicketBadge kind="ticket" status={t.status} size="sm" />
+                  <TicketBadge kind="ticket-priority" status={t.priority} size="sm" />
                   <span style={{ fontSize: "12px", color: "var(--text-faint)", textAlign: "right" }}>
                     {updatedDate}
                   </span>
@@ -356,7 +357,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
                     <p style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text)", lineHeight: 1.3 }}>
                       {t.subject}
                     </p>
-                    <StatusBadge kind="ticket" status={t.status} size="sm" className="shrink-0" />
+                    <TicketBadge kind="ticket" status={t.status} size="sm" className="shrink-0" />
                   </div>
                   <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                     {t.ticketNumber && (
@@ -364,7 +365,7 @@ export function SuporteClient({ tickets, isAdmin, tokenBalance = 0 }: Props) {
                         UFT{String(t.ticketNumber).padStart(4, "0")}
                       </span>
                     )}
-                    <StatusBadge kind="ticket-priority" status={t.priority} size="sm" />
+                    <TicketBadge kind="ticket-priority" status={t.priority} size="sm" />
                     <span style={{ fontSize: "11px", color: "var(--text-faint)", marginLeft: "auto" }}>
                       {updatedDate}
                     </span>

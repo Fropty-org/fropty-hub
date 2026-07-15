@@ -4,7 +4,8 @@ import { notFound } from "next/navigation";
 import { getTicketDetail } from "@/app/actions/suporte";
 import { AdminTicketActions } from "@/app/components/suporte/AdminTicketActions";
 import { TicketWorkspace } from "@/app/components/suporte/TicketWorkspace";
-import { ArrowLeft, ChevronRight, ClipboardCheck } from "lucide-react";
+import { ReviewBanner } from "@/app/components/suporte/ReviewBanner";
+import { ArrowLeft, ChevronRight } from "lucide-react";
 
 export const metadata: Metadata = { title: "Chamado" };
 
@@ -35,40 +36,7 @@ export default async function TicketDetailPage({ params }: Props) {
       </div>
 
       {/* ── Banner "Avaliar solução" (cliente + status resolvido) ── */}
-      {!isAdmin && ticket.status === "resolvido" && (
-        <div style={{
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          gap: 16, flexWrap: "wrap",
-          background: "rgba(34,197,94,0.07)", border: "1px solid rgba(34,197,94,0.25)",
-          borderRadius: 14, padding: "16px 20px", marginBottom: 20,
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{ width: 38, height: 38, borderRadius: 10, background: "rgba(34,197,94,0.12)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <ClipboardCheck size={19} style={{ color: "var(--c-success)" }} />
-            </div>
-            <div>
-              <p style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text)" }}>
-                Nossa equipe marcou este chamado como resolvido
-              </p>
-              <p style={{ margin: "2px 0 0", fontSize: "12px", color: "var(--text-muted)" }}>
-                A solução funcionou? Confirme para encerrar ou reabra se precisar de mais ajuda.
-              </p>
-            </div>
-          </div>
-          <a
-            href={`/portal/suporte/${ticketId}/avaliar`}
-            style={{
-              display: "inline-flex", alignItems: "center", gap: 6, flexShrink: 0,
-              background: "var(--c-success)", color: "#fff",
-              borderRadius: 10, padding: "9px 18px",
-              fontSize: "13px", fontWeight: 700, textDecoration: "none",
-              boxShadow: "0 4px 14px rgba(34,197,94,0.3)",
-            }}
-          >
-            <ClipboardCheck size={14} /> Avaliar solução
-          </a>
-        </div>
-      )}
+      {!isAdmin && ticket.status === "resolvido" && <ReviewBanner ticketId={ticketId} />}
 
       {/* ── Ações de admin (status/prioridade) ── */}
       {isAdmin && (

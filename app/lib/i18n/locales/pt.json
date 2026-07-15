@@ -18,6 +18,70 @@
     "en": "English",
     "es": "Español"
   },
+  "serviceDesk": {
+    "noToken": { "title": "Tokens insuficientes", "desc": "Você precisa de tokens para abrir chamados. Adquira tokens ou um plano para continuar.", "cta": "Ver tokens", "close": "Fechar" },
+    "subtitleAdmin": "Todos os chamados — abra em nome de um cliente quando necessário",
+    "subtitleClient": "Acompanhe e abra chamados em tempo real",
+    "newTicket": "Novo chamado",
+    "kpi": { "total": "Total", "open": "Em aberto", "highPriority": "Alta prioridade", "resolved": "Resolvidos" },
+    "searchPlaceholder": "Buscar por assunto ou categoria…",
+    "filter": { "all": "todos", "open": "abertos", "closed": "fechados", "anyPriority": "Toda prioridade", "high": "Alta", "medium": "Média", "low": "Baixa" },
+    "ticketsCount": "{n} chamado(s)",
+    "noResults": "Nenhum chamado encontrado",
+    "empty": { "title": "Nenhum chamado ainda", "descAdmin": "Nenhum cliente abriu chamado ainda.", "descClient": "Quando precisar de suporte, estamos aqui.", "openFirst": "Abrir primeiro chamado" },
+    "status": { "aberto": "Aberto", "em_andamento": "Em andamento", "resolvido": "Aguardando validação", "fechado": "Fechado", "reaberto": "Reaberto" },
+    "priority": { "baixa": "Baixa", "media": "Média", "alta": "Alta" },
+    "queue": {
+      "title": "Fila do Service Desk",
+      "summary": "{total} chamados · {open} em aberto · {late} em atraso",
+      "views": "Visões:",
+      "noViews": "nenhuma salva ainda",
+      "saveView": "Salvar visão atual",
+      "viewNamePrompt": "Nome da visão:",
+      "filters": { "clients": "Clientes", "status": "Status", "priority": "Prioridade", "responsible": "Responsável", "sort": "Ordenar" },
+      "options": { "late": "⚠ Em atraso (SLA)", "urgency": "Urgência", "recent": "Recentes", "myTickets": "Meus chamados", "unassigned": "Não atribuídos" },
+      "unassigned": "— Não atribuído",
+      "columnEmpty": "Nenhum chamado",
+      "emptyTitle": "Nenhum chamado na fila",
+      "emptyDesc": "Ajuste os filtros ou aguarde novos chamados.",
+      "done": "Concluído"
+    },
+    "detail": {
+      "tabs": { "form": "Formulário", "associated": "Associados", "approval": "Aprovação", "equipment": "Equipamento", "attachments": "Anexos" },
+      "sla": { "response": "Resposta", "resolution": "Resolução" },
+      "moreActions": "Mais ações",
+      "details": { "title": "Detalhes", "openedAt": "Data de abertura", "situation": "Situação", "openedBy": "Aberto por", "currentAnalyst": "Analista atual", "group": "Grupo", "unassigned": "Não atribuído" },
+      "actions": { "title": "Ações adicionadas", "search": "Buscar", "filter": "Filtrar", "empty": "Nenhuma ação registrada ainda.", "closed": "Este chamado está encerrado." },
+      "composer": { "placeholder": "O que gostaria de registrar?", "selectAction": "Selecionar ação", "send": "Enviar", "bold": "Negrito", "italic": "Itálico", "strike": "Tachado", "link": "Link", "list": "Lista", "orderedList": "Lista numerada", "attach": "Anexar", "logTime": "Registrar tempo", "expand": "Expandir" },
+      "form": { "subject": "Assunto", "group": "Grupo", "priority": "Prioridade", "description": "Descrição" },
+      "attachments": { "title": "Anexos do formulário", "search": "Pesquisar", "new": "Novo", "colName": "Nome do arquivo", "colAuthor": "Autor", "colDate": "Data de inclusão", "colActions": "Ações", "view": "Visualizar", "download": "Baixar", "toGrid": "Ver em grade", "toTable": "Ver em tabela", "refresh": "Atualizar", "empty": "Nenhum anexo neste chamado." },
+      "placeholders": {
+        "associatedTitle": "Solicitações associadas", "associatedDesc": "Vincule outros chamados e solicitações relacionados a este atendimento.",
+        "approvalTitle": "Aprovação", "approvalDesc": "Fluxos de aprovação aparecerão aqui quando este chamado exigir autorização.",
+        "equipmentTitle": "Equipamento", "equipmentDesc": "Equipamentos e ativos relacionados a este chamado aparecerão aqui."
+      },
+      "backToList": "Service Desk",
+      "team": "Equipe Fropty",
+      "reviewBanner": { "title": "Nossa equipe marcou este chamado como resolvido", "desc": "A solução funcionou? Confirme para encerrar ou reabra se precisar de mais ajuda.", "cta": "Avaliar solução" }
+    },
+    "form": {
+      "title": "Abrir chamado",
+      "subtitleAdmin": "Abra um chamado em nome de um cliente. Respondemos em até 24h.",
+      "subtitleClient": "Descreva o problema com detalhes — respondemos em até 24h.",
+      "client": "Cliente", "clientPlaceholder": "Selecione o cliente", "noClients": "Nenhum cliente ativo encontrado para abrir o chamado.",
+      "debitLabel": "Debitar 1 token do cliente", "debitOn": "1 token será descontado do saldo do cliente ao abrir.", "debitOff": "Cortesia — nenhum token será descontado do cliente.",
+      "subject": "Assunto", "subjectPlaceholder": "Descreva brevemente o problema",
+      "category": "Categoria", "priority": "Prioridade", "description": "Descrição", "descriptionPlaceholder": "O que aconteceu? Quando ocorre? O que já tentou?",
+      "attachments": "Anexos", "attachmentsHint": "(máx 5 · 10 MB cada)", "addFile": "Adicionar arquivo",
+      "tokens": "{n} tokens",
+      "priorityDesc": { "baixa": "Não urgente", "media": "Impacto moderado", "alta": "Bloqueando uso" },
+      "copilotTitle": "Talvez isto já resolva", "copilotHint": "Não resolveu? Continue preenchendo abaixo para abrir o chamado.",
+      "required": "Campo obrigatório",
+      "cancel": "Cancelar", "submit": "Abrir chamado", "submitting": "Enviando...",
+      "successTitle": "Chamado aberto!", "successDesc": "Nossa equipe responderá em até 24h.",
+      "newTicketCrumb": "Novo chamado"
+    }
+  },
   "legal": {
     "about": {
       "title": "Sobre o site Fropty Hub",

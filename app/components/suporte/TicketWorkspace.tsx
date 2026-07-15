@@ -2,9 +2,10 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { createClient } from "@/app/lib/supabase/browser";
-import { StatusBadge } from "@/app/components/ui/StatusBadge";
 import { TicketConversation } from "@/app/components/suporte/TicketConversation";
 import { SlaGauge } from "@/app/components/suporte/SlaGauge";
+import { TicketBadge } from "@/app/components/suporte/TicketBadge";
+import { useT } from "@/app/lib/i18n/I18nProvider";
 import { computeSla, SLA_TARGETS, type SlaState } from "@/app/lib/constants/sla";
 import type { TicketPriority, TicketStatus } from "@/app/lib/constants/status";
 import type { Database } from "@/app/lib/supabase/types";
@@ -43,12 +44,12 @@ interface Props {
 
 type TabId = "formulario" | "associados" | "aprovacao" | "equipamento" | "anexos";
 
-const TABS: { id: TabId; label: string }[] = [
-  { id: "formulario",  label: "Formulário" },
-  { id: "associados",  label: "Associados" },
-  { id: "aprovacao",   label: "Aprovação" },
-  { id: "equipamento", label: "Equipamento" },
-  { id: "anexos",      label: "Anexos" },
+const TABS: { id: TabId; key: string }[] = [
+  { id: "formulario",  key: "serviceDesk.detail.tabs.form" },
+  { id: "associados",  key: "serviceDesk.detail.tabs.associated" },
+  { id: "aprovacao",   key: "serviceDesk.detail.tabs.approval" },
+  { id: "equipamento", key: "serviceDesk.detail.tabs.equipment" },
+  { id: "anexos",      key: "serviceDesk.detail.tabs.attachments" },
 ];
 
 function fDateTime(iso: string) {
@@ -83,6 +84,7 @@ function DetailRow({ label, children }: { label: string; children: React.ReactNo
 }
 
 export function TicketWorkspace({ ticket, messages, currentUserId, currentUserName, isAdmin, senderRole, ticketNum, participants }: Props) {
+  const t = useT();
   // A descrição do chamado (1ª mensagem) vive na aba Formulário — fora da timeline.
   const descriptionId = messages[0]?.id;
   const actionMessages = messages.filter((m) => m.id !== descriptionId);
@@ -109,11 +111,11 @@ export function TicketWorkspace({ ticket, messages, currentUserId, currentUserNa
     return messages.flatMap((m) => (m.attachments ?? []).map((path) => ({
       path,
       name: path.split("/").pop() ?? path,
-      author: m.sender_role === "cliente" ? clientName : (ticket.analyst_name ?? "Equipe Fropty"),
+      author: m.sender_role === "cliente" ? clientName : (ticket.analyst_name ?? t("serviceDesk.detail.team")),
       authorRole: m.sender_role as "cliente" | "admin",
       date: m.created_at,
     })));
-  }, [messages, ticket.client_name, ticket.analyst_name]);
+  }, [messages, ticket.client_name, ticket.analyst_name, t]);
 
   const resolveUrls = useCallback(async (paths: string[]) => {
     const toResolve = paths.filter((p) => !signedUrls[p]);
@@ -159,25 +161,25 @@ export function TicketWorkspace({ ticket, messages, currentUserId, currentUserNa
             <h1 style={{ margin: 0, fontSize: "1.35rem", fontWeight: 800, color: "var(--text)", letterSpacing: "-0.02em" }}>
               {ticketNum ?? ticket.subject}
             </h1>
-            <StatusBadge kind="ticket" status={ticket.status} />
-            <StatusBadge kind="ticket-priority" status={ticket.priority} />
+            <TicketBadge kind="ticket" status={ticket.status} />
+            <TicketBadge kind="ticket-priority" status={ticket.priority} />
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 22 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <SlaClock s={response} />
               <div style={{ lineHeight: 1.25 }}>
-                <div style={{ fontSize: "12px", fontWeight: 700, color: "var(--text)" }}>Resposta</div>
+                <div style={{ fontSize: "12px", fontWeight: 700, color: "var(--text)" }}>{t("serviceDesk.detail.sla.response")}</div>
                 <div style={{ fontSize: "11.5px", color: "var(--text-faint)" }}>{fDateTime(responseDue)}</div>
               </div>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <SlaClock s={resolution} />
               <div style={{ lineHeight: 1.25 }}>
-                <div style={{ fontSize: "12px", fontWeight: 700, color: "var(--text)" }}>Resolução</div>
+                <div style={{ fontSize: "12px", fontWeight: 700, color: "var(--text)" }}>{t("serviceDesk.detail.sla.resolution")}</div>
                 <div style={{ fontSize: "11.5px", color: "var(--text-faint)" }}>{fDateTime(resolutionDue)}</div>
               </div>
             </div>
-            <button className="ticket-iconbtn" style={{ border: "none", background: "none", width: 28 }} title="Mais ações">
+            <button className="ticket-iconbtn" style={{ border: "none", background: "none", width: 28 }} title={t("serviceDesk.detail.moreActions")}>
               <MoreVertical size={18} />
             </button>
           </div>
@@ -185,9 +187,9 @@ export function TicketWorkspace({ ticket, messages, currentUserId, currentUserNa
 
         {/* Tabs */}
         <div style={{ display: "flex", alignItems: "center", borderBottom: "1px solid var(--border)", marginTop: 18, marginBottom: 22, overflowX: "auto" }}>
-          {TABS.map((t) => (
-            <button key={t.id} className="ticket-tab" data-active={tab === t.id} onClick={() => setTab(t.id)}>
-              {t.label}
+          {TABS.map((tb) => (
+            <button key={tb.id} className="ticket-tab" data-active={tab === tb.id} onClick={() => setTab(tb.id)}>
+              {t(tb.key)}
             </button>
           ))}
         </div>
@@ -202,9 +204,9 @@ export function TicketWorkspace({ ticket, messages, currentUserId, currentUserNa
             setView={setAttView}
           />
         )}
-        {tab === "associados" && <Placeholder Icon={LinkIcon} title="Solicitações associadas" desc="Vincule outros chamados e solicitações relacionados a este atendimento." />}
-        {tab === "aprovacao" && <Placeholder Icon={ClipboardCheck} title="Aprovação" desc="Fluxos de aprovação aparecerão aqui quando este chamado exigir autorização." />}
-        {tab === "equipamento" && <Placeholder Icon={MonitorSmartphone} title="Equipamento" desc="Equipamentos e ativos relacionados a este chamado aparecerão aqui." />}
+        {tab === "associados" && <Placeholder Icon={LinkIcon} title={t("serviceDesk.detail.placeholders.associatedTitle")} desc={t("serviceDesk.detail.placeholders.associatedDesc")} />}
+        {tab === "aprovacao" && <Placeholder Icon={ClipboardCheck} title={t("serviceDesk.detail.placeholders.approvalTitle")} desc={t("serviceDesk.detail.placeholders.approvalDesc")} />}
+        {tab === "equipamento" && <Placeholder Icon={MonitorSmartphone} title={t("serviceDesk.detail.placeholders.equipmentTitle")} desc={t("serviceDesk.detail.placeholders.equipmentDesc")} />}
       </div>
 
       {/* ── Painel lateral ── */}
@@ -213,20 +215,20 @@ export function TicketWorkspace({ ticket, messages, currentUserId, currentUserNa
         <div className="ticket-ws__panel">
           <button onClick={() => setDetailsOpen((v) => !v)}
             style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", background: "none", border: "none", padding: detailsOpen ? "2px 0 10px" : "2px 0", cursor: "pointer", fontFamily: "inherit" }}>
-            <span style={{ fontSize: "15px", fontWeight: 700, color: "var(--text)" }}>Detalhes</span>
+            <span style={{ fontSize: "15px", fontWeight: 700, color: "var(--text)" }}>{t("serviceDesk.detail.details.title")}</span>
             {detailsOpen ? <ChevronUp size={18} style={{ color: "var(--text-faint)" }} /> : <ChevronDown size={18} style={{ color: "var(--text-faint)" }} />}
           </button>
           {detailsOpen && (
             <div style={{ borderTop: "1px solid var(--border)" }}>
-              <DetailRow label="Data de abertura">{fDate(ticket.created_at)}</DetailRow>
-              <DetailRow label="Situação">
+              <DetailRow label={t("serviceDesk.detail.details.openedAt")}>{fDate(ticket.created_at)}</DetailRow>
+              <DetailRow label={t("serviceDesk.detail.details.situation")}>
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-                  <StatusBadge kind="ticket" status={ticket.status} size="sm" />
+                  <TicketBadge kind="ticket" status={ticket.status} size="sm" />
                 </span>
               </DetailRow>
-              <DetailRow label="Aberto por">{ticket.client_name ?? "—"}</DetailRow>
-              <DetailRow label="Analista atual">{ticket.analyst_name ?? "Não atribuído"}</DetailRow>
-              <DetailRow label="Grupo">{ticket.category}</DetailRow>
+              <DetailRow label={t("serviceDesk.detail.details.openedBy")}>{ticket.client_name ?? "—"}</DetailRow>
+              <DetailRow label={t("serviceDesk.detail.details.currentAnalyst")}>{ticket.analyst_name ?? t("serviceDesk.detail.details.unassigned")}</DetailRow>
+              <DetailRow label={t("serviceDesk.detail.details.group")}>{ticket.category}</DetailRow>
             </div>
           )}
         </div>
@@ -234,10 +236,10 @@ export function TicketWorkspace({ ticket, messages, currentUserId, currentUserNa
         {/* Ações adicionadas */}
         <div className="ticket-ws__panel" style={{ display: "flex", flexDirection: "column", height: "min(620px, calc(100vh - 200px))" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-            <span style={{ fontSize: "15px", fontWeight: 700, color: "var(--text)" }}>Ações adicionadas</span>
+            <span style={{ fontSize: "15px", fontWeight: 700, color: "var(--text)" }}>{t("serviceDesk.detail.actions.title")}</span>
             <div style={{ display: "flex", gap: 4 }}>
-              <button className="ticket-iconbtn" style={{ width: 30, height: 30, border: "none", background: "none" }} title="Buscar"><Search size={16} /></button>
-              <button className="ticket-iconbtn" style={{ width: 30, height: 30, border: "none", background: "none" }} title="Filtrar"><SlidersHorizontal size={16} /></button>
+              <button className="ticket-iconbtn" style={{ width: 30, height: 30, border: "none", background: "none" }} title={t("serviceDesk.detail.actions.search")}><Search size={16} /></button>
+              <button className="ticket-iconbtn" style={{ width: 30, height: 30, border: "none", background: "none" }} title={t("serviceDesk.detail.actions.filter")}><SlidersHorizontal size={16} /></button>
             </div>
           </div>
           <TicketConversation
@@ -269,17 +271,18 @@ function ReadField({ label, value }: { label: string; value: string }) {
   );
 }
 function FormularioTab({ ticket, messages }: { ticket: TicketLike; messages: MessageRow[] }) {
+  const t = useT();
   const firstBody = messages.find((m) => m.sender_role === "cliente")?.body ?? "";
-  const priorityLabel = { baixa: "Baixa", media: "Média", alta: "Alta" }[ticket.priority] ?? ticket.priority;
+  const priorityLabel = t(`serviceDesk.priority.${ticket.priority}`);
   return (
     <div>
       <h2 style={{ margin: "0 0 20px", fontSize: "1.05rem", fontWeight: 800, color: "var(--text)" }}>{ticket.subject}</h2>
-      <ReadField label="Assunto" value={ticket.subject} />
+      <ReadField label={t("serviceDesk.detail.form.subject")} value={ticket.subject} />
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-        <ReadField label="Grupo" value={ticket.category} />
-        <ReadField label="Prioridade" value={priorityLabel} />
+        <ReadField label={t("serviceDesk.detail.form.group")} value={ticket.category} />
+        <ReadField label={t("serviceDesk.detail.form.priority")} value={priorityLabel} />
       </div>
-      <ReadField label="Descrição" value={firstBody} />
+      <ReadField label={t("serviceDesk.detail.form.description")} value={firstBody} />
     </div>
   );
 }
@@ -294,36 +297,37 @@ function fileIcon(name: string) {
 function AnexosTab({ attachments, signedUrls, view, setView }: {
   attachments: Att[]; signedUrls: Record<string, string>; view: "table" | "grid"; setView: (v: "table" | "grid") => void;
 }) {
+  const t = useT();
   const [q, setQ] = useState("");
   const filtered = attachments.filter((a) => a.name.toLowerCase().includes(q.toLowerCase()));
 
   return (
     <div>
-      <h2 style={{ margin: "0 0 18px", fontSize: "1.05rem", fontWeight: 800, color: "var(--text)" }}>Anexos do formulário</h2>
+      <h2 style={{ margin: "0 0 18px", fontSize: "1.05rem", fontWeight: 800, color: "var(--text)" }}>{t("serviceDesk.detail.attachments.title")}</h2>
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18, flexWrap: "wrap" }}>
         <div style={{ position: "relative", flex: 1, minWidth: 200 }}>
           <Search size={15} style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--text-faint)" }} />
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Pesquisar"
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("serviceDesk.detail.attachments.search")}
             className="hub-input" style={{ paddingLeft: 34, height: 38 }} />
         </div>
-        <button className="ticket-iconbtn" data-active={view === "grid"} title={view === "table" ? "Ver em grade" : "Ver em tabela"}
+        <button className="ticket-iconbtn" data-active={view === "grid"} title={view === "table" ? t("serviceDesk.detail.attachments.toGrid") : t("serviceDesk.detail.attachments.toTable")}
           onClick={() => setView(view === "table" ? "grid" : "table")}>
           {view === "table" ? <LayoutGrid size={17} /> : <TableIcon size={17} />}
         </button>
-        <button className="ticket-iconbtn" title="Atualizar"><RefreshCw size={16} /></button>
-        <button className="hub-btn hub-btn-primary" style={{ height: 38 }}><Plus size={15} /> Novo</button>
+        <button className="ticket-iconbtn" title={t("serviceDesk.detail.attachments.refresh")}><RefreshCw size={16} /></button>
+        <button className="hub-btn hub-btn-primary" style={{ height: 38 }}><Plus size={15} /> {t("serviceDesk.detail.attachments.new")}</button>
       </div>
 
       {filtered.length === 0 ? (
         <div style={{ textAlign: "center", padding: "48px 0", color: "var(--text-faint)", fontSize: "13px" }}>
-          Nenhum anexo neste chamado.
+          {t("serviceDesk.detail.attachments.empty")}
         </div>
       ) : view === "table" ? (
         <div style={{ overflowX: "auto", border: "1px solid var(--border)", borderRadius: 10 }}>
           <table className="hub-table" style={{ width: "100%" }}>
             <thead>
               <tr>
-                <th>Nome do arquivo</th><th>Autor</th><th>Data de inclusão</th><th style={{ textAlign: "right" }}>Ações</th>
+                <th>{t("serviceDesk.detail.attachments.colName")}</th><th>{t("serviceDesk.detail.attachments.colAuthor")}</th><th>{t("serviceDesk.detail.attachments.colDate")}</th><th style={{ textAlign: "right" }}>{t("serviceDesk.detail.attachments.colActions")}</th>
               </tr>
             </thead>
             <tbody>
@@ -348,8 +352,8 @@ function AnexosTab({ attachments, signedUrls, view, setView }: {
                     <td style={{ color: "var(--text-muted)" }}>{fDate(a.date)}</td>
                     <td>
                       <div style={{ display: "flex", gap: 6, justifyContent: "flex-end" }}>
-                        <a href={url ?? "#"} target="_blank" rel="noopener noreferrer" className="ticket-iconbtn" style={{ width: 30, height: 30, border: "none", background: "none", opacity: url ? 1 : 0.4 }} title="Visualizar"><Eye size={16} /></a>
-                        <a href={url ?? "#"} download className="ticket-iconbtn" style={{ width: 30, height: 30, border: "none", background: "none", opacity: url ? 1 : 0.4 }} title="Baixar"><Download size={16} /></a>
+                        <a href={url ?? "#"} target="_blank" rel="noopener noreferrer" className="ticket-iconbtn" style={{ width: 30, height: 30, border: "none", background: "none", opacity: url ? 1 : 0.4 }} title={t("serviceDesk.detail.attachments.view")}><Eye size={16} /></a>
+                        <a href={url ?? "#"} download className="ticket-iconbtn" style={{ width: 30, height: 30, border: "none", background: "none", opacity: url ? 1 : 0.4 }} title={t("serviceDesk.detail.attachments.download")}><Download size={16} /></a>
                       </div>
                     </td>
                   </tr>

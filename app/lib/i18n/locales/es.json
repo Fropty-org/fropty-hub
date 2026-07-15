@@ -18,6 +18,70 @@
     "en": "English",
     "es": "Español"
   },
+  "serviceDesk": {
+    "noToken": { "title": "Tokens insuficientes", "desc": "Necesitas tokens para abrir tickets. Consigue tokens o un plan para continuar.", "cta": "Ver tokens", "close": "Cerrar" },
+    "subtitleAdmin": "Todos los tickets — abre uno en nombre de un cliente cuando sea necesario",
+    "subtitleClient": "Sigue y abre tickets en tiempo real",
+    "newTicket": "Nuevo ticket",
+    "kpi": { "total": "Total", "open": "Abiertos", "highPriority": "Alta prioridad", "resolved": "Resueltos" },
+    "searchPlaceholder": "Buscar por asunto o categoría…",
+    "filter": { "all": "todos", "open": "abiertos", "closed": "cerrados", "anyPriority": "Toda prioridad", "high": "Alta", "medium": "Media", "low": "Baja" },
+    "ticketsCount": "{n} ticket(s)",
+    "noResults": "No se encontraron tickets",
+    "empty": { "title": "Aún no hay tickets", "descAdmin": "Ningún cliente ha abierto un ticket todavía.", "descClient": "Cuando necesites soporte, aquí estamos.", "openFirst": "Abrir el primer ticket" },
+    "status": { "aberto": "Abierto", "em_andamento": "En curso", "resolvido": "Esperando validación", "fechado": "Cerrado", "reaberto": "Reabierto" },
+    "priority": { "baixa": "Baja", "media": "Media", "alta": "Alta" },
+    "queue": {
+      "title": "Cola del Service Desk",
+      "summary": "{total} tickets · {open} abiertos · {late} atrasados",
+      "views": "Vistas:",
+      "noViews": "ninguna guardada aún",
+      "saveView": "Guardar vista actual",
+      "viewNamePrompt": "Nombre de la vista:",
+      "filters": { "clients": "Clientes", "status": "Estado", "priority": "Prioridad", "responsible": "Responsable", "sort": "Ordenar" },
+      "options": { "late": "⚠ Atrasado (SLA)", "urgency": "Urgencia", "recent": "Más recientes", "myTickets": "Mis tickets", "unassigned": "Sin asignar" },
+      "unassigned": "— Sin asignar",
+      "columnEmpty": "Sin tickets",
+      "emptyTitle": "No hay tickets en la cola",
+      "emptyDesc": "Ajusta los filtros o espera nuevos tickets.",
+      "done": "Concluido"
+    },
+    "detail": {
+      "tabs": { "form": "Formulario", "associated": "Asociados", "approval": "Aprobación", "equipment": "Equipo", "attachments": "Adjuntos" },
+      "sla": { "response": "Respuesta", "resolution": "Resolución" },
+      "moreActions": "Más acciones",
+      "details": { "title": "Detalles", "openedAt": "Fecha de apertura", "situation": "Situación", "openedBy": "Abierto por", "currentAnalyst": "Analista actual", "group": "Grupo", "unassigned": "Sin asignar" },
+      "actions": { "title": "Acciones añadidas", "search": "Buscar", "filter": "Filtrar", "empty": "Aún no hay acciones registradas.", "closed": "Este ticket está cerrado." },
+      "composer": { "placeholder": "¿Qué te gustaría registrar?", "selectAction": "Seleccionar acción", "send": "Enviar", "bold": "Negrita", "italic": "Cursiva", "strike": "Tachado", "link": "Enlace", "list": "Lista", "orderedList": "Lista numerada", "attach": "Adjuntar", "logTime": "Registrar tiempo", "expand": "Expandir" },
+      "form": { "subject": "Asunto", "group": "Grupo", "priority": "Prioridad", "description": "Descripción" },
+      "attachments": { "title": "Adjuntos del formulario", "search": "Buscar", "new": "Nuevo", "colName": "Nombre del archivo", "colAuthor": "Autor", "colDate": "Fecha de inclusión", "colActions": "Acciones", "view": "Ver", "download": "Descargar", "toGrid": "Ver en cuadrícula", "toTable": "Ver en tabla", "refresh": "Actualizar", "empty": "Sin adjuntos en este ticket." },
+      "placeholders": {
+        "associatedTitle": "Solicitudes asociadas", "associatedDesc": "Vincula otros tickets y solicitudes relacionados con este caso.",
+        "approvalTitle": "Aprobación", "approvalDesc": "Los flujos de aprobación aparecerán aquí cuando este ticket requiera autorización.",
+        "equipmentTitle": "Equipo", "equipmentDesc": "Los equipos y activos relacionados con este ticket aparecerán aquí."
+      },
+      "backToList": "Service Desk",
+      "team": "Equipo Fropty",
+      "reviewBanner": { "title": "Nuestro equipo marcó este ticket como resuelto", "desc": "¿Funcionó la solución? Confírmala para cerrarla o reábrela si necesitas más ayuda.", "cta": "Evaluar solución" }
+    },
+    "form": {
+      "title": "Abrir ticket",
+      "subtitleAdmin": "Abre un ticket en nombre de un cliente. Respondemos en hasta 24h.",
+      "subtitleClient": "Describe el problema con detalle — respondemos en hasta 24h.",
+      "client": "Cliente", "clientPlaceholder": "Selecciona el cliente", "noClients": "No se encontró ningún cliente activo para abrir el ticket.",
+      "debitLabel": "Debitar 1 token del cliente", "debitOn": "Se descontará 1 token del saldo del cliente al abrir.", "debitOff": "Cortesía — no se descontará ningún token del cliente.",
+      "subject": "Asunto", "subjectPlaceholder": "Describe brevemente el problema",
+      "category": "Categoría", "priority": "Prioridad", "description": "Descripción", "descriptionPlaceholder": "¿Qué pasó? ¿Cuándo ocurre? ¿Qué ya intentaste?",
+      "attachments": "Adjuntos", "attachmentsHint": "(máx 5 · 10 MB c/u)", "addFile": "Añadir archivo",
+      "tokens": "{n} tokens",
+      "priorityDesc": { "baixa": "No urgente", "media": "Impacto moderado", "alta": "Bloqueando el uso" },
+      "copilotTitle": "Quizás esto ya lo resuelva", "copilotHint": "¿No lo resolvió? Sigue completando abajo para abrir el ticket.",
+      "required": "Campo obligatorio",
+      "cancel": "Cancelar", "submit": "Abrir ticket", "submitting": "Enviando...",
+      "successTitle": "¡Ticket abierto!", "successDesc": "Nuestro equipo responderá en hasta 24h.",
+      "newTicketCrumb": "Nuevo ticket"
+    }
+  },
   "legal": {
     "about": {
       "title": "Acerca de Fropty Hub",

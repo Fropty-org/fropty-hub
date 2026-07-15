@@ -7,6 +7,7 @@ import { createTicket } from "@/app/actions/suporte";
 import { suggestArticles } from "@/app/actions/knowledge";
 import { CheckCircle, Paperclip, File, X, AlertCircle, Loader2, Send, ArrowDown, ArrowRight, ArrowUp, LucideIcon, Coins, Lightbulb, BookOpen } from "lucide-react";
 import { createClient } from "@/app/lib/supabase/browser";
+import { useT } from "@/app/lib/i18n/I18nProvider";
 import type { KnowledgeArticle } from "@/app/lib/types/knowledge";
 
 interface Props {
@@ -50,6 +51,7 @@ const labelStyle: React.CSSProperties = {
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
+  const t                         = useT();
   const router                    = useRouter();
   const [loading,   setLoading]   = useState(false);
   const [error,     setError]     = useState("");
@@ -155,10 +157,10 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
           <CheckCircle size={30} style={{ color: "var(--c-success)" }} />
         </div>
         <p style={{ fontWeight: 800, fontSize: "1rem", color: "var(--text)", margin: "0 0 6px" }}>
-          Chamado aberto!
+          {t("serviceDesk.form.successTitle")}
         </p>
         <p style={{ color: "var(--text-faint)", fontSize: "13px", margin: 0 }}>
-          Nossa equipe responderá em até 24h.
+          {t("serviceDesk.form.successDesc")}
         </p>
       </div>
     );
@@ -170,7 +172,7 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
       {/* Seletor de cliente + débito de token — somente admin */}
       {isAdmin && (
         <div>
-          <label style={labelStyle}>Cliente *</label>
+          <label style={labelStyle}>{t("serviceDesk.form.client")} *</label>
           {clients && clients.length > 0 ? (
             <select
               name="on_behalf_of"
@@ -180,12 +182,12 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
               onFocus={(e) => { e.currentTarget.style.borderColor = "var(--primary)"; }}
               onBlur={(e)  => { e.currentTarget.style.borderColor = "var(--border)"; }}
             >
-              <option value="" disabled>Selecione o cliente</option>
+              <option value="" disabled>{t("serviceDesk.form.clientPlaceholder")}</option>
               {clients.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
             </select>
           ) : (
             <p style={{ margin: 0, fontSize: "12px", color: "var(--c-danger)", display: "flex", alignItems: "center", gap: 6 }}>
-              <AlertCircle size={13} /> Nenhum cliente ativo encontrado para abrir o chamado.
+              <AlertCircle size={13} /> {t("serviceDesk.form.noClients")}
             </p>
           )}
 
@@ -207,12 +209,12 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
             />
             <span style={{ display: "flex", flexDirection: "column", gap: 2 }}>
               <span style={{ fontSize: "12.5px", fontWeight: 600, color: "var(--text)" }}>
-                Debitar 1 token do cliente
+                {t("serviceDesk.form.debitLabel")}
               </span>
               <span style={{ fontSize: "11px", color: "var(--text-faint)" }}>
                 {debitToken
-                  ? "1 token será descontado do saldo do cliente ao abrir."
-                  : "Cortesia — nenhum token será descontado do cliente."}
+                  ? t("serviceDesk.form.debitOn")
+                  : t("serviceDesk.form.debitOff")}
               </span>
             </span>
           </label>
@@ -221,10 +223,10 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
 
       {/* Assunto */}
       <div>
-        <label style={labelStyle}>Assunto *</label>
+        <label style={labelStyle}>{t("serviceDesk.form.subject")} *</label>
         <input
           name="subject"
-          placeholder="Descreva brevemente o problema"
+          placeholder={t("serviceDesk.form.subjectPlaceholder")}
           value={values.subject}
           onChange={(e) => setValues((v) => ({ ...v, subject: e.target.value }))}
           style={{ ...inputStyle, borderColor: touched.subject && !values.subject.trim() ? "var(--c-danger)" : "var(--border)" }}
@@ -236,7 +238,7 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
         />
         {touched.subject && !values.subject.trim() && (
           <p style={{ margin: "5px 0 0", fontSize: "11.5px", color: "var(--c-danger)", display: "flex", alignItems: "center", gap: 4 }}>
-            <AlertCircle size={11} /> Campo obrigatório
+            <AlertCircle size={11} /> {t("serviceDesk.form.required")}
           </p>
         )}
       </div>
@@ -246,7 +248,7 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
         <div style={{ background: "var(--c-info-bg)", border: "1px solid rgba(59,130,246,0.22)", borderRadius: 12, padding: "12px 14px" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
             <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "12px", fontWeight: 700, color: "var(--c-info)" }}>
-              <Lightbulb size={13} /> Talvez isto já resolva
+              <Lightbulb size={13} /> {t("serviceDesk.form.copilotTitle")}
             </span>
             <button
               type="button"
@@ -277,14 +279,14 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
             ))}
           </div>
           <p style={{ margin: "9px 0 0", fontSize: "11px", color: "var(--text-muted)" }}>
-            Não resolveu? Continue preenchendo abaixo para abrir o chamado.
+            {t("serviceDesk.form.copilotHint")}
           </p>
         </div>
       )}
 
       {/* Categoria */}
       <div>
-        <label style={labelStyle}>Categoria</label>
+        <label style={labelStyle}>{t("serviceDesk.form.category")}</label>
         <select
           name="category"
           style={{ ...inputStyle, appearance: "none", cursor: "pointer" }}
@@ -298,11 +300,11 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
       {/* Prioridade */}
       <div>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 7 }}>
-          <label style={{ ...labelStyle, marginBottom: 0 }}>Prioridade</label>
+          <label style={{ ...labelStyle, marginBottom: 0 }}>{t("serviceDesk.form.priority")}</label>
           {!isAdmin && (
             <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: "11px", fontWeight: 700, color: "var(--brand-accent)", background: "color-mix(in srgb, var(--brand-accent) 10%, transparent)", border: "1px solid color-mix(in srgb, var(--brand-accent) 25%, transparent)", borderRadius: 99, padding: "2px 10px" }}>
               <Coins size={11} />
-              {PRIORITIES.find((p) => p.value === priority)?.tokens ?? 10} tokens
+              {t("serviceDesk.form.tokens", { n: PRIORITIES.find((p) => p.value === priority)?.tokens ?? 10 })}
             </span>
           )}
         </div>
@@ -329,9 +331,9 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
             >
               <p.Icon size={16} style={{ color: priority === p.value ? p.color : "var(--text-faint)" }} />
               <span style={{ fontSize: "12px", fontWeight: 700, color: priority === p.value ? p.color : "var(--text-muted)" }}>
-                {p.label}
+                {t(`serviceDesk.priority.${p.value}`)}
               </span>
-              <span style={{ fontSize: "10px", color: "var(--text-faint)" }}>{p.desc}</span>
+              <span style={{ fontSize: "10px", color: "var(--text-faint)" }}>{t(`serviceDesk.form.priorityDesc.${p.value}`)}</span>
             </button>
           ))}
         </div>
@@ -339,11 +341,11 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
 
       {/* Descrição */}
       <div>
-        <label style={labelStyle}>Descrição *</label>
+        <label style={labelStyle}>{t("serviceDesk.form.description")} *</label>
         <textarea
           name="body"
           rows={4}
-          placeholder="O que aconteceu? Quando ocorre? O que já tentou?"
+          placeholder={t("serviceDesk.form.descriptionPlaceholder")}
           value={values.body}
           onChange={(e) => setValues((v) => ({ ...v, body: e.target.value }))}
           style={{ ...inputStyle, resize: "vertical", minHeight: 96, lineHeight: 1.6, borderColor: touched.body && !values.body.trim() ? "var(--c-danger)" : "var(--border)" }}
@@ -355,14 +357,14 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
         />
         {touched.body && !values.body.trim() && (
           <p style={{ margin: "5px 0 0", fontSize: "11.5px", color: "var(--c-danger)", display: "flex", alignItems: "center", gap: 4 }}>
-            <AlertCircle size={11} /> Campo obrigatório
+            <AlertCircle size={11} /> {t("serviceDesk.form.required")}
           </p>
         )}
       </div>
 
       {/* Anexos */}
       <div>
-        <label style={labelStyle}>Anexos <span style={{ fontWeight: 400, textTransform: "none", letterSpacing: 0 }}>(máx 5 · 10 MB cada)</span></label>
+        <label style={labelStyle}>{t("serviceDesk.form.attachments")} <span style={{ fontWeight: 400, textTransform: "none", letterSpacing: 0 }}>{t("serviceDesk.form.attachmentsHint")}</span></label>
         <input
           ref={fileInputRef}
           type="file"
@@ -393,7 +395,7 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
             onMouseEnter={(e) => { e.currentTarget.style.borderColor = "var(--primary)"; e.currentTarget.style.color = "var(--primary)"; }}
             onMouseLeave={(e) => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.color = "var(--text-muted)"; }}
           >
-            <Paperclip size={14} /> Adicionar arquivo
+            <Paperclip size={14} /> {t("serviceDesk.form.addFile")}
           </button>
         )}
         {files.length > 0 && (
@@ -465,7 +467,7 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
           onMouseEnter={(e) => { e.currentTarget.style.borderColor = "var(--border-hover)"; }}
           onMouseLeave={(e) => { e.currentTarget.style.borderColor = "var(--border)"; }}
         >
-          Cancelar
+          {t("serviceDesk.form.cancel")}
         </button>
         <button
           type="submit"
@@ -489,8 +491,8 @@ export function NewTicketForm({ onClose, isAdmin, clients }: Props) {
           }}
         >
           {loading
-            ? <><Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} /> Enviando...</>
-            : <><Send size={16} /> Abrir chamado</>
+            ? <><Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} /> {t("serviceDesk.form.submitting")}</>
+            : <><Send size={16} /> {t("serviceDesk.form.submit")}</>
           }
         </button>
       </div>

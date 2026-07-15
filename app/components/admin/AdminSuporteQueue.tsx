@@ -4,9 +4,10 @@ import { useState, useMemo, useEffect, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Search, Loader2, Bookmark, Plus, X } from "lucide-react";
-import { StatusBadge } from "@/app/components/ui/StatusBadge";
 import { HubEmptyState } from "@/app/components/ui/HubEmptyState";
 import { SlaGauge } from "@/app/components/suporte/SlaGauge";
+import { TicketBadge } from "@/app/components/suporte/TicketBadge";
+import { useT } from "@/app/lib/i18n/I18nProvider";
 import { computeSla } from "@/app/lib/constants/sla";
 import { assignTicket } from "@/app/actions/suporte";
 import { TICKET_STATUS_MAP, type TicketPriority, type TicketStatus } from "@/app/lib/constants/status";
@@ -32,6 +33,7 @@ interface Analyst { id: string; name: string; }
 
 /** Seletor de responsável por linha. Fora do <a> do assunto (HTML válido). */
 function AssigneeSelect({ ticketId, value, analysts }: { ticketId: string; value: string | null; analysts: Analyst[] }) {
+  const t = useT();
   const router = useRouter();
   const [pending, start] = useTransition();
   const [val, setVal] = useState(value ?? "");
@@ -48,9 +50,9 @@ function AssigneeSelect({ ticketId, value, analysts }: { ticketId: string; value
         }}
         className="hub-input"
         style={{ fontSize: 12, padding: "4px 24px 4px 8px", width: "100%", opacity: pending ? 0.5 : 1, color: val ? "var(--text)" : "var(--text-faint)" }}
-        aria-label="Responsável pelo chamado"
+        aria-label={t("serviceDesk.queue.filters.responsible")}
       >
-        <option value="">— Não atribuído</option>
+        <option value="">{t("serviceDesk.queue.unassigned")}</option>
         {analysts.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
       </select>
       {pending && <Loader2 size={12} style={{ position: "absolute", right: 7, color: "var(--text-faint)", animation: "spin 1s linear infinite", pointerEvents: "none" }} />}
@@ -81,7 +83,7 @@ function KanbanCard({ r, analysts, now }: { r: { t: QueueTicket; breached: boole
         </p>
       </Link>
       <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
-        <StatusBadge kind="ticket-priority" status={t.priority} size="sm" />
+        <TicketBadge kind="ticket-priority" status={t.priority} size="sm" />
         <span style={{ fontSize: "11.5px", color: "var(--text-faint)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{t.clientName}</span>
       </div>
       <AssigneeSelect ticketId={t.id} value={t.assignedTo} analysts={analysts} />
@@ -139,6 +141,7 @@ interface SavedView {
 const VIEWS_KEY = "fropty-suporte-views";
 
 export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }: Props) {
+  const t = useT();
   const [search, setSearch]       = useState("");
   const [client, setClient]       = useState("todos");
   const [status, setStatus]       = useState<StatusFilter>("todos");
@@ -165,7 +168,7 @@ export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }:
     try { localStorage.setItem(VIEWS_KEY, JSON.stringify(next)); } catch {}
   }
   function saveCurrentView() {
-    const name = window.prompt("Nome da visão:")?.trim();
+    const name = window.prompt(t("serviceDesk.queue.viewNamePrompt"))?.trim();
     if (!name) return;
     persistViews([...views.filter(v => v.name !== name), { name, f: { search, client, status, priority, assignee, sort } }]);
   }
@@ -229,13 +232,10 @@ export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }:
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 16, marginBottom: 20, flexWrap: "wrap" }}>
         <div>
           <h1 style={{ margin: 0, fontSize: "1.5rem", fontWeight: 800, color: "var(--text)", letterSpacing: "-0.02em" }}>
-            Fila do Service Desk
+            {t("serviceDesk.queue.title")}
           </h1>
           <p style={{ margin: "4px 0 0", fontSize: "13px", color: "var(--text-muted)" }}>
-            {tickets.length} chamados · {openCount} em aberto ·{" "}
-            <span style={{ color: breachedCount > 0 ? "var(--c-danger)" : "var(--text-muted)", fontWeight: breachedCount > 0 ? 700 : 400 }}>
-              {breachedCount} em atraso
-            </span>
+            {t("serviceDesk.queue.summary", { total: tickets.length, open: openCount, late: breachedCount })}
           </p>
         </div>
         <Link
@@ -243,17 +243,17 @@ export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }:
           className="hub-btn hub-btn-primary"
           style={{ textDecoration: "none", flexShrink: 0 }}
         >
-          <Plus size={15} /> Novo chamado
+          <Plus size={15} /> {t("serviceDesk.newTicket")}
         </Link>
       </div>
 
       {/* Views salvas */}
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center", marginBottom: 12 }}>
         <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: "12px", fontWeight: 700, color: "var(--text-faint)" }}>
-          <Bookmark size={13} /> Visões:
+          <Bookmark size={13} /> {t("serviceDesk.queue.views")}
         </span>
         {views.length === 0 && (
-          <span style={{ fontSize: "12px", color: "var(--text-faint)" }}>nenhuma salva ainda</span>
+          <span style={{ fontSize: "12px", color: "var(--text-faint)" }}>{t("serviceDesk.queue.noViews")}</span>
         )}
         {views.map((v) => (
           <span key={v.name} style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "var(--surface-2)", border: "1px solid var(--border)", borderRadius: "var(--r-full)", padding: "3px 4px 3px 10px", fontSize: "12px" }}>
@@ -266,7 +266,7 @@ export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }:
           </span>
         ))}
         <button type="button" onClick={saveCurrentView} className="hub-btn hub-btn-ghost" style={{ padding: "3px 10px", fontSize: "12px" }}>
-          <Plus size={12} /> Salvar visão atual
+          <Plus size={12} /> {t("serviceDesk.queue.saveView")}
         </button>
       </div>
 
@@ -277,39 +277,39 @@ export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }:
           <input
             value={search}
             onChange={(e) => resetPage(setSearch)(e.target.value)}
-            placeholder="Buscar assunto, categoria ou UFT…"
+            placeholder={t("serviceDesk.searchPlaceholder")}
             className="hub-input"
             style={{ paddingLeft: 32, width: "100%" }}
           />
         </div>
         <select value={client} onChange={(e) => resetPage(setClient)(e.target.value)} className="hub-input" style={{ flex: "0 1 150px" }}>
-          <option value="todos">Clientes</option>
+          <option value="todos">{t("serviceDesk.queue.filters.clients")}</option>
           {clients.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
         </select>
         <select value={status} onChange={(e) => resetPage(setStatus as (v: string) => void)(e.target.value)} className="hub-input" style={{ flex: "0 1 140px" }}>
-          <option value="todos">Status</option>
-          <option value="atraso">⚠ Em atraso (SLA)</option>
-          <option value="aberto">Aberto</option>
-          <option value="em_andamento">Em andamento</option>
-          <option value="reaberto">Reaberto</option>
-          <option value="resolvido">Aguardando validação</option>
-          <option value="fechado">Fechado</option>
+          <option value="todos">{t("serviceDesk.queue.filters.status")}</option>
+          <option value="atraso">{t("serviceDesk.queue.options.late")}</option>
+          <option value="aberto">{t("serviceDesk.status.aberto")}</option>
+          <option value="em_andamento">{t("serviceDesk.status.em_andamento")}</option>
+          <option value="reaberto">{t("serviceDesk.status.reaberto")}</option>
+          <option value="resolvido">{t("serviceDesk.status.resolvido")}</option>
+          <option value="fechado">{t("serviceDesk.status.fechado")}</option>
         </select>
         <select value={priority} onChange={(e) => resetPage(setPriority)(e.target.value)} className="hub-input" style={{ flex: "0 1 130px" }}>
-          <option value="todos">Prioridade</option>
-          <option value="alta">Alta</option>
-          <option value="media">Média</option>
-          <option value="baixa">Baixa</option>
+          <option value="todos">{t("serviceDesk.queue.filters.priority")}</option>
+          <option value="alta">{t("serviceDesk.priority.alta")}</option>
+          <option value="media">{t("serviceDesk.priority.media")}</option>
+          <option value="baixa">{t("serviceDesk.priority.baixa")}</option>
         </select>
         <select value={assignee} onChange={(e) => resetPage(setAssignee)(e.target.value)} className="hub-input" style={{ flex: "0 1 150px" }}>
-          <option value="todos">Responsável</option>
-          <option value="meus">Meus chamados</option>
-          <option value="nao">Não atribuídos</option>
+          <option value="todos">{t("serviceDesk.queue.filters.responsible")}</option>
+          <option value="meus">{t("serviceDesk.queue.options.myTickets")}</option>
+          <option value="nao">{t("serviceDesk.queue.options.unassigned")}</option>
           {analysts.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
         </select>
         <select value={sort} onChange={(e) => setSort(e.target.value as SortMode)} className="hub-input" style={{ flex: "0 1 130px" }}>
-          <option value="urgencia">Urgência</option>
-          <option value="recente">Recentes</option>
+          <option value="urgencia">{t("serviceDesk.queue.options.urgency")}</option>
+          <option value="recente">{t("serviceDesk.queue.options.recent")}</option>
         </select>
       </div>
 
@@ -318,8 +318,8 @@ export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }:
         <div className="hub-card" style={{ padding: "8px 0" }}>
           <HubEmptyState
             variant="default"
-            title="Nenhum chamado na fila"
-            description="Ajuste os filtros ou aguarde novos chamados."
+            title={t("serviceDesk.queue.emptyTitle")}
+            description={t("serviceDesk.queue.emptyDesc")}
           />
         </div>
       ) : (
@@ -332,7 +332,7 @@ export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }:
                 {/* Cabeçalho da coluna */}
                 <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "12px 14px", borderBottom: "1px solid var(--border)" }}>
                   <span style={{ width: 8, height: 8, borderRadius: "50%", background: meta.color, flexShrink: 0 }} />
-                  <span style={{ fontSize: "12.5px", fontWeight: 700, color: "var(--text)" }}>{meta.label}</span>
+                  <span style={{ fontSize: "12.5px", fontWeight: 700, color: "var(--text)" }}>{t(`serviceDesk.status.${col}`)}</span>
                   <span style={{ marginLeft: "auto", fontSize: "11px", fontWeight: 700, color: "var(--text-faint)", background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 99, padding: "1px 8px", minWidth: 22, textAlign: "center" }}>
                     {items.length}
                   </span>
@@ -340,7 +340,7 @@ export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }:
                 {/* Cards */}
                 <div style={{ display: "flex", flexDirection: "column", gap: 10, padding: 12, overflowY: "auto" }}>
                   {items.length === 0 ? (
-                    <p style={{ margin: "6px 4px", fontSize: "12px", color: "var(--text-faint)", textAlign: "center" }}>Nenhum chamado</p>
+                    <p style={{ margin: "6px 4px", fontSize: "12px", color: "var(--text-faint)", textAlign: "center" }}>{t("serviceDesk.queue.columnEmpty")}</p>
                   ) : (
                     items.map((r) => <KanbanCard key={r.t.id} r={r} analysts={analysts} now={now} />)
                   )}
