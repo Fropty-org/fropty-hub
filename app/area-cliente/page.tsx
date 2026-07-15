@@ -52,6 +52,9 @@ export default function AreaClientePage() {
     const saved = (localStorage.getItem("fropty-theme") ?? "dark") as "dark" | "light";
     setIsDark(saved === "dark");
     document.documentElement.classList.toggle("dark", saved === "dark");
+    // Persiste o tema resolvido (default dark) para que as telas seguintes do
+    // fluxo — como o desafio 2FA — não caiam no tema do sistema por localStorage vazio.
+    localStorage.setItem("fropty-theme", saved);
   }, []);
 
   function toggleTheme() {
