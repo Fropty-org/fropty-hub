@@ -76,15 +76,14 @@ function SlaClock({ s }: { s: SlaState | null }) {
   return (
     <span
       style={{
-        width: 22, height: 22, borderRadius: "50%", flexShrink: 0, boxSizing: "border-box",
-        padding: 2.5,
+        position: "relative", display: "inline-block", flexShrink: 0,
+        width: 22, height: 22, borderRadius: "50%", boxSizing: "border-box",
         border: `2px solid ${`color-mix(in srgb, ${color} 40%, transparent)`}`,
-        display: "inline-flex",
       }}
     >
       <span
         style={{
-          width: "100%", height: "100%", borderRadius: "50%",
+          position: "absolute", inset: 3, borderRadius: "50%",
           background: `conic-gradient(${color} ${pct * 360}deg, var(--surface) 0)`,
         }}
       />

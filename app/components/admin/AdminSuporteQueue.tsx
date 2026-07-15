@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Search, ChevronRight, AlertTriangle, Loader2, Bookmark, Plus, X } from "lucide-react";
+import { Search, ChevronRight, Loader2, Bookmark, Plus, X } from "lucide-react";
 import { StatusBadge } from "@/app/components/ui/StatusBadge";
 import { Pagination } from "@/app/components/ui/Pagination";
 import { HubEmptyState } from "@/app/components/ui/HubEmptyState";
@@ -77,19 +77,23 @@ function activeSla(t: QueueTicket, now?: number) {
   return { state, phase };
 }
 
-function SlaCell({ t, now }: { t: QueueTicket; now: number }) {
+/* Pizza de progresso do SLA (mesma linguagem visual da tela do chamado):
+   disco preenchido = fração do prazo ativo decorrida, dentro de um anel claro.
+   Sempre centralizado (inset simétrico). */
+function SlaPie({ t, now }: { t: QueueTicket; now: number }) {
   const isOpen = OPEN_STATUSES.includes(t.status);
-  const { state, phase } = activeSla(t, now);
-
-  if (!isOpen) {
-    return <span className="hub-badge hub-badge-neutral sm">Concluído</span>;
+  let color = "var(--c-success)";
+  let pct = 1;
+  let title = "Concluído";
+  if (isOpen) {
+    const { state, phase } = activeSla(t, now);
+    color = state.breached ? "var(--c-danger)" : state.ratio > 0.75 ? "var(--c-warning)" : "var(--c-info)";
+    pct = Math.min(1, state.ratio);
+    title = `${phase}: ${state.label}`;
   }
-
-  const tone = state.breached ? "danger" : state.ratio > 0.75 ? "warning" : "info";
   return (
-    <span className={`hub-badge hub-badge-${tone} sm`} title={`${phase}: ${state.label}`}>
-      {state.breached && <AlertTriangle size={11} />}
-      {phase[0]}· {state.label}
+    <span title={title} style={{ position: "relative", display: "inline-block", width: 20, height: 20, borderRadius: "50%", boxSizing: "border-box", border: `2px solid ${`color-mix(in srgb, ${color} 40%, transparent)`}` }}>
+      <span style={{ position: "absolute", inset: 2.5, borderRadius: "50%", background: `conic-gradient(${color} ${pct * 360}deg, var(--surface) 0)` }} />
     </span>
   );
 }
@@ -252,12 +256,12 @@ export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }:
             style={{ paddingLeft: 32, width: "100%" }}
           />
         </div>
-        <select value={client} onChange={(e) => resetPage(setClient)(e.target.value)} className="hub-input" style={{ flex: "0 1 180px" }}>
-          <option value="todos">Todos os clientes</option>
+        <select value={client} onChange={(e) => resetPage(setClient)(e.target.value)} className="hub-input" style={{ flex: "0 1 150px" }}>
+          <option value="todos">Clientes</option>
           {clients.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
         </select>
-        <select value={status} onChange={(e) => resetPage(setStatus as (v: string) => void)(e.target.value)} className="hub-input" style={{ flex: "0 1 160px" }}>
-          <option value="todos">Todos os status</option>
+        <select value={status} onChange={(e) => resetPage(setStatus as (v: string) => void)(e.target.value)} className="hub-input" style={{ flex: "0 1 140px" }}>
+          <option value="todos">Status</option>
           <option value="atraso">⚠ Em atraso (SLA)</option>
           <option value="aberto">Aberto</option>
           <option value="em_andamento">Em andamento</option>
@@ -265,21 +269,21 @@ export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }:
           <option value="resolvido">Aguardando validação</option>
           <option value="fechado">Fechado</option>
         </select>
-        <select value={priority} onChange={(e) => resetPage(setPriority)(e.target.value)} className="hub-input" style={{ flex: "0 1 140px" }}>
-          <option value="todos">Toda prioridade</option>
+        <select value={priority} onChange={(e) => resetPage(setPriority)(e.target.value)} className="hub-input" style={{ flex: "0 1 130px" }}>
+          <option value="todos">Prioridade</option>
           <option value="alta">Alta</option>
           <option value="media">Média</option>
           <option value="baixa">Baixa</option>
         </select>
-        <select value={assignee} onChange={(e) => resetPage(setAssignee)(e.target.value)} className="hub-input" style={{ flex: "0 1 170px" }}>
-          <option value="todos">Todo responsável</option>
+        <select value={assignee} onChange={(e) => resetPage(setAssignee)(e.target.value)} className="hub-input" style={{ flex: "0 1 150px" }}>
+          <option value="todos">Responsável</option>
           <option value="meus">Meus chamados</option>
           <option value="nao">Não atribuídos</option>
           {analysts.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
         </select>
-        <select value={sort} onChange={(e) => setSort(e.target.value as SortMode)} className="hub-input" style={{ flex: "0 1 150px" }}>
-          <option value="urgencia">Ordenar: urgência</option>
-          <option value="recente">Ordenar: recentes</option>
+        <select value={sort} onChange={(e) => setSort(e.target.value as SortMode)} className="hub-input" style={{ flex: "0 1 130px" }}>
+          <option value="urgencia">Urgência</option>
+          <option value="recente">Recentes</option>
         </select>
       </div>
 
@@ -295,31 +299,31 @@ export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }:
       ) : (
         <div className="hub-card" style={{ overflow: "hidden", padding: 0 }}>
           {/* Cabeçalho */}
-          <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 150px 108px 92px 140px 64px 22px", padding: "10px 18px", background: "var(--surface-2)", borderBottom: "1px solid var(--border)", fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--text-faint)" }}>
-            <span>Chamado</span><span>Cliente</span><span>Responsável</span><span>Status</span><span>Prioridade</span><span>SLA</span><span style={{ textAlign: "right" }}>Atual.</span><span />
+          <div style={{ display: "grid", gridTemplateColumns: "minmax(0,2fr) minmax(0,1.1fr) 168px 150px 104px 64px 24px", padding: "10px 18px", background: "var(--surface-2)", borderBottom: "1px solid var(--border)", fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--text-faint)" }}>
+            <span>UFT</span><span>Cliente</span><span>Responsável</span><span style={{ textAlign: "center" }}>Status</span><span style={{ textAlign: "center" }}>Prioridade</span><span style={{ textAlign: "center" }}>SLA</span><span />
           </div>
 
           {paged.map((r, i) => {
             const t = r.t;
-            const updated = new Date(t.updatedAt).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
             return (
               <div
                 key={t.id}
                 className="hub-row-link"
-                style={{ display: "grid", gridTemplateColumns: "2fr 1fr 150px 108px 92px 140px 64px 22px", padding: "12px 18px", alignItems: "center", borderBottom: i < paged.length - 1 ? "1px solid var(--border)" : "none", color: "inherit", borderLeft: r.breached ? "3px solid var(--c-danger)" : "3px solid transparent" }}
+                style={{ display: "grid", gridTemplateColumns: "minmax(0,2fr) minmax(0,1.1fr) 168px 150px 104px 64px 24px", padding: "12px 18px", alignItems: "center", borderBottom: i < paged.length - 1 ? "1px solid var(--border)" : "none", color: "inherit", borderLeft: r.breached ? "3px solid var(--c-danger)" : "3px solid transparent" }}
               >
-                <Link href={`/portal/suporte/${t.id}`} style={{ minWidth: 0, textDecoration: "none", color: "inherit" }}>
-                  <p style={{ margin: 0, fontSize: "13.5px", fontWeight: 600, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{t.subject}</p>
-                  <p style={{ margin: "2px 0 0", fontSize: "11px", color: "var(--text-faint)" }}>
-                    {t.ticketNumber != null && <span style={{ fontWeight: 700 }}>UFT{String(t.ticketNumber).padStart(4, "0")}</span>} · {t.category}
+                <Link href={`/portal/suporte/${t.id}`} style={{ minWidth: 0, textDecoration: "none", color: "inherit", paddingRight: 12 }}>
+                  <p style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text)", letterSpacing: "-0.01em" }}>
+                    {t.ticketNumber != null ? `UFT${String(t.ticketNumber).padStart(4, "0")}` : "—"}
+                  </p>
+                  <p style={{ margin: "2px 0 0", fontSize: "12px", color: "var(--text-faint)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {t.subject}
                   </p>
                 </Link>
-                <span style={{ fontSize: "12.5px", color: "var(--text-muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", paddingRight: 8 }}>{t.clientName}</span>
-                <span style={{ paddingRight: 8 }}><AssigneeSelect ticketId={t.id} value={t.assignedTo} analysts={analysts} /></span>
-                <span><StatusBadge kind="ticket" status={t.status} size="sm" /></span>
-                <span><StatusBadge kind="ticket-priority" status={t.priority} size="sm" /></span>
-                <span><SlaCell t={t} now={now} /></span>
-                <span style={{ fontSize: "12px", color: "var(--text-faint)", textAlign: "right" }}>{updated}</span>
+                <span style={{ fontSize: "12.5px", color: "var(--text-muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", paddingRight: 12 }}>{t.clientName}</span>
+                <span style={{ paddingRight: 12 }}><AssigneeSelect ticketId={t.id} value={t.assignedTo} analysts={analysts} /></span>
+                <span style={{ display: "flex", justifyContent: "center" }}><StatusBadge kind="ticket" status={t.status} size="sm" /></span>
+                <span style={{ display: "flex", justifyContent: "center" }}><StatusBadge kind="ticket-priority" status={t.priority} size="sm" /></span>
+                <span style={{ display: "flex", justifyContent: "center" }}><SlaPie t={t} now={now} /></span>
                 <Link href={`/portal/suporte/${t.id}`} style={{ display: "flex", justifyContent: "flex-end", color: "var(--text-faint)" }} aria-label="Abrir chamado">
                   <ChevronRight size={14} />
                 </Link>
