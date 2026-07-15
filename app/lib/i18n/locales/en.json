@@ -366,6 +366,81 @@
         "submit": "Invite user",
         "submitting": "Sending invite…"
       }
+    },
+    "nav": {
+      "groups": {
+        "main": "Main",
+        "ops": "Operations",
+        "produto": "Product",
+        "sistema": "System"
+      },
+      "overview": "Overview",
+      "users": "Users",
+      "customerSuccess": "Customer Success",
+      "projects": "Projects",
+      "contracts": "Contracts",
+      "finance": "Finance",
+      "serviceDesk": "Service Desk",
+      "kanban": "Kanban",
+      "calendar": "Calendar",
+      "roadmap": "Roadmap",
+      "feedback": "Feedback",
+      "knowledgeBase": "Knowledge Base",
+      "analytics": "Analytics",
+      "audit": "Audit",
+      "usersOverview": "Overview",
+      "usersNew": "New user",
+      "adminRole": "Administrator",
+      "expand": "Expand menu",
+      "collapse": "Collapse menu",
+      "search": "Search…",
+      "openMenu": "Open menu",
+      "closeMenu": "Close menu"
+    },
+    "overview": {
+      "title": "Overview",
+      "subtitle": "Operational summary of the Fropty ecosystem",
+      "kpi": {
+        "activeClients": "Active clients",
+        "openTickets": "Open tickets",
+        "mrr": "MRR",
+        "resolutionRate": "Resolution rate"
+      },
+      "atRisk": "{n} at risk",
+      "allHealthy": "all healthy",
+      "resolvedSub": "{n} resolved",
+      "activeClientsSub": "{n} active clients",
+      "ticketsResolvedSub": "{n} tickets resolved",
+      "trendRisk": "{n} risk",
+      "trendHealthy": "Healthy",
+      "trendActive": "Active",
+      "trendTotal": "{n} total",
+      "trendSla": "{n}% SLA",
+      "activeProjects": "Active projects",
+      "activeContracts": "Active contracts",
+      "csAttention": "CS — attention",
+      "csRisk": "CS — risk/critical",
+      "highPriority": "High priority",
+      "viewAll": "View all",
+      "allClear": "All clear",
+      "noUrgent": "No urgent tickets open.",
+      "recentTickets": "Recent tickets",
+      "noTickets": "No tickets yet.",
+      "urgent": "urgent",
+      "quickAccess": "Quick access",
+      "status": {
+        "aberto": "Open",
+        "em_andamento": "In progress",
+        "reaberto": "Reopened",
+        "resolvido": "Resolved",
+        "fechado": "Closed"
+      },
+      "ago": {
+        "now": "now",
+        "min": "{n}m ago",
+        "hour": "{n}h ago",
+        "day": "{n}d ago"
+      }
     }
   },
   "legal": {

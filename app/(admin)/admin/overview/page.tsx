@@ -10,11 +10,13 @@ import {
 import type { LucideIcon } from "lucide-react";
 import { ACTIVE_PROJECT_STATUSES } from "@/app/lib/constants/projects";
 import { RefreshStatus } from "@/app/components/ui/RefreshStatus";
+import { getServerI18n } from "@/app/lib/i18n/server";
 
 export const metadata: Metadata = { title: "Visão Geral — Admin" };
 
 export default async function AdminOverviewPage() {
   const supabase = await createClient();
+  const { t } = await getServerI18n();
 
   const [
     { count: totalClients },
@@ -65,54 +67,54 @@ export default async function AdminOverviewPage() {
     trend?: string; trendDir?: "up" | "down" | "neutral";
   }[] = [
     {
-      label: "Clientes ativos",
+      label: t("admin.overview.kpi.activeClients"),
       value: totalClients ?? 0,
-      sub: atRisk > 0 ? `${atRisk} em risco` : "todos saudáveis",
+      sub: atRisk > 0 ? t("admin.overview.atRisk", { n: atRisk }) : t("admin.overview.allHealthy"),
       Icon: Users,
       accent: "var(--c-info)",
       bg: "var(--c-info-bg)",
       href: "/admin/usuarios",
       trendDir: atRisk > 0 ? "down" : "up",
-      trend: atRisk > 0 ? `${atRisk} risco` : "Saudável",
+      trend: atRisk > 0 ? t("admin.overview.trendRisk", { n: atRisk }) : t("admin.overview.trendHealthy"),
     },
     {
-      label: "Tickets abertos",
+      label: t("admin.overview.kpi.openTickets"),
       value: openTickets ?? 0,
-      sub: `${closedTickets ?? 0} resolvidos`,
+      sub: t("admin.overview.resolvedSub", { n: closedTickets ?? 0 }),
       Icon: MessageCircle,
       accent: "var(--brand-accent)",
       bg: "rgba(239,159,39,0.10)",
       href: "/portal/suporte",
       trendDir: (openTickets ?? 0) > 5 ? "down" : "neutral",
-      trend: `${totalTickets} total`,
+      trend: t("admin.overview.trendTotal", { n: totalTickets }),
     },
     {
-      label: "MRR",
+      label: t("admin.overview.kpi.mrr"),
       value: `R$${mrr.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`,
-      sub: `${totalClients ?? 0} clientes ativos`,
+      sub: t("admin.overview.activeClientsSub", { n: totalClients ?? 0 }),
       Icon: DollarSign,
       accent: "var(--c-success)",
       bg: "var(--c-success-bg)",
       href: "/admin/financeiro",
       trendDir: "up",
-      trend: "Ativo",
+      trend: t("admin.overview.trendActive"),
     },
     {
-      label: "Taxa de resolução",
+      label: t("admin.overview.kpi.resolutionRate"),
       value: `${resolvedRate}%`,
-      sub: `${closedTickets ?? 0} tickets resolvidos`,
+      sub: t("admin.overview.ticketsResolvedSub", { n: closedTickets ?? 0 }),
       Icon: CheckCircle,
       accent: resolvedRate >= 80 ? "var(--c-success)" : resolvedRate >= 50 ? "var(--brand-accent)" : "var(--c-danger)",
       bg: resolvedRate >= 80 ? "var(--c-success-bg)" : resolvedRate >= 50 ? "rgba(239,159,39,0.10)" : "var(--c-danger-bg)",
       href: "/admin/analytics",
       trendDir: resolvedRate >= 80 ? "up" : resolvedRate >= 50 ? "neutral" : "down",
-      trend: `${resolvedRate}% SLA`,
+      trend: t("admin.overview.trendSla", { n: resolvedRate }),
     },
   ];
 
   const STATUS_LABEL: Record<string, string> = {
-    aberto: "Aberto", em_andamento: "Em andamento", reaberto: "Reaberto",
-    resolvido: "Resolvido", fechado: "Fechado",
+    aberto: t("admin.overview.status.aberto"), em_andamento: t("admin.overview.status.em_andamento"), reaberto: t("admin.overview.status.reaberto"),
+    resolvido: t("admin.overview.status.resolvido"), fechado: t("admin.overview.status.fechado"),
   };
   const STATUS_BADGE: Record<string, string> = {
     aberto: "hub-badge hub-badge-danger",
@@ -125,22 +127,22 @@ export default async function AdminOverviewPage() {
   const now = new Date();
   function timeAgo(dateStr: string) {
     const diff = Math.floor((now.getTime() - new Date(dateStr).getTime()) / 60000);
-    if (diff < 1) return "agora";
-    if (diff < 60) return `${diff}m atrás`;
-    if (diff < 1440) return `${Math.floor(diff / 60)}h atrás`;
-    return `${Math.floor(diff / 1440)}d atrás`;
+    if (diff < 1) return t("admin.overview.ago.now");
+    if (diff < 60) return t("admin.overview.ago.min", { n: diff });
+    if (diff < 1440) return t("admin.overview.ago.hour", { n: Math.floor(diff / 60) });
+    return t("admin.overview.ago.day", { n: Math.floor(diff / 1440) });
   }
 
   const quickLinks: { href: string; label: string; Icon: LucideIcon }[] = [
-    { href: "/admin/usuarios",         label: "Usuários",          Icon: Users },
-    { href: "/admin/customer-success", label: "Customer Success",  Icon: Heart },
-    { href: "/admin/projetos",         label: "Projetos",          Icon: FolderKanban },
-    { href: "/admin/contratos",        label: "Contratos",         Icon: FileText },
-    { href: "/admin/financeiro",       label: "Financeiro",        Icon: DollarSign },
-    { href: "/admin/roadmap",          label: "Roadmap",           Icon: TrendingUp },
-    { href: "/admin/feedback",         label: "Feedback",          Icon: Star },
-    { href: "/admin/analytics",        label: "Analytics",         Icon: BarChart2 },
-    { href: "/admin/base-conhecimento",label: "Base de Conhecimento", Icon: BookOpen },
+    { href: "/admin/usuarios",         label: t("admin.nav.users"),          Icon: Users },
+    { href: "/admin/customer-success", label: t("admin.nav.customerSuccess"),  Icon: Heart },
+    { href: "/admin/projetos",         label: t("admin.nav.projects"),          Icon: FolderKanban },
+    { href: "/admin/contratos",        label: t("admin.nav.contracts"),         Icon: FileText },
+    { href: "/admin/financeiro",       label: t("admin.nav.finance"),        Icon: DollarSign },
+    { href: "/admin/roadmap",          label: t("admin.nav.roadmap"),           Icon: TrendingUp },
+    { href: "/admin/feedback",         label: t("admin.nav.feedback"),          Icon: Star },
+    { href: "/admin/analytics",        label: t("admin.nav.analytics"),         Icon: BarChart2 },
+    { href: "/admin/base-conhecimento",label: t("admin.nav.knowledgeBase"), Icon: BookOpen },
   ];
 
   return (
@@ -149,8 +151,8 @@ export default async function AdminOverviewPage() {
       {/* ── Page header ── */}
       <div className="hub-page-header" style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
         <div>
-          <h1 className="hub-page-title">Visão Geral</h1>
-          <p className="hub-page-sub">Resumo operacional do ecossistema Fropty</p>
+          <h1 className="hub-page-title">{t("admin.overview.title")}</h1>
+          <p className="hub-page-sub">{t("admin.overview.subtitle")}</p>
         </div>
         <RefreshStatus />
       </div>
@@ -182,10 +184,10 @@ export default async function AdminOverviewPage() {
       {/* ── Secondary metrics strip ── */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 10, marginBottom: 28 }}>
         {[
-          { href: "/admin/projetos",         label: "Projetos ativos",    value: openProjects ?? 0,    Icon: FolderKanban,  color: "var(--primary)" },
-          { href: "/admin/contratos",        label: "Contratos ativos",   value: activeContracts ?? 0, Icon: FileText,      color: "var(--c-success)" },
-          { href: "/admin/customer-success", label: "CS — atenção",       value: healthCounts.atencao, Icon: Heart,         color: "var(--brand-accent)" },
-          { href: "/admin/customer-success", label: "CS — risco/crítico", value: atRisk,               Icon: AlertTriangle, color: "var(--c-danger)" },
+          { href: "/admin/projetos",         label: t("admin.overview.activeProjects"),    value: openProjects ?? 0,    Icon: FolderKanban,  color: "var(--primary)" },
+          { href: "/admin/contratos",        label: t("admin.overview.activeContracts"),   value: activeContracts ?? 0, Icon: FileText,      color: "var(--c-success)" },
+          { href: "/admin/customer-success", label: t("admin.overview.csAttention"),       value: healthCounts.atencao, Icon: Heart,         color: "var(--brand-accent)" },
+          { href: "/admin/customer-success", label: t("admin.overview.csRisk"), value: atRisk,               Icon: AlertTriangle, color: "var(--c-danger)" },
         ].map(({ href, label, value, Icon, color }) => (
           <Link key={label} href={href} className="hub-card hub-card-sm hub-card-hover" style={{ display: "flex", alignItems: "center", gap: 12, textDecoration: "none" }}>
             <div style={{ width: 34, height: 34, borderRadius: 9, background: `color-mix(in srgb, ${color} 12%, transparent)`, display: "flex", alignItems: "center", justifyContent: "center", color, flexShrink: 0 }}>
@@ -207,7 +209,7 @@ export default async function AdminOverviewPage() {
           <div className="hub-section-header">
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <AlertTriangle size={14} style={{ color: "var(--c-danger)" }} />
-              <span className="hub-section-title">Alta prioridade</span>
+              <span className="hub-section-title">{t("admin.overview.highPriority")}</span>
               {(urgentTickets?.length ?? 0) > 0 && (
                 <span className="hub-badge hub-badge-danger" style={{ fontSize: "10px", padding: "1px 7px" }}>
                   {urgentTickets!.length}
@@ -215,7 +217,7 @@ export default async function AdminOverviewPage() {
               )}
             </div>
             <Link href="/portal/suporte" className="hub-link-arrow" style={{ fontSize: "12px" }}>
-              Ver todos <ChevronRight size={12} />
+              {t("admin.overview.viewAll")} <ChevronRight size={12} />
             </Link>
           </div>
 
@@ -225,27 +227,27 @@ export default async function AdminOverviewPage() {
                 <div className="hub-empty-icon">
                   <CheckCircle size={20} style={{ color: "var(--c-success)" }} />
                 </div>
-                <p className="hub-empty-title" style={{ color: "var(--c-success)" }}>Tudo em dia</p>
-                <p className="hub-empty-desc">Nenhum ticket urgente em aberto.</p>
+                <p className="hub-empty-title" style={{ color: "var(--c-success)" }}>{t("admin.overview.allClear")}</p>
+                <p className="hub-empty-desc">{t("admin.overview.noUrgent")}</p>
               </div>
             ) : (
-              (urgentTickets ?? []).map((t, i, arr) => {
-                const ref = t.ticket_number ? `#${String(t.ticket_number).padStart(4, "0")}` : null;
+              (urgentTickets ?? []).map((tk, i, arr) => {
+                const ref = tk.ticket_number ? `#${String(tk.ticket_number).padStart(4, "0")}` : null;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const clientName = (t.profiles as any)?.name;
+                const clientName = (tk.profiles as any)?.name;
                 return (
-                  <Link key={t.id} href={`/portal/suporte/${t.id}`}
+                  <Link key={tk.id} href={`/portal/suporte/${tk.id}`}
                     style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, padding: "11px 16px", textDecoration: "none", borderBottom: i < arr.length - 1 ? "1px solid var(--border)" : "none" }}
                     className="hub-row-link"
                   >
                     <div style={{ minWidth: 0, flex: 1 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 1 }}>
                         {ref && <code className="hub-code" style={{ padding: "1px 5px" }}>{ref}</code>}
-                        <p style={{ margin: 0, fontSize: "13px", fontWeight: 600, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{t.subject}</p>
+                        <p style={{ margin: 0, fontSize: "13px", fontWeight: 600, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{tk.subject}</p>
                       </div>
                       <p style={{ margin: 0, fontSize: "11px", color: "var(--text-faint)" }}>{clientName ?? "—"}</p>
                     </div>
-                    <span className="hub-badge hub-badge-danger" style={{ fontSize: "10px" }}>urgente</span>
+                    <span className="hub-badge hub-badge-danger" style={{ fontSize: "10px" }}>{t("admin.overview.urgent")}</span>
                   </Link>
                 );
               })
@@ -258,32 +260,32 @@ export default async function AdminOverviewPage() {
           <div className="hub-section-header">
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <TrendingUp size={14} style={{ color: "var(--text-muted)" }} />
-              <span className="hub-section-title">Tickets recentes</span>
+              <span className="hub-section-title">{t("admin.overview.recentTickets")}</span>
             </div>
             <Link href="/portal/suporte" className="hub-link-arrow" style={{ fontSize: "12px" }}>
-              Ver todos <ChevronRight size={12} />
+              {t("admin.overview.viewAll")} <ChevronRight size={12} />
             </Link>
           </div>
 
           <div className="hub-card" style={{ padding: 0, overflow: "hidden" }}>
             {(recentTickets ?? []).length === 0 ? (
               <div className="hub-empty" style={{ padding: "28px 16px" }}>
-                <p className="hub-empty-desc">Nenhum ticket ainda.</p>
+                <p className="hub-empty-desc">{t("admin.overview.noTickets")}</p>
               </div>
             ) : (
-              (recentTickets ?? []).map((t, i, arr) => {
-                const status = t.status as string;
+              (recentTickets ?? []).map((tk, i, arr) => {
+                const status = tk.status as string;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const clientName = (t.profiles as any)?.name;
+                const clientName = (tk.profiles as any)?.name;
                 return (
-                  <Link key={t.id} href={`/portal/suporte/${t.id}`}
+                  <Link key={tk.id} href={`/portal/suporte/${tk.id}`}
                     style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, padding: "11px 16px", textDecoration: "none", borderBottom: i < arr.length - 1 ? "1px solid var(--border)" : "none" }}
                     className="hub-row-link"
                   >
                     <div style={{ minWidth: 0, flex: 1 }}>
-                      <p style={{ margin: "0 0 1px", fontSize: "13px", fontWeight: 600, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{t.subject}</p>
+                      <p style={{ margin: "0 0 1px", fontSize: "13px", fontWeight: 600, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{tk.subject}</p>
                       <p style={{ margin: 0, fontSize: "11px", color: "var(--text-faint)" }}>
-                        {clientName ?? "—"} · {timeAgo(t.created_at)}
+                        {clientName ?? "—"} · {timeAgo(tk.created_at)}
                       </p>
                     </div>
                     <span className={STATUS_BADGE[status] ?? "hub-badge hub-badge-neutral"} style={{ fontSize: "10px" }}>
@@ -300,7 +302,7 @@ export default async function AdminOverviewPage() {
       {/* ── Quick links ── */}
       <div>
         <div className="hub-section-divider">
-          <span className="hub-section-divider-label">Acesso rápido</span>
+          <span className="hub-section-divider-label">{t("admin.overview.quickAccess")}</span>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 8 }}>
           {quickLinks.map(({ href, label, Icon }) => (

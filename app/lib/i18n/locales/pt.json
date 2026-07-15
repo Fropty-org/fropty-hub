@@ -366,6 +366,81 @@
         "submit": "Convidar usuário",
         "submitting": "Enviando convite…"
       }
+    },
+    "nav": {
+      "groups": {
+        "main": "Principal",
+        "ops": "Operações",
+        "produto": "Produto",
+        "sistema": "Sistema"
+      },
+      "overview": "Visão Geral",
+      "users": "Usuários",
+      "customerSuccess": "Customer Success",
+      "projects": "Projetos",
+      "contracts": "Contratos",
+      "finance": "Financeiro",
+      "serviceDesk": "Service Desk",
+      "kanban": "Kanban",
+      "calendar": "Calendário",
+      "roadmap": "Roadmap",
+      "feedback": "Feedback",
+      "knowledgeBase": "Base de Conhecimento",
+      "analytics": "Analytics",
+      "audit": "Auditoria",
+      "usersOverview": "Visão Geral",
+      "usersNew": "Novo Usuário",
+      "adminRole": "Administrador",
+      "expand": "Expandir menu",
+      "collapse": "Recolher menu",
+      "search": "Buscar…",
+      "openMenu": "Abrir menu",
+      "closeMenu": "Fechar menu"
+    },
+    "overview": {
+      "title": "Visão Geral",
+      "subtitle": "Resumo operacional do ecossistema Fropty",
+      "kpi": {
+        "activeClients": "Clientes ativos",
+        "openTickets": "Tickets abertos",
+        "mrr": "MRR",
+        "resolutionRate": "Taxa de resolução"
+      },
+      "atRisk": "{n} em risco",
+      "allHealthy": "todos saudáveis",
+      "resolvedSub": "{n} resolvidos",
+      "activeClientsSub": "{n} clientes ativos",
+      "ticketsResolvedSub": "{n} tickets resolvidos",
+      "trendRisk": "{n} risco",
+      "trendHealthy": "Saudável",
+      "trendActive": "Ativo",
+      "trendTotal": "{n} total",
+      "trendSla": "{n}% SLA",
+      "activeProjects": "Projetos ativos",
+      "activeContracts": "Contratos ativos",
+      "csAttention": "CS — atenção",
+      "csRisk": "CS — risco/crítico",
+      "highPriority": "Alta prioridade",
+      "viewAll": "Ver todos",
+      "allClear": "Tudo em dia",
+      "noUrgent": "Nenhum ticket urgente em aberto.",
+      "recentTickets": "Tickets recentes",
+      "noTickets": "Nenhum ticket ainda.",
+      "urgent": "urgente",
+      "quickAccess": "Acesso rápido",
+      "status": {
+        "aberto": "Aberto",
+        "em_andamento": "Em andamento",
+        "reaberto": "Reaberto",
+        "resolvido": "Resolvido",
+        "fechado": "Fechado"
+      },
+      "ago": {
+        "now": "agora",
+        "min": "{n}m atrás",
+        "hour": "{n}h atrás",
+        "day": "{n}d atrás"
+      }
     }
   },
   "legal": {

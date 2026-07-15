@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { PortalThemeToggle } from "@/app/components/cliente/PortalThemeToggle";
+import { useT } from "@/app/lib/i18n/I18nProvider";
 import {
   LayoutDashboard, Users, CreditCard, MessageCircle, BarChart2, ShieldCheck,
   BookOpen, Map, MessageSquarePlus, FolderKanban, FileSignature,
@@ -18,31 +19,27 @@ type SubItem = { id: string; href: string; label: string; Icon?: LucideIcon };
 type NavItem = { id: string; href: string; Icon: LucideIcon; label: string; group?: string; subItems?: SubItem[] };
 
 const NAV: NavItem[] = [
-  { id: "overview",          href: "/admin/overview",          Icon: LayoutDashboard,   label: "Visão Geral",         group: "main" },
+  { id: "overview",          href: "/admin/overview",          Icon: LayoutDashboard,   label: "admin.nav.overview",         group: "main" },
   {
-    id: "usuarios", href: "/admin/usuarios", Icon: Users, label: "Usuários", group: "main",
+    id: "usuarios", href: "/admin/usuarios", Icon: Users, label: "admin.nav.users", group: "main",
     subItems: [
-      { id: "usuarios-overview", href: "/admin/usuarios",      label: "Visão Geral",   Icon: ListFilter },
-      { id: "usuarios-novo",     href: "/admin/usuarios/novo", label: "Novo Usuário",  Icon: UserPlus },
+      { id: "usuarios-overview", href: "/admin/usuarios",      label: "admin.nav.usersOverview",   Icon: ListFilter },
+      { id: "usuarios-novo",     href: "/admin/usuarios/novo", label: "admin.nav.usersNew",  Icon: UserPlus },
     ],
   },
-  { id: "customer-success",  href: "/admin/customer-success",  Icon: HeartPulse,        label: "Customer Success",    group: "main" },
-  { id: "projetos",          href: "/admin/projetos",          Icon: FolderKanban,      label: "Projetos",            group: "ops" },
-  { id: "contratos",         href: "/admin/contratos",         Icon: FileSignature,     label: "Contratos",           group: "ops" },
-  { id: "financeiro",        href: "/admin/financeiro",        Icon: CreditCard,        label: "Financeiro",          group: "ops" },
-  { id: "suporte",           href: "/admin/suporte",           Icon: MessageCircle,     label: "Service Desk",        group: "ops" },
-  { id: "kanban",            href: "/admin/kanban",            Icon: LayoutGrid,        label: "Kanban",              group: "ops" },
-  { id: "calendario",        href: "/admin/calendario",        Icon: CalendarDays,      label: "Calendário",          group: "ops" },
-  { id: "roadmap",           href: "/admin/roadmap",           Icon: Map,               label: "Roadmap",             group: "produto" },
-  { id: "feedback",          href: "/admin/feedback",          Icon: MessageSquarePlus, label: "Feedback",            group: "produto" },
-  { id: "base-conhecimento", href: "/admin/base-conhecimento", Icon: BookOpen,          label: "Base de Conhecimento",group: "produto" },
-  { id: "analytics",         href: "/admin/analytics",         Icon: BarChart2,         label: "Analytics",           group: "sistema" },
-  { id: "audit",             href: "/admin/audit",             Icon: ShieldCheck,       label: "Auditoria",           group: "sistema" },
+  { id: "customer-success",  href: "/admin/customer-success",  Icon: HeartPulse,        label: "admin.nav.customerSuccess",    group: "main" },
+  { id: "projetos",          href: "/admin/projetos",          Icon: FolderKanban,      label: "admin.nav.projects",            group: "ops" },
+  { id: "contratos",         href: "/admin/contratos",         Icon: FileSignature,     label: "admin.nav.contracts",           group: "ops" },
+  { id: "financeiro",        href: "/admin/financeiro",        Icon: CreditCard,        label: "admin.nav.finance",          group: "ops" },
+  { id: "suporte",           href: "/admin/suporte",           Icon: MessageCircle,     label: "admin.nav.serviceDesk",        group: "ops" },
+  { id: "kanban",            href: "/admin/kanban",            Icon: LayoutGrid,        label: "admin.nav.kanban",              group: "ops" },
+  { id: "calendario",        href: "/admin/calendario",        Icon: CalendarDays,      label: "admin.nav.calendar",          group: "ops" },
+  { id: "roadmap",           href: "/admin/roadmap",           Icon: Map,               label: "admin.nav.roadmap",             group: "produto" },
+  { id: "feedback",          href: "/admin/feedback",          Icon: MessageSquarePlus, label: "admin.nav.feedback",            group: "produto" },
+  { id: "base-conhecimento", href: "/admin/base-conhecimento", Icon: BookOpen,          label: "admin.nav.knowledgeBase",group: "produto" },
+  { id: "analytics",         href: "/admin/analytics",         Icon: BarChart2,         label: "admin.nav.analytics",           group: "sistema" },
+  { id: "audit",             href: "/admin/audit",             Icon: ShieldCheck,       label: "admin.nav.audit",           group: "sistema" },
 ];
-
-const GROUP_LABELS: Record<string, string> = {
-  main: "Principal", ops: "Operações", produto: "Produto", sistema: "Sistema",
-};
 
 interface Props {
   name:          string;
@@ -53,6 +50,7 @@ interface Props {
 }
 
 export function AdminSidebar({ name, initials, userId, initialTheme = "dark", avatarUrl }: Props) {
+  const t = useT();
   const pathname              = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [collapsed,  setCollapsed]  = useState(false);
@@ -150,7 +148,7 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
           marginBottom: 20, paddingLeft: collapsed ? 0 : 2, flexShrink: 0,
         }}>
           {collapsed ? (
-            <button onClick={toggleCollapse} title="Expandir menu" style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <button onClick={toggleCollapse} title={t("admin.nav.expand")} style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <Image src="/favicon.svg" alt="Fropty Hub" width={28} height={28} unoptimized />
             </button>
           ) : (
@@ -161,7 +159,7 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
                   Fropty<span style={{ color: "var(--ac)" }}>Hub</span>
                 </span>
               </Link>
-              <button onClick={toggleCollapse} title="Recolher menu" className="portal-sidebar-toggle" style={{ width: 26, height: 26, borderRadius: "var(--r-sm)", border: "1px solid var(--border)", background: "var(--surface-2)", cursor: "pointer", color: "var(--text-faint)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <button onClick={toggleCollapse} title={t("admin.nav.collapse")} className="portal-sidebar-toggle" style={{ width: 26, height: 26, borderRadius: "var(--r-sm)", border: "1px solid var(--border)", background: "var(--surface-2)", cursor: "pointer", color: "var(--text-faint)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                 <PanelLeftClose size={13} />
               </button>
             </>
@@ -178,7 +176,7 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
                   textTransform: "uppercase", color: "var(--text-faint)",
                   padding: "0 10px", margin: "0 0 5px 0",
                 }}>
-                  {GROUP_LABELS[groupKey] ?? groupKey}
+                  {t("admin.nav.groups." + groupKey)}
                 </p>
               )}
               {items.map((item) => {
@@ -208,7 +206,7 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
                         <span style={{ flexShrink: 0, display: "flex", opacity: active ? 1 : 0.65 }}>
                           <Icon size={16} />
                         </span>
-                        <span style={{ flex: 1, textAlign: "left", overflow: "hidden", textOverflow: "ellipsis" }}>{label}</span>
+                        <span style={{ flex: 1, textAlign: "left", overflow: "hidden", textOverflow: "ellipsis" }}>{t(label)}</span>
                         <span style={{ flexShrink: 0, color: "var(--text-faint)", transition: "transform 0.2s", transform: isExpanded ? "rotate(0deg)" : "rotate(-90deg)", display: "flex" }}>
                           <ChevronDown size={13} />
                         </span>
@@ -239,7 +237,7 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
                                 onMouseLeave={e => { if (!subActive) { (e.currentTarget as HTMLAnchorElement).style.background = "transparent"; (e.currentTarget as HTMLAnchorElement).style.color = "var(--text-muted)"; } }}
                               >
                                 {SubIcon && <SubIcon size={13} style={{ opacity: subActive ? 1 : 0.6, flexShrink: 0 }} />}
-                                {sub.label}
+                                {t(sub.label)}
                               </Link>
                             );
                           })}
@@ -255,7 +253,7 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
                     key={id}
                     href={href}
                     onClick={() => setMobileOpen(false)}
-                    title={collapsed ? label : undefined}
+                    title={collapsed ? t(label) : undefined}
                     style={navLinkStyle(active)}
                     onMouseEnter={e => { if (!active) { (e.currentTarget as HTMLAnchorElement).style.background = "var(--sidebar-item-hover)"; (e.currentTarget as HTMLAnchorElement).style.color = "var(--text)"; } }}
                     onMouseLeave={e => { if (!active) { (e.currentTarget as HTMLAnchorElement).style.background = "transparent"; (e.currentTarget as HTMLAnchorElement).style.color = "var(--text-muted)"; } }}
@@ -264,7 +262,7 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
                       <Icon size={16} />
                     </span>
                     {!collapsed && (
-                      <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis" }}>{label}</span>
+                      <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis" }}>{t(label)}</span>
                     )}
                   </Link>
                 );
@@ -305,7 +303,7 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
               <div style={{ flex: 1, overflow: "hidden", minWidth: 0, textAlign: "left" }}>
                 <p style={{ margin: 0, fontSize: "12.5px", fontWeight: 600, color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{name}</p>
                 <p style={{ margin: 0, fontSize: "10px", fontWeight: 600, color: "var(--text-faint)", display: "flex", alignItems: "center", gap: 3 }}>
-                  <Shield size={8} style={{ color: "var(--primary)", opacity: 0.7 }} /> Administrador
+                  <Shield size={8} style={{ color: "var(--primary)", opacity: 0.7 }} /> {t("admin.nav.adminRole")}
                 </p>
               </div>
             )}
@@ -318,7 +316,7 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
   return (
     <>
       <div className="portal-topbar">
-        <button onClick={() => setMobileOpen(true)} aria-label="Abrir menu" style={{ width: 36, height: 36, borderRadius: "var(--r-md)", background: "var(--surface)", border: "1px solid var(--border)", cursor: "pointer", color: "var(--text-muted)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <button onClick={() => setMobileOpen(true)} aria-label={t("admin.nav.openMenu")} style={{ width: 36, height: 36, borderRadius: "var(--r-md)", background: "var(--surface)", border: "1px solid var(--border)", cursor: "pointer", color: "var(--text-muted)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
           <Menu size={17} />
         </button>
         <Link href="/admin/overview" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none", flex: 1 }}>
