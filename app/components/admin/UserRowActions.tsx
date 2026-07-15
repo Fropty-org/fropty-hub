@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { useToast } from "@/app/components/ui/Toast";
 import { Lock, LockOpen, Check } from "lucide-react";
+import { useT } from "@/app/lib/i18n/I18nProvider";
 import {
   adminSetTokenBalance,
   adminUpdateUserPlan,
@@ -64,6 +65,7 @@ const saveBtnStyle: React.CSSProperties = {
 };
 
 export function UserRowActions({ userId, name, role: roleInit, plan: planInit, tokenBalance: tokenInit, isActive: activeInit }: Props) {
+  const t = useT();
   const { show, ToastComponent } = useToast();
   const [pending, startTransition] = useTransition();
 
@@ -81,7 +83,7 @@ export function UserRowActions({ userId, name, role: roleInit, plan: planInit, t
         onOk();
         show(msg, "success");
       } catch {
-        show("Não foi possível salvar. Tente novamente.", "error");
+        show(t("admin.users.row.saveError"), "error");
       }
     });
   }
@@ -89,27 +91,27 @@ export function UserRowActions({ userId, name, role: roleInit, plan: planInit, t
   function saveRole() {
     const fd = new FormData();
     fd.set("user_id", userId); fd.set("role", role);
-    run(adminUpdateUserRole, fd, () => {}, `Papel de ${who} atualizado para ${role}.`);
+    run(adminUpdateUserRole, fd, () => {}, t("admin.users.row.toastRole", { who }));
   }
   function savePlan() {
     const fd = new FormData();
     fd.set("user_id", userId); fd.set("plan", plan);
-    run(adminUpdateUserPlan, fd, () => {}, `Plano de ${who} definido como ${PLAN_LABEL[plan]}.`);
+    run(adminUpdateUserPlan, fd, () => {}, t("admin.users.row.toastPlan", { who }));
   }
   function saveTokens() {
     const n = parseInt(tokens, 10);
-    if (isNaN(n) || n < 0 || n > 99999) { show("Informe um valor entre 0 e 99999.", "error"); return; }
+    if (isNaN(n) || n < 0 || n > 99999) { show(t("admin.users.row.tokenRange"), "error"); return; }
     const fd = new FormData();
     fd.set("user_id", userId); fd.set("balance", String(n));
-    run(adminSetTokenBalance, fd, () => setTokens(String(n)), `Saldo de ${who} definido em ${n} token${n !== 1 ? "s" : ""}.`);
+    run(adminSetTokenBalance, fd, () => setTokens(String(n)), t("admin.users.row.toastBalance", { who }));
   }
   function toggleAccess() {
     const fd = new FormData();
     fd.set("user_id", userId);
     if (active) {
-      run(adminRevokeAccess, fd, () => setActive(false), `Acesso de ${who} bloqueado.`);
+      run(adminRevokeAccess, fd, () => setActive(false), t("admin.users.row.toastBlocked", { who }));
     } else {
-      run(adminRestoreAccess, fd, () => setActive(true), `Acesso de ${who} liberado.`);
+      run(adminRestoreAccess, fd, () => setActive(true), t("admin.users.row.toastUnblocked", { who }));
     }
   }
 
@@ -118,23 +120,23 @@ export function UserRowActions({ userId, name, role: roleInit, plan: planInit, t
       {/* Role — badge/pill estilo Preline, editável */}
       <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
         <select value={role} onChange={(e) => setRole(e.target.value as "cliente" | "admin")} style={pillSelectStyle(ROLE_COLOR[role] ?? "var(--text-muted)")}>
-          <option value="cliente">Cliente</option>
-          <option value="admin">Admin</option>
+          <option value="cliente">{t("admin.roles.cliente")}</option>
+          <option value="admin">{t("admin.roles.admin")}</option>
         </select>
         {role !== roleInit && (
-          <button type="button" onClick={saveRole} disabled={pending} title="Salvar papel" style={saveBtnStyle}><Check size={12} /></button>
+          <button type="button" onClick={saveRole} disabled={pending} title={t("admin.users.row.saveRole")} style={saveBtnStyle}><Check size={12} /></button>
         )}
       </div>
 
       {/* Plano — badge/pill estilo Preline, editável */}
       <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
         <select value={plan} onChange={(e) => setPlan(e.target.value as Props["plan"])} style={pillSelectStyle(PLAN_COLOR[plan])}>
-          <option value="sem_plano">Sem plano</option>
-          <option value="basico">Básico</option>
-          <option value="pro">Pro</option>
+          <option value="sem_plano">{t("admin.plans.sem_plano")}</option>
+          <option value="basico">{t("admin.plans.basico")}</option>
+          <option value="pro">{t("admin.plans.pro")}</option>
         </select>
         {plan !== planInit && (
-          <button type="button" onClick={savePlan} disabled={pending} title="Salvar plano" style={saveBtnStyle}><Check size={12} /></button>
+          <button type="button" onClick={savePlan} disabled={pending} title={t("admin.users.row.savePlan")} style={saveBtnStyle}><Check size={12} /></button>
         )}
       </div>
 
@@ -146,15 +148,15 @@ export function UserRowActions({ userId, name, role: roleInit, plan: planInit, t
           onKeyDown={(e) => { if (e.key === "Enter") saveTokens(); }}
           style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 7, color: "var(--text)", padding: "4px 6px", fontSize: "12px", fontWeight: 700, fontFamily: "inherit", width: "70px" }}
         />
-        <button type="button" onClick={saveTokens} disabled={pending} title="Definir saldo" style={saveBtnStyle}>✓</button>
+        <button type="button" onClick={saveTokens} disabled={pending} title={t("admin.users.row.setBalance")} style={saveBtnStyle}>✓</button>
       </div>
 
       {/* Status */}
       <span style={{ textAlign: "center" }}>
         {active ? (
-          <span style={{ fontSize: "11px", fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: "rgba(34,197,94,0.1)", color: "var(--c-success)", border: "1px solid rgba(34,197,94,0.3)", display: "inline-block" }}>Ativo</span>
+          <span style={{ fontSize: "11px", fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: "rgba(34,197,94,0.1)", color: "var(--c-success)", border: "1px solid rgba(34,197,94,0.3)", display: "inline-block" }}>{t("admin.users.row.active")}</span>
         ) : (
-          <span style={{ fontSize: "11px", fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: "rgba(239,68,68,0.1)", color: "#ef4444", border: "1px solid rgba(239,68,68,0.3)", display: "inline-block" }}>Bloqueado</span>
+          <span style={{ fontSize: "11px", fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: "rgba(239,68,68,0.1)", color: "#ef4444", border: "1px solid rgba(239,68,68,0.3)", display: "inline-block" }}>{t("admin.users.row.blocked")}</span>
         )}
       </span>
 
@@ -165,18 +167,18 @@ export function UserRowActions({ userId, name, role: roleInit, plan: planInit, t
         ) : active ? (
           <button
             type="button" onClick={toggleAccess} disabled={pending}
-            title="Bloquear o acesso deste cliente ao portal"
+            title={t("admin.users.row.blockTitle")}
             style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "5px 10px", borderRadius: 7, border: "1px solid rgba(239,68,68,0.35)", background: "rgba(239,68,68,0.08)", color: "#ef4444", fontSize: "11px", fontWeight: 700, cursor: pending ? "wait" : "pointer", fontFamily: "inherit" }}
           >
-            <Lock size={13} /> Bloquear
+            <Lock size={13} /> {t("admin.users.row.block")}
           </button>
         ) : (
           <button
             type="button" onClick={toggleAccess} disabled={pending}
-            title="Liberar novamente o acesso deste cliente"
+            title={t("admin.users.row.unblockTitle")}
             style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "5px 10px", borderRadius: 7, border: "1px solid rgba(34,197,94,0.35)", background: "rgba(34,197,94,0.08)", color: "var(--c-success)", fontSize: "11px", fontWeight: 700, cursor: pending ? "wait" : "pointer", fontFamily: "inherit" }}
           >
-            <LockOpen size={13} /> Desbloquear
+            <LockOpen size={13} /> {t("admin.users.row.unblock")}
           </button>
         )}
       </div>

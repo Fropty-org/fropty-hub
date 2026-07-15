@@ -19,18 +19,51 @@
     "es": "Español"
   },
   "serviceDesk": {
-    "noToken": { "title": "Tokens insuficientes", "desc": "Necesitas tokens para abrir tickets. Consigue tokens o un plan para continuar.", "cta": "Ver tokens", "close": "Cerrar" },
+    "noToken": {
+      "title": "Tokens insuficientes",
+      "desc": "Necesitas tokens para abrir tickets. Consigue tokens o un plan para continuar.",
+      "cta": "Ver tokens",
+      "close": "Cerrar"
+    },
     "subtitleAdmin": "Todos los tickets — abre uno en nombre de un cliente cuando sea necesario",
     "subtitleClient": "Sigue y abre tickets en tiempo real",
     "newTicket": "Nuevo ticket",
-    "kpi": { "total": "Total", "open": "Abiertos", "highPriority": "Alta prioridad", "resolved": "Resueltos" },
+    "kpi": {
+      "total": "Total",
+      "open": "Abiertos",
+      "highPriority": "Alta prioridad",
+      "resolved": "Resueltos"
+    },
     "searchPlaceholder": "Buscar por asunto o categoría…",
-    "filter": { "all": "todos", "open": "abiertos", "closed": "cerrados", "anyPriority": "Toda prioridad", "high": "Alta", "medium": "Media", "low": "Baja" },
+    "filter": {
+      "all": "todos",
+      "open": "abiertos",
+      "closed": "cerrados",
+      "anyPriority": "Toda prioridad",
+      "high": "Alta",
+      "medium": "Media",
+      "low": "Baja"
+    },
     "ticketsCount": "{n} ticket(s)",
     "noResults": "No se encontraron tickets",
-    "empty": { "title": "Aún no hay tickets", "descAdmin": "Ningún cliente ha abierto un ticket todavía.", "descClient": "Cuando necesites soporte, aquí estamos.", "openFirst": "Abrir el primer ticket" },
-    "status": { "aberto": "Abierto", "em_andamento": "En curso", "resolvido": "Esperando validación", "fechado": "Cerrado", "reaberto": "Reabierto" },
-    "priority": { "baixa": "Baja", "media": "Media", "alta": "Alta" },
+    "empty": {
+      "title": "Aún no hay tickets",
+      "descAdmin": "Ningún cliente ha abierto un ticket todavía.",
+      "descClient": "Cuando necesites soporte, aquí estamos.",
+      "openFirst": "Abrir el primer ticket"
+    },
+    "status": {
+      "aberto": "Abierto",
+      "em_andamento": "En curso",
+      "resolvido": "Esperando validación",
+      "fechado": "Cerrado",
+      "reaberto": "Reabierto"
+    },
+    "priority": {
+      "baixa": "Baja",
+      "media": "Media",
+      "alta": "Alta"
+    },
     "queue": {
       "title": "Cola del Service Desk",
       "summary": "{total} tickets · {open} abiertos · {late} atrasados",
@@ -38,8 +71,20 @@
       "noViews": "ninguna guardada aún",
       "saveView": "Guardar vista actual",
       "viewNamePrompt": "Nombre de la vista:",
-      "filters": { "clients": "Clientes", "status": "Estado", "priority": "Prioridad", "responsible": "Responsable", "sort": "Ordenar" },
-      "options": { "late": "⚠ Atrasado (SLA)", "urgency": "Urgencia", "recent": "Más recientes", "myTickets": "Mis tickets", "unassigned": "Sin asignar" },
+      "filters": {
+        "clients": "Clientes",
+        "status": "Estado",
+        "priority": "Prioridad",
+        "responsible": "Responsable",
+        "sort": "Ordenar"
+      },
+      "options": {
+        "late": "⚠ Atrasado (SLA)",
+        "urgency": "Urgencia",
+        "recent": "Más recientes",
+        "myTickets": "Mis tickets",
+        "unassigned": "Sin asignar"
+      },
       "unassigned": "— Sin asignar",
       "columnEmpty": "Sin tickets",
       "emptyTitle": "No hay tickets en la cola",
@@ -47,39 +92,277 @@
       "done": "Concluido"
     },
     "detail": {
-      "tabs": { "form": "Formulario", "associated": "Asociados", "approval": "Aprobación", "equipment": "Equipo", "attachments": "Adjuntos" },
-      "sla": { "response": "Respuesta", "resolution": "Resolución" },
+      "tabs": {
+        "form": "Formulario",
+        "associated": "Asociados",
+        "approval": "Aprobación",
+        "equipment": "Equipo",
+        "attachments": "Adjuntos"
+      },
+      "sla": {
+        "response": "Respuesta",
+        "resolution": "Resolución"
+      },
       "moreActions": "Más acciones",
-      "details": { "title": "Detalles", "openedAt": "Fecha de apertura", "situation": "Situación", "openedBy": "Abierto por", "currentAnalyst": "Analista actual", "group": "Grupo", "unassigned": "Sin asignar" },
-      "actions": { "title": "Acciones añadidas", "search": "Buscar", "filter": "Filtrar", "empty": "Aún no hay acciones registradas.", "closed": "Este ticket está cerrado." },
-      "composer": { "placeholder": "¿Qué te gustaría registrar?", "selectAction": "Seleccionar acción", "send": "Enviar", "bold": "Negrita", "italic": "Cursiva", "strike": "Tachado", "link": "Enlace", "list": "Lista", "orderedList": "Lista numerada", "attach": "Adjuntar", "logTime": "Registrar tiempo", "expand": "Expandir" },
-      "form": { "subject": "Asunto", "group": "Grupo", "priority": "Prioridad", "description": "Descripción" },
-      "attachments": { "title": "Adjuntos del formulario", "search": "Buscar", "new": "Nuevo", "colName": "Nombre del archivo", "colAuthor": "Autor", "colDate": "Fecha de inclusión", "colActions": "Acciones", "view": "Ver", "download": "Descargar", "toGrid": "Ver en cuadrícula", "toTable": "Ver en tabla", "refresh": "Actualizar", "empty": "Sin adjuntos en este ticket." },
+      "details": {
+        "title": "Detalles",
+        "openedAt": "Fecha de apertura",
+        "situation": "Situación",
+        "openedBy": "Abierto por",
+        "currentAnalyst": "Analista actual",
+        "group": "Grupo",
+        "unassigned": "Sin asignar"
+      },
+      "actions": {
+        "title": "Acciones añadidas",
+        "search": "Buscar",
+        "filter": "Filtrar",
+        "empty": "Aún no hay acciones registradas.",
+        "closed": "Este ticket está cerrado."
+      },
+      "composer": {
+        "placeholder": "¿Qué te gustaría registrar?",
+        "selectAction": "Seleccionar acción",
+        "send": "Enviar",
+        "bold": "Negrita",
+        "italic": "Cursiva",
+        "strike": "Tachado",
+        "link": "Enlace",
+        "list": "Lista",
+        "orderedList": "Lista numerada",
+        "attach": "Adjuntar",
+        "logTime": "Registrar tiempo",
+        "expand": "Expandir"
+      },
+      "form": {
+        "subject": "Asunto",
+        "group": "Grupo",
+        "priority": "Prioridad",
+        "description": "Descripción"
+      },
+      "attachments": {
+        "title": "Adjuntos del formulario",
+        "search": "Buscar",
+        "new": "Nuevo",
+        "colName": "Nombre del archivo",
+        "colAuthor": "Autor",
+        "colDate": "Fecha de inclusión",
+        "colActions": "Acciones",
+        "view": "Ver",
+        "download": "Descargar",
+        "toGrid": "Ver en cuadrícula",
+        "toTable": "Ver en tabla",
+        "refresh": "Actualizar",
+        "empty": "Sin adjuntos en este ticket."
+      },
       "placeholders": {
-        "associatedTitle": "Solicitudes asociadas", "associatedDesc": "Vincula otros tickets y solicitudes relacionados con este caso.",
-        "approvalTitle": "Aprobación", "approvalDesc": "Los flujos de aprobación aparecerán aquí cuando este ticket requiera autorización.",
-        "equipmentTitle": "Equipo", "equipmentDesc": "Los equipos y activos relacionados con este ticket aparecerán aquí."
+        "associatedTitle": "Solicitudes asociadas",
+        "associatedDesc": "Vincula otros tickets y solicitudes relacionados con este caso.",
+        "approvalTitle": "Aprobación",
+        "approvalDesc": "Los flujos de aprobación aparecerán aquí cuando este ticket requiera autorización.",
+        "equipmentTitle": "Equipo",
+        "equipmentDesc": "Los equipos y activos relacionados con este ticket aparecerán aquí."
       },
       "backToList": "Service Desk",
       "team": "Equipo Fropty",
-      "reviewBanner": { "title": "Nuestro equipo marcó este ticket como resuelto", "desc": "¿Funcionó la solución? Confírmala para cerrarla o reábrela si necesitas más ayuda.", "cta": "Evaluar solución" }
+      "reviewBanner": {
+        "title": "Nuestro equipo marcó este ticket como resuelto",
+        "desc": "¿Funcionó la solución? Confírmala para cerrarla o reábrela si necesitas más ayuda.",
+        "cta": "Evaluar solución"
+      }
     },
     "form": {
       "title": "Abrir ticket",
       "subtitleAdmin": "Abre un ticket en nombre de un cliente. Respondemos en hasta 24h.",
       "subtitleClient": "Describe el problema con detalle — respondemos en hasta 24h.",
-      "client": "Cliente", "clientPlaceholder": "Selecciona el cliente", "noClients": "No se encontró ningún cliente activo para abrir el ticket.",
-      "debitLabel": "Debitar 1 token del cliente", "debitOn": "Se descontará 1 token del saldo del cliente al abrir.", "debitOff": "Cortesía — no se descontará ningún token del cliente.",
-      "subject": "Asunto", "subjectPlaceholder": "Describe brevemente el problema",
-      "category": "Categoría", "priority": "Prioridad", "description": "Descripción", "descriptionPlaceholder": "¿Qué pasó? ¿Cuándo ocurre? ¿Qué ya intentaste?",
-      "attachments": "Adjuntos", "attachmentsHint": "(máx 5 · 10 MB c/u)", "addFile": "Añadir archivo",
+      "client": "Cliente",
+      "clientPlaceholder": "Selecciona el cliente",
+      "noClients": "No se encontró ningún cliente activo para abrir el ticket.",
+      "debitLabel": "Debitar 1 token del cliente",
+      "debitOn": "Se descontará 1 token del saldo del cliente al abrir.",
+      "debitOff": "Cortesía — no se descontará ningún token del cliente.",
+      "subject": "Asunto",
+      "subjectPlaceholder": "Describe brevemente el problema",
+      "category": "Categoría",
+      "priority": "Prioridad",
+      "description": "Descripción",
+      "descriptionPlaceholder": "¿Qué pasó? ¿Cuándo ocurre? ¿Qué ya intentaste?",
+      "attachments": "Adjuntos",
+      "attachmentsHint": "(máx 5 · 10 MB c/u)",
+      "addFile": "Añadir archivo",
       "tokens": "{n} tokens",
-      "priorityDesc": { "baixa": "No urgente", "media": "Impacto moderado", "alta": "Bloqueando el uso" },
-      "copilotTitle": "Quizás esto ya lo resuelva", "copilotHint": "¿No lo resolvió? Sigue completando abajo para abrir el ticket.",
+      "priorityDesc": {
+        "baixa": "No urgente",
+        "media": "Impacto moderado",
+        "alta": "Bloqueando el uso"
+      },
+      "copilotTitle": "Quizás esto ya lo resuelva",
+      "copilotHint": "¿No lo resolvió? Sigue completando abajo para abrir el ticket.",
       "required": "Campo obligatorio",
-      "cancel": "Cancelar", "submit": "Abrir ticket", "submitting": "Enviando...",
-      "successTitle": "¡Ticket abierto!", "successDesc": "Nuestro equipo responderá en hasta 24h.",
+      "cancel": "Cancelar",
+      "submit": "Abrir ticket",
+      "submitting": "Enviando...",
+      "successTitle": "¡Ticket abierto!",
+      "successDesc": "Nuestro equipo responderá en hasta 24h.",
       "newTicketCrumb": "Nuevo ticket"
+    }
+  },
+  "admin": {
+    "roles": {
+      "cliente": "Cliente",
+      "admin": "Admin"
+    },
+    "plans": {
+      "sem_plano": "Sin plan",
+      "basico": "Básico",
+      "pro": "Pro"
+    },
+    "users": {
+      "title": "Usuarios",
+      "subtitle": "Gestiona cuentas, planes y accesos del ecosistema.",
+      "newUser": "Nuevo usuario",
+      "stats": {
+        "total": "Total de usuarios",
+        "active": "Usuarios activos",
+        "blocked": "Bloqueados",
+        "admins": "Administradores"
+      },
+      "tabs": {
+        "all": "Todos",
+        "active": "Activos",
+        "blocked": "Bloqueados"
+      },
+      "search": "Buscar…",
+      "pagination": {
+        "page": "Página {page} de {total}",
+        "results": "{n} resultado(s)",
+        "prev": "Anterior",
+        "next": "Siguiente"
+      },
+      "toolbar": {
+        "import": "Importar",
+        "export": "Exportar",
+        "filter": "Filtrar",
+        "filterBy": "Filtrar por",
+        "role": "Rol",
+        "plan": "Plan",
+        "all": "Todos",
+        "clear": "Limpiar",
+        "apply": "Aplicar"
+      },
+      "import": {
+        "title": "Importar usuarios (CSV)",
+        "desc": "Sube un CSV con una columna email (obligatoria) y opcionalmente nombre, empresa, plan y tokens. Cada fila se convierte en una invitación por correo.",
+        "downloadTemplate": "Descargar plantilla CSV",
+        "chooseFile": "Elegir archivo .csv",
+        "ready": "{n} usuario(s) listos para invitar",
+        "emptyFile": "Archivo vacío o sin filas de datos.",
+        "needEmail": "El CSV necesita una columna \"email\".",
+        "noRows": "No se encontró ninguna fila con correo.",
+        "sent": "{n} invitación(es) enviada(s).",
+        "failures": "{n} fallo(s):",
+        "close": "Cerrar",
+        "cancel": "Cancelar",
+        "sending": "Enviando…",
+        "invite": "Invitar"
+      },
+      "table": {
+        "user": "Usuario",
+        "company": "Empresa",
+        "email": "Email",
+        "phone": "Teléfono",
+        "date": "Fecha",
+        "role": "Rol",
+        "plan": "Plan",
+        "tokens": "Tokens",
+        "status": "Estado",
+        "access": "Acceso",
+        "actions": "Acciones",
+        "empty": "No se encontraron usuarios."
+      },
+      "bulk": {
+        "selected": "{n} seleccionado(s)",
+        "changePlan": "Cambiar plan:",
+        "apply": "Aplicar",
+        "cancel": "Cancelar",
+        "updated": "Plan actualizado para {n} usuario(s)."
+      },
+      "row": {
+        "active": "Activo",
+        "blocked": "Bloqueado",
+        "block": "Bloquear",
+        "unblock": "Desbloquear",
+        "saveRole": "Guardar rol",
+        "savePlan": "Guardar plan",
+        "setBalance": "Definir saldo",
+        "blockTitle": "Bloquear el acceso de este cliente al portal",
+        "unblockTitle": "Restablecer el acceso de este cliente",
+        "saveError": "No se pudo guardar. Inténtalo de nuevo.",
+        "tokenRange": "Ingresa un valor entre 0 y 99999.",
+        "toastRole": "Rol de {who} actualizado.",
+        "toastPlan": "Plan de {who} definido.",
+        "toastBalance": "Saldo de {who} actualizado.",
+        "toastBlocked": "Acceso de {who} bloqueado.",
+        "toastUnblocked": "Acceso de {who} restablecido."
+      },
+      "menu": {
+        "actions": "Acciones",
+        "edit": "Editar",
+        "renew": "Renovar acceso +30d",
+        "delete": "Eliminar",
+        "renewTitle": "Fija la vigencia a hoy + 30 días (restablece el acceso)",
+        "cannotDeleteAdmin": "Los administradores no se pueden eliminar aquí",
+        "deleteTitle": "Eliminar usuario",
+        "confirm": "¿Eliminar {who} de forma definitiva? Todos los datos (tickets, proyectos, tokens) se eliminarán.",
+        "cancel": "Cancelar",
+        "deleted": "{who} fue eliminado.",
+        "renewed": "Acceso de {who} renovado por 30 días."
+      },
+      "invite": {
+        "title": "Invitar a un nuevo cliente",
+        "email": "Email",
+        "name": "Nombre",
+        "tokens": "Tokens",
+        "plan": "Plan",
+        "contractStart": "Inicio del contrato",
+        "services": "Servicios contratados",
+        "emailPlaceholder": "cliente@email.com",
+        "namePlaceholder": "Nombre del cliente",
+        "sending": "Enviando…",
+        "invite": "Invitar",
+        "unknownError": "Error desconocido."
+      },
+      "edit": {
+        "title": "Editar usuario",
+        "subtitle": "Editando los datos de {name}.",
+        "fullName": "Nombre completo",
+        "email": "Email",
+        "company": "Empresa",
+        "phone": "Teléfono",
+        "plan": "Plan",
+        "tokens": "Tokens",
+        "contractStart": "Inicio del contrato",
+        "renewal": "Vigencia del acceso (renovación)",
+        "renewalHint": "Fecha hasta la cual el cliente tiene acceso al portal. Vacío = sin bloqueo por vigencia.",
+        "services": "Servicios contratados",
+        "cancel": "Cancelar",
+        "save": "Guardar cambios",
+        "saving": "Guardando…",
+        "saveError": "Error al guardar.",
+        "companyPlaceholder": "Nombre de la empresa"
+      },
+      "new": {
+        "title": "Nuevo usuario",
+        "inviteError": "Error al invitar.",
+        "subtitle": "Invita a un nuevo cliente por correo.",
+        "avatarTitle": "Foto del usuario",
+        "avatarHint": "JPG, PNG o WebP. Máx. 2 MB.",
+        "changePhoto": "Cambiar foto",
+        "choosePhoto": "Elegir foto",
+        "tokensInitial": "Tokens iniciales",
+        "submit": "Invitar usuario",
+        "submitting": "Enviando invitación…"
+      }
     }
   },
   "legal": {
@@ -87,38 +370,80 @@
       "title": "Acerca de Fropty Hub",
       "intro": "Fropty Hub es el portal del cliente del ecosistema Fropty — el lugar donde todo se conecta.",
       "sections": [
-        { "h": "Qué es el Hub", "p": "Un único entorno para dar seguimiento a tickets de soporte, proyectos, contratos, finanzas, base de conocimiento, roadmap y mucho más. Cada cliente ve solo lo que contrató." },
-        { "h": "Ecosistema Fropty", "p": "Fropty ofrece módulos y servicios digitales para empresas — como FroptyCash, FroptyInvest, FroptySentinel, FroptyCRM y FroptyApps — reunidos e integrados en el Hub." },
-        { "h": "Seguridad", "p": "El Hub está protegido por FroptySentinel, con autenticación en dos pasos, verificación de contraseñas filtradas y monitoreo continuo." }
+        {
+          "h": "Qué es el Hub",
+          "p": "Un único entorno para dar seguimiento a tickets de soporte, proyectos, contratos, finanzas, base de conocimiento, roadmap y mucho más. Cada cliente ve solo lo que contrató."
+        },
+        {
+          "h": "Ecosistema Fropty",
+          "p": "Fropty ofrece módulos y servicios digitales para empresas — como FroptyCash, FroptyInvest, FroptySentinel, FroptyCRM y FroptyApps — reunidos e integrados en el Hub."
+        },
+        {
+          "h": "Seguridad",
+          "p": "El Hub está protegido por FroptySentinel, con autenticación en dos pasos, verificación de contraseñas filtradas y monitoreo continuo."
+        }
       ]
     },
     "terms": {
       "title": "Términos de Uso",
       "intro": "Al acceder y utilizar Fropty Hub, aceptas los términos descritos a continuación.",
       "sections": [
-        { "h": "1. Uso de la plataforma", "p": "El acceso es personal y está destinado a clientes con contrato vigente. Eres responsable de mantener la confidencialidad de tus credenciales." },
-        { "h": "2. Contenido y datos", "p": "Los datos que ingresas en el Hub pertenecen al cliente. Fropty los utiliza solo para prestar los servicios contratados." },
-        { "h": "3. Disponibilidad", "p": "Buscamos alta disponibilidad, pero el servicio puede pasar por mantenimientos programados, avisados con antelación siempre que sea posible." },
-        { "h": "4. Cambios", "p": "Estos términos pueden actualizarse. Los cambios relevantes se comunicarán por los canales oficiales." }
+        {
+          "h": "1. Uso de la plataforma",
+          "p": "El acceso es personal y está destinado a clientes con contrato vigente. Eres responsable de mantener la confidencialidad de tus credenciales."
+        },
+        {
+          "h": "2. Contenido y datos",
+          "p": "Los datos que ingresas en el Hub pertenecen al cliente. Fropty los utiliza solo para prestar los servicios contratados."
+        },
+        {
+          "h": "3. Disponibilidad",
+          "p": "Buscamos alta disponibilidad, pero el servicio puede pasar por mantenimientos programados, avisados con antelación siempre que sea posible."
+        },
+        {
+          "h": "4. Cambios",
+          "p": "Estos términos pueden actualizarse. Los cambios relevantes se comunicarán por los canales oficiales."
+        }
       ]
     },
     "privacy": {
       "title": "Política de Privacidad",
       "intro": "Nos tomamos tu privacidad en serio. Esta política explica cómo tratamos tus datos.",
       "sections": [
-        { "h": "Datos que recopilamos", "p": "Recopilamos solo los datos necesarios para operar el Hub: información de la cuenta, actividad de uso y el contenido que registras (tickets, proyectos, comentarios)." },
-        { "h": "Cómo los usamos", "p": "Usamos los datos para autenticar el acceso, brindar soporte, mejorar la plataforma y cumplir obligaciones legales. No vendemos tus datos." },
-        { "h": "Tus derechos", "p": "Puedes solicitar acceso, corrección o eliminación de tus datos en cualquier momento a través de nuestros canales de contacto." },
-        { "h": "Contacto", "p": "Las dudas sobre privacidad pueden enviarse a suporte@fropty.com." }
+        {
+          "h": "Datos que recopilamos",
+          "p": "Recopilamos solo los datos necesarios para operar el Hub: información de la cuenta, actividad de uso y el contenido que registras (tickets, proyectos, comentarios)."
+        },
+        {
+          "h": "Cómo los usamos",
+          "p": "Usamos los datos para autenticar el acceso, brindar soporte, mejorar la plataforma y cumplir obligaciones legales. No vendemos tus datos."
+        },
+        {
+          "h": "Tus derechos",
+          "p": "Puedes solicitar acceso, corrección o eliminación de tus datos en cualquier momento a través de nuestros canales de contacto."
+        },
+        {
+          "h": "Contacto",
+          "p": "Las dudas sobre privacidad pueden enviarse a suporte@fropty.com."
+        }
       ]
     },
     "licenses": {
       "title": "Licencias",
       "intro": "Fropty Hub se construye con software libre y de código abierto. Gracias a la comunidad open source.",
       "sections": [
-        { "h": "Tecnologías principales", "p": "Next.js, React y Tailwind CSS — licencia MIT. Supabase (Postgres, Auth, Storage, Realtime) — licencia Apache 2.0." },
-        { "h": "Íconos y fuentes", "p": "Íconos Lucide (licencia ISC). Fuentes Inter y DM Sans (SIL Open Font License 1.1)." },
-        { "h": "Marcas", "p": "Fropty, Fropty Hub y los nombres de los módulos son marcas de Fropty. Las demás marcas pertenecen a sus respectivos titulares." }
+        {
+          "h": "Tecnologías principales",
+          "p": "Next.js, React y Tailwind CSS — licencia MIT. Supabase (Postgres, Auth, Storage, Realtime) — licencia Apache 2.0."
+        },
+        {
+          "h": "Íconos y fuentes",
+          "p": "Íconos Lucide (licencia ISC). Fuentes Inter y DM Sans (SIL Open Font License 1.1)."
+        },
+        {
+          "h": "Marcas",
+          "p": "Fropty, Fropty Hub y los nombres de los módulos son marcas de Fropty. Las demás marcas pertenecen a sus respectivos titulares."
+        }
       ]
     }
   }

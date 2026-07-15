@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { UserRowActions } from "./UserRowActions";
 import { UserRowMenu } from "./UserRowMenu";
 import { adminBulkUpdatePlan } from "@/app/actions/admin";
+import { useT } from "@/app/lib/i18n/I18nProvider";
 import { CheckSquare, Square, ChevronDown, Loader2 } from "lucide-react";
 
 interface User {
@@ -31,6 +32,7 @@ const PLAN_OPTIONS = [
 ];
 
 export function BulkUsuariosClient({ users }: Props) {
+  const t = useT();
   const [selected,    setSelected]    = useState<Set<string>>(new Set());
   const [bulkPlan,    setBulkPlan]    = useState("sem_plano");
   const [feedback,    setFeedback]    = useState("");
@@ -58,7 +60,7 @@ export function BulkUsuariosClient({ users }: Props) {
       if (result?.error) {
         setFeedback(`Erro: ${result.error}`);
       } else {
-        setFeedback(`Plano atualizado para ${selected.size} usuário(s).`);
+        setFeedback(t("admin.users.bulk.updated", { n: selected.size }));
         setSelected(new Set());
         setTimeout(() => setFeedback(""), 3000);
       }
@@ -75,10 +77,10 @@ export function BulkUsuariosClient({ users }: Props) {
           border: "1px solid color-mix(in srgb, var(--primary) 20%, transparent)", borderRadius: 12, marginBottom: 12,
         }}>
           <span style={{ fontSize: "12px", fontWeight: 700, color: "var(--primary)" }}>
-            {selected.size} selecionado{selected.size !== 1 ? "s" : ""}
+            {t("admin.users.bulk.selected", { n: selected.size })}
           </span>
           <span style={{ color: "var(--border)", margin: "0 2px" }}>|</span>
-          <span style={{ fontSize: "12px", color: "var(--text-muted)", fontWeight: 600 }}>Alterar plano:</span>
+          <span style={{ fontSize: "12px", color: "var(--text-muted)", fontWeight: 600 }}>{t("admin.users.bulk.changePlan")}</span>
           <div style={{ position: "relative", display: "inline-flex", alignItems: "center" }}>
             <select
               value={bulkPlan}
@@ -89,7 +91,7 @@ export function BulkUsuariosClient({ users }: Props) {
                 color: "var(--text)", cursor: "pointer", fontFamily: "inherit",
               }}
             >
-              {PLAN_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+              {PLAN_OPTIONS.map((o) => <option key={o.value} value={o.value}>{t(`admin.plans.${o.value}`)}</option>)}
             </select>
             <ChevronDown size={12} style={{ position: "absolute", right: 8, color: "var(--text-faint)", pointerEvents: "none" }} />
           </div>
@@ -105,13 +107,13 @@ export function BulkUsuariosClient({ users }: Props) {
             }}
           >
             {isPending ? <Loader2 size={13} style={{ animation: "spin 1s linear infinite" }} /> : null}
-            Aplicar
+            {t("admin.users.bulk.apply")}
           </button>
           <button
             onClick={() => setSelected(new Set())}
             style={{ background: "none", border: "none", fontSize: "12px", color: "var(--text-faint)", cursor: "pointer", fontFamily: "inherit", fontWeight: 600 }}
           >
-            Cancelar
+            {t("admin.users.bulk.cancel")}
           </button>
           {feedback && <span style={{ fontSize: "12px", color: "var(--c-success)", fontWeight: 600 }}>{feedback}</span>}
         </div>
@@ -126,17 +128,17 @@ export function BulkUsuariosClient({ users }: Props) {
           >
             {allSelected ? <CheckSquare size={14} /> : someSelected ? <CheckSquare size={14} style={{ opacity: 0.5 }} /> : <Square size={14} />}
           </button>
-          <span>Usuário</span>
-          <span>Empresa</span>
-          <span>Email</span>
-          <span>Telefone</span>
-          <span>Data</span>
-          <span>Papel</span>
-          <span>Plano</span>
-          <span>Tokens</span>
-          <span style={{ textAlign: "center" }}>Status</span>
-          <span style={{ textAlign: "center" }}>Acesso</span>
-          <span style={{ textAlign: "center" }}>Ações</span>
+          <span>{t("admin.users.table.user")}</span>
+          <span>{t("admin.users.table.company")}</span>
+          <span>{t("admin.users.table.email")}</span>
+          <span>{t("admin.users.table.phone")}</span>
+          <span>{t("admin.users.table.date")}</span>
+          <span>{t("admin.users.table.role")}</span>
+          <span>{t("admin.users.table.plan")}</span>
+          <span>{t("admin.users.table.tokens")}</span>
+          <span style={{ textAlign: "center" }}>{t("admin.users.table.status")}</span>
+          <span style={{ textAlign: "center" }}>{t("admin.users.table.access")}</span>
+          <span style={{ textAlign: "center" }}>{t("admin.users.table.actions")}</span>
         </div>
 
         {users.map((u, i) => {
@@ -212,7 +214,7 @@ export function BulkUsuariosClient({ users }: Props) {
 
         {users.length === 0 && (
           <div style={{ padding: "48px 20px", textAlign: "center" }}>
-            <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>Nenhum usuário encontrado.</p>
+            <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>{t("admin.users.table.empty")}</p>
           </div>
         )}
       </div>

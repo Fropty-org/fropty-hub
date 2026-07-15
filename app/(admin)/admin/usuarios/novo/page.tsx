@@ -5,12 +5,14 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { adminInviteClient } from "@/app/actions/admin";
 import { SERVICES } from "@/app/lib/constants/services";
+import { useT } from "@/app/lib/i18n/I18nProvider";
 import {
   ArrowLeft, UserPlus, Mail, User, Phone, Loader2,
   CheckCircle, XCircle, CreditCard, Coins, Camera, Building2, CalendarDays,
 } from "lucide-react";
 
 export default function NovoUsuarioPage() {
+  const t = useT();
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [msg,     setMsg]          = useState<{ ok: boolean; text: string } | null>(null);
@@ -48,7 +50,7 @@ export default function NovoUsuarioPage() {
         setMsg({ ok: true, text: res.success });
         setTimeout(() => router.push("/admin/usuarios"), 1800);
       } else {
-        setMsg({ ok: false, text: res.error ?? "Erro ao convidar." });
+        setMsg({ ok: false, text: res.error ?? t("admin.users.new.inviteError") });
       }
     });
   }
@@ -65,8 +67,8 @@ export default function NovoUsuarioPage() {
           <ArrowLeft size={15} />
         </Link>
         <div>
-          <h1 style={{ fontSize: "1.2rem", fontWeight: 800, margin: 0, color: "var(--text)", letterSpacing: "-0.02em" }}>Novo usuário</h1>
-          <p style={{ margin: "2px 0 0", fontSize: "12px", color: "var(--text-faint)" }}>Convida um novo cliente por e-mail.</p>
+          <h1 style={{ fontSize: "1.2rem", fontWeight: 800, margin: 0, color: "var(--text)", letterSpacing: "-0.02em" }}>{t("admin.users.new.title")}</h1>
+          <p style={{ margin: "2px 0 0", fontSize: "12px", color: "var(--text-faint)" }}>{t("admin.users.new.subtitle")}</p>
         </div>
       </div>
 
@@ -94,16 +96,16 @@ export default function NovoUsuarioPage() {
               <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleAvatarChange} />
             </div>
             <div>
-              <p style={{ margin: "0 0 3px", fontSize: "13px", fontWeight: 700, color: "var(--text)" }}>Foto do usuário</p>
+              <p style={{ margin: "0 0 3px", fontSize: "13px", fontWeight: 700, color: "var(--text)" }}>{t("admin.users.new.avatarTitle")}</p>
               <p style={{ margin: "0 0 8px", fontSize: "12px", color: "var(--text-faint)", lineHeight: 1.5 }}>
-                JPG, PNG ou WebP. Máx. 2 MB.
+                {t("admin.users.new.avatarHint")}
               </p>
               <button
                 type="button"
                 onClick={() => fileRef.current?.click()}
                 style={{ fontSize: "12px", fontWeight: 600, color: "var(--primary)", background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "inherit" }}
               >
-                {avatarPreview ? "Trocar foto" : "Escolher foto"}
+                {avatarPreview ? t("admin.users.new.changePhoto") : t("admin.users.new.choosePhoto")}
               </button>
             </div>
           </div>
@@ -113,14 +115,14 @@ export default function NovoUsuarioPage() {
 
             {/* Nome + E-mail */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-              <Field label="Nome completo" icon={<User size={13} />}>
+              <Field label={t("admin.users.edit.fullName")} icon={<User size={13} />}>
                 <input
                   name="name"
                   placeholder="João Silva"
                   style={inputStyle}
                 />
               </Field>
-              <Field label="E-mail *" icon={<Mail size={13} />}>
+              <Field label={`${t("admin.users.edit.email")} *`} icon={<Mail size={13} />}>
                 <input
                   name="email"
                   type="email"
@@ -133,14 +135,14 @@ export default function NovoUsuarioPage() {
 
             {/* Empresa + Telefone */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-              <Field label="Empresa" icon={<Building2 size={13} />}>
+              <Field label={t("admin.users.edit.company")} icon={<Building2 size={13} />}>
                 <input
                   name="company"
-                  placeholder="Nome da empresa"
+                  placeholder={t("admin.users.edit.companyPlaceholder")}
                   style={inputStyle}
                 />
               </Field>
-              <Field label="Telefone" icon={<Phone size={13} />}>
+              <Field label={t("admin.users.edit.phone")} icon={<Phone size={13} />}>
                 <input
                   name="phone"
                   placeholder="+5511999990000"
@@ -151,14 +153,14 @@ export default function NovoUsuarioPage() {
 
             {/* Plano + Tokens */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
-              <Field label="Plano" icon={<CreditCard size={13} />}>
+              <Field label={t("admin.users.edit.plan")} icon={<CreditCard size={13} />}>
                 <select name="plan" style={{ ...inputStyle, cursor: "pointer" }}>
-                  <option value="sem_plano">Sem plano</option>
-                  <option value="basico">Básico</option>
-                  <option value="pro">Pro</option>
+                  <option value="sem_plano">{t("admin.plans.sem_plano")}</option>
+                  <option value="basico">{t("admin.plans.basico")}</option>
+                  <option value="pro">{t("admin.plans.pro")}</option>
                 </select>
               </Field>
-              <Field label="Tokens iniciais" icon={<Coins size={13} />}>
+              <Field label={t("admin.users.new.tokensInitial")} icon={<Coins size={13} />}>
                 <input
                   name="token_balance"
                   type="number"
@@ -168,14 +170,14 @@ export default function NovoUsuarioPage() {
                   style={inputStyle}
                 />
               </Field>
-              <Field label="Início do contrato" icon={<CalendarDays size={13} />}>
+              <Field label={t("admin.users.edit.contractStart")} icon={<CalendarDays size={13} />}>
                 <input name="contract_start" type="date" style={{ ...inputStyle, colorScheme: "dark" }} />
               </Field>
             </div>
 
             {/* Serviços */}
             <div>
-              <p style={labelStyle}>Serviços contratados</p>
+              <p style={labelStyle}>{t("admin.users.edit.services")}</p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 8 }}>
                 {SERVICES.map(s => {
                   const on = services.has(s.id);
@@ -215,7 +217,7 @@ export default function NovoUsuarioPage() {
             </div>
             <div style={{ display: "flex", gap: 8 }}>
               <Link href="/admin/usuarios" style={{ padding: "9px 18px", borderRadius: 9, border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text-muted)", fontSize: "13px", fontWeight: 600, textDecoration: "none", display: "inline-flex", alignItems: "center" }}>
-                Cancelar
+                {t("admin.users.edit.cancel")}
               </Link>
               <button
                 type="submit"
@@ -223,7 +225,7 @@ export default function NovoUsuarioPage() {
                 style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "9px 20px", borderRadius: 9, border: "none", background: pending ? "var(--surface-2)" : "var(--cta-bg)", color: pending ? "var(--text-muted)" : "var(--cta-text)", fontSize: "13px", fontWeight: 700, cursor: pending ? "not-allowed" : "pointer", fontFamily: "inherit" }}
               >
                 {pending ? <Loader2 size={13} style={{ animation: "spin 0.8s linear infinite" }} /> : <UserPlus size={13} />}
-                {pending ? "Enviando convite…" : "Convidar usuário"}
+                {pending ? t("admin.users.new.submitting") : t("admin.users.new.submit")}
               </button>
             </div>
           </div>

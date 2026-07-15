@@ -19,18 +19,51 @@
     "es": "Español"
   },
   "serviceDesk": {
-    "noToken": { "title": "Tokens insuficientes", "desc": "Você precisa de tokens para abrir chamados. Adquira tokens ou um plano para continuar.", "cta": "Ver tokens", "close": "Fechar" },
+    "noToken": {
+      "title": "Tokens insuficientes",
+      "desc": "Você precisa de tokens para abrir chamados. Adquira tokens ou um plano para continuar.",
+      "cta": "Ver tokens",
+      "close": "Fechar"
+    },
     "subtitleAdmin": "Todos os chamados — abra em nome de um cliente quando necessário",
     "subtitleClient": "Acompanhe e abra chamados em tempo real",
     "newTicket": "Novo chamado",
-    "kpi": { "total": "Total", "open": "Em aberto", "highPriority": "Alta prioridade", "resolved": "Resolvidos" },
+    "kpi": {
+      "total": "Total",
+      "open": "Em aberto",
+      "highPriority": "Alta prioridade",
+      "resolved": "Resolvidos"
+    },
     "searchPlaceholder": "Buscar por assunto ou categoria…",
-    "filter": { "all": "todos", "open": "abertos", "closed": "fechados", "anyPriority": "Toda prioridade", "high": "Alta", "medium": "Média", "low": "Baixa" },
+    "filter": {
+      "all": "todos",
+      "open": "abertos",
+      "closed": "fechados",
+      "anyPriority": "Toda prioridade",
+      "high": "Alta",
+      "medium": "Média",
+      "low": "Baixa"
+    },
     "ticketsCount": "{n} chamado(s)",
     "noResults": "Nenhum chamado encontrado",
-    "empty": { "title": "Nenhum chamado ainda", "descAdmin": "Nenhum cliente abriu chamado ainda.", "descClient": "Quando precisar de suporte, estamos aqui.", "openFirst": "Abrir primeiro chamado" },
-    "status": { "aberto": "Aberto", "em_andamento": "Em andamento", "resolvido": "Aguardando validação", "fechado": "Fechado", "reaberto": "Reaberto" },
-    "priority": { "baixa": "Baixa", "media": "Média", "alta": "Alta" },
+    "empty": {
+      "title": "Nenhum chamado ainda",
+      "descAdmin": "Nenhum cliente abriu chamado ainda.",
+      "descClient": "Quando precisar de suporte, estamos aqui.",
+      "openFirst": "Abrir primeiro chamado"
+    },
+    "status": {
+      "aberto": "Aberto",
+      "em_andamento": "Em andamento",
+      "resolvido": "Aguardando validação",
+      "fechado": "Fechado",
+      "reaberto": "Reaberto"
+    },
+    "priority": {
+      "baixa": "Baixa",
+      "media": "Média",
+      "alta": "Alta"
+    },
     "queue": {
       "title": "Fila do Service Desk",
       "summary": "{total} chamados · {open} em aberto · {late} em atraso",
@@ -38,8 +71,20 @@
       "noViews": "nenhuma salva ainda",
       "saveView": "Salvar visão atual",
       "viewNamePrompt": "Nome da visão:",
-      "filters": { "clients": "Clientes", "status": "Status", "priority": "Prioridade", "responsible": "Responsável", "sort": "Ordenar" },
-      "options": { "late": "⚠ Em atraso (SLA)", "urgency": "Urgência", "recent": "Recentes", "myTickets": "Meus chamados", "unassigned": "Não atribuídos" },
+      "filters": {
+        "clients": "Clientes",
+        "status": "Status",
+        "priority": "Prioridade",
+        "responsible": "Responsável",
+        "sort": "Ordenar"
+      },
+      "options": {
+        "late": "⚠ Em atraso (SLA)",
+        "urgency": "Urgência",
+        "recent": "Recentes",
+        "myTickets": "Meus chamados",
+        "unassigned": "Não atribuídos"
+      },
       "unassigned": "— Não atribuído",
       "columnEmpty": "Nenhum chamado",
       "emptyTitle": "Nenhum chamado na fila",
@@ -47,39 +92,277 @@
       "done": "Concluído"
     },
     "detail": {
-      "tabs": { "form": "Formulário", "associated": "Associados", "approval": "Aprovação", "equipment": "Equipamento", "attachments": "Anexos" },
-      "sla": { "response": "Resposta", "resolution": "Resolução" },
+      "tabs": {
+        "form": "Formulário",
+        "associated": "Associados",
+        "approval": "Aprovação",
+        "equipment": "Equipamento",
+        "attachments": "Anexos"
+      },
+      "sla": {
+        "response": "Resposta",
+        "resolution": "Resolução"
+      },
       "moreActions": "Mais ações",
-      "details": { "title": "Detalhes", "openedAt": "Data de abertura", "situation": "Situação", "openedBy": "Aberto por", "currentAnalyst": "Analista atual", "group": "Grupo", "unassigned": "Não atribuído" },
-      "actions": { "title": "Ações adicionadas", "search": "Buscar", "filter": "Filtrar", "empty": "Nenhuma ação registrada ainda.", "closed": "Este chamado está encerrado." },
-      "composer": { "placeholder": "O que gostaria de registrar?", "selectAction": "Selecionar ação", "send": "Enviar", "bold": "Negrito", "italic": "Itálico", "strike": "Tachado", "link": "Link", "list": "Lista", "orderedList": "Lista numerada", "attach": "Anexar", "logTime": "Registrar tempo", "expand": "Expandir" },
-      "form": { "subject": "Assunto", "group": "Grupo", "priority": "Prioridade", "description": "Descrição" },
-      "attachments": { "title": "Anexos do formulário", "search": "Pesquisar", "new": "Novo", "colName": "Nome do arquivo", "colAuthor": "Autor", "colDate": "Data de inclusão", "colActions": "Ações", "view": "Visualizar", "download": "Baixar", "toGrid": "Ver em grade", "toTable": "Ver em tabela", "refresh": "Atualizar", "empty": "Nenhum anexo neste chamado." },
+      "details": {
+        "title": "Detalhes",
+        "openedAt": "Data de abertura",
+        "situation": "Situação",
+        "openedBy": "Aberto por",
+        "currentAnalyst": "Analista atual",
+        "group": "Grupo",
+        "unassigned": "Não atribuído"
+      },
+      "actions": {
+        "title": "Ações adicionadas",
+        "search": "Buscar",
+        "filter": "Filtrar",
+        "empty": "Nenhuma ação registrada ainda.",
+        "closed": "Este chamado está encerrado."
+      },
+      "composer": {
+        "placeholder": "O que gostaria de registrar?",
+        "selectAction": "Selecionar ação",
+        "send": "Enviar",
+        "bold": "Negrito",
+        "italic": "Itálico",
+        "strike": "Tachado",
+        "link": "Link",
+        "list": "Lista",
+        "orderedList": "Lista numerada",
+        "attach": "Anexar",
+        "logTime": "Registrar tempo",
+        "expand": "Expandir"
+      },
+      "form": {
+        "subject": "Assunto",
+        "group": "Grupo",
+        "priority": "Prioridade",
+        "description": "Descrição"
+      },
+      "attachments": {
+        "title": "Anexos do formulário",
+        "search": "Pesquisar",
+        "new": "Novo",
+        "colName": "Nome do arquivo",
+        "colAuthor": "Autor",
+        "colDate": "Data de inclusão",
+        "colActions": "Ações",
+        "view": "Visualizar",
+        "download": "Baixar",
+        "toGrid": "Ver em grade",
+        "toTable": "Ver em tabela",
+        "refresh": "Atualizar",
+        "empty": "Nenhum anexo neste chamado."
+      },
       "placeholders": {
-        "associatedTitle": "Solicitações associadas", "associatedDesc": "Vincule outros chamados e solicitações relacionados a este atendimento.",
-        "approvalTitle": "Aprovação", "approvalDesc": "Fluxos de aprovação aparecerão aqui quando este chamado exigir autorização.",
-        "equipmentTitle": "Equipamento", "equipmentDesc": "Equipamentos e ativos relacionados a este chamado aparecerão aqui."
+        "associatedTitle": "Solicitações associadas",
+        "associatedDesc": "Vincule outros chamados e solicitações relacionados a este atendimento.",
+        "approvalTitle": "Aprovação",
+        "approvalDesc": "Fluxos de aprovação aparecerão aqui quando este chamado exigir autorização.",
+        "equipmentTitle": "Equipamento",
+        "equipmentDesc": "Equipamentos e ativos relacionados a este chamado aparecerão aqui."
       },
       "backToList": "Service Desk",
       "team": "Equipe Fropty",
-      "reviewBanner": { "title": "Nossa equipe marcou este chamado como resolvido", "desc": "A solução funcionou? Confirme para encerrar ou reabra se precisar de mais ajuda.", "cta": "Avaliar solução" }
+      "reviewBanner": {
+        "title": "Nossa equipe marcou este chamado como resolvido",
+        "desc": "A solução funcionou? Confirme para encerrar ou reabra se precisar de mais ajuda.",
+        "cta": "Avaliar solução"
+      }
     },
     "form": {
       "title": "Abrir chamado",
       "subtitleAdmin": "Abra um chamado em nome de um cliente. Respondemos em até 24h.",
       "subtitleClient": "Descreva o problema com detalhes — respondemos em até 24h.",
-      "client": "Cliente", "clientPlaceholder": "Selecione o cliente", "noClients": "Nenhum cliente ativo encontrado para abrir o chamado.",
-      "debitLabel": "Debitar 1 token do cliente", "debitOn": "1 token será descontado do saldo do cliente ao abrir.", "debitOff": "Cortesia — nenhum token será descontado do cliente.",
-      "subject": "Assunto", "subjectPlaceholder": "Descreva brevemente o problema",
-      "category": "Categoria", "priority": "Prioridade", "description": "Descrição", "descriptionPlaceholder": "O que aconteceu? Quando ocorre? O que já tentou?",
-      "attachments": "Anexos", "attachmentsHint": "(máx 5 · 10 MB cada)", "addFile": "Adicionar arquivo",
+      "client": "Cliente",
+      "clientPlaceholder": "Selecione o cliente",
+      "noClients": "Nenhum cliente ativo encontrado para abrir o chamado.",
+      "debitLabel": "Debitar 1 token do cliente",
+      "debitOn": "1 token será descontado do saldo do cliente ao abrir.",
+      "debitOff": "Cortesia — nenhum token será descontado do cliente.",
+      "subject": "Assunto",
+      "subjectPlaceholder": "Descreva brevemente o problema",
+      "category": "Categoria",
+      "priority": "Prioridade",
+      "description": "Descrição",
+      "descriptionPlaceholder": "O que aconteceu? Quando ocorre? O que já tentou?",
+      "attachments": "Anexos",
+      "attachmentsHint": "(máx 5 · 10 MB cada)",
+      "addFile": "Adicionar arquivo",
       "tokens": "{n} tokens",
-      "priorityDesc": { "baixa": "Não urgente", "media": "Impacto moderado", "alta": "Bloqueando uso" },
-      "copilotTitle": "Talvez isto já resolva", "copilotHint": "Não resolveu? Continue preenchendo abaixo para abrir o chamado.",
+      "priorityDesc": {
+        "baixa": "Não urgente",
+        "media": "Impacto moderado",
+        "alta": "Bloqueando uso"
+      },
+      "copilotTitle": "Talvez isto já resolva",
+      "copilotHint": "Não resolveu? Continue preenchendo abaixo para abrir o chamado.",
       "required": "Campo obrigatório",
-      "cancel": "Cancelar", "submit": "Abrir chamado", "submitting": "Enviando...",
-      "successTitle": "Chamado aberto!", "successDesc": "Nossa equipe responderá em até 24h.",
+      "cancel": "Cancelar",
+      "submit": "Abrir chamado",
+      "submitting": "Enviando...",
+      "successTitle": "Chamado aberto!",
+      "successDesc": "Nossa equipe responderá em até 24h.",
       "newTicketCrumb": "Novo chamado"
+    }
+  },
+  "admin": {
+    "roles": {
+      "cliente": "Cliente",
+      "admin": "Admin"
+    },
+    "plans": {
+      "sem_plano": "Sem plano",
+      "basico": "Básico",
+      "pro": "Pro"
+    },
+    "users": {
+      "title": "Usuários",
+      "subtitle": "Gerencie contas, planos e acessos do ecossistema.",
+      "newUser": "Novo usuário",
+      "stats": {
+        "total": "Total de usuários",
+        "active": "Usuários ativos",
+        "blocked": "Bloqueados",
+        "admins": "Administradores"
+      },
+      "tabs": {
+        "all": "Todos",
+        "active": "Ativos",
+        "blocked": "Bloqueados"
+      },
+      "search": "Buscar…",
+      "pagination": {
+        "page": "Página {page} de {total}",
+        "results": "{n} resultado(s)",
+        "prev": "Anterior",
+        "next": "Próxima"
+      },
+      "toolbar": {
+        "import": "Importar",
+        "export": "Exportar",
+        "filter": "Filtrar",
+        "filterBy": "Filtrar por",
+        "role": "Papel",
+        "plan": "Plano",
+        "all": "Todos",
+        "clear": "Limpar",
+        "apply": "Aplicar"
+      },
+      "import": {
+        "title": "Importar usuários (CSV)",
+        "desc": "Envie um CSV com uma coluna email (obrigatória) e, opcionalmente, nome, empresa, plano e tokens. Cada linha vira um convite por e-mail.",
+        "downloadTemplate": "Baixar modelo CSV",
+        "chooseFile": "Escolher arquivo .csv",
+        "ready": "{n} usuário(s) prontos para convidar",
+        "emptyFile": "Arquivo vazio ou sem linhas de dados.",
+        "needEmail": "O CSV precisa de uma coluna \"email\".",
+        "noRows": "Nenhuma linha com e-mail encontrada.",
+        "sent": "{n} convite(s) enviado(s).",
+        "failures": "{n} falha(s):",
+        "close": "Fechar",
+        "cancel": "Cancelar",
+        "sending": "Enviando…",
+        "invite": "Convidar"
+      },
+      "table": {
+        "user": "Usuário",
+        "company": "Empresa",
+        "email": "Email",
+        "phone": "Telefone",
+        "date": "Data",
+        "role": "Papel",
+        "plan": "Plano",
+        "tokens": "Tokens",
+        "status": "Status",
+        "access": "Acesso",
+        "actions": "Ações",
+        "empty": "Nenhum usuário encontrado."
+      },
+      "bulk": {
+        "selected": "{n} selecionado(s)",
+        "changePlan": "Alterar plano:",
+        "apply": "Aplicar",
+        "cancel": "Cancelar",
+        "updated": "Plano atualizado para {n} usuário(s)."
+      },
+      "row": {
+        "active": "Ativo",
+        "blocked": "Bloqueado",
+        "block": "Bloquear",
+        "unblock": "Desbloquear",
+        "saveRole": "Salvar papel",
+        "savePlan": "Salvar plano",
+        "setBalance": "Definir saldo",
+        "blockTitle": "Bloquear o acesso deste cliente ao portal",
+        "unblockTitle": "Liberar novamente o acesso deste cliente",
+        "saveError": "Não foi possível salvar. Tente novamente.",
+        "tokenRange": "Informe um valor entre 0 e 99999.",
+        "toastRole": "Papel de {who} atualizado.",
+        "toastPlan": "Plano de {who} definido.",
+        "toastBalance": "Saldo de {who} atualizado.",
+        "toastBlocked": "Acesso de {who} bloqueado.",
+        "toastUnblocked": "Acesso de {who} liberado."
+      },
+      "menu": {
+        "actions": "Ações",
+        "edit": "Editar",
+        "renew": "Renovar acesso +30d",
+        "delete": "Excluir",
+        "renewTitle": "Define a vigência para hoje + 30 dias (restabelece o acesso)",
+        "cannotDeleteAdmin": "Administradores não podem ser excluídos aqui",
+        "deleteTitle": "Excluir usuário",
+        "confirm": "Excluir {who} em definitivo? Todos os dados (chamados, projetos, tokens) serão removidos.",
+        "cancel": "Cancelar",
+        "deleted": "{who} foi excluído.",
+        "renewed": "Acesso de {who} renovado por 30 dias."
+      },
+      "invite": {
+        "title": "Convidar novo cliente",
+        "email": "E-mail",
+        "name": "Nome",
+        "tokens": "Tokens",
+        "plan": "Plano",
+        "contractStart": "Início do contrato",
+        "services": "Serviços contratados",
+        "emailPlaceholder": "cliente@email.com",
+        "namePlaceholder": "Nome do cliente",
+        "sending": "Enviando…",
+        "invite": "Convidar",
+        "unknownError": "Erro desconhecido."
+      },
+      "edit": {
+        "title": "Editar usuário",
+        "subtitle": "Altera os dados de {name}.",
+        "fullName": "Nome completo",
+        "email": "E-mail",
+        "company": "Empresa",
+        "phone": "Telefone",
+        "plan": "Plano",
+        "tokens": "Tokens",
+        "contractStart": "Início do contrato",
+        "renewal": "Vigência do acesso (renovação)",
+        "renewalHint": "Data até quando o cliente tem acesso ao portal. Vazio = sem bloqueio por vigência.",
+        "services": "Serviços contratados",
+        "cancel": "Cancelar",
+        "save": "Salvar alterações",
+        "saving": "Salvando…",
+        "saveError": "Erro ao salvar.",
+        "companyPlaceholder": "Nome da empresa"
+      },
+      "new": {
+        "title": "Novo usuário",
+        "inviteError": "Erro ao convidar.",
+        "subtitle": "Convida um novo cliente por e-mail.",
+        "avatarTitle": "Foto do usuário",
+        "avatarHint": "JPG, PNG ou WebP. Máx. 2 MB.",
+        "changePhoto": "Trocar foto",
+        "choosePhoto": "Escolher foto",
+        "tokensInitial": "Tokens iniciais",
+        "submit": "Convidar usuário",
+        "submitting": "Enviando convite…"
+      }
     }
   },
   "legal": {
@@ -87,38 +370,80 @@
       "title": "Sobre o site Fropty Hub",
       "intro": "O Fropty Hub é o portal do cliente do ecossistema Fropty — o lugar onde tudo se conecta.",
       "sections": [
-        { "h": "O que é o Hub", "p": "Um único ambiente para acompanhar chamados de suporte, projetos, contratos, financeiro, base de conhecimento, roadmap e muito mais. Cada cliente enxerga apenas o que contratou." },
-        { "h": "Ecossistema Fropty", "p": "A Fropty oferece módulos e serviços digitais para empresas — como FroptyCash, FroptyInvest, FroptySentinel, FroptyCRM e FroptyApps — reunidos e integrados no Hub." },
-        { "h": "Segurança", "p": "O Hub é protegido pelo FroptySentinel, com autenticação em duas etapas, verificação de senhas vazadas e monitoramento contínuo." }
+        {
+          "h": "O que é o Hub",
+          "p": "Um único ambiente para acompanhar chamados de suporte, projetos, contratos, financeiro, base de conhecimento, roadmap e muito mais. Cada cliente enxerga apenas o que contratou."
+        },
+        {
+          "h": "Ecossistema Fropty",
+          "p": "A Fropty oferece módulos e serviços digitais para empresas — como FroptyCash, FroptyInvest, FroptySentinel, FroptyCRM e FroptyApps — reunidos e integrados no Hub."
+        },
+        {
+          "h": "Segurança",
+          "p": "O Hub é protegido pelo FroptySentinel, com autenticação em duas etapas, verificação de senhas vazadas e monitoramento contínuo."
+        }
       ]
     },
     "terms": {
       "title": "Termos de Uso",
       "intro": "Ao acessar e utilizar o Fropty Hub, você concorda com os termos descritos abaixo.",
       "sections": [
-        { "h": "1. Uso da plataforma", "p": "O acesso é pessoal e destinado a clientes com contrato vigente. Você é responsável por manter a confidencialidade das suas credenciais." },
-        { "h": "2. Conteúdo e dados", "p": "Os dados inseridos no Hub pertencem ao cliente. A Fropty os utiliza apenas para prestar os serviços contratados." },
-        { "h": "3. Disponibilidade", "p": "Buscamos alta disponibilidade, mas o serviço pode passar por manutenções programadas, comunicadas com antecedência sempre que possível." },
-        { "h": "4. Alterações", "p": "Estes termos podem ser atualizados. Mudanças relevantes serão comunicadas pelos canais oficiais." }
+        {
+          "h": "1. Uso da plataforma",
+          "p": "O acesso é pessoal e destinado a clientes com contrato vigente. Você é responsável por manter a confidencialidade das suas credenciais."
+        },
+        {
+          "h": "2. Conteúdo e dados",
+          "p": "Os dados inseridos no Hub pertencem ao cliente. A Fropty os utiliza apenas para prestar os serviços contratados."
+        },
+        {
+          "h": "3. Disponibilidade",
+          "p": "Buscamos alta disponibilidade, mas o serviço pode passar por manutenções programadas, comunicadas com antecedência sempre que possível."
+        },
+        {
+          "h": "4. Alterações",
+          "p": "Estes termos podem ser atualizados. Mudanças relevantes serão comunicadas pelos canais oficiais."
+        }
       ]
     },
     "privacy": {
       "title": "Política de Privacidade",
       "intro": "Levamos a sua privacidade a sério. Esta política explica como tratamos os seus dados.",
       "sections": [
-        { "h": "Dados que coletamos", "p": "Coletamos apenas os dados necessários para operar o Hub: informações de conta, atividade de uso e o conteúdo que você registra (chamados, projetos, feedback)." },
-        { "h": "Como usamos", "p": "Usamos os dados para autenticar o acesso, prestar suporte, melhorar a plataforma e cumprir obrigações legais. Não vendemos os seus dados." },
-        { "h": "Seus direitos", "p": "Você pode solicitar acesso, correção ou exclusão dos seus dados a qualquer momento pelos canais de contato." },
-        { "h": "Contato", "p": "Dúvidas sobre privacidade podem ser enviadas para suporte@fropty.com." }
+        {
+          "h": "Dados que coletamos",
+          "p": "Coletamos apenas os dados necessários para operar o Hub: informações de conta, atividade de uso e o conteúdo que você registra (chamados, projetos, feedback)."
+        },
+        {
+          "h": "Como usamos",
+          "p": "Usamos os dados para autenticar o acesso, prestar suporte, melhorar a plataforma e cumprir obrigações legais. Não vendemos os seus dados."
+        },
+        {
+          "h": "Seus direitos",
+          "p": "Você pode solicitar acesso, correção ou exclusão dos seus dados a qualquer momento pelos canais de contato."
+        },
+        {
+          "h": "Contato",
+          "p": "Dúvidas sobre privacidade podem ser enviadas para suporte@fropty.com."
+        }
       ]
     },
     "licenses": {
       "title": "Licenças",
       "intro": "O Fropty Hub é construído com software livre. Agradecemos à comunidade open source.",
       "sections": [
-        { "h": "Tecnologias principais", "p": "Next.js, React e Tailwind CSS — licença MIT. Supabase (Postgres, Auth, Storage, Realtime) — licença Apache 2.0." },
-        { "h": "Ícones e fontes", "p": "Ícones Lucide (licença ISC). Fontes Inter e DM Sans (SIL Open Font License 1.1)." },
-        { "h": "Marcas", "p": "Fropty, Fropty Hub e os nomes dos módulos são marcas da Fropty. Demais marcas pertencem aos seus respectivos titulares." }
+        {
+          "h": "Tecnologias principais",
+          "p": "Next.js, React e Tailwind CSS — licença MIT. Supabase (Postgres, Auth, Storage, Realtime) — licença Apache 2.0."
+        },
+        {
+          "h": "Ícones e fontes",
+          "p": "Ícones Lucide (licença ISC). Fontes Inter e DM Sans (SIL Open Font License 1.1)."
+        },
+        {
+          "h": "Marcas",
+          "p": "Fropty, Fropty Hub e os nomes dos módulos são marcas da Fropty. Demais marcas pertencem aos seus respectivos titulares."
+        }
       ]
     }
   }

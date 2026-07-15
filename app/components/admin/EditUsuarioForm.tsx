@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { adminUpdateUserProfile } from "@/app/actions/admin";
 import { SERVICES } from "@/app/lib/constants/services";
+import { useT } from "@/app/lib/i18n/I18nProvider";
 import {
   ArrowLeft, Save, Mail, User, Phone, Loader2,
   CheckCircle, XCircle, CreditCard, Coins, Building2, CalendarDays,
@@ -25,6 +26,7 @@ interface EditUser {
 }
 
 export function EditUsuarioForm({ user }: { user: EditUser }) {
+  const t = useT();
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
@@ -51,7 +53,7 @@ export function EditUsuarioForm({ user }: { user: EditUser }) {
         setMsg({ ok: true, text: res.success });
         setTimeout(() => { router.push("/admin/usuarios"); router.refresh(); }, 1200);
       } else {
-        setMsg({ ok: false, text: res.error ?? "Erro ao salvar." });
+        setMsg({ ok: false, text: res.error ?? t("admin.users.edit.saveError") });
       }
     });
   }
@@ -68,9 +70,9 @@ export function EditUsuarioForm({ user }: { user: EditUser }) {
           <ArrowLeft size={15} />
         </Link>
         <div>
-          <h1 style={{ fontSize: "1.2rem", fontWeight: 800, margin: 0, color: "var(--text)", letterSpacing: "-0.02em" }}>Editar usuário</h1>
+          <h1 style={{ fontSize: "1.2rem", fontWeight: 800, margin: 0, color: "var(--text)", letterSpacing: "-0.02em" }}>{t("admin.users.edit.title")}</h1>
           <p style={{ margin: "2px 0 0", fontSize: "12px", color: "var(--text-faint)" }}>
-            Altera os dados de {user.name || user.email}.
+            {t("admin.users.edit.subtitle", { name: user.name || user.email })}
           </p>
         </div>
       </div>
@@ -81,54 +83,54 @@ export function EditUsuarioForm({ user }: { user: EditUser }) {
 
             {/* Nome + E-mail */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-              <Field label="Nome completo" icon={<User size={13} />}>
+              <Field label={t("admin.users.edit.fullName")} icon={<User size={13} />}>
                 <input name="name" defaultValue={user.name} placeholder="João Silva" style={inputStyle} />
               </Field>
-              <Field label="E-mail *" icon={<Mail size={13} />}>
+              <Field label={`${t("admin.users.edit.email")} *`} icon={<Mail size={13} />}>
                 <input name="email" type="email" required defaultValue={user.email} placeholder="joao@empresa.com" style={inputStyle} />
               </Field>
             </div>
 
             {/* Empresa + Telefone */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-              <Field label="Empresa" icon={<Building2 size={13} />}>
-                <input name="company" defaultValue={user.company} placeholder="Nome da empresa" style={inputStyle} />
+              <Field label={t("admin.users.edit.company")} icon={<Building2 size={13} />}>
+                <input name="company" defaultValue={user.company} placeholder={t("admin.users.edit.companyPlaceholder")} style={inputStyle} />
               </Field>
-              <Field label="Telefone" icon={<Phone size={13} />}>
+              <Field label={t("admin.users.edit.phone")} icon={<Phone size={13} />}>
                 <input name="phone" defaultValue={user.phone} placeholder="+5511999990000" style={inputStyle} />
               </Field>
             </div>
 
             {/* Plano + Tokens + Contrato */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
-              <Field label="Plano" icon={<CreditCard size={13} />}>
+              <Field label={t("admin.users.edit.plan")} icon={<CreditCard size={13} />}>
                 <select name="plan" defaultValue={user.plan} style={{ ...inputStyle, cursor: "pointer" }}>
-                  <option value="sem_plano">Sem plano</option>
-                  <option value="basico">Básico</option>
-                  <option value="pro">Pro</option>
+                  <option value="sem_plano">{t("admin.plans.sem_plano")}</option>
+                  <option value="basico">{t("admin.plans.basico")}</option>
+                  <option value="pro">{t("admin.plans.pro")}</option>
                 </select>
               </Field>
-              <Field label="Tokens" icon={<Coins size={13} />}>
+              <Field label={t("admin.users.edit.tokens")} icon={<Coins size={13} />}>
                 <input name="token_balance" type="number" defaultValue={user.token_balance} min={0} max={99999} style={inputStyle} />
               </Field>
-              <Field label="Início do contrato" icon={<CalendarDays size={13} />}>
+              <Field label={t("admin.users.edit.contractStart")} icon={<CalendarDays size={13} />}>
                 <input name="contract_start" type="date" defaultValue={user.contract_start} style={{ ...inputStyle, colorScheme: "dark" }} />
               </Field>
             </div>
 
             {/* Vigência do acesso */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 6 }}>
-              <Field label="Vigência do acesso (renovação)" icon={<CalendarDays size={13} />}>
+              <Field label={t("admin.users.edit.renewal")} icon={<CalendarDays size={13} />}>
                 <input name="plan_renewal" type="date" defaultValue={user.plan_renewal} style={{ ...inputStyle, colorScheme: "dark" }} />
                 <span style={{ fontSize: "11px", color: "var(--text-faint)", marginTop: 4, display: "block" }}>
-                  Data até quando o cliente tem acesso ao portal. Vazio = sem bloqueio por vigência.
+                  {t("admin.users.edit.renewalHint")}
                 </span>
               </Field>
             </div>
 
             {/* Serviços */}
             <div>
-              <p style={labelStyle}>Serviços contratados</p>
+              <p style={labelStyle}>{t("admin.users.edit.services")}</p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 8 }}>
                 {SERVICES.map((s) => {
                   const on = services.has(s.id);
@@ -168,7 +170,7 @@ export function EditUsuarioForm({ user }: { user: EditUser }) {
             </div>
             <div style={{ display: "flex", gap: 8 }}>
               <Link href="/admin/usuarios" style={{ padding: "9px 18px", borderRadius: 9, border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text-muted)", fontSize: "13px", fontWeight: 600, textDecoration: "none", display: "inline-flex", alignItems: "center" }}>
-                Cancelar
+                {t("admin.users.edit.cancel")}
               </Link>
               <button
                 type="submit"
@@ -176,7 +178,7 @@ export function EditUsuarioForm({ user }: { user: EditUser }) {
                 style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "9px 20px", borderRadius: 9, border: "none", background: pending ? "var(--surface-2)" : "var(--cta-bg)", color: pending ? "var(--text-muted)" : "var(--cta-text)", fontSize: "13px", fontWeight: 700, cursor: pending ? "not-allowed" : "pointer", fontFamily: "inherit" }}
               >
                 {pending ? <Loader2 size={13} style={{ animation: "spin 0.8s linear infinite" }} /> : <Save size={13} />}
-                {pending ? "Salvando…" : "Salvar alterações"}
+                {pending ? t("admin.users.edit.saving") : t("admin.users.edit.save")}
               </button>
             </div>
           </div>

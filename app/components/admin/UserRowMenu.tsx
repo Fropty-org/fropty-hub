@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { MoreHorizontal, Pencil, Trash2, Loader2, AlertTriangle, CalendarCheck } from "lucide-react";
 import { useToast } from "@/app/components/ui/Toast";
+import { useT } from "@/app/lib/i18n/I18nProvider";
 import { adminDeleteUser, adminRenewAccess } from "@/app/actions/admin";
 
 interface Props {
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export function UserRowMenu({ userId, name, email, role }: Props) {
+  const t = useT();
   const router = useRouter();
   const { show, ToastComponent } = useToast();
   const [open, setOpen]       = useState(false);
@@ -58,7 +60,7 @@ export function UserRowMenu({ userId, name, email, role }: Props) {
       if (res?.error) {
         show(res.error, "error");
       } else {
-        show(`${who} foi excluído.`, "success");
+        show(t("admin.users.menu.deleted", { who }), "success");
         setConfirm(false);
         setOpen(false);
         router.refresh();
@@ -74,7 +76,7 @@ export function UserRowMenu({ userId, name, email, role }: Props) {
     startTransition(async () => {
       const res = await adminRenewAccess(fd);
       if (res?.error) show(res.error, "error");
-      else { show(`Acesso de ${who} renovado por 30 dias.`, "success"); router.refresh(); }
+      else { show(t("admin.users.menu.renewed", { who }), "success"); router.refresh(); }
     });
   }
 
@@ -84,7 +86,7 @@ export function UserRowMenu({ userId, name, email, role }: Props) {
         ref={triggerRef}
         type="button"
         onClick={() => (open ? (setOpen(false), setConfirm(false)) : openMenu())}
-        title="Ações"
+        title={t("admin.users.menu.actions")}
         style={{ width: 26, height: 26, borderRadius: 7, border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text-muted)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
       >
         <MoreHorizontal size={14} />
@@ -94,21 +96,21 @@ export function UserRowMenu({ userId, name, email, role }: Props) {
         !confirm ? (
           <div ref={panelRef} style={{ position: "fixed", top: pos.top, right: pos.right, zIndex: 1000, minWidth: 150, background: "var(--surface-elevated, var(--card-bg))", border: "1px solid var(--border)", borderRadius: 9, boxShadow: "var(--shadow-dropdown, 0 8px 24px rgba(0,0,0,0.18))", overflow: "hidden", padding: 4 }}>
             <button type="button" onClick={() => { setOpen(false); router.push(`/admin/usuarios/${userId}/editar`); }} style={menuItem}>
-              <Pencil size={13} /> Editar
+              <Pencil size={13} /> {t("admin.users.menu.edit")}
             </button>
             {role === "cliente" && (
-              <button type="button" onClick={renew} disabled={pending} style={menuItem} title="Define a vigência para hoje + 30 dias (restabelece o acesso)">
-                <CalendarCheck size={13} /> Renovar acesso +30d
+              <button type="button" onClick={renew} disabled={pending} style={menuItem} title={t("admin.users.menu.renewTitle")}>
+                <CalendarCheck size={13} /> {t("admin.users.menu.renew")}
               </button>
             )}
             <button
               type="button"
               onClick={() => setConfirm(true)}
               disabled={role === "admin"}
-              title={role === "admin" ? "Administradores não podem ser excluídos aqui" : "Excluir usuário"}
+              title={role === "admin" ? t("admin.users.menu.cannotDeleteAdmin") : t("admin.users.menu.deleteTitle")}
               style={{ ...menuItem, color: role === "admin" ? "var(--text-faint)" : "var(--c-danger)", cursor: role === "admin" ? "not-allowed" : "pointer" }}
             >
-              <Trash2 size={13} /> Excluir
+              <Trash2 size={13} /> {t("admin.users.menu.delete")}
             </button>
           </div>
         ) : (
@@ -116,16 +118,16 @@ export function UserRowMenu({ userId, name, email, role }: Props) {
             <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
               <AlertTriangle size={15} style={{ color: "var(--c-danger)", flexShrink: 0, marginTop: 1 }} />
               <p style={{ margin: 0, fontSize: "12px", color: "var(--text)", fontWeight: 600, lineHeight: 1.4 }}>
-                Excluir <strong>{who}</strong> em definitivo? Todos os dados (chamados, projetos, tokens) serão removidos.
+                {t("admin.users.menu.confirm", { who })}
               </p>
             </div>
             <div style={{ display: "flex", gap: 6, justifyContent: "flex-end" }}>
               <button type="button" onClick={() => setConfirm(false)} disabled={pending} style={{ padding: "5px 11px", borderRadius: 7, border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text-muted)", fontSize: "11.5px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
-                Cancelar
+                {t("admin.users.menu.cancel")}
               </button>
               <button type="button" onClick={doDelete} disabled={pending} style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "5px 11px", borderRadius: 7, border: "none", background: "var(--c-danger)", color: "#fff", fontSize: "11.5px", fontWeight: 700, cursor: pending ? "wait" : "pointer", fontFamily: "inherit" }}>
                 {pending ? <Loader2 size={12} style={{ animation: "spin 0.8s linear infinite" }} /> : <Trash2 size={12} />}
-                Excluir
+                {t("admin.users.menu.delete")}
               </button>
             </div>
           </div>

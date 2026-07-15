@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { Upload, Download, SlidersHorizontal, Loader2, X, FileUp, CheckCircle, AlertTriangle } from "lucide-react";
 import { useToast } from "@/app/components/ui/Toast";
+import { useT } from "@/app/lib/i18n/I18nProvider";
 import { adminExportUsers, adminBulkInviteClients, type BulkInviteRow } from "@/app/actions/admin";
 
 interface Props {
@@ -58,6 +59,7 @@ function parseCSV(text: string): string[][] {
 }
 
 export function UsuariosToolbar({ tab, q, role, plan }: Props) {
+  const t = useT();
   const router = useRouter();
   const { show, ToastComponent } = useToast();
 
@@ -108,7 +110,7 @@ export function UsuariosToolbar({ tab, q, role, plan }: Props) {
       URL.revokeObjectURL(url);
       show(`${rows.length} usuário${rows.length !== 1 ? "s" : ""} exportado${rows.length !== 1 ? "s" : ""}.`, "success");
     } catch {
-      show("Não foi possível exportar. Tente novamente.", "error");
+      show(t("admin.users.row.saveError"), "error");
     } finally {
       setExporting(false);
     }
@@ -131,10 +133,10 @@ export function UsuariosToolbar({ tab, q, role, plan }: Props) {
     <>
       {/* Import / Export split button */}
       <div style={{ display: "inline-flex", borderRadius: 7, border: "1px solid var(--border)", overflow: "hidden" }}>
-        <button type="button" onClick={() => setImportOpen(true)} style={actionBtn}><Upload size={12} /><span>Importar</span></button>
+        <button type="button" onClick={() => setImportOpen(true)} style={actionBtn}><Upload size={12} /><span>{t("admin.users.toolbar.import")}</span></button>
         <div style={{ width: 1, background: "var(--border)" }} />
         <button type="button" onClick={handleExport} disabled={exporting} style={actionBtn}>
-          {exporting ? <Loader2 size={12} style={{ animation: "spin 0.8s linear infinite" }} /> : <Download size={12} />}<span>Exportar</span>
+          {exporting ? <Loader2 size={12} style={{ animation: "spin 0.8s linear infinite" }} /> : <Download size={12} />}<span>{t("admin.users.toolbar.export")}</span>
         </button>
       </div>
 
@@ -146,7 +148,7 @@ export function UsuariosToolbar({ tab, q, role, plan }: Props) {
         style={{ ...actionBtn, border: "1px solid var(--border)", borderRadius: 7, padding: "5px 10px", gap: 5, color: activeFilters ? "var(--primary)" : "var(--text-muted)", borderColor: activeFilters ? "var(--primary)" : "var(--border)" }}
       >
         <SlidersHorizontal size={12} />
-        <span>Filtrar</span>
+        <span>{t("admin.users.toolbar.filter")}</span>
         {activeFilters > 0 && (
           <span style={{ fontSize: "10px", background: "var(--primary)", color: "#fff", borderRadius: 999, padding: "0 5px", fontWeight: 800 }}>{activeFilters}</span>
         )}
@@ -177,33 +179,35 @@ export function UsuariosToolbar({ tab, q, role, plan }: Props) {
 }
 
 function FilterBody({ role, plan, onApply }: { role: string; plan: string; onApply: (r: string, p: string) => void }) {
+  const t = useT();
   const [r, setR] = useState(role);
   const [p, setP] = useState(plan);
   return (
     <>
-      <p style={{ margin: "0 0 10px", fontSize: "11px", fontWeight: 800, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Filtrar por</p>
-      <label style={fieldLabel}>Papel</label>
+      <p style={{ margin: "0 0 10px", fontSize: "11px", fontWeight: 800, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.05em" }}>{t("admin.users.toolbar.filterBy")}</p>
+      <label style={fieldLabel}>{t("admin.users.toolbar.role")}</label>
       <select value={r} onChange={(e) => setR(e.target.value)} style={selectStyle}>
-        <option value="">Todos</option>
-        <option value="cliente">Cliente</option>
-        <option value="admin">Admin</option>
+        <option value="">{t("admin.users.toolbar.all")}</option>
+        <option value="cliente">{t("admin.roles.cliente")}</option>
+        <option value="admin">{t("admin.roles.admin")}</option>
       </select>
-      <label style={{ ...fieldLabel, marginTop: 10 }}>Plano</label>
+      <label style={{ ...fieldLabel, marginTop: 10 }}>{t("admin.users.toolbar.plan")}</label>
       <select value={p} onChange={(e) => setP(e.target.value)} style={selectStyle}>
-        <option value="">Todos</option>
-        <option value="sem_plano">Sem plano</option>
-        <option value="basico">Básico</option>
-        <option value="pro">Pro</option>
+        <option value="">{t("admin.users.toolbar.all")}</option>
+        <option value="sem_plano">{t("admin.plans.sem_plano")}</option>
+        <option value="basico">{t("admin.plans.basico")}</option>
+        <option value="pro">{t("admin.plans.pro")}</option>
       </select>
       <div style={{ display: "flex", gap: 6, marginTop: 14 }}>
-        <button type="button" onClick={() => onApply("", "")} style={{ flex: 1, padding: "7px 0", borderRadius: 7, border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text-muted)", fontSize: "12px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>Limpar</button>
-        <button type="button" onClick={() => onApply(r, p)} style={{ flex: 1, padding: "7px 0", borderRadius: 7, border: "none", background: "var(--primary)", color: "#fff", fontSize: "12px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>Aplicar</button>
+        <button type="button" onClick={() => onApply("", "")} style={{ flex: 1, padding: "7px 0", borderRadius: 7, border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text-muted)", fontSize: "12px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>{t("admin.users.toolbar.clear")}</button>
+        <button type="button" onClick={() => onApply(r, p)} style={{ flex: 1, padding: "7px 0", borderRadius: 7, border: "none", background: "var(--primary)", color: "#fff", fontSize: "12px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>{t("admin.users.toolbar.apply")}</button>
       </div>
     </>
   );
 }
 
 function ImportModal({ onClose, onDone, parse }: { onClose: () => void; onDone: (n: number) => void; parse: (t: string) => string[][] }) {
+  const t = useT();
   const [rows, setRows] = useState<BulkInviteRow[] | null>(null);
   const [fileName, setFileName] = useState("");
   const [parseError, setParseError] = useState("");
@@ -258,7 +262,7 @@ function ImportModal({ onClose, onDone, parse }: { onClose: () => void; onDone: 
     <div onClick={onClose} style={{ position: "fixed", inset: 0, zIndex: 100, background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
       <div onClick={(e) => e.stopPropagation()} className="hub-card" style={{ width: "100%", maxWidth: 440, padding: 0, overflow: "hidden" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px", borderBottom: "1px solid var(--border)" }}>
-          <h3 style={{ margin: 0, fontSize: "14px", fontWeight: 800, color: "var(--text)" }}>Importar usuários (CSV)</h3>
+          <h3 style={{ margin: 0, fontSize: "14px", fontWeight: 800, color: "var(--text)" }}>{t("admin.users.import.title")}</h3>
           <button type="button" onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-faint)", display: "flex" }}><X size={16} /></button>
         </div>
 
@@ -268,14 +272,14 @@ function ImportModal({ onClose, onDone, parse }: { onClose: () => void; onDone: 
               <p style={{ margin: "0 0 12px", fontSize: "12.5px", color: "var(--text-muted)", lineHeight: 1.5 }}>
                 Envie um CSV com uma coluna <strong>email</strong> (obrigatória) e, opcionalmente, <strong>nome</strong>, <strong>empresa</strong>, <strong>plano</strong> e <strong>tokens</strong>. Cada linha vira um convite por e-mail.
               </p>
-              <a href={templateHref} download="modelo-usuarios.csv" style={{ fontSize: "12px", fontWeight: 700, color: "var(--primary)", textDecoration: "none" }}>Baixar modelo CSV</a>
+              <a href={templateHref} download="modelo-usuarios.csv" style={{ fontSize: "12px", fontWeight: 700, color: "var(--primary)", textDecoration: "none" }}>{t("admin.users.import.downloadTemplate")}</a>
 
               <div
                 onClick={() => fileRef.current?.click()}
                 style={{ marginTop: 14, border: "1.5px dashed var(--border)", borderRadius: 10, padding: "22px 16px", textAlign: "center", cursor: "pointer", background: "var(--surface)" }}
               >
                 <FileUp size={22} style={{ color: "var(--text-faint)", marginBottom: 6 }} />
-                <p style={{ margin: 0, fontSize: "12.5px", fontWeight: 600, color: "var(--text)" }}>{fileName || "Escolher arquivo .csv"}</p>
+                <p style={{ margin: 0, fontSize: "12.5px", fontWeight: 600, color: "var(--text)" }}>{fileName || t("admin.users.import.chooseFile")}</p>
                 {rows && <p style={{ margin: "4px 0 0", fontSize: "12px", color: "var(--c-success)", fontWeight: 700 }}>{rows.length} usuário(s) prontos para convidar</p>}
               </div>
               <input ref={fileRef} type="file" accept=".csv,text/csv" style={{ display: "none" }} onChange={handleFile} />
@@ -312,12 +316,12 @@ function ImportModal({ onClose, onDone, parse }: { onClose: () => void; onDone: 
 
         <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, padding: "14px 20px", borderTop: "1px solid var(--border)" }}>
           <button type="button" onClick={onClose} style={{ padding: "8px 16px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text-muted)", fontSize: "12.5px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
-            {result ? "Fechar" : "Cancelar"}
+            {result ? t("admin.users.import.close") : t("admin.users.import.cancel")}
           </button>
           {!result && (
             <button type="button" onClick={confirmImport} disabled={!rows || pending} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 16px", borderRadius: 8, border: "none", background: !rows || pending ? "var(--surface-2)" : "var(--cta-bg)", color: !rows || pending ? "var(--text-muted)" : "var(--cta-text)", fontSize: "12.5px", fontWeight: 700, cursor: !rows || pending ? "not-allowed" : "pointer", fontFamily: "inherit" }}>
               {pending ? <Loader2 size={13} style={{ animation: "spin 0.8s linear infinite" }} /> : <Upload size={13} />}
-              {pending ? "Enviando…" : `Convidar${rows ? ` ${rows.length}` : ""}`}
+              {pending ? t("admin.users.import.sending") : `${t("admin.users.import.invite")}${rows ? ` ${rows.length}` : ""}`}
             </button>
           )}
         </div>

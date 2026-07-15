@@ -19,18 +19,51 @@
     "es": "Español"
   },
   "serviceDesk": {
-    "noToken": { "title": "Not enough tokens", "desc": "You need tokens to open tickets. Get tokens or a plan to continue.", "cta": "View tokens", "close": "Close" },
+    "noToken": {
+      "title": "Not enough tokens",
+      "desc": "You need tokens to open tickets. Get tokens or a plan to continue.",
+      "cta": "View tokens",
+      "close": "Close"
+    },
     "subtitleAdmin": "All tickets — open one on behalf of a client when needed",
     "subtitleClient": "Track and open tickets in real time",
     "newTicket": "New ticket",
-    "kpi": { "total": "Total", "open": "Open", "highPriority": "High priority", "resolved": "Resolved" },
+    "kpi": {
+      "total": "Total",
+      "open": "Open",
+      "highPriority": "High priority",
+      "resolved": "Resolved"
+    },
     "searchPlaceholder": "Search by subject or category…",
-    "filter": { "all": "all", "open": "open", "closed": "closed", "anyPriority": "Any priority", "high": "High", "medium": "Medium", "low": "Low" },
+    "filter": {
+      "all": "all",
+      "open": "open",
+      "closed": "closed",
+      "anyPriority": "Any priority",
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
     "ticketsCount": "{n} ticket(s)",
     "noResults": "No tickets found",
-    "empty": { "title": "No tickets yet", "descAdmin": "No client has opened a ticket yet.", "descClient": "Whenever you need support, we're here.", "openFirst": "Open your first ticket" },
-    "status": { "aberto": "Open", "em_andamento": "In progress", "resolvido": "Awaiting review", "fechado": "Closed", "reaberto": "Reopened" },
-    "priority": { "baixa": "Low", "media": "Medium", "alta": "High" },
+    "empty": {
+      "title": "No tickets yet",
+      "descAdmin": "No client has opened a ticket yet.",
+      "descClient": "Whenever you need support, we're here.",
+      "openFirst": "Open your first ticket"
+    },
+    "status": {
+      "aberto": "Open",
+      "em_andamento": "In progress",
+      "resolvido": "Awaiting review",
+      "fechado": "Closed",
+      "reaberto": "Reopened"
+    },
+    "priority": {
+      "baixa": "Low",
+      "media": "Medium",
+      "alta": "High"
+    },
     "queue": {
       "title": "Service Desk queue",
       "summary": "{total} tickets · {open} open · {late} overdue",
@@ -38,8 +71,20 @@
       "noViews": "none saved yet",
       "saveView": "Save current view",
       "viewNamePrompt": "View name:",
-      "filters": { "clients": "Clients", "status": "Status", "priority": "Priority", "responsible": "Assignee", "sort": "Sort" },
-      "options": { "late": "⚠ Overdue (SLA)", "urgency": "Urgency", "recent": "Most recent", "myTickets": "My tickets", "unassigned": "Unassigned" },
+      "filters": {
+        "clients": "Clients",
+        "status": "Status",
+        "priority": "Priority",
+        "responsible": "Assignee",
+        "sort": "Sort"
+      },
+      "options": {
+        "late": "⚠ Overdue (SLA)",
+        "urgency": "Urgency",
+        "recent": "Most recent",
+        "myTickets": "My tickets",
+        "unassigned": "Unassigned"
+      },
       "unassigned": "— Unassigned",
       "columnEmpty": "No tickets",
       "emptyTitle": "No tickets in the queue",
@@ -47,39 +92,277 @@
       "done": "Done"
     },
     "detail": {
-      "tabs": { "form": "Form", "associated": "Associated", "approval": "Approval", "equipment": "Equipment", "attachments": "Attachments" },
-      "sla": { "response": "Response", "resolution": "Resolution" },
+      "tabs": {
+        "form": "Form",
+        "associated": "Associated",
+        "approval": "Approval",
+        "equipment": "Equipment",
+        "attachments": "Attachments"
+      },
+      "sla": {
+        "response": "Response",
+        "resolution": "Resolution"
+      },
       "moreActions": "More actions",
-      "details": { "title": "Details", "openedAt": "Opened on", "situation": "Situation", "openedBy": "Opened by", "currentAnalyst": "Current analyst", "group": "Group", "unassigned": "Unassigned" },
-      "actions": { "title": "Added actions", "search": "Search", "filter": "Filter", "empty": "No actions logged yet.", "closed": "This ticket is closed." },
-      "composer": { "placeholder": "What would you like to log?", "selectAction": "Select action", "send": "Send", "bold": "Bold", "italic": "Italic", "strike": "Strikethrough", "link": "Link", "list": "List", "orderedList": "Numbered list", "attach": "Attach", "logTime": "Log time", "expand": "Expand" },
-      "form": { "subject": "Subject", "group": "Group", "priority": "Priority", "description": "Description" },
-      "attachments": { "title": "Form attachments", "search": "Search", "new": "New", "colName": "File name", "colAuthor": "Author", "colDate": "Added on", "colActions": "Actions", "view": "View", "download": "Download", "toGrid": "Grid view", "toTable": "Table view", "refresh": "Refresh", "empty": "No attachments on this ticket." },
+      "details": {
+        "title": "Details",
+        "openedAt": "Opened on",
+        "situation": "Situation",
+        "openedBy": "Opened by",
+        "currentAnalyst": "Current analyst",
+        "group": "Group",
+        "unassigned": "Unassigned"
+      },
+      "actions": {
+        "title": "Added actions",
+        "search": "Search",
+        "filter": "Filter",
+        "empty": "No actions logged yet.",
+        "closed": "This ticket is closed."
+      },
+      "composer": {
+        "placeholder": "What would you like to log?",
+        "selectAction": "Select action",
+        "send": "Send",
+        "bold": "Bold",
+        "italic": "Italic",
+        "strike": "Strikethrough",
+        "link": "Link",
+        "list": "List",
+        "orderedList": "Numbered list",
+        "attach": "Attach",
+        "logTime": "Log time",
+        "expand": "Expand"
+      },
+      "form": {
+        "subject": "Subject",
+        "group": "Group",
+        "priority": "Priority",
+        "description": "Description"
+      },
+      "attachments": {
+        "title": "Form attachments",
+        "search": "Search",
+        "new": "New",
+        "colName": "File name",
+        "colAuthor": "Author",
+        "colDate": "Added on",
+        "colActions": "Actions",
+        "view": "View",
+        "download": "Download",
+        "toGrid": "Grid view",
+        "toTable": "Table view",
+        "refresh": "Refresh",
+        "empty": "No attachments on this ticket."
+      },
       "placeholders": {
-        "associatedTitle": "Associated requests", "associatedDesc": "Link other tickets and requests related to this case.",
-        "approvalTitle": "Approval", "approvalDesc": "Approval flows will show up here when this ticket requires authorization.",
-        "equipmentTitle": "Equipment", "equipmentDesc": "Equipment and assets related to this ticket will show up here."
+        "associatedTitle": "Associated requests",
+        "associatedDesc": "Link other tickets and requests related to this case.",
+        "approvalTitle": "Approval",
+        "approvalDesc": "Approval flows will show up here when this ticket requires authorization.",
+        "equipmentTitle": "Equipment",
+        "equipmentDesc": "Equipment and assets related to this ticket will show up here."
       },
       "backToList": "Service Desk",
       "team": "Fropty Team",
-      "reviewBanner": { "title": "Our team marked this ticket as resolved", "desc": "Did the solution work? Confirm to close it or reopen if you need more help.", "cta": "Review solution" }
+      "reviewBanner": {
+        "title": "Our team marked this ticket as resolved",
+        "desc": "Did the solution work? Confirm to close it or reopen if you need more help.",
+        "cta": "Review solution"
+      }
     },
     "form": {
       "title": "Open a ticket",
       "subtitleAdmin": "Open a ticket on behalf of a client. We reply within 24h.",
       "subtitleClient": "Describe the issue in detail — we reply within 24h.",
-      "client": "Client", "clientPlaceholder": "Select the client", "noClients": "No active client found to open the ticket.",
-      "debitLabel": "Debit 1 token from the client", "debitOn": "1 token will be deducted from the client's balance on open.", "debitOff": "Courtesy — no token will be deducted from the client.",
-      "subject": "Subject", "subjectPlaceholder": "Briefly describe the issue",
-      "category": "Category", "priority": "Priority", "description": "Description", "descriptionPlaceholder": "What happened? When does it occur? What have you tried?",
-      "attachments": "Attachments", "attachmentsHint": "(max 5 · 10 MB each)", "addFile": "Add file",
+      "client": "Client",
+      "clientPlaceholder": "Select the client",
+      "noClients": "No active client found to open the ticket.",
+      "debitLabel": "Debit 1 token from the client",
+      "debitOn": "1 token will be deducted from the client's balance on open.",
+      "debitOff": "Courtesy — no token will be deducted from the client.",
+      "subject": "Subject",
+      "subjectPlaceholder": "Briefly describe the issue",
+      "category": "Category",
+      "priority": "Priority",
+      "description": "Description",
+      "descriptionPlaceholder": "What happened? When does it occur? What have you tried?",
+      "attachments": "Attachments",
+      "attachmentsHint": "(max 5 · 10 MB each)",
+      "addFile": "Add file",
       "tokens": "{n} tokens",
-      "priorityDesc": { "baixa": "Not urgent", "media": "Moderate impact", "alta": "Blocking usage" },
-      "copilotTitle": "This might already solve it", "copilotHint": "Didn't help? Keep filling in below to open the ticket.",
+      "priorityDesc": {
+        "baixa": "Not urgent",
+        "media": "Moderate impact",
+        "alta": "Blocking usage"
+      },
+      "copilotTitle": "This might already solve it",
+      "copilotHint": "Didn't help? Keep filling in below to open the ticket.",
       "required": "Required field",
-      "cancel": "Cancel", "submit": "Open ticket", "submitting": "Sending...",
-      "successTitle": "Ticket opened!", "successDesc": "Our team will reply within 24h.",
+      "cancel": "Cancel",
+      "submit": "Open ticket",
+      "submitting": "Sending...",
+      "successTitle": "Ticket opened!",
+      "successDesc": "Our team will reply within 24h.",
       "newTicketCrumb": "New ticket"
+    }
+  },
+  "admin": {
+    "roles": {
+      "cliente": "Client",
+      "admin": "Admin"
+    },
+    "plans": {
+      "sem_plano": "No plan",
+      "basico": "Basic",
+      "pro": "Pro"
+    },
+    "users": {
+      "title": "Users",
+      "subtitle": "Manage accounts, plans and access across the ecosystem.",
+      "newUser": "New user",
+      "stats": {
+        "total": "Total users",
+        "active": "Active users",
+        "blocked": "Blocked",
+        "admins": "Administrators"
+      },
+      "tabs": {
+        "all": "All",
+        "active": "Active",
+        "blocked": "Blocked"
+      },
+      "search": "Search…",
+      "pagination": {
+        "page": "Page {page} of {total}",
+        "results": "{n} result(s)",
+        "prev": "Previous",
+        "next": "Next"
+      },
+      "toolbar": {
+        "import": "Import",
+        "export": "Export",
+        "filter": "Filter",
+        "filterBy": "Filter by",
+        "role": "Role",
+        "plan": "Plan",
+        "all": "All",
+        "clear": "Clear",
+        "apply": "Apply"
+      },
+      "import": {
+        "title": "Import users (CSV)",
+        "desc": "Upload a CSV with an email column (required) and optionally name, company, plan and tokens. Each row becomes an email invite.",
+        "downloadTemplate": "Download CSV template",
+        "chooseFile": "Choose .csv file",
+        "ready": "{n} user(s) ready to invite",
+        "emptyFile": "Empty file or no data rows.",
+        "needEmail": "The CSV needs an \"email\" column.",
+        "noRows": "No row with an email found.",
+        "sent": "{n} invite(s) sent.",
+        "failures": "{n} failure(s):",
+        "close": "Close",
+        "cancel": "Cancel",
+        "sending": "Sending…",
+        "invite": "Invite"
+      },
+      "table": {
+        "user": "User",
+        "company": "Company",
+        "email": "Email",
+        "phone": "Phone",
+        "date": "Date",
+        "role": "Role",
+        "plan": "Plan",
+        "tokens": "Tokens",
+        "status": "Status",
+        "access": "Access",
+        "actions": "Actions",
+        "empty": "No users found."
+      },
+      "bulk": {
+        "selected": "{n} selected",
+        "changePlan": "Change plan:",
+        "apply": "Apply",
+        "cancel": "Cancel",
+        "updated": "Plan updated for {n} user(s)."
+      },
+      "row": {
+        "active": "Active",
+        "blocked": "Blocked",
+        "block": "Block",
+        "unblock": "Unblock",
+        "saveRole": "Save role",
+        "savePlan": "Save plan",
+        "setBalance": "Set balance",
+        "blockTitle": "Block this client's access to the portal",
+        "unblockTitle": "Restore this client's access",
+        "saveError": "Could not save. Please try again.",
+        "tokenRange": "Enter a value between 0 and 99999.",
+        "toastRole": "Role for {who} updated.",
+        "toastPlan": "Plan for {who} set.",
+        "toastBalance": "Balance for {who} updated.",
+        "toastBlocked": "Access for {who} blocked.",
+        "toastUnblocked": "Access for {who} restored."
+      },
+      "menu": {
+        "actions": "Actions",
+        "edit": "Edit",
+        "renew": "Renew access +30d",
+        "delete": "Delete",
+        "renewTitle": "Sets validity to today + 30 days (restores access)",
+        "cannotDeleteAdmin": "Administrators cannot be deleted here",
+        "deleteTitle": "Delete user",
+        "confirm": "Permanently delete {who}? All data (tickets, projects, tokens) will be removed.",
+        "cancel": "Cancel",
+        "deleted": "{who} was deleted.",
+        "renewed": "Access for {who} renewed for 30 days."
+      },
+      "invite": {
+        "title": "Invite a new client",
+        "email": "Email",
+        "name": "Name",
+        "tokens": "Tokens",
+        "plan": "Plan",
+        "contractStart": "Contract start",
+        "services": "Contracted services",
+        "emailPlaceholder": "client@email.com",
+        "namePlaceholder": "Client name",
+        "sending": "Sending…",
+        "invite": "Invite",
+        "unknownError": "Unknown error."
+      },
+      "edit": {
+        "title": "Edit user",
+        "subtitle": "Editing {name}'s details.",
+        "fullName": "Full name",
+        "email": "Email",
+        "company": "Company",
+        "phone": "Phone",
+        "plan": "Plan",
+        "tokens": "Tokens",
+        "contractStart": "Contract start",
+        "renewal": "Access validity (renewal)",
+        "renewalHint": "Date until which the client has portal access. Empty = no validity block.",
+        "services": "Contracted services",
+        "cancel": "Cancel",
+        "save": "Save changes",
+        "saving": "Saving…",
+        "saveError": "Error saving.",
+        "companyPlaceholder": "Company name"
+      },
+      "new": {
+        "title": "New user",
+        "inviteError": "Error inviting.",
+        "subtitle": "Invite a new client by email.",
+        "avatarTitle": "User photo",
+        "avatarHint": "JPG, PNG or WebP. Max 2 MB.",
+        "changePhoto": "Change photo",
+        "choosePhoto": "Choose photo",
+        "tokensInitial": "Initial tokens",
+        "submit": "Invite user",
+        "submitting": "Sending invite…"
+      }
     }
   },
   "legal": {
@@ -87,38 +370,80 @@
       "title": "About Fropty Hub",
       "intro": "Fropty Hub is the client portal of the Fropty ecosystem — the place where everything connects.",
       "sections": [
-        { "h": "What the Hub is", "p": "A single environment to track support tickets, projects, contracts, billing, knowledge base, roadmap and much more. Each client only sees what they subscribed to." },
-        { "h": "Fropty ecosystem", "p": "Fropty offers digital modules and services for companies — such as FroptyCash, FroptyInvest, FroptySentinel, FroptyCRM and FroptyApps — brought together and integrated in the Hub." },
-        { "h": "Security", "p": "The Hub is protected by FroptySentinel, with two-factor authentication, leaked-password checks and continuous monitoring." }
+        {
+          "h": "What the Hub is",
+          "p": "A single environment to track support tickets, projects, contracts, billing, knowledge base, roadmap and much more. Each client only sees what they subscribed to."
+        },
+        {
+          "h": "Fropty ecosystem",
+          "p": "Fropty offers digital modules and services for companies — such as FroptyCash, FroptyInvest, FroptySentinel, FroptyCRM and FroptyApps — brought together and integrated in the Hub."
+        },
+        {
+          "h": "Security",
+          "p": "The Hub is protected by FroptySentinel, with two-factor authentication, leaked-password checks and continuous monitoring."
+        }
       ]
     },
     "terms": {
       "title": "Terms of Use",
       "intro": "By accessing and using Fropty Hub, you agree to the terms described below.",
       "sections": [
-        { "h": "1. Use of the platform", "p": "Access is personal and intended for clients with an active contract. You are responsible for keeping your credentials confidential." },
-        { "h": "2. Content and data", "p": "The data you enter in the Hub belongs to the client. Fropty uses it only to provide the contracted services." },
-        { "h": "3. Availability", "p": "We aim for high availability, but the service may undergo scheduled maintenance, announced in advance whenever possible." },
-        { "h": "4. Changes", "p": "These terms may be updated. Significant changes will be communicated through the official channels." }
+        {
+          "h": "1. Use of the platform",
+          "p": "Access is personal and intended for clients with an active contract. You are responsible for keeping your credentials confidential."
+        },
+        {
+          "h": "2. Content and data",
+          "p": "The data you enter in the Hub belongs to the client. Fropty uses it only to provide the contracted services."
+        },
+        {
+          "h": "3. Availability",
+          "p": "We aim for high availability, but the service may undergo scheduled maintenance, announced in advance whenever possible."
+        },
+        {
+          "h": "4. Changes",
+          "p": "These terms may be updated. Significant changes will be communicated through the official channels."
+        }
       ]
     },
     "privacy": {
       "title": "Privacy Policy",
       "intro": "We take your privacy seriously. This policy explains how we handle your data.",
       "sections": [
-        { "h": "Data we collect", "p": "We collect only the data needed to run the Hub: account information, usage activity and the content you create (tickets, projects, feedback)." },
-        { "h": "How we use it", "p": "We use the data to authenticate access, provide support, improve the platform and comply with legal obligations. We do not sell your data." },
-        { "h": "Your rights", "p": "You may request access to, correction of, or deletion of your data at any time through our contact channels." },
-        { "h": "Contact", "p": "Privacy questions can be sent to suporte@fropty.com." }
+        {
+          "h": "Data we collect",
+          "p": "We collect only the data needed to run the Hub: account information, usage activity and the content you create (tickets, projects, feedback)."
+        },
+        {
+          "h": "How we use it",
+          "p": "We use the data to authenticate access, provide support, improve the platform and comply with legal obligations. We do not sell your data."
+        },
+        {
+          "h": "Your rights",
+          "p": "You may request access to, correction of, or deletion of your data at any time through our contact channels."
+        },
+        {
+          "h": "Contact",
+          "p": "Privacy questions can be sent to suporte@fropty.com."
+        }
       ]
     },
     "licenses": {
       "title": "Licenses",
       "intro": "Fropty Hub is built with free and open-source software. Thanks to the open source community.",
       "sections": [
-        { "h": "Core technologies", "p": "Next.js, React and Tailwind CSS — MIT license. Supabase (Postgres, Auth, Storage, Realtime) — Apache 2.0 license." },
-        { "h": "Icons and fonts", "p": "Lucide icons (ISC license). Inter and DM Sans fonts (SIL Open Font License 1.1)." },
-        { "h": "Trademarks", "p": "Fropty, Fropty Hub and the module names are trademarks of Fropty. All other trademarks belong to their respective owners." }
+        {
+          "h": "Core technologies",
+          "p": "Next.js, React and Tailwind CSS — MIT license. Supabase (Postgres, Auth, Storage, Realtime) — Apache 2.0 license."
+        },
+        {
+          "h": "Icons and fonts",
+          "p": "Lucide icons (ISC license). Inter and DM Sans fonts (SIL Open Font License 1.1)."
+        },
+        {
+          "h": "Trademarks",
+          "p": "Fropty, Fropty Hub and the module names are trademarks of Fropty. All other trademarks belong to their respective owners."
+        }
       ]
     }
   }

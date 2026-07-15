@@ -4,6 +4,7 @@ import { createClient } from "@/app/lib/supabase/server";
 import { createServiceClient } from "@/app/lib/supabase/service";
 import { BulkUsuariosClient } from "@/app/components/admin/BulkUsuariosClient";
 import { UsuariosToolbar } from "@/app/components/admin/UsuariosToolbar";
+import { getServerI18n } from "@/app/lib/i18n/server";
 import { ChevronLeft, ChevronRight, UserPlus, Users, UserCheck, UserX, ShieldCheck } from "lucide-react";
 
 export const metadata: Metadata = { title: "Usuários — Admin" };
@@ -21,6 +22,7 @@ export default async function AdminUsuariosPage({ searchParams }: Props) {
   const page   = Math.max(1, parseInt(pageParam ?? "1", 10));
   const offset = (page - 1) * PAGE_SIZE;
   const supabase = await createClient();
+  const { t } = await getServerI18n();
 
   const [
     { count: total },
@@ -82,16 +84,16 @@ export default async function AdminUsuariosPage({ searchParams }: Props) {
   const totalPages = Math.ceil((filteredTotal ?? 0) / PAGE_SIZE);
 
   const stats = [
-    { label: "Total de Usuários", value: total ?? 0,    icon: <Users size={16} />,      color: "#6366f1", bg: "rgba(99,102,241,0.10)" },
-    { label: "Usuários Ativos",   value: ativos ?? 0,   icon: <UserCheck size={16} />,  color: "var(--c-success)", bg: "rgba(34,197,94,0.10)" },
-    { label: "Bloqueados",        value: inativos ?? 0, icon: <UserX size={16} />,      color: "var(--c-danger)", bg: "rgba(239,68,68,0.10)" },
-    { label: "Administradores",   value: admins ?? 0,   icon: <ShieldCheck size={16} />,color: "#f97316", bg: "rgba(249,115,22,0.10)" },
+    { label: t("admin.users.stats.total"), value: total ?? 0,    icon: <Users size={16} />,      color: "#6366f1", bg: "rgba(99,102,241,0.10)" },
+    { label: t("admin.users.stats.active"), value: ativos ?? 0,   icon: <UserCheck size={16} />,  color: "var(--c-success)", bg: "rgba(34,197,94,0.10)" },
+    { label: t("admin.users.stats.blocked"), value: inativos ?? 0, icon: <UserX size={16} />,      color: "var(--c-danger)", bg: "rgba(239,68,68,0.10)" },
+    { label: t("admin.users.stats.admins"), value: admins ?? 0,   icon: <ShieldCheck size={16} />,color: "#f97316", bg: "rgba(249,115,22,0.10)" },
   ];
 
   const TABS = [
-    { id: "todos",    label: "Todos",      count: total ?? 0 },
-    { id: "ativos",   label: "Ativos",     count: ativos ?? 0 },
-    { id: "inativos", label: "Bloqueados", count: inativos ?? 0 },
+    { id: "todos",    label: t("admin.users.tabs.all"),     count: total ?? 0 },
+    { id: "ativos",   label: t("admin.users.tabs.active"),  count: ativos ?? 0 },
+    { id: "inativos", label: t("admin.users.tabs.blocked"), count: inativos ?? 0 },
   ];
 
   function tabHref(t: string) {
@@ -120,16 +122,16 @@ export default async function AdminUsuariosPage({ searchParams }: Props) {
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", marginBottom: 20 }}>
         <div>
-          <h1 style={{ fontSize: "1.25rem", fontWeight: 800, margin: "0 0 2px", color: "var(--text)", letterSpacing: "-0.02em" }}>Usuários</h1>
+          <h1 style={{ fontSize: "1.25rem", fontWeight: 800, margin: "0 0 2px", color: "var(--text)", letterSpacing: "-0.02em" }}>{t("admin.users.title")}</h1>
           <p style={{ margin: 0, fontSize: "12.5px", color: "var(--text-faint)" }}>
-            Gerencie contas, planos e acessos do ecossistema.
+            {t("admin.users.subtitle")}
           </p>
         </div>
         <Link
           href="/admin/usuarios/novo"
           style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 14px", borderRadius: 8, background: "var(--cta-bg)", color: "var(--cta-text)", fontSize: "12.5px", fontWeight: 700, textDecoration: "none", flexShrink: 0 }}
         >
-          <UserPlus size={13} /> + Novo Usuário
+          <UserPlus size={13} /> + {t("admin.users.newUser")}
         </Link>
       </div>
 
@@ -189,7 +191,7 @@ export default async function AdminUsuariosPage({ searchParams }: Props) {
                 <input
                   name="q"
                   defaultValue={q}
-                  placeholder="Buscar…"
+                  placeholder={t("admin.users.search")}
                   style={{ paddingLeft: 28, paddingRight: 10, paddingTop: 6, paddingBottom: 6, borderRadius: 7, border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text)", fontSize: "12.5px", fontFamily: "inherit", outline: "none", width: 200 }}
                 />
               </div>
@@ -220,17 +222,17 @@ export default async function AdminUsuariosPage({ searchParams }: Props) {
         {totalPages > 1 && (
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 16px", borderTop: "1px solid var(--border)" }}>
             <span style={{ fontSize: "11.5px", color: "var(--text-faint)" }}>
-              Página {page} de {totalPages} · {filteredTotal ?? 0} resultado{(filteredTotal ?? 0) !== 1 ? "s" : ""}
+              {t("admin.users.pagination.page", { page, total: totalPages })} · {t("admin.users.pagination.results", { n: filteredTotal ?? 0 })}
             </span>
             <div style={{ display: "flex", gap: 5 }}>
               {page > 1 && (
                 <Link href={pageHref(page - 1)} style={paginBtn}>
-                  <ChevronLeft size={12} /> Anterior
+                  <ChevronLeft size={12} /> {t("admin.users.pagination.prev")}
                 </Link>
               )}
               {page < totalPages && (
                 <Link href={pageHref(page + 1)} style={paginBtn}>
-                  Próxima <ChevronRight size={12} />
+                  {t("admin.users.pagination.next")} <ChevronRight size={12} />
                 </Link>
               )}
             </div>
