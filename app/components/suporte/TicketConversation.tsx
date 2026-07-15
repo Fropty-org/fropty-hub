@@ -28,6 +28,43 @@ interface Props {
 
 import { User, Headphones } from "lucide-react";
 
+// ── Mini-markdown seguro (negrito, itálico, tachado, link, listas) ──
+// Escapa o HTML primeiro (anti-XSS) e só então aplica a formatação suportada
+// pela barra do composer. Links restritos a http(s)/mailto.
+function escapeHtml(s: string) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+function inlineFmt(s: string) {
+  s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+|mailto:[^\s)]+)\)/g,
+    (_m, txt, url) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${txt}</a>`);
+  s = s.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  s = s.replace(/~~([^~]+)~~/g, "<del>$1</del>");
+  s = s.replace(/(^|[\s(])_([^_\n]+)_(?=$|[\s.,!?)])/g, "$1<em>$2</em>");
+  return s;
+}
+function formatRich(raw: string): string {
+  const lines = escapeHtml(raw).split("\n");
+  const out: string[] = [];
+  let list: "ul" | "ol" | null = null;
+  const close = () => { if (list) { out.push(`</${list}>`); list = null; } };
+  for (const line of lines) {
+    const ul = /^\s*[-*]\s+(.*)$/.exec(line);
+    const ol = /^\s*\d+\.\s+(.*)$/.exec(line);
+    if (ul) {
+      if (list !== "ul") { close(); out.push("<ul>"); list = "ul"; }
+      out.push(`<li>${inlineFmt(ul[1])}</li>`);
+    } else if (ol) {
+      if (list !== "ol") { close(); out.push("<ol>"); list = "ol"; }
+      out.push(`<li>${inlineFmt(ol[1])}</li>`);
+    } else {
+      close();
+      out.push(line.trim() === "" ? "" : `<div>${inlineFmt(line)}</div>`);
+    }
+  }
+  close();
+  return out.join("");
+}
+
 // Identidade visual de cada papel na conversa
 const ROLE_META = {
   cliente: { fallback: "Cliente",       color: "var(--c-info)", Icon: User },
@@ -233,6 +270,15 @@ export function TicketConversation({
 
     return (
       <div style={{ display: "flex", flexDirection: "column", minHeight: 0, flex: 1 }}>
+        <style>{`
+          .rich-msg a { color: var(--primary); text-decoration: underline; }
+          .rich-msg strong { font-weight: 700; color: var(--text); }
+          .rich-msg em { font-style: italic; }
+          .rich-msg del { opacity: 0.7; }
+          .rich-msg ul, .rich-msg ol { margin: 4px 0; padding-left: 20px; }
+          .rich-msg li { margin: 2px 0; }
+          .rich-msg div:empty { display: none; }
+        `}</style>
         {/* Timeline */}
         <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: 22, padding: "4px 2px 16px" }}>
           {messages.length === 0 && (
@@ -264,9 +310,11 @@ export function TicketConversation({
                     <span style={{ fontSize: "13px", fontWeight: 700, color: "var(--text)" }}>{senderLabel}</span>
                     <span style={{ fontSize: "11px", color: "var(--text-faint)", flexShrink: 0 }}>{stamp}</span>
                   </div>
-                  <p style={{ margin: "4px 0 0", fontSize: "13px", lineHeight: 1.55, color: "var(--text-muted)", whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
-                    {msg.body}
-                  </p>
+                  <div
+                    className="rich-msg"
+                    style={{ margin: "4px 0 0", fontSize: "13px", lineHeight: 1.55, color: "var(--text-muted)", wordBreak: "break-word" }}
+                    dangerouslySetInnerHTML={{ __html: formatRich(msg.body) }}
+                  />
                   {atts.length > 0 && (
                     <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 3 }}>
                       {atts.map((path) => {

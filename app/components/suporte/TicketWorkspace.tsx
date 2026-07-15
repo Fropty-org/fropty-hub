@@ -88,7 +88,7 @@ export function TicketWorkspace({ ticket, messages, currentUserId, currentUserNa
   const actionMessages = messages.filter((m) => m.id !== descriptionId);
   const [tab, setTab] = useState<TabId>("formulario");
   const [detailsOpen, setDetailsOpen] = useState(true);
-  const [attView, setAttView] = useState<"table" | "grid">("table");
+  const [attView, setAttView] = useState<"table" | "grid">("grid");
   const [signedUrls, setSignedUrls] = useState<Record<string, string>>({});
 
   const { response, resolution } = computeSla({
