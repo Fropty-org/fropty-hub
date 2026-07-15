@@ -108,6 +108,11 @@ interface Props {
 type StatusFilter = "todos" | "aberto" | "em_andamento" | "reaberto" | "resolvido" | "fechado" | "atraso";
 type SortMode = "urgencia" | "recente";
 
+// Grade da fila: UFT e Cliente com largura capada (não esticam em telas largas);
+// Responsável/Status/Prioridade/SLA/seta compactos; o espaçador final (1fr)
+// absorve a sobra à direita, deixando a tabela mais densa e confortável.
+const GRID_COLS = "minmax(190px,300px) minmax(120px,180px) 168px 132px 104px 52px 28px minmax(0,1fr)";
+
 interface SavedView {
   name: string;
   f: { search: string; client: string; status: StatusFilter; priority: string; assignee: string; sort: SortMode };
@@ -298,9 +303,11 @@ export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }:
         </div>
       ) : (
         <div className="hub-card" style={{ overflow: "hidden", padding: 0 }}>
-          {/* Cabeçalho */}
-          <div style={{ display: "grid", gridTemplateColumns: "minmax(0,2fr) minmax(0,1.1fr) 168px 150px 104px 64px 24px", padding: "10px 18px", background: "var(--surface-2)", borderBottom: "1px solid var(--border)", fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--text-faint)" }}>
-            <span>UFT</span><span>Cliente</span><span>Responsável</span><span style={{ textAlign: "center" }}>Status</span><span style={{ textAlign: "center" }}>Prioridade</span><span style={{ textAlign: "center" }}>SLA</span><span />
+          {/* Cabeçalho — mesma grade das linhas (inclui a borda-esquerda transparente
+              para alinhar com o marcador de SLA estourado). Colunas de dados com
+              largura capada; a sobra vai para o espaçador final. */}
+          <div style={{ display: "grid", gridTemplateColumns: GRID_COLS, padding: "10px 16px", borderLeft: "3px solid transparent", background: "var(--surface-2)", borderBottom: "1px solid var(--border)", fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--text-faint)" }}>
+            <span>UFT</span><span>Cliente</span><span>Responsável</span><span style={{ textAlign: "center" }}>Status</span><span style={{ textAlign: "center" }}>Prioridade</span><span style={{ textAlign: "center" }}>SLA</span><span /><span />
           </div>
 
           {paged.map((r, i) => {
@@ -309,7 +316,7 @@ export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }:
               <div
                 key={t.id}
                 className="hub-row-link"
-                style={{ display: "grid", gridTemplateColumns: "minmax(0,2fr) minmax(0,1.1fr) 168px 150px 104px 64px 24px", padding: "12px 18px", alignItems: "center", borderBottom: i < paged.length - 1 ? "1px solid var(--border)" : "none", color: "inherit", borderLeft: r.breached ? "3px solid var(--c-danger)" : "3px solid transparent" }}
+                style={{ display: "grid", gridTemplateColumns: GRID_COLS, padding: "10px 16px", alignItems: "center", borderBottom: i < paged.length - 1 ? "1px solid var(--border)" : "none", color: "inherit", borderLeft: r.breached ? "3px solid var(--c-danger)" : "3px solid transparent" }}
               >
                 <Link href={`/portal/suporte/${t.id}`} style={{ minWidth: 0, textDecoration: "none", color: "inherit", paddingRight: 12 }}>
                   <p style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text)", letterSpacing: "-0.01em" }}>
@@ -324,9 +331,10 @@ export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }:
                 <span style={{ display: "flex", justifyContent: "center" }}><StatusBadge kind="ticket" status={t.status} size="sm" /></span>
                 <span style={{ display: "flex", justifyContent: "center" }}><StatusBadge kind="ticket-priority" status={t.priority} size="sm" /></span>
                 <span style={{ display: "flex", justifyContent: "center" }}><SlaPie t={t} now={now} /></span>
-                <Link href={`/portal/suporte/${t.id}`} style={{ display: "flex", justifyContent: "flex-end", color: "var(--text-faint)" }} aria-label="Abrir chamado">
+                <Link href={`/portal/suporte/${t.id}`} style={{ display: "flex", justifyContent: "center", color: "var(--text-faint)" }} aria-label="Abrir chamado">
                   <ChevronRight size={14} />
                 </Link>
+                <span />
               </div>
             );
           })}
