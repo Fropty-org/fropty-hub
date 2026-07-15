@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import { createClient } from "@/app/lib/supabase/server";
 import { TrendingUp, Users, ArrowDownLeft, ArrowUpRight } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { getServerI18n } from "@/app/lib/i18n/server";
 
 export const metadata: Metadata = { title: "Financeiro — Admin" };
 
 export default async function AdminFinanceiroPage() {
   const supabase = await createClient();
+  const { t } = await getServerI18n();
 
   const [
     { data: mrrData },
@@ -26,17 +28,17 @@ export default async function AdminFinanceiroPage() {
   const totalDebits  = txs.filter((t) => t.type === "debit").reduce((s, t) => s + t.amount, 0);
 
   const kpis: { label: string; value: string | number; sub?: string; Icon: LucideIcon; color: string }[] = [
-    { label: "MRR",                           value: `R$${mrr.toFixed(2).replace(".", ",")}`, sub: "receita recorrente mensal", Icon: TrendingUp,    color: "var(--c-success)" },
-    { label: "Assinantes",                    value: assinantes.length,  sub: "planos ativos",                              Icon: Users,           color: "var(--primary)" },
-    { label: "Tokens emitidos",               value: totalCredits,       sub: "últimas 30 transações",                      Icon: ArrowDownLeft,   color: "#EF9F27" },
-    { label: "Tokens consumidos",             value: totalDebits,        sub: "últimas 30 transações",                      Icon: ArrowUpRight,    color: "var(--c-danger)" },
+    { label: t("admin.finance.kpiMrr"), value: `R$${mrr.toFixed(2).replace(".", ",")}`, sub: t("admin.finance.kpiMrrSub"), Icon: TrendingUp,    color: "var(--c-success)" },
+    { label: t("admin.finance.kpiSubscribers"), value: assinantes.length,  sub: t("admin.finance.kpiSubscribersSub"), Icon: Users,           color: "var(--primary)" },
+    { label: t("admin.finance.kpiIssued"), value: totalCredits,       sub: t("admin.finance.last30"), Icon: ArrowDownLeft,   color: "#EF9F27" },
+    { label: t("admin.finance.kpiConsumed"), value: totalDebits,        sub: t("admin.finance.last30"), Icon: ArrowUpRight,    color: "var(--c-danger)" },
   ];
 
   return (
     <div className="hub-page" style={{ maxWidth: "none" }}>
       <div style={{ marginBottom: 28 }}>
-        <h1 style={{ fontSize: "1.5rem", fontWeight: 800, margin: "0 0 4px", color: "var(--text)", letterSpacing: "-0.02em" }}>Financeiro</h1>
-        <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>Receita, assinantes e movimentação de tokens</p>
+        <h1 style={{ fontSize: "1.5rem", fontWeight: 800, margin: "0 0 4px", color: "var(--text)", letterSpacing: "-0.02em" }}>{t("admin.finance.title")}</h1>
+        <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>{t("admin.finance.subtitle")}</p>
       </div>
 
       {/* KPI strip */}
@@ -59,12 +61,12 @@ export default async function AdminFinanceiroPage() {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
         {/* Assinantes */}
         <div>
-          <h2 style={{ fontSize: "1rem", fontWeight: 700, margin: "0 0 14px", color: "var(--text)" }}>Assinantes</h2>
+          <h2 style={{ fontSize: "1rem", fontWeight: 700, margin: "0 0 14px", color: "var(--text)" }}>{t("admin.finance.subscribers")}</h2>
           <div className="hub-card" style={{ padding: 0, overflow: "hidden" }}>
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
                 <tr style={{ borderBottom: "1px solid var(--border)" }}>
-                  {["Nome", "Plano", "Tokens"].map((h) => (
+                  {[t("admin.finance.colName"), t("admin.finance.colPlan"), t("admin.finance.colTokens")].map((h) => (
                     <th key={h} style={{ padding: "10px 16px", textAlign: "left", fontSize: "11px", fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.05em" }}>{h}</th>
                   ))}
                 </tr>
@@ -75,14 +77,14 @@ export default async function AdminFinanceiroPage() {
                     <td style={{ padding: "11px 16px", fontSize: "13px", fontWeight: 600, color: "var(--text)" }}>{u.name}</td>
                     <td style={{ padding: "11px 16px" }}>
                       <span style={{ fontSize: "11px", fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: u.plan === "pro" ? "color-mix(in srgb, var(--primary) 12%, transparent)" : "rgba(34,197,94,0.12)", color: u.plan === "pro" ? "var(--primary)" : "var(--c-success)" }}>
-                        {u.plan === "pro" ? "Pro" : "Básico"}
+                        {u.plan === "pro" ? t("admin.plans.pro") : t("admin.plans.basico")}
                       </span>
                     </td>
                     <td style={{ padding: "11px 16px", fontSize: "12px", fontWeight: 700, color: "#EF9F27" }}>{u.token_balance}</td>
                   </tr>
                 ))}
                 {assinantes.length === 0 && (
-                  <tr><td colSpan={3} style={{ padding: "28px 16px", textAlign: "center", color: "var(--text-faint)", fontSize: "13px" }}>Nenhum assinante ainda.</td></tr>
+                  <tr><td colSpan={3} style={{ padding: "28px 16px", textAlign: "center", color: "var(--text-faint)", fontSize: "13px" }}>{t("admin.finance.noSubscribers")}</td></tr>
                 )}
               </tbody>
             </table>
@@ -91,12 +93,12 @@ export default async function AdminFinanceiroPage() {
 
         {/* Últimas movimentações */}
         <div>
-          <h2 style={{ fontSize: "1rem", fontWeight: 700, margin: "0 0 14px", color: "var(--text)" }}>Últimas movimentações</h2>
+          <h2 style={{ fontSize: "1rem", fontWeight: 700, margin: "0 0 14px", color: "var(--text)" }}>{t("admin.finance.movements")}</h2>
           <div className="hub-card" style={{ padding: 0, overflow: "hidden" }}>
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
                 <tr style={{ borderBottom: "1px solid var(--border)" }}>
-                  {["Descrição", "Tipo", "Tokens", "Data"].map((h) => (
+                  {[t("admin.finance.colDescription"), t("admin.finance.colType"), t("admin.finance.colTokens"), t("admin.finance.colDate")].map((h) => (
                     <th key={h} style={{ padding: "10px 16px", textAlign: "left", fontSize: "11px", fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.05em" }}>{h}</th>
                   ))}
                 </tr>
@@ -111,7 +113,7 @@ export default async function AdminFinanceiroPage() {
                     </td>
                     <td style={{ padding: "11px 16px" }}>
                       <span style={{ fontSize: "10px", fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: tx.type === "credit" ? "rgba(34,197,94,0.12)" : "rgba(239,68,68,0.12)", color: tx.type === "credit" ? "var(--c-success)" : "var(--c-danger)" }}>
-                        {tx.type === "credit" ? "Crédito" : "Débito"}
+                        {tx.type === "credit" ? t("admin.finance.credit") : t("admin.finance.debit")}
                       </span>
                     </td>
                     <td style={{ padding: "11px 16px", fontSize: "13px", fontWeight: 700, color: tx.type === "credit" ? "var(--c-success)" : "var(--c-danger)" }}>
@@ -123,7 +125,7 @@ export default async function AdminFinanceiroPage() {
                   </tr>
                 ))}
                 {txs.length === 0 && (
-                  <tr><td colSpan={4} style={{ padding: "28px 16px", textAlign: "center", color: "var(--text-faint)", fontSize: "13px" }}>Nenhuma movimentação.</td></tr>
+                  <tr><td colSpan={4} style={{ padding: "28px 16px", textAlign: "center", color: "var(--text-faint)", fontSize: "13px" }}>{t("admin.finance.noMovements")}</td></tr>
                 )}
               </tbody>
             </table>

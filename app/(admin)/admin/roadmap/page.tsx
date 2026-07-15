@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllRoadmapAdmin } from "@/app/actions/roadmap";
 import { Map, Plus, ThumbsUp, Lightbulb, Calendar, Rocket, CheckCircle2, XCircle, Globe, Lock } from "lucide-react";
+import { getServerI18n } from "@/app/lib/i18n/server";
 
 export const metadata: Metadata = { title: "Roadmap — Admin" };
 
@@ -31,6 +32,7 @@ export default async function AdminRoadmapPage({
 }) {
   const { status: filterStatus } = await searchParams;
   const allItems = await getAllRoadmapAdmin();
+  const { t } = await getServerI18n();
 
   const items = filterStatus && filterStatus !== "todos"
     ? allItems.filter((i) => i.status === filterStatus)
@@ -50,14 +52,14 @@ export default async function AdminRoadmapPage({
       {/* Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28, gap: 16 }}>
         <div>
-          <h1 style={{ fontSize: "1.5rem", fontWeight: 800, margin: "0 0 4px", color: "var(--text)", letterSpacing: "-0.02em" }}>Roadmap</h1>
-          <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>{allItems.length} itens no total</p>
+          <h1 style={{ fontSize: "1.5rem", fontWeight: 800, margin: "0 0 4px", color: "var(--text)", letterSpacing: "-0.02em" }}>{t("admin.roadmap.title")}</h1>
+          <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>{t("admin.roadmap.totalItems", { n: allItems.length })}</p>
         </div>
         <Link
           href="/admin/roadmap/novo"
           style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "var(--cta-bg)", color: "var(--cta-text)", padding: "9px 18px", borderRadius: 10, fontSize: "13px", fontWeight: 700, textDecoration: "none" }}
         >
-          <Plus size={15} /> Novo Item
+          <Plus size={15} /> {t("admin.roadmap.newItem")}
         </Link>
       </div>
 
@@ -69,7 +71,7 @@ export default async function AdminRoadmapPage({
               <div style={{ width: 32, height: 32, borderRadius: 9, background: `${k.color}18`, display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <k.Icon size={15} style={{ color: k.color }} />
               </div>
-              <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--text-muted)" }}>{k.label}</span>
+              <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--text-muted)" }}>{t("admin.roadmap.status." + k.key)}</span>
             </div>
             <p style={{ margin: 0, fontSize: "1.7rem", fontWeight: 900, color: "var(--text)", lineHeight: 1, letterSpacing: "-0.02em" }}>{k.count}</p>
           </div>
@@ -78,7 +80,7 @@ export default async function AdminRoadmapPage({
 
       {/* Filtros */}
       <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 20 }}>
-        {[{ key: "todos", label: "Todos", color: "var(--text-muted)" }, ...Object.entries(STATUS_CONFIG).map(([key, cfg]) => ({ key, label: cfg.label, color: cfg.color }))].map(({ key, label, color }) => {
+        {[{ key: "todos", color: "var(--text-muted)" }, ...Object.entries(STATUS_CONFIG).map(([key, cfg]) => ({ key, color: cfg.color }))].map(({ key, color }) => {
           const active = (filterStatus ?? "todos") === key;
           return (
             <Link
@@ -86,7 +88,7 @@ export default async function AdminRoadmapPage({
               href={`/admin/roadmap?status=${key}`}
               style={{ padding: "6px 14px", borderRadius: 8, fontSize: "12px", fontWeight: 600, textDecoration: "none", background: active ? `${color}20` : "transparent", color: active ? color : "var(--text-muted)", border: `1px solid ${active ? color + "40" : "var(--border)"}` }}
             >
-              {label}
+              {key === "todos" ? t("admin.roadmap.all") : t("admin.roadmap.status." + key)}
             </Link>
           );
         })}
@@ -97,7 +99,7 @@ export default async function AdminRoadmapPage({
         <table style={{ width: "100%", borderCollapse: "collapse" }}>
           <thead>
             <tr style={{ borderBottom: "1px solid var(--border)" }}>
-              {["Título", "Status", "Categoria", "Votos", "Visibilidade", "Criado em"].map((h) => (
+              {[t("admin.roadmap.colTitle"), t("admin.roadmap.colStatus"), t("admin.roadmap.colCategory"), t("admin.roadmap.colVotes"), t("admin.roadmap.colVisibility"), t("admin.roadmap.colCreated")].map((h) => (
                 <th key={h} style={{ padding: "11px 16px", textAlign: "left", fontSize: "11px", fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                   {h}
                 </th>
@@ -109,7 +111,7 @@ export default async function AdminRoadmapPage({
               <tr>
                 <td colSpan={6} style={{ padding: "56px 16px", textAlign: "center" }}>
                   <Map size={28} style={{ color: "var(--text-faint)", display: "block", margin: "0 auto 10px" }} />
-                  <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>Nenhum item no roadmap.</p>
+                  <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>{t("admin.roadmap.empty")}</p>
                 </td>
               </tr>
             ) : items.map((item, idx) => {
@@ -124,12 +126,12 @@ export default async function AdminRoadmapPage({
                   </td>
                   <td style={{ padding: "13px 16px" }}>
                     <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: "11px", fontWeight: 700, padding: "3px 9px", borderRadius: 99, background: cfg.bg, color: cfg.color }}>
-                      <CfgIcon size={11} /> {cfg.label}
+                      <CfgIcon size={11} /> {STATUS_CONFIG[item.status] ? t("admin.roadmap.status." + item.status) : cfg.label}
                     </span>
                   </td>
                   <td style={{ padding: "13px 16px" }}>
                     <span style={{ fontSize: "11px", fontWeight: 600, padding: "2px 8px", borderRadius: 99, background: "color-mix(in srgb, var(--primary) 10%, transparent)", color: "var(--primary)" }}>
-                      {CATEGORY_LABEL[item.category] ?? item.category}
+                      {t("admin.roadmap.category." + item.category, {}) !== "admin.roadmap.category." + item.category ? t("admin.roadmap.category." + item.category) : (CATEGORY_LABEL[item.category] ?? item.category)}
                     </span>
                   </td>
                   <td style={{ padding: "13px 16px" }}>
@@ -140,11 +142,11 @@ export default async function AdminRoadmapPage({
                   <td style={{ padding: "13px 16px" }}>
                     {item.visibility === "publico" ? (
                       <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: "11px", fontWeight: 700, color: "var(--c-success)" }}>
-                        <Globe size={12} /> Público
+                        <Globe size={12} /> {t("admin.roadmap.public")}
                       </span>
                     ) : (
                       <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: "11px", fontWeight: 700, color: "var(--text-faint)" }}>
-                        <Lock size={12} /> Privado
+                        <Lock size={12} /> {t("admin.roadmap.private")}
                       </span>
                     )}
                   </td>

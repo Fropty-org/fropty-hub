@@ -2,8 +2,10 @@
 
 import { useTransition } from "react";
 import { togglePublished } from "@/app/actions/knowledge";
+import { useT } from "@/app/lib/i18n/I18nProvider";
 
 export function TogglePublishedButton({ id, published }: { id: string; published: boolean }) {
+  const t = useT();
   const [pending, startTransition] = useTransition();
 
   return (
@@ -21,7 +23,7 @@ export function TogglePublishedButton({ id, published }: { id: string; published
         transition: "opacity 0.15s",
       }}
     >
-      {published ? "Publicado" : "Rascunho"}
+      {published ? t("admin.kb.statePublished") : t("admin.kb.stateDraft")}
     </button>
   );
 }

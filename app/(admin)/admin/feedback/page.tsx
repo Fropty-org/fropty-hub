@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getAllFeedbacksAdmin } from "@/app/actions/feedback";
 import { MessageSquare, Bug, Star, AlertCircle, HelpCircle, Inbox } from "lucide-react";
 import type { FeedbackType, FeedbackStatus } from "@/app/lib/types/feedback";
+import { getServerI18n } from "@/app/lib/i18n/server";
 
 export const metadata: Metadata = { title: "Feedback — Admin" };
 
@@ -29,6 +30,7 @@ export default async function AdminFeedbackPage({
 }) {
   const { tipo: filterTipo, status: filterStatus } = await searchParams;
   const allFeedbacks = await getAllFeedbacksAdmin();
+  const { t } = await getServerI18n();
 
   const feedbacks = allFeedbacks.filter((fb) => {
     if (filterTipo && filterTipo !== "todos" && fb.type !== filterTipo) return false;
@@ -50,8 +52,8 @@ export default async function AdminFeedbackPage({
 
       {/* ── Page header ── */}
       <div className="hub-page-header">
-        <h1 className="hub-page-title">Feedback</h1>
-        <p className="hub-page-sub">{allFeedbacks.length} registros no total</p>
+        <h1 className="hub-page-title">{t("admin.feedback.title")}</h1>
+        <p className="hub-page-sub">{t("admin.feedback.total", { n: allFeedbacks.length })}</p>
       </div>
 
       {/* ── KPI strip (por tipo) ── */}
@@ -62,7 +64,7 @@ export default async function AdminFeedbackPage({
               <div className="hub-stat-icon" style={{ width: 32, height: 32, background: `${k.color}18`, color: k.color }}>
                 <k.Icon size={14} style={{ color: k.color }} />
               </div>
-              <span className="hub-stat-label" style={{ margin: 0 }}>{k.label}</span>
+              <span className="hub-stat-label" style={{ margin: 0 }}>{t("admin.feedback.type." + k.key)}</span>
             </div>
             <p className="hub-stat-value">{k.count}</p>
           </div>
@@ -71,7 +73,7 @@ export default async function AdminFeedbackPage({
 
       {/* ── Filtros por tipo ── */}
       <div className="hub-filter-strip" style={{ marginBottom: 8 }}>
-        {[{ key: "todos", label: "Todos os tipos" }, ...Object.entries(TYPE_CONFIG).map(([key, cfg]) => ({ key, label: cfg.label }))].map(({ key, label }) => {
+        {[{ key: "todos", label: t("admin.feedback.allTypes") }, ...Object.entries(TYPE_CONFIG).map(([key]) => ({ key, label: t("admin.feedback.type." + key) }))].map(({ key, label }) => {
           const active = (filterTipo ?? "todos") === key;
           return (
             <Link key={key} href={`/admin/feedback?tipo=${key}${filterStatus ? `&status=${filterStatus}` : ""}`}
@@ -84,7 +86,7 @@ export default async function AdminFeedbackPage({
 
       {/* ── Filtros por status ── */}
       <div className="hub-filter-strip" style={{ marginBottom: 20 }}>
-        {[{ key: "todos", label: "Todos os status" }, ...Object.entries(STATUS_CONFIG).map(([key, cfg]) => ({ key, label: cfg.label }))].map(({ key, label }) => {
+        {[{ key: "todos", label: t("admin.feedback.allStatuses") }, ...Object.entries(STATUS_CONFIG).map(([key]) => ({ key, label: t("admin.feedback.status." + key) }))].map(({ key, label }) => {
           const active = (filterStatus ?? "todos") === key;
           return (
             <Link key={key} href={`/admin/feedback?${filterTipo ? `tipo=${filterTipo}&` : ""}status=${key}`}
@@ -101,7 +103,7 @@ export default async function AdminFeedbackPage({
           <table className="hub-table">
             <thead>
               <tr>
-                {["Cliente", "Tipo", "Título", "Produto", "Status", "Data"].map((h) => (
+                {[t("admin.feedback.colClient"), t("admin.feedback.colType"), t("admin.feedback.colTitle"), t("admin.feedback.colProduct"), t("admin.feedback.colStatus"), t("admin.feedback.colDate")].map((h) => (
                   <th key={h}>{h}</th>
                 ))}
               </tr>
@@ -112,7 +114,7 @@ export default async function AdminFeedbackPage({
                   <td colSpan={6} style={{ padding: "56px 16px", textAlign: "center" }}>
                     <div className="hub-empty" style={{ padding: 0 }}>
                       <div className="hub-empty-icon"><Inbox size={22} /></div>
-                      <p className="hub-empty-desc">Nenhum feedback encontrado.</p>
+                      <p className="hub-empty-desc">{t("admin.feedback.empty")}</p>
                     </div>
                   </td>
                 </tr>
@@ -127,7 +129,7 @@ export default async function AdminFeedbackPage({
                     <td style={{ fontWeight: 600, whiteSpace: "nowrap" }}>{fb.client_name ?? "—"}</td>
                     <td>
                       <span className="hub-badge" style={{ background: typeCfg.bg, color: typeCfg.color, border: `1px solid ${typeCfg.color}30`, display: "inline-flex", alignItems: "center", gap: 5 }}>
-                        <TypeIcon size={10} /> {typeCfg.label}
+                        <TypeIcon size={10} /> {TYPE_CONFIG[type] ? t("admin.feedback.type." + type) : typeCfg.label}
                       </span>
                     </td>
                     <td className="hub-td-primary">
@@ -138,7 +140,7 @@ export default async function AdminFeedbackPage({
                     <td>{fb.product || "—"}</td>
                     <td>
                       <span className="hub-badge" style={{ background: `${statusCfg.color}18`, color: statusCfg.color, border: `1px solid ${statusCfg.color}30` }}>
-                        {statusCfg.label}
+                        {STATUS_CONFIG[status] ? t("admin.feedback.status." + status) : statusCfg.label}
                       </span>
                     </td>
                     <td style={{ whiteSpace: "nowrap" }}>
@@ -151,7 +153,7 @@ export default async function AdminFeedbackPage({
           </table>
         </div>
         <div className="hub-table-footer">
-          <span className="hub-table-info">{feedbacks.length} de {allFeedbacks.length} registros</span>
+          <span className="hub-table-info">{t("admin.feedback.footer", { n: feedbacks.length, total: allFeedbacks.length })}</span>
         </div>
       </div>
     </div>

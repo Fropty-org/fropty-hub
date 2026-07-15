@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getAllArticlesAdmin } from "@/app/actions/knowledge";
 import { BookOpen, Plus, Eye, ThumbsUp, ThumbsDown, Pencil, FileText, CheckCircle2 } from "lucide-react";
 import { TogglePublishedButton } from "@/app/components/knowledge/TogglePublishedButton";
+import { getServerI18n } from "@/app/lib/i18n/server";
 
 export const metadata: Metadata = { title: "Base de Conhecimento — Admin" };
 
@@ -17,6 +18,7 @@ export default async function AdminBaseConhecimentoPage({
   searchParams: Promise<{ status?: string }>;
 }) {
   const { status: filterStatus } = await searchParams;
+  const { t } = await getServerI18n();
   const allArticles = await getAllArticlesAdmin();
 
   const articles = filterStatus === "publicado"
@@ -30,10 +32,10 @@ export default async function AdminBaseConhecimentoPage({
   const totalViews = allArticles.reduce((s, a) => s + (a.views ?? 0), 0);
 
   const kpis = [
-    { label: "Total de artigos", value: allArticles.length, color: "var(--primary)",  Icon: BookOpen },
-    { label: "Publicados",       value: published,          color: "var(--c-success)",         Icon: CheckCircle2 },
-    { label: "Rascunhos",        value: drafts,             color: "#EF9F27",         Icon: FileText },
-    { label: "Visualizações",    value: totalViews,         color: "var(--c-info)",         Icon: Eye },
+    { label: t("admin.kb.kpiTotal"), value: allArticles.length, color: "var(--primary)",  Icon: BookOpen },
+    { label: t("admin.kb.kpiPublished"), value: published,          color: "var(--c-success)",         Icon: CheckCircle2 },
+    { label: t("admin.kb.kpiDrafts"), value: drafts,             color: "#EF9F27",         Icon: FileText },
+    { label: t("admin.kb.kpiViews"), value: totalViews,         color: "var(--c-info)",         Icon: Eye },
   ];
 
   return (
@@ -42,17 +44,17 @@ export default async function AdminBaseConhecimentoPage({
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 28, gap: 16 }}>
         <div>
           <h1 style={{ margin: 0, fontSize: "1.5rem", fontWeight: 800, color: "var(--text)", letterSpacing: "-0.02em" }}>
-            Base de Conhecimento
+            {t("admin.kb.title")}
           </h1>
           <p style={{ margin: "4px 0 0", fontSize: "13px", color: "var(--text-faint)" }}>
-            {published} publicados · {drafts} rascunhos
+            {t("admin.kb.subtitle", { pub: published, draft: drafts })}
           </p>
         </div>
         <Link
           href="/admin/base-conhecimento/novo"
           style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "9px 18px", borderRadius: 10, background: "var(--cta-bg)", color: "var(--cta-text)", fontSize: "13px", fontWeight: 700, textDecoration: "none", flexShrink: 0 }}
         >
-          <Plus size={15} /> Novo Artigo
+          <Plus size={15} /> {t("admin.kb.newArticle")}
         </Link>
       </div>
 
@@ -74,9 +76,9 @@ export default async function AdminBaseConhecimentoPage({
       {/* Filtros publicado/rascunho */}
       <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 20 }}>
         {[
-          { key: "todos",      label: "Todos",      color: "var(--text-muted)" },
-          { key: "publicado",  label: "Publicados", color: "var(--c-success)" },
-          { key: "rascunho",   label: "Rascunhos",  color: "#EF9F27" },
+          { key: "todos",      label: t("admin.kb.all"),      color: "var(--text-muted)" },
+          { key: "publicado",  label: t("admin.kb.published"), color: "var(--c-success)" },
+          { key: "rascunho",   label: t("admin.kb.drafts"),  color: "#EF9F27" },
         ].map(({ key, label, color }) => {
           const active = (filterStatus ?? "todos") === key;
           return (
@@ -92,16 +94,17 @@ export default async function AdminBaseConhecimentoPage({
       {articles.length === 0 ? (
         <div className="hub-card" style={{ padding: "60px 24px", textAlign: "center" }}>
           <BookOpen size={36} style={{ color: "var(--text-faint)", marginBottom: 12, display: "block", margin: "0 auto 12px" }} />
-          <p style={{ margin: 0, fontSize: "14px", fontWeight: 700, color: "var(--text)" }}>Nenhum artigo encontrado</p>
-          <p style={{ margin: "6px 0 0", fontSize: "13px", color: "var(--text-faint)" }}>Crie o primeiro artigo para começar.</p>
+          <p style={{ margin: 0, fontSize: "14px", fontWeight: 700, color: "var(--text)" }}>{t("admin.kb.emptyTitle")}</p>
+          <p style={{ margin: "6px 0 0", fontSize: "13px", color: "var(--text-faint)" }}>{t("admin.kb.emptyDesc")}</p>
         </div>
       ) : (
         <div className="hub-card" style={{ padding: 0, overflow: "hidden" }}>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
               <tr style={{ borderBottom: "1px solid var(--border)" }}>
-                {["Título", "Categoria", "Status", "Views", "Votos", "Atualizado", ""].map((h) => (
-                  <th key={h} style={{ padding: "11px 16px", textAlign: "left", fontSize: "11px", fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.05em", whiteSpace: "nowrap" }}>
+                {[t("admin.kb.colTitle"), t("admin.kb.colCategory"), t("admin.kb.colStatus"), t("admin.kb.colViews"), t("admin.kb.colVotes"), t("admin.kb.colUpdated"), ""].map((h, hi) => (
+                // eslint-disable-next-line react/no-array-index-key
+                  <th key={hi} style={{ padding: "11px 16px", textAlign: "left", fontSize: "11px", fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.05em", whiteSpace: "nowrap" }}>
                     {h}
                   </th>
                 ))}
@@ -122,7 +125,7 @@ export default async function AdminBaseConhecimentoPage({
                   </td>
                   <td style={{ padding: "13px 16px", whiteSpace: "nowrap" }}>
                     <span style={{ fontSize: "11px", fontWeight: 600, padding: "3px 9px", borderRadius: 99, background: "color-mix(in srgb, var(--primary) 10%, transparent)", color: "var(--primary)" }}>
-                      {CATEGORY_LABELS[article.category] ?? article.category}
+                      {t("admin.kb.category." + article.category, {}) !== "admin.kb.category." + article.category ? t("admin.kb.category." + article.category) : (CATEGORY_LABELS[article.category] ?? article.category)}
                     </span>
                   </td>
                   <td style={{ padding: "13px 16px", whiteSpace: "nowrap" }}>
@@ -154,7 +157,7 @@ export default async function AdminBaseConhecimentoPage({
                       href={`/admin/base-conhecimento/${article.id}/editar`}
                       style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "6px 12px", borderRadius: 7, border: "1px solid var(--border)", background: "transparent", fontSize: "12px", fontWeight: 600, color: "var(--text-muted)", textDecoration: "none" }}
                     >
-                      <Pencil size={12} /> Editar
+                      <Pencil size={12} /> {t("admin.kb.edit")}
                     </Link>
                   </td>
                 </tr>
