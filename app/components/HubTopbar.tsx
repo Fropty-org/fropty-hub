@@ -1,13 +1,12 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import { NotificationBell } from "@/app/components/NotificationBell";
 import { SessionGuard } from "@/app/components/session/SessionGuard";
 import { HelpMenu } from "@/app/components/HelpMenu";
 import { LanguageSwitcher } from "@/app/components/LanguageSwitcher";
+import { AccountMenu } from "@/app/components/AccountMenu";
 import { useT } from "@/app/lib/i18n/I18nProvider";
 
 interface Props {
@@ -15,6 +14,10 @@ interface Props {
   initials: string;
   avatarUrl?: string | null;
   profileHref: string;
+  name: string;
+  email: string;
+  roleLabel: string;
+  initialTheme?: "dark" | "light";
 }
 
 /**
@@ -22,7 +25,7 @@ interface Props {
  * sino de notificações e avatar. Oculta no mobile (o portal-topbar
  * mobile já cobre esse caso).
  */
-export function HubTopbar({ userId, initials, avatarUrl, profileHref }: Props) {
+export function HubTopbar({ userId, initials, avatarUrl, profileHref, name, email, roleLabel, initialTheme }: Props) {
   const t = useT();
   const [isMac, setIsMac] = useState(false);
 
@@ -53,20 +56,15 @@ export function HubTopbar({ userId, initials, avatarUrl, profileHref }: Props) {
         <LanguageSwitcher />
         <HelpMenu />
         <NotificationBell userId={userId} />
-        <Link href={profileHref} className="hub-topbar-avatar" title={t("common.myProfile")}>
-          {avatarUrl ? (
-            <Image
-              src={avatarUrl}
-              alt=""
-              width={30}
-              height={30}
-              unoptimized
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            />
-          ) : (
-            initials
-          )}
-        </Link>
+        <AccountMenu
+          name={name}
+          email={email}
+          initials={initials}
+          avatarUrl={avatarUrl}
+          roleLabel={roleLabel}
+          profileHref={profileHref}
+          initialTheme={initialTheme}
+        />
       </div>
     </header>
   );

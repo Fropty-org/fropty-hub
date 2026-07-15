@@ -2,17 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTransition, useState, useEffect, useRef } from "react";
-import { signOut } from "@/app/actions/auth";
+import { useState, useEffect, useRef } from "react";
 import { PortalThemeToggle } from "@/app/components/cliente/PortalThemeToggle";
 import {
   LayoutDashboard, Users, CreditCard, MessageCircle, BarChart2, ShieldCheck,
-  UserCircle, BookOpen, Map, MessageSquarePlus, FolderKanban, FileSignature,
-  HeartPulse, Menu, LogOut, Loader2, PanelLeftClose, Shield,
-  ChevronUp, ChevronDown, UserPlus, ListFilter,
+  BookOpen, Map, MessageSquarePlus, FolderKanban, FileSignature,
+  HeartPulse, Menu, PanelLeftClose, Shield,
+  ChevronDown, UserPlus, ListFilter,
   LayoutGrid, CalendarDays,
 } from "lucide-react";
-import { NotificationBell } from "@/app/components/NotificationBell";
 import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
 
@@ -56,11 +54,8 @@ interface Props {
 
 export function AdminSidebar({ name, initials, userId, initialTheme = "dark", avatarUrl }: Props) {
   const pathname              = usePathname();
-  const [pending, startTrans] = useTransition();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [collapsed,  setCollapsed]  = useState(false);
-  const [menuOpen,   setMenuOpen]   = useState(false);
-  const [popPos,     setPopPos]     = useState<{ bottom: number; left: number } | null>(null);
   // Track which accordion items are expanded
   const [expanded, setExpanded] = useState<Set<string>>(() => {
     // Auto-expand if current path is under usuarios
@@ -70,7 +65,6 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
     return new Set();
   });
   const footerRef  = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLButtonElement>(null);
 
   // Auto-expand accordion based on current path
   useEffect(() => {
@@ -80,29 +74,6 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
       }
     });
   }, [pathname]);
-
-  useEffect(() => {
-    function onOutside(e: MouseEvent) {
-      const popEl = document.getElementById("admin-user-popover");
-      if (
-        footerRef.current && !footerRef.current.contains(e.target as Node) &&
-        (!popEl || !popEl.contains(e.target as Node))
-      ) setMenuOpen(false);
-    }
-    if (menuOpen) document.addEventListener("mousedown", onOutside);
-    return () => document.removeEventListener("mousedown", onOutside);
-  }, [menuOpen]);
-
-  function handleMenuToggle() {
-    if (!menuOpen && triggerRef.current) {
-      const r = triggerRef.current.getBoundingClientRect();
-      setPopPos({
-        bottom: window.innerHeight - r.top + 8,
-        left: collapsed ? r.right + 8 : r.left,
-      });
-    }
-    setMenuOpen(o => !o);
-  }
 
   useEffect(() => {
     const saved = localStorage.getItem("hub-admin-sidebar-collapsed");
@@ -126,12 +97,6 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
     });
   }
 
-  function handleSignOut() {
-    startTrans(async () => {
-      const result = await signOut();
-      if (result?.redirectTo) window.location.href = result.redirectTo;
-    });
-  }
 
   const W = collapsed ? 60 : 224;
 
@@ -308,23 +273,23 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
           ))}
         </nav>
 
-        {/* Footer */}
+        {/* Footer — identidade + link para o perfil (o menu de conta vive no
+            avatar do topo, AccountMenu). */}
         <div ref={footerRef} style={{ flexShrink: 0, marginTop: 8 }}>
           <div style={{ height: 1, background: "var(--border)", marginBottom: 6 }} />
-          <button
-            ref={triggerRef}
-            onClick={handleMenuToggle}
+          <Link
+            href="/admin/perfil"
             title={collapsed ? name : undefined}
             style={{
               width: "100%", display: "flex", alignItems: "center",
               justifyContent: collapsed ? "center" : "flex-start",
               gap: 8, padding: collapsed ? "6px 0" : "7px 10px",
-              borderRadius: "var(--r-md)", background: menuOpen ? "var(--surface-2)" : "transparent",
-              border: "none", cursor: "pointer", color: "var(--text)", fontFamily: "inherit",
+              borderRadius: "var(--r-md)", background: "transparent",
+              textDecoration: "none", color: "var(--text)",
               transition: "background 0.12s",
             }}
-            onMouseEnter={e => { if (!menuOpen) (e.currentTarget as HTMLButtonElement).style.background = "var(--sidebar-item-hover)"; }}
-            onMouseLeave={e => { if (!menuOpen) (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
+            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = "var(--sidebar-item-hover)"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = "transparent"; }}
           >
             <div style={{ position: "relative", flexShrink: 0 }}>
               <div style={{ width: 30, height: 30, borderRadius: "50%", background: "var(--surface-2)", border: "1.5px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 700, color: "var(--text)", overflow: "hidden" }}>
@@ -337,17 +302,14 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
               </span>
             </div>
             {!collapsed && (
-              <>
-                <div style={{ flex: 1, overflow: "hidden", minWidth: 0, textAlign: "left" }}>
-                  <p style={{ margin: 0, fontSize: "12.5px", fontWeight: 600, color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{name}</p>
-                  <p style={{ margin: 0, fontSize: "10px", fontWeight: 600, color: "var(--text-faint)", display: "flex", alignItems: "center", gap: 3 }}>
-                    <Shield size={8} style={{ color: "var(--primary)", opacity: 0.7 }} /> Administrador
-                  </p>
-                </div>
-                <ChevronUp size={12} style={{ flexShrink: 0, color: "var(--text-faint)", transform: menuOpen ? "rotate(0deg)" : "rotate(180deg)", transition: "transform 0.2s" }} />
-              </>
+              <div style={{ flex: 1, overflow: "hidden", minWidth: 0, textAlign: "left" }}>
+                <p style={{ margin: 0, fontSize: "12.5px", fontWeight: 600, color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{name}</p>
+                <p style={{ margin: 0, fontSize: "10px", fontWeight: 600, color: "var(--text-faint)", display: "flex", alignItems: "center", gap: 3 }}>
+                  <Shield size={8} style={{ color: "var(--primary)", opacity: 0.7 }} /> Administrador
+                </p>
+              </div>
             )}
-          </button>
+          </Link>
         </div>
       </div>
     </aside>
@@ -355,73 +317,6 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
 
   return (
     <>
-      {menuOpen && popPos && (
-        <div
-          id="admin-user-popover"
-          style={{
-            position: "fixed", bottom: popPos.bottom, left: popPos.left,
-            width: 232, background: "var(--surface)", border: "1px solid var(--border)",
-            borderRadius: "var(--r-lg)", boxShadow: "0 8px 32px rgba(0,0,0,0.28)",
-            overflow: "hidden", zIndex: 9999,
-          }}
-        >
-          <div style={{ padding: "14px 14px 12px", display: "flex", alignItems: "center", gap: 10, borderBottom: "1px solid var(--border)" }}>
-            <div style={{ width: 38, height: 38, borderRadius: "50%", background: "var(--surface-2)", border: "1.5px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px", fontWeight: 800, color: "var(--text)", flexShrink: 0, overflow: "hidden" }}>
-              {avatarUrl ? <img src={avatarUrl} alt={name} style={{ width: "100%", height: "100%", objectFit: "cover" }} referrerPolicy="no-referrer" /> : initials}
-            </div>
-            <div style={{ overflow: "hidden", flex: 1, minWidth: 0 }}>
-              <p style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{name}</p>
-              <p style={{ margin: 0, fontSize: "10.5px", color: "var(--text-faint)", display: "flex", alignItems: "center", gap: 3 }}>
-                <Shield size={8} style={{ color: "var(--primary)" }} /> Administrador · Fropty Hub
-              </p>
-            </div>
-          </div>
-          <div style={{ padding: "6px" }}>
-            <p style={{ margin: "2px 10px 3px", fontSize: "9.5px", fontWeight: 800, letterSpacing: "0.09em", textTransform: "uppercase", color: "var(--text-faint)" }}>Conta</p>
-            <Link href="/admin/perfil" onClick={() => setMenuOpen(false)} style={dropItem} onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.background = "var(--surface-2)"} onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.background = "transparent"}>
-              <UserCircle size={14} /> Meu Perfil
-            </Link>
-            <Link href="/admin/usuarios" onClick={() => setMenuOpen(false)} style={dropItem} onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.background = "var(--surface-2)"} onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.background = "transparent"}>
-              <Users size={14} /> Gerenciar Usuários
-            </Link>
-            <Link href="/admin/financeiro" onClick={() => setMenuOpen(false)} style={dropItem} onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.background = "var(--surface-2)"} onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.background = "transparent"}>
-              <CreditCard size={14} /> Financeiro
-            </Link>
-          </div>
-          <div style={{ height: 1, background: "var(--border)" }} />
-          <div style={{ padding: "6px" }}>
-            <p style={{ margin: "2px 10px 3px", fontSize: "9.5px", fontWeight: 800, letterSpacing: "0.09em", textTransform: "uppercase", color: "var(--text-faint)" }}>Preferências</p>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "7px 10px", borderRadius: "var(--r-md)" }}>
-              <span style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "13px", color: "var(--text-muted)", fontWeight: 500 }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
-                Tema
-              </span>
-              <PortalThemeToggle initialTheme={initialTheme} />
-            </div>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "7px 10px", borderRadius: "var(--r-md)" }}>
-              <span style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "13px", color: "var(--text-muted)", fontWeight: 500 }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
-                Notificações
-              </span>
-              <NotificationBell userId={userId} />
-            </div>
-          </div>
-          <div style={{ height: 1, background: "var(--border)" }} />
-          <div style={{ padding: "6px" }}>
-            <button
-              onClick={handleSignOut}
-              disabled={pending}
-              style={{ width: "100%", display: "flex", alignItems: "center", gap: 8, padding: "7px 10px", borderRadius: "var(--r-md)", fontSize: "13px", fontWeight: 500, color: "var(--c-danger)", background: "none", border: "none", cursor: pending ? "not-allowed" : "pointer", fontFamily: "inherit", opacity: pending ? 0.5 : 1 }}
-              onMouseEnter={e => (e.currentTarget.style.background = "rgba(220,38,38,0.07)")}
-              onMouseLeave={e => (e.currentTarget.style.background = "none")}
-            >
-              {pending ? <Loader2 size={13} style={{ animation: "spin 0.8s linear infinite" }} /> : <LogOut size={13} />}
-              {pending ? "Saindo…" : "Sair"}
-            </button>
-          </div>
-        </div>
-      )}
-
       <div className="portal-topbar">
         <button onClick={() => setMobileOpen(true)} aria-label="Abrir menu" style={{ width: 36, height: 36, borderRadius: "var(--r-md)", background: "var(--surface)", border: "1px solid var(--border)", cursor: "pointer", color: "var(--text-muted)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
           <Menu size={17} />
@@ -442,11 +337,6 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
   );
 }
 
-const dropItem: React.CSSProperties = {
-  display: "flex", alignItems: "center", gap: 8,
-  padding: "7px 10px", borderRadius: "var(--r-md)",
-  fontSize: "13px", fontWeight: 500, color: "var(--text-muted)",
-  textDecoration: "none", transition: "background 0.1s",
-};
+
 
 

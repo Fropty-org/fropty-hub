@@ -40,6 +40,10 @@ export default async function AdminPortalLayout({ children }: { children: React.
           initials={initials}
           avatarUrl={avatarUrl}
           profileHref="/admin/perfil"
+          name={name}
+          email={user?.email ?? ""}
+          roleLabel="Admin"
+          initialTheme={initialTheme}
         />
         <div style={{ flex: 1 }}>{children}</div>
       </main>

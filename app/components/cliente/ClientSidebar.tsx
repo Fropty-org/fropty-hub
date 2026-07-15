@@ -2,14 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTransition, useState, useEffect } from "react";
-import { signOut } from "../../actions/auth";
+import { useState, useEffect } from "react";
 import { PortalThemeToggle } from "./PortalThemeToggle";
 import type { ClientUser } from "../../lib/types/cliente";
 import { PORTAL_NAV_ITEMS, PORTAL_NAV_GROUPS } from "../../lib/constants/portal-nav";
 import {
   LayoutDashboard, MessageCircle, CreditCard, UserCircle, BookOpen, Map,
-  MessageSquarePlus, FolderKanban, FileSignature, LogOut, Loader2,
+  MessageSquarePlus, FolderKanban, FileSignature,
   Menu, X, PanelLeftClose, PanelLeftOpen, Search, Coins, Sparkles,
   MessagesSquare, LayoutGrid, CalendarDays,
 } from "lucide-react";
@@ -48,7 +47,6 @@ const PLAN_LABEL: Record<string, string> = { basico: "Básico", pro: "Pro", sem_
 export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) {
   const pathname              = usePathname();
   const nav                   = navItems ?? DEFAULT_NAV;
-  const [pending, startTrans] = useTransition();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [collapsed,  setCollapsed]  = useState(false);
 
@@ -61,13 +59,6 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
     const next = !collapsed;
     setCollapsed(next);
     localStorage.setItem("hub-sidebar-collapsed", next ? "1" : "0");
-  }
-
-  function handleSignOut() {
-    startTrans(async () => {
-      const result = await signOut();
-      if (result?.redirectTo) window.location.href = result.redirectTo;
-    });
   }
 
   const W = collapsed ? 60 : 224;
@@ -264,35 +255,31 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
           ))}
         </nav>
 
-        {/* ── Footer: theme + user + logout ── */}
+        {/* ── Footer: identidade + link para o perfil (o menu de conta —
+            tema/sair — vive no avatar do topo, AccountMenu). ── */}
         <div style={{ flexShrink: 0, marginTop: 8 }}>
           <div style={{ height: 1, background: "var(--border)", marginBottom: 8 }} />
 
-          {/* Theme row — only when expanded */}
-          {!collapsed && (
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "4px 10px", marginBottom: 4 }}>
-              <span style={{ fontSize: "12px", color: "var(--text-faint)", fontWeight: 500 }}>Tema</span>
-              <PortalThemeToggle initialTheme={initialTheme} />
-            </div>
-          )}
-
-          {/* User row (Aceternity pattern) */}
-          <div style={{
-            display: "flex", alignItems: "center",
-            justifyContent: collapsed ? "center" : "space-between",
-            padding: collapsed ? "6px 0" : "7px 10px",
-            borderRadius: "var(--r-md)",
-            gap: 8,
-          }}>
+          <Link
+            href="/portal/perfil"
+            title={collapsed ? user.name : undefined}
+            style={{
+              display: "flex", alignItems: "center",
+              justifyContent: collapsed ? "center" : "flex-start",
+              padding: collapsed ? "6px 0" : "7px 10px",
+              borderRadius: "var(--r-md)", gap: 8,
+              textDecoration: "none", color: "var(--text)", transition: "background 0.12s",
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = "var(--sidebar-item-hover)"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = "transparent"; }}
+          >
             {/* Avatar */}
             <div style={{
               width: 30, height: 30, borderRadius: "50%", flexShrink: 0,
               background: "var(--surface-2)", border: "1px solid var(--border)",
               display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: "12px", fontWeight: 700, color: "var(--text)",
-            }}
-              title={collapsed ? user.name : undefined}
-            >
+              fontSize: "12px", fontWeight: 700, color: "var(--text)", overflow: "hidden",
+            }}>
               {user.avatarInitials}
             </div>
 
@@ -320,34 +307,7 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
                 </div>
               </div>
             )}
-
-            {/* Logout — expanded */}
-            {!collapsed && (
-              <button
-                onClick={handleSignOut}
-                disabled={pending}
-                title="Sair"
-                style={{
-                  width: 28, height: 28, borderRadius: "var(--r-sm)",
-                  border: "1px solid var(--border)", background: "var(--surface-2)",
-                  cursor: pending ? "not-allowed" : "pointer",
-                  color: "var(--text-faint)", opacity: pending ? 0.5 : 1,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  flexShrink: 0, transition: "color 0.12s, background 0.12s",
-                }}
-                onMouseEnter={e => {
-                  (e.currentTarget as HTMLButtonElement).style.color = "var(--c-danger)";
-                  (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--c-danger)";
-                }}
-                onMouseLeave={e => {
-                  (e.currentTarget as HTMLButtonElement).style.color = "var(--text-faint)";
-                  (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--border)";
-                }}
-              >
-                {pending ? <Loader2 size={13} style={{ animation: "spin 0.8s linear infinite" }} /> : <LogOut size={13} />}
-              </button>
-            )}
-          </div>
+          </Link>
         </div>
       </div>
     </aside>

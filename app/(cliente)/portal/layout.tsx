@@ -175,6 +175,10 @@ export default async function PortalLayout({
           initials={initials}
           avatarUrl={avatarUrl}
           profileHref={isAdmin ? "/admin/perfil" : "/portal/perfil"}
+          name={displayName}
+          email={email}
+          roleLabel={isAdmin ? "Admin" : "Cliente"}
+          initialTheme={(profile?.theme ?? "dark") as "dark" | "light"}
         />
         {access.state === "expiring" && access.daysLeft !== null && (
           <RenewalNotice daysLeft={access.daysLeft} renewalStr={fmtDate(access.renewal)} />

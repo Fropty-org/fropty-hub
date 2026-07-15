@@ -5,7 +5,10 @@
     "help": "Help",
     "language": "Language",
     "backToHub": "Back to the Hub",
-    "lastUpdated": "Last updated"
+    "lastUpdated": "Last updated",
+    "theme": "Theme",
+    "signOut": "Sign out",
+    "signingOut": "Signing out..."
   },
   "help": {
     "about": "About Fropty Hub",
