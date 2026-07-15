@@ -186,7 +186,7 @@ export default async function PortalLayout({
       <CommandPalette />
 
       {/* FroptySentinel: reforço de segurança visível ao cliente */}
-      {!isAdmin && <SentinelHeartbeat />}
+      <SentinelHeartbeat />
 
     </div>
   );

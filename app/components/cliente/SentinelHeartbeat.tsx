@@ -10,9 +10,9 @@ import { ShieldCheck, X } from "lucide-react";
  * ("nenhum problema encontrado"). Hoje é apenas visual — a varredura real será
  * plugada depois (o texto/estado virá de uma checagem de verdade).
  */
-const INTERVAL_MS = 5 * 60 * 1000; // 5 min
+const INTERVAL_MS = 2 * 60 * 1000; // 2 min (cadência de validação)
 const VISIBLE_MS  = 6000;
-const FIRST_MS    = 20 * 1000;     // primeira aparição ~20s após entrar
+const FIRST_MS    = 15 * 1000;     // primeira aparição ~15s após entrar
 
 const MESSAGES = [
   "Nenhum problema encontrado na sua conta.",

@@ -5,6 +5,7 @@ import { createClient } from "@/app/lib/supabase/server";
 import { AdminSidebar } from "@/app/components/admin/AdminSidebar";
 import { HubTopbar } from "@/app/components/HubTopbar";
 import { CommandPalette } from "@/app/components/CommandPalette";
+import { SentinelHeartbeat } from "@/app/components/cliente/SentinelHeartbeat";
 
 export const metadata: Metadata = { robots: { index: false, follow: false } };
 
@@ -45,6 +46,9 @@ export default async function AdminPortalLayout({ children }: { children: React.
 
       {/* Busca global Cmd+K */}
       <CommandPalette />
+
+      {/* Heartbeat do FroptySentinel (fake, validação) */}
+      <SentinelHeartbeat />
     </div>
   );
 }
