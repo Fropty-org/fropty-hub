@@ -3,13 +3,13 @@
 import { useState, useMemo, useEffect, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Search, ChevronRight, Loader2, Bookmark, Plus, X } from "lucide-react";
+import { Search, Loader2, Bookmark, Plus, X } from "lucide-react";
 import { StatusBadge } from "@/app/components/ui/StatusBadge";
-import { Pagination } from "@/app/components/ui/Pagination";
 import { HubEmptyState } from "@/app/components/ui/HubEmptyState";
+import { SlaGauge } from "@/app/components/suporte/SlaGauge";
 import { computeSla } from "@/app/lib/constants/sla";
 import { assignTicket } from "@/app/actions/suporte";
-import type { TicketPriority } from "@/app/lib/constants/status";
+import { TICKET_STATUS_MAP, type TicketPriority, type TicketStatus } from "@/app/lib/constants/status";
 
 export interface QueueTicket {
   id:              string;
@@ -59,7 +59,35 @@ function AssigneeSelect({ ticketId, value, analysts }: { ticketId: string; value
 }
 
 const OPEN_STATUSES = ["aberto", "em_andamento", "reaberto"];
-const PAGE_SIZE = 20;
+
+// Colunas do board, na ordem do fluxo do chamado.
+const BOARD_STATUSES: TicketStatus[] = ["aberto", "em_andamento", "reaberto", "resolvido", "fechado"];
+
+/* Card vertical de um chamado no board. */
+function KanbanCard({ r, analysts, now }: { r: { t: QueueTicket; breached: boolean }; analysts: Analyst[]; now: number }) {
+  const t = r.t;
+  const uft = t.ticketNumber != null ? `UFT${String(t.ticketNumber).padStart(4, "0")}` : "—";
+  return (
+    <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderLeft: r.breached ? "3px solid var(--c-danger)" : "3px solid transparent", borderRadius: 12, padding: "11px 12px", display: "flex", flexDirection: "column", gap: 9 }}>
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 8 }}>
+        <Link href={`/portal/suporte/${t.id}`} style={{ textDecoration: "none", minWidth: 0 }}>
+          <span style={{ fontSize: "13px", fontWeight: 800, color: "var(--text)", letterSpacing: "-0.01em" }}>{uft}</span>
+        </Link>
+        <SlaPie t={t} now={now} size={22} />
+      </div>
+      <Link href={`/portal/suporte/${t.id}`} style={{ textDecoration: "none" }}>
+        <p style={{ margin: 0, fontSize: "12.5px", color: "var(--text-muted)", lineHeight: 1.4, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+          {t.subject}
+        </p>
+      </Link>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
+        <StatusBadge kind="ticket-priority" status={t.priority} size="sm" />
+        <span style={{ fontSize: "11.5px", color: "var(--text-faint)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{t.clientName}</span>
+      </div>
+      <AssigneeSelect ticketId={t.id} value={t.assignedTo} analysts={analysts} />
+    </div>
+  );
+}
 
 /** Estado de SLA "ativo" da linha: a barra que está correndo (ou concluída). */
 function activeSla(t: QueueTicket, now?: number) {
@@ -80,7 +108,7 @@ function activeSla(t: QueueTicket, now?: number) {
 /* Pizza de progresso do SLA (mesma linguagem visual da tela do chamado):
    disco preenchido = fração do prazo ativo decorrida, dentro de um anel claro.
    Sempre centralizado (inset simétrico). */
-function SlaPie({ t, now }: { t: QueueTicket; now: number }) {
+function SlaPie({ t, now, size = 20 }: { t: QueueTicket; now: number; size?: number }) {
   const isOpen = OPEN_STATUSES.includes(t.status);
   let color = "var(--c-success)";
   let pct = 1;
@@ -88,14 +116,10 @@ function SlaPie({ t, now }: { t: QueueTicket; now: number }) {
   if (isOpen) {
     const { state, phase } = activeSla(t, now);
     color = state.breached ? "var(--c-danger)" : state.ratio > 0.75 ? "var(--c-warning)" : "var(--c-info)";
-    pct = Math.min(1, state.ratio);
+    pct = state.ratio;
     title = `${phase}: ${state.label}`;
   }
-  return (
-    <span title={title} style={{ position: "relative", display: "inline-block", width: 20, height: 20, borderRadius: "50%", boxSizing: "border-box", border: `2px solid ${`color-mix(in srgb, ${color} 40%, transparent)`}` }}>
-      <span style={{ position: "absolute", inset: 2.5, borderRadius: "50%", background: `conic-gradient(${color} ${pct * 360}deg, var(--surface) 0)` }} />
-    </span>
-  );
+  return <SlaGauge color={color} pct={pct} title={title} size={size} />;
 }
 
 interface Props {
@@ -107,11 +131,6 @@ interface Props {
 
 type StatusFilter = "todos" | "aberto" | "em_andamento" | "reaberto" | "resolvido" | "fechado" | "atraso";
 type SortMode = "urgencia" | "recente";
-
-// Grade da fila: UFT e Cliente com largura capada (não esticam em telas largas);
-// Responsável/Status/Prioridade/SLA/seta compactos; o espaçador final (1fr)
-// absorve a sobra à direita, deixando a tabela mais densa e confortável.
-const GRID_COLS = "minmax(190px,300px) minmax(120px,180px) 168px 132px 104px 52px 28px minmax(0,1fr)";
 
 interface SavedView {
   name: string;
@@ -126,7 +145,7 @@ export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }:
   const [priority, setPriority]   = useState("todos");
   const [assignee, setAssignee]   = useState("todos");
   const [sort, setSort]           = useState<SortMode>("urgencia");
-  const [page, setPage]           = useState(1);
+  const [, setPage]               = useState(1);
   const [now, setNow]             = useState(() => Date.now());
 
   // Relógio de SLA ao vivo: re-renderiza a fila a cada 30s para o tempo
@@ -191,9 +210,11 @@ export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }:
     return rows;
   }, [enriched, search, client, priority, assignee, status, sort, currentUserId]);
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const safePage   = Math.min(page, totalPages);
-  const paged      = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+  // Board por status: quando um status específico está filtrado, mostramos só
+  // aquela coluna; "todos"/"atraso" mostram todas.
+  const visibleColumns = (status === "todos" || status === "atraso")
+    ? BOARD_STATUSES
+    : BOARD_STATUSES.filter((s) => s === status);
 
   const openCount     = enriched.filter((r) => r.isOpen).length;
   const breachedCount = enriched.filter((r) => r.breached).length;
@@ -302,51 +323,31 @@ export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }:
           />
         </div>
       ) : (
-        <div className="hub-card" style={{ overflow: "hidden", padding: 0 }}>
-          {/* Cabeçalho — mesma grade das linhas (inclui a borda-esquerda transparente
-              para alinhar com o marcador de SLA estourado). Colunas de dados com
-              largura capada; a sobra vai para o espaçador final. */}
-          <div style={{ display: "grid", gridTemplateColumns: GRID_COLS, padding: "10px 16px", borderLeft: "3px solid transparent", background: "var(--surface-2)", borderBottom: "1px solid var(--border)", fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--text-faint)" }}>
-            <span>UFT</span><span>Cliente</span><span>Responsável</span><span style={{ textAlign: "center" }}>Status</span><span style={{ textAlign: "center" }}>Prioridade</span><span style={{ textAlign: "center" }}>SLA</span><span /><span />
-          </div>
-
-          {paged.map((r, i) => {
-            const t = r.t;
+        <div className="suporte-board" style={{ display: "grid", gridTemplateColumns: `repeat(${visibleColumns.length}, minmax(258px, 1fr))`, gap: 14, alignItems: "start", overflowX: "auto", paddingBottom: 6 }}>
+          {visibleColumns.map((col) => {
+            const meta = TICKET_STATUS_MAP[col];
+            const items = filtered.filter((r) => r.t.status === col);
             return (
-              <div
-                key={t.id}
-                className="hub-row-link"
-                style={{ display: "grid", gridTemplateColumns: GRID_COLS, padding: "10px 16px", alignItems: "center", borderBottom: i < paged.length - 1 ? "1px solid var(--border)" : "none", color: "inherit", borderLeft: r.breached ? "3px solid var(--c-danger)" : "3px solid transparent" }}
-              >
-                <Link href={`/portal/suporte/${t.id}`} style={{ minWidth: 0, textDecoration: "none", color: "inherit", paddingRight: 12 }}>
-                  <p style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text)", letterSpacing: "-0.01em" }}>
-                    {t.ticketNumber != null ? `UFT${String(t.ticketNumber).padStart(4, "0")}` : "—"}
-                  </p>
-                  <p style={{ margin: "2px 0 0", fontSize: "12px", color: "var(--text-faint)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                    {t.subject}
-                  </p>
-                </Link>
-                <span style={{ fontSize: "12.5px", color: "var(--text-muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", paddingRight: 12 }}>{t.clientName}</span>
-                <span style={{ paddingRight: 12 }}><AssigneeSelect ticketId={t.id} value={t.assignedTo} analysts={analysts} /></span>
-                <span style={{ display: "flex", justifyContent: "center" }}><StatusBadge kind="ticket" status={t.status} size="sm" /></span>
-                <span style={{ display: "flex", justifyContent: "center" }}><StatusBadge kind="ticket-priority" status={t.priority} size="sm" /></span>
-                <span style={{ display: "flex", justifyContent: "center" }}><SlaPie t={t} now={now} /></span>
-                <Link href={`/portal/suporte/${t.id}`} style={{ display: "flex", justifyContent: "center", color: "var(--text-faint)" }} aria-label="Abrir chamado">
-                  <ChevronRight size={14} />
-                </Link>
-                <span />
+              <div key={col} style={{ background: "var(--surface-2)", border: "1px solid var(--border)", borderRadius: 14, display: "flex", flexDirection: "column", maxHeight: "calc(100vh - 250px)" }}>
+                {/* Cabeçalho da coluna */}
+                <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "12px 14px", borderBottom: "1px solid var(--border)" }}>
+                  <span style={{ width: 8, height: 8, borderRadius: "50%", background: meta.color, flexShrink: 0 }} />
+                  <span style={{ fontSize: "12.5px", fontWeight: 700, color: "var(--text)" }}>{meta.label}</span>
+                  <span style={{ marginLeft: "auto", fontSize: "11px", fontWeight: 700, color: "var(--text-faint)", background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 99, padding: "1px 8px", minWidth: 22, textAlign: "center" }}>
+                    {items.length}
+                  </span>
+                </div>
+                {/* Cards */}
+                <div style={{ display: "flex", flexDirection: "column", gap: 10, padding: 12, overflowY: "auto" }}>
+                  {items.length === 0 ? (
+                    <p style={{ margin: "6px 4px", fontSize: "12px", color: "var(--text-faint)", textAlign: "center" }}>Nenhum chamado</p>
+                  ) : (
+                    items.map((r) => <KanbanCard key={r.t.id} r={r} analysts={analysts} now={now} />)
+                  )}
+                </div>
               </div>
             );
           })}
-
-          {totalPages > 1 && (
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 18px", borderTop: "1px solid var(--border)" }}>
-              <span style={{ fontSize: "12px", color: "var(--text-faint)" }}>
-                {(safePage - 1) * PAGE_SIZE + 1}–{Math.min(safePage * PAGE_SIZE, filtered.length)} de {filtered.length}
-              </span>
-              <Pagination page={safePage} totalPages={totalPages} onChange={setPage} />
-            </div>
-          )}
         </div>
       )}
     </div>

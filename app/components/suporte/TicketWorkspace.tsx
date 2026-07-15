@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { createClient } from "@/app/lib/supabase/browser";
 import { StatusBadge } from "@/app/components/ui/StatusBadge";
 import { TicketConversation } from "@/app/components/suporte/TicketConversation";
+import { SlaGauge } from "@/app/components/suporte/SlaGauge";
 import { computeSla, SLA_TARGETS, type SlaState } from "@/app/lib/constants/sla";
 import type { TicketPriority, TicketStatus } from "@/app/lib/constants/status";
 import type { Database } from "@/app/lib/supabase/types";
@@ -67,28 +68,9 @@ function slaColor(s: SlaState | null): string {
   return "var(--c-info)";
 }
 
-/* Pizza de progresso do SLA: disco preenchido (fatia = fração do prazo
-   decorrida) dentro de um anel externo claro, separado por um gap — como no
-   modelo. */
+/* Pizza de progresso do SLA (SVG, zoom-safe). */
 function SlaClock({ s }: { s: SlaState | null }) {
-  const color = slaColor(s);
-  const pct = s ? Math.min(1, s.ratio) : 0;
-  return (
-    <span
-      style={{
-        position: "relative", display: "inline-block", flexShrink: 0,
-        width: 22, height: 22, borderRadius: "50%", boxSizing: "border-box",
-        border: `2px solid ${`color-mix(in srgb, ${color} 40%, transparent)`}`,
-      }}
-    >
-      <span
-        style={{
-          position: "absolute", inset: 3, borderRadius: "50%",
-          background: `conic-gradient(${color} ${pct * 360}deg, var(--surface) 0)`,
-        }}
-      />
-    </span>
-  );
+  return <SlaGauge color={slaColor(s)} pct={s ? s.ratio : 0} size={22} />;
 }
 
 function DetailRow({ label, children }: { label: string; children: React.ReactNode }) {
