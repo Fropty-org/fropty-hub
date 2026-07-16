@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useT } from "@/app/lib/i18n/I18nProvider";
 
 interface Props {
   labelStyle: React.CSSProperties;
@@ -13,6 +14,7 @@ interface Props {
  * start_date / end_date para o server action.
  */
 export function ContractDateFields({ labelStyle, inputStyle }: Props) {
+  const t = useT();
   const [start, setStart] = useState("");
   const [end, setEnd]     = useState("");
   const invalid = !!start && !!end && end < start;
@@ -20,11 +22,11 @@ export function ContractDateFields({ labelStyle, inputStyle }: Props) {
   return (
     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
       <div>
-        <label style={labelStyle}>Data de início</label>
+        <label style={labelStyle}>{t("admin.contracts.form.startDate")}</label>
         <input name="start_date" type="date" value={start} onChange={(e) => setStart(e.target.value)} style={inputStyle} />
       </div>
       <div>
-        <label style={labelStyle}>Data de término</label>
+        <label style={labelStyle}>{t("admin.contracts.form.endDate")}</label>
         <input
           name="end_date"
           type="date"
@@ -35,7 +37,7 @@ export function ContractDateFields({ labelStyle, inputStyle }: Props) {
         />
         {invalid && (
           <p style={{ margin: "5px 0 0", fontSize: "11.5px", color: "var(--c-danger)" }}>
-            O término não pode ser anterior ao início.
+            {t("admin.contracts.form.endBeforeStart")}
           </p>
         )}
       </div>

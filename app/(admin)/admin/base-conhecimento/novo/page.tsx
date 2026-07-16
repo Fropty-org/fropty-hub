@@ -3,10 +3,12 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { ArticleForm } from "@/app/components/knowledge/ArticleForm";
 import { createArticle } from "@/app/actions/knowledge";
+import { getServerI18n } from "@/app/lib/i18n/server";
 
 export const metadata: Metadata = { title: "Novo Artigo — Admin" };
 
-export default function NovoArtigoPage() {
+export default async function NovoArtigoPage() {
+  const { t } = await getServerI18n();
   return (
     <div className="hub-page" style={{ maxWidth: 800, margin: "0 auto" }}>
       <div style={{ marginBottom: 24 }}>
@@ -15,12 +17,12 @@ export default function NovoArtigoPage() {
           style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "0.85rem", color: "var(--text-muted)", textDecoration: "none" }}
         >
           <ArrowLeft size={14} />
-          Base de Conhecimento
+          {t("admin.kb.form.back")}
         </Link>
       </div>
 
       <h1 style={{ margin: "0 0 28px", fontSize: "1.4rem", fontWeight: 800, color: "var(--text)" }}>
-        Novo Artigo
+        {t("admin.kb.form.newTitle")}
       </h1>
 
       <div style={{

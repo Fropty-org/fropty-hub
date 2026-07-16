@@ -4,15 +4,10 @@ import { useTransition, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import type { KnowledgeArticle, ArticleCategory } from "@/app/lib/types/knowledge";
+import { useT } from "@/app/lib/i18n/I18nProvider";
 
-const CATEGORIES: { id: ArticleCategory; label: string }[] = [
-  { id: "geral",       label: "Geral" },
-  { id: "suporte",     label: "Suporte" },
-  { id: "produto",     label: "Produto" },
-  { id: "financeiro",  label: "Financeiro" },
-  { id: "projetos",    label: "Projetos" },
-  { id: "seguranca",   label: "Segurança" },
-  { id: "integracao",  label: "Integração" },
+const CATEGORY_IDS: ArticleCategory[] = [
+  "geral", "suporte", "produto", "financeiro", "projetos", "seguranca", "integracao",
 ];
 
 const PRODUCTS = [
@@ -37,6 +32,7 @@ function slugify(text: string): string {
 }
 
 export function ArticleForm({ article, action }: Props) {
+  const t = useT();
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [error, setError]   = useState("");
@@ -88,7 +84,7 @@ export function ArticleForm({ article, action }: Props) {
       )}
 
       <div>
-        <label style={labelStyle}>Título *</label>
+        <label style={labelStyle}>{t("admin.kb.form.title")}</label>
         <input
           name="title"
           defaultValue={article?.title}
@@ -96,62 +92,62 @@ export function ArticleForm({ article, action }: Props) {
           required
           maxLength={300}
           style={inputStyle}
-          placeholder="Título do artigo"
+          placeholder={t("admin.kb.form.phTitle")}
         />
       </div>
 
       <div>
-        <label style={labelStyle}>Slug (URL)</label>
+        <label style={labelStyle}>{t("admin.kb.form.slug")}</label>
         <input
           name="slug"
           value={slug}
           onChange={e => setSlug(e.target.value)}
           style={inputStyle}
-          placeholder="como-usar-o-portal"
+          placeholder={t("admin.kb.form.phSlug")}
         />
         <p style={{ margin: "4px 0 0", fontSize: "0.75rem", color: "var(--text-faint)" }}>
-          Gerado automaticamente a partir do título. Altere apenas se necessário.
+          {t("admin.kb.form.slugHint")}
         </p>
       </div>
 
       <div>
-        <label style={labelStyle}>Resumo (excerpt)</label>
+        <label style={labelStyle}>{t("admin.kb.form.excerpt")}</label>
         <input
           name="excerpt"
           defaultValue={article?.excerpt}
           maxLength={500}
           style={inputStyle}
-          placeholder="Breve descrição exibida na listagem"
+          placeholder={t("admin.kb.form.phExcerpt")}
         />
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
         <div>
-          <label style={labelStyle}>Categoria *</label>
+          <label style={labelStyle}>{t("admin.kb.form.category")}</label>
           <select name="category" defaultValue={article?.category ?? "geral"} required style={inputStyle}>
-            {CATEGORIES.map(c => (
-              <option key={c.id} value={c.id}>{c.label}</option>
+            {CATEGORY_IDS.map(id => (
+              <option key={id} value={id}>{t(`admin.kb.category.${id}`)}</option>
             ))}
           </select>
         </div>
         <div>
-          <label style={labelStyle}>Produto associado</label>
+          <label style={labelStyle}>{t("admin.kb.form.product")}</label>
           <select name="product" defaultValue={article?.product ?? ""} style={inputStyle}>
-            <option value="">— Nenhum —</option>
+            <option value="">{t("admin.kb.form.productNone")}</option>
             {PRODUCTS.map(p => <option key={p} value={p}>{p}</option>)}
           </select>
         </div>
       </div>
 
       <div>
-        <label style={labelStyle}>Conteúdo (Markdown) *</label>
+        <label style={labelStyle}>{t("admin.kb.form.content")}</label>
         <textarea
           name="content"
           defaultValue={article?.content}
           required
           rows={20}
           style={{ ...inputStyle, resize: "vertical", lineHeight: 1.6 }}
-          placeholder="## Título&#10;&#10;Conteúdo em Markdown..."
+          placeholder={t("admin.kb.form.phContent")}
         />
       </div>
 
@@ -179,7 +175,7 @@ export function ArticleForm({ article, action }: Props) {
           }} />
         </button>
         <span style={{ fontSize: "0.88rem", fontWeight: 600, color: "var(--text)" }}>
-          {published ? "Publicado" : "Rascunho"}
+          {published ? t("admin.kb.form.published") : t("admin.kb.form.draft")}
         </span>
       </div>
 
@@ -196,7 +192,7 @@ export function ArticleForm({ article, action }: Props) {
           }}
         >
           {pending && <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }} />}
-          {article ? "Salvar alterações" : "Criar artigo"}
+          {article ? t("admin.kb.form.saveChanges") : t("admin.kb.form.createArticle")}
         </button>
         <button
           type="button"
@@ -208,7 +204,7 @@ export function ArticleForm({ article, action }: Props) {
             cursor: "pointer", fontFamily: "inherit",
           }}
         >
-          Cancelar
+          {t("admin.kb.form.cancel")}
         </button>
       </div>
     </form>

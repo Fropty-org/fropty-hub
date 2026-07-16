@@ -6,8 +6,10 @@ import { createRoadmapItem } from "@/app/actions/roadmap";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { useT } from "@/app/lib/i18n/I18nProvider";
 
 export default function NovoRoadmapItemPage() {
+  const t = useT();
   const router = useRouter();
   const [pending, start] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -23,7 +25,7 @@ export default function NovoRoadmapItemPage() {
       visibility:     fd.get("visibility") as string,
       target_version: (fd.get("target_version") as string).trim() || undefined,
     };
-    if (!data.title) { setError("Título obrigatório."); return; }
+    if (!data.title) { setError(t("admin.roadmap.form.titleRequired")); return; }
     setError(null);
     start(async () => {
       const result = await createRoadmapItem(data);
@@ -51,11 +53,11 @@ export default function NovoRoadmapItemPage() {
         display: "inline-flex", alignItems: "center", gap: 6,
         fontSize: "13px", color: "var(--text-faint)", textDecoration: "none", marginBottom: 24,
       }}>
-        <ArrowLeft size={14} /> Voltar ao Roadmap
+        <ArrowLeft size={14} /> {t("admin.roadmap.form.back")}
       </Link>
 
       <h1 style={{ fontSize: "1.5rem", fontWeight: 800, margin: "0 0 28px", color: "var(--text)" }}>
-        Novo Item do Roadmap
+        {t("admin.roadmap.form.newTitle")}
       </h1>
 
       <form onSubmit={handleSubmit} style={{
@@ -64,52 +66,45 @@ export default function NovoRoadmapItemPage() {
         display: "flex", flexDirection: "column", gap: 20,
       }}>
         <div>
-          <label style={labelStyle}>Título *</label>
-          <input name="title" required maxLength={200} placeholder="Ex.: Notificações por WhatsApp" style={inputStyle} />
+          <label style={labelStyle}>{t("admin.roadmap.form.title")}</label>
+          <input name="title" required maxLength={200} placeholder={t("admin.roadmap.form.phTitle")} style={inputStyle} />
         </div>
 
         <div>
-          <label style={labelStyle}>Descrição</label>
-          <textarea name="description" maxLength={1000} rows={3} placeholder="Descreva a feature em detalhes..." style={{ ...inputStyle, resize: "vertical" }} />
+          <label style={labelStyle}>{t("admin.roadmap.form.description")}</label>
+          <textarea name="description" maxLength={1000} rows={3} placeholder={t("admin.roadmap.form.phDescription")} style={{ ...inputStyle, resize: "vertical" }} />
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
           <div>
-            <label style={labelStyle}>Status</label>
+            <label style={labelStyle}>{t("admin.roadmap.form.status")}</label>
             <select name="status" defaultValue="planejado" style={inputStyle}>
-              <option value="ideia">Ideia</option>
-              <option value="planejado">Planejado</option>
-              <option value="em_desenvolvimento">Em Desenvolvimento</option>
-              <option value="lancado">Lançado</option>
-              <option value="descartado">Descartado</option>
+              {["ideia", "planejado", "em_desenvolvimento", "lancado", "descartado"].map((k) => (
+                <option key={k} value={k}>{t(`admin.roadmap.status.${k}`)}</option>
+              ))}
             </select>
           </div>
           <div>
-            <label style={labelStyle}>Categoria</label>
+            <label style={labelStyle}>{t("admin.roadmap.form.category")}</label>
             <select name="category" defaultValue="produto" style={inputStyle}>
-              <option value="produto">Produto</option>
-              <option value="suporte">Suporte</option>
-              <option value="financeiro">Financeiro</option>
-              <option value="integracao">Integração</option>
-              <option value="seguranca">Segurança</option>
-              <option value="ux">UX</option>
-              <option value="performance">Performance</option>
-              <option value="outro">Outro</option>
+              {["produto", "suporte", "financeiro", "integracao", "seguranca", "ux", "performance", "outro"].map((k) => (
+                <option key={k} value={k}>{t(`admin.roadmap.category.${k}`)}</option>
+              ))}
             </select>
           </div>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
           <div>
-            <label style={labelStyle}>Visibilidade</label>
+            <label style={labelStyle}>{t("admin.roadmap.form.visibility")}</label>
             <select name="visibility" defaultValue="publico" style={inputStyle}>
-              <option value="publico">Público</option>
-              <option value="privado">Privado</option>
+              <option value="publico">{t("admin.roadmap.form.public")}</option>
+              <option value="privado">{t("admin.roadmap.form.private")}</option>
             </select>
           </div>
           <div>
-            <label style={labelStyle}>Versão alvo</label>
-            <input name="target_version" maxLength={50} placeholder="Ex.: v2.1" style={inputStyle} />
+            <label style={labelStyle}>{t("admin.roadmap.form.targetVersion")}</label>
+            <input name="target_version" maxLength={50} placeholder={t("admin.roadmap.form.phVersion")} style={inputStyle} />
           </div>
         </div>
 
@@ -127,7 +122,7 @@ export default function NovoRoadmapItemPage() {
             opacity: pending ? 0.7 : 1, fontFamily: "inherit",
           }}
         >
-          {pending ? "Salvando..." : "Criar Item"}
+          {pending ? t("admin.roadmap.form.saving") : t("admin.roadmap.form.create")}
         </button>
       </form>
     </div>

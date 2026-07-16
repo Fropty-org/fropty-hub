@@ -634,6 +634,24 @@
         "ux": "UX",
         "performance": "Performance",
         "outro": "Other"
+      },
+      "form": {
+        "back": "Back to Roadmap",
+        "newTitle": "New Roadmap Item",
+        "title": "Title *",
+        "phTitle": "E.g.: WhatsApp notifications",
+        "description": "Description",
+        "phDescription": "Describe the feature in detail...",
+        "status": "Status",
+        "category": "Category",
+        "visibility": "Visibility",
+        "public": "Public",
+        "private": "Private",
+        "targetVersion": "Target version",
+        "phVersion": "E.g.: v2.1",
+        "titleRequired": "Title is required.",
+        "saving": "Saving...",
+        "create": "Create Item"
       }
     },
     "feedback": {
@@ -662,6 +680,25 @@
         "aprovado": "Approved",
         "descartado": "Discarded",
         "implementado": "Implemented"
+      },
+      "detail": {
+        "back": "Back",
+        "loading": "Loading...",
+        "convertPrompt": "Good idea? Turn this feedback into a public roadmap item.",
+        "addedToRoadmap": "Added to roadmap",
+        "converting": "Converting…",
+        "convert": "Convert to roadmap",
+        "respond": "Respond",
+        "response": "Response",
+        "phResponse": "Write a response for the client...",
+        "status": "Status",
+        "impact": "Impact",
+        "impactUndefined": "— Not set —",
+        "impactHigh": "High",
+        "impactMedium": "Medium",
+        "impactLow": "Low",
+        "saving": "Saving...",
+        "saveResponse": "Save Response"
       }
     },
     "kb": {
@@ -694,7 +731,29 @@
         "integracao": "Integration"
       },
       "statePublished": "Published",
-      "stateDraft": "Draft"
+      "stateDraft": "Draft",
+      "form": {
+        "back": "Knowledge Base",
+        "newTitle": "New Article",
+        "editTitle": "Edit Article",
+        "title": "Title *",
+        "phTitle": "Article title",
+        "slug": "Slug (URL)",
+        "phSlug": "how-to-use-the-portal",
+        "slugHint": "Generated automatically from the title. Change only if needed.",
+        "excerpt": "Excerpt",
+        "phExcerpt": "Short description shown in the listing",
+        "category": "Category *",
+        "product": "Associated product",
+        "productNone": "— None —",
+        "content": "Content (Markdown) *",
+        "phContent": "## Title\n\nContent in Markdown...",
+        "published": "Published",
+        "draft": "Draft",
+        "saveChanges": "Save changes",
+        "createArticle": "Create article",
+        "cancel": "Cancel"
+      }
     },
     "projects": {
       "title": "Projects",
@@ -727,6 +786,43 @@
         "alta": "High",
         "media": "Medium",
         "baixa": "Low"
+      },
+      "form": {
+        "back": "Projects",
+        "newTitle": "New Project",
+        "client": "Client *",
+        "selectClient": "Select client...",
+        "title": "Title *",
+        "phTitle": "E.g.: Management app for a clinic",
+        "description": "Description",
+        "phDescription": "Describe the project scope...",
+        "initialStatus": "Initial status",
+        "priority": "Priority",
+        "startDate": "Start date",
+        "dueDate": "Due date",
+        "estHours": "Estimated hours",
+        "estCost": "Estimated cost (R$)",
+        "internalNotes": "Internal notes",
+        "phNotes": "Notes visible to the team only...",
+        "cancel": "Cancel",
+        "create": "Create Project"
+      },
+      "detail": {
+        "back": "Projects",
+        "updates": "Updates",
+        "phUpdate": "Write an update for the client...",
+        "addUpdate": "Add Update",
+        "noUpdates": "No updates yet.",
+        "start": "Start",
+        "due": "Due",
+        "estHoursShort": "Est. hours",
+        "estCostShort": "Est. cost",
+        "updateStatus": "Update status",
+        "newStatus": "New status",
+        "noteOptional": "Note (optional)",
+        "phNote": "Explain the change...",
+        "save": "Save",
+        "admin": "Admin"
       }
     },
     "contracts": {
@@ -758,6 +854,38 @@
         "retainer": "Retainer",
         "manutencao": "Maintenance",
         "licenca": "License"
+      },
+      "form": {
+        "back": "Contracts",
+        "newTitle": "New Contract",
+        "client": "Client *",
+        "selectClient": "Select client...",
+        "linkedProject": "Linked project (optional)",
+        "none": "None",
+        "title": "Title *",
+        "phTitle": "E.g.: Development contract — v1",
+        "description": "Description",
+        "phDescription": "Describe the object of the contract...",
+        "status": "Status",
+        "type": "Type",
+        "startDate": "Start date",
+        "endDate": "End date",
+        "endBeforeStart": "The end date cannot be before the start date.",
+        "value": "Value (R$)",
+        "fileUrl": "File URL",
+        "cancel": "Cancel",
+        "create": "Create Contract"
+      },
+      "detail": {
+        "back": "Contracts",
+        "start": "Start",
+        "end": "End",
+        "value": "Value",
+        "signed": "Signed",
+        "linkedProject": "Linked project:",
+        "viewFile": "View file",
+        "updateStatus": "Update status",
+        "save": "Save"
       }
     }
   },

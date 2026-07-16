@@ -6,10 +6,12 @@ import { createServiceClient } from "@/app/lib/supabase/service";
 import { createContract } from "@/app/actions/contracts";
 import { ContractDateFields } from "@/app/components/admin/ContractDateFields";
 import { CONTRACT_STATUS_MAP, CONTRACT_TYPE_MAP } from "@/app/lib/constants/projects";
+import { getServerI18n } from "@/app/lib/i18n/server";
 
 export const metadata: Metadata = { title: "Novo Contrato" };
 
 export default async function NovoContratoPage() {
+  const { t } = await getServerI18n();
   const supabase = createServiceClient();
 
   const [{ data: clients }, { data: projects }] = await Promise.all([
@@ -41,20 +43,20 @@ export default async function NovoContratoPage() {
         href="/admin/contratos"
         style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "13px", color: "var(--text-muted)", textDecoration: "none", marginBottom: 20 }}
       >
-        <ArrowLeft size={14} /> Contratos
+        <ArrowLeft size={14} /> {t("admin.contracts.form.back")}
       </Link>
 
       <h1 style={{ margin: "0 0 24px", fontSize: "1.3rem", fontWeight: 800, color: "var(--text)" }}>
-        Novo Contrato
+        {t("admin.contracts.form.newTitle")}
       </h1>
 
       <form action={handleCreate}>
         <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 16, padding: "24px", display: "flex", flexDirection: "column", gap: 18 }}>
 
           <div>
-            <label style={labelStyle}>Cliente *</label>
+            <label style={labelStyle}>{t("admin.contracts.form.client")}</label>
             <select name="client_id" required style={inputStyle}>
-              <option value="">Selecionar cliente...</option>
+              <option value="">{t("admin.contracts.form.selectClient")}</option>
               {(clients ?? []).map((c) => (
                 <option key={c.id} value={c.id}>{c.name ?? c.id}</option>
               ))}
@@ -62,9 +64,9 @@ export default async function NovoContratoPage() {
           </div>
 
           <div>
-            <label style={labelStyle}>Projeto vinculado (opcional)</label>
+            <label style={labelStyle}>{t("admin.contracts.form.linkedProject")}</label>
             <select name="project_id" style={inputStyle}>
-              <option value="">Nenhum</option>
+              <option value="">{t("admin.contracts.form.none")}</option>
               {(projects ?? []).map((p) => (
                 <option key={p.id} value={p.id}>{p.title}</option>
               ))}
@@ -72,29 +74,29 @@ export default async function NovoContratoPage() {
           </div>
 
           <div>
-            <label style={labelStyle}>Título *</label>
-            <input name="title" required maxLength={200} style={inputStyle} placeholder="Ex: Contrato de desenvolvimento — v1" />
+            <label style={labelStyle}>{t("admin.contracts.form.title")}</label>
+            <input name="title" required maxLength={200} style={inputStyle} placeholder={t("admin.contracts.form.phTitle")} />
           </div>
 
           <div>
-            <label style={labelStyle}>Descrição</label>
-            <textarea name="description" rows={3} style={{ ...inputStyle, resize: "vertical" }} placeholder="Descreva o objeto do contrato..." />
+            <label style={labelStyle}>{t("admin.contracts.form.description")}</label>
+            <textarea name="description" rows={3} style={{ ...inputStyle, resize: "vertical" }} placeholder={t("admin.contracts.form.phDescription")} />
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
             <div>
-              <label style={labelStyle}>Status</label>
+              <label style={labelStyle}>{t("admin.contracts.form.status")}</label>
               <select name="status" style={inputStyle} defaultValue="rascunho">
-                {Object.entries(CONTRACT_STATUS_MAP).map(([k, v]) => (
-                  <option key={k} value={k}>{v.label}</option>
+                {Object.keys(CONTRACT_STATUS_MAP).map((k) => (
+                  <option key={k} value={k}>{t(`admin.contracts.status.${k}`)}</option>
                 ))}
               </select>
             </div>
             <div>
-              <label style={labelStyle}>Tipo</label>
+              <label style={labelStyle}>{t("admin.contracts.form.type")}</label>
               <select name="type" style={inputStyle} defaultValue="projeto">
-                {Object.entries(CONTRACT_TYPE_MAP).map(([k, v]) => (
-                  <option key={k} value={k}>{v}</option>
+                {Object.keys(CONTRACT_TYPE_MAP).map((k) => (
+                  <option key={k} value={k}>{t(`admin.contracts.type.${k}`)}</option>
                 ))}
               </select>
             </div>
@@ -104,11 +106,11 @@ export default async function NovoContratoPage() {
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
             <div>
-              <label style={labelStyle}>Valor (R$)</label>
+              <label style={labelStyle}>{t("admin.contracts.form.value")}</label>
               <input name="value" type="number" min="0" step="0.01" style={inputStyle} placeholder="0,00" />
             </div>
             <div>
-              <label style={labelStyle}>URL do arquivo</label>
+              <label style={labelStyle}>{t("admin.contracts.form.fileUrl")}</label>
               <input name="file_url" type="url" style={inputStyle} placeholder="https://..." />
             </div>
           </div>
@@ -122,7 +124,7 @@ export default async function NovoContratoPage() {
                 fontSize: "13px", fontWeight: 600, color: "var(--text-muted)", textDecoration: "none",
               }}
             >
-              Cancelar
+              {t("admin.contracts.form.cancel")}
             </Link>
             <button
               type="submit"
@@ -132,7 +134,7 @@ export default async function NovoContratoPage() {
                 border: "none", cursor: "pointer", fontFamily: "inherit",
               }}
             >
-              Criar Contrato
+              {t("admin.contracts.form.create")}
             </button>
           </div>
         </div>

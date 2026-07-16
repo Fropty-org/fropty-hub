@@ -5,17 +5,13 @@ import { useParams, useRouter } from "next/navigation";
 import { getAllFeedbacksAdmin, respondToFeedback, convertFeedbackToRoadmap } from "@/app/actions/feedback";
 import Link from "next/link";
 import { ArrowLeft, Rocket, Check } from "lucide-react";
-import type { Feedback, FeedbackType, FeedbackStatus } from "@/app/lib/types/feedback";
+import type { Feedback, FeedbackStatus } from "@/app/lib/types/feedback";
+import { useT } from "@/app/lib/i18n/I18nProvider";
 
-const TYPE_LABEL: Record<FeedbackType, string> = {
-  sugestao: "Sugestão", bug: "Bug", elogio: "Elogio", critica: "Crítica", outro: "Outro",
-};
-
-const STATUS_LABEL: Record<FeedbackStatus, string> = {
-  recebido: "Recebido", em_analise: "Em Análise", aprovado: "Aprovado", descartado: "Descartado", implementado: "Implementado",
-};
+const STATUS_KEYS: FeedbackStatus[] = ["recebido", "em_analise", "aprovado", "descartado", "implementado"];
 
 export default function AdminFeedbackDetailPage() {
+  const t = useT();
   const { feedbackId } = useParams<{ feedbackId: string }>();
   const router = useRouter();
   const [feedback, setFeedback]     = useState<Feedback | null>(null);
@@ -77,7 +73,7 @@ export default function AdminFeedbackDetailPage() {
   if (!feedback) {
     return (
       <div style={{ padding: "40px 32px", color: "var(--text-faint)", fontSize: "14px" }}>
-        Carregando...
+        {t("admin.feedback.detail.loading")}
       </div>
     );
   }
@@ -88,14 +84,14 @@ export default function AdminFeedbackDetailPage() {
         display: "inline-flex", alignItems: "center", gap: 6,
         fontSize: "13px", color: "var(--text-faint)", textDecoration: "none", marginBottom: 24,
       }}>
-        <ArrowLeft size={14} /> Voltar
+        <ArrowLeft size={14} /> {t("admin.feedback.detail.back")}
       </Link>
 
       <h1 style={{ fontSize: "1.5rem", fontWeight: 800, margin: "0 0 6px", color: "var(--text)" }}>
         {feedback.title}
       </h1>
       <p style={{ margin: "0 0 24px", fontSize: "13px", color: "var(--text-faint)" }}>
-        {TYPE_LABEL[feedback.type as FeedbackType] ?? feedback.type}
+        {t(`admin.feedback.type.${feedback.type}`)}
         {feedback.product ? ` · ${feedback.product}` : ""}
         {" · "}{feedback.client_name ?? "—"}
         {" · "}{new Date(feedback.created_at).toLocaleDateString("pt-BR")}
@@ -113,11 +109,11 @@ export default function AdminFeedbackDetailPage() {
       {/* Converter em roadmap */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", marginBottom: 24, padding: "14px 18px", background: "var(--surface-2)", border: "1px solid var(--border)", borderRadius: 12 }}>
         <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>
-          Boa ideia? Transforme este feedback em um item público de roadmap.
+          {t("admin.feedback.detail.convertPrompt")}
         </span>
         {converted ? (
           <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "13px", fontWeight: 700, color: "var(--c-success)" }}>
-            <Check size={14} /> Adicionado ao roadmap
+            <Check size={14} /> {t("admin.feedback.detail.addedToRoadmap")}
           </span>
         ) : (
           <button
@@ -127,7 +123,7 @@ export default function AdminFeedbackDetailPage() {
             className="hub-btn hub-btn-ghost"
             style={{ whiteSpace: "nowrap", opacity: converting ? 0.7 : 1 }}
           >
-            <Rocket size={14} /> {converting ? "Convertendo…" : "Converter em roadmap"}
+            <Rocket size={14} /> {converting ? t("admin.feedback.detail.converting") : t("admin.feedback.detail.convert")}
           </button>
         )}
       </div>
@@ -138,34 +134,34 @@ export default function AdminFeedbackDetailPage() {
         display: "flex", flexDirection: "column", gap: 18,
       }}>
         <h2 style={{ margin: 0, fontSize: "1rem", fontWeight: 700, color: "var(--text)" }}>
-          Responder
+          {t("admin.feedback.detail.respond")}
         </h2>
 
         <div>
-          <label style={labelStyle}>Resposta</label>
+          <label style={labelStyle}>{t("admin.feedback.detail.response")}</label>
           <textarea
             value={response} onChange={(e) => setResponse(e.target.value)}
-            rows={4} maxLength={5000} placeholder="Escreva uma resposta para o cliente..."
+            rows={4} maxLength={5000} placeholder={t("admin.feedback.detail.phResponse")}
             style={{ ...inputStyle, resize: "vertical" }}
           />
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
           <div>
-            <label style={labelStyle}>Status</label>
+            <label style={labelStyle}>{t("admin.feedback.detail.status")}</label>
             <select value={status} onChange={(e) => setStatus(e.target.value)} style={inputStyle}>
-              {(Object.keys(STATUS_LABEL) as FeedbackStatus[]).map((s) => (
-                <option key={s} value={s}>{STATUS_LABEL[s]}</option>
+              {STATUS_KEYS.map((s) => (
+                <option key={s} value={s}>{t(`admin.feedback.status.${s}`)}</option>
               ))}
             </select>
           </div>
           <div>
-            <label style={labelStyle}>Impacto</label>
+            <label style={labelStyle}>{t("admin.feedback.detail.impact")}</label>
             <select value={impact} onChange={(e) => setImpact(e.target.value)} style={inputStyle}>
-              <option value="">— Não definido —</option>
-              <option value="alto">Alto</option>
-              <option value="medio">Médio</option>
-              <option value="baixo">Baixo</option>
+              <option value="">{t("admin.feedback.detail.impactUndefined")}</option>
+              <option value="alto">{t("admin.feedback.detail.impactHigh")}</option>
+              <option value="medio">{t("admin.feedback.detail.impactMedium")}</option>
+              <option value="baixo">{t("admin.feedback.detail.impactLow")}</option>
             </select>
           </div>
         </div>
@@ -185,7 +181,7 @@ export default function AdminFeedbackDetailPage() {
             opacity: pending ? 0.7 : 1, fontFamily: "inherit",
           }}
         >
-          {pending ? "Salvando..." : "Salvar Resposta"}
+          {pending ? t("admin.feedback.detail.saving") : t("admin.feedback.detail.saveResponse")}
         </button>
       </form>
     </div>

@@ -4,7 +4,8 @@ import Link from "next/link";
 import { ArrowLeft, Calendar, DollarSign, Clock, User } from "lucide-react";
 import { getProject, updateProjectStatus, addProjectUpdate } from "@/app/actions/projects";
 import { PROJECT_STATUSES } from "@/app/lib/constants/projects";
-import { StatusBadge } from "@/app/components/ui/StatusBadge";
+import { AdminStatusBadge } from "@/app/components/admin/AdminStatusBadge";
+import { getServerI18n } from "@/app/lib/i18n/server";
 import type { ProjectStatus } from "@/app/lib/types/projects";
 
 export const metadata: Metadata = { title: "Admin — Projeto" };
@@ -25,6 +26,7 @@ function formatCurrency(v?: number) {
 
 export default async function AdminProjetoDetailPage({ params }: { params: Promise<{ projectId: string }> }) {
   const { projectId } = await params;
+  const { t } = await getServerI18n();
   const { project, updates } = await getProject(projectId);
 
   if (!project) notFound();
@@ -58,7 +60,7 @@ export default async function AdminProjetoDetailPage({ params }: { params: Promi
         href="/admin/projetos"
         style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "13px", color: "var(--text-muted)", textDecoration: "none", marginBottom: 20 }}
       >
-        <ArrowLeft size={14} /> Projetos
+        <ArrowLeft size={14} /> {t("admin.projects.detail.back")}
       </Link>
 
       {/* Header */}
@@ -79,8 +81,8 @@ export default async function AdminProjetoDetailPage({ params }: { params: Promi
               {project.title}
             </h1>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-              <StatusBadge kind="project" status={project.status} size="sm" />
-              <StatusBadge kind="project-priority" status={project.priority} size="sm" />
+              <AdminStatusBadge kind="project" status={project.status} size="sm" />
+              <AdminStatusBadge kind="project-priority" status={project.priority} size="sm" />
               <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: "12px", color: "var(--text-faint)" }}>
                 <User size={11} /> {project.client_name ?? "—"}
               </span>
@@ -90,10 +92,10 @@ export default async function AdminProjetoDetailPage({ params }: { params: Promi
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 12 }}>
           {[
-            { Icon: Calendar,   label: "Início",     value: formatDate(project.start_date) },
-            { Icon: Calendar,   label: "Entrega",    value: formatDate(project.due_date) },
-            { Icon: Clock,      label: "Horas est.", value: project.estimated_hours ? `${project.estimated_hours}h` : "—" },
-            { Icon: DollarSign, label: "Custo est.", value: formatCurrency(project.estimated_cost) },
+            { Icon: Calendar,   label: t("admin.projects.detail.start"),        value: formatDate(project.start_date) },
+            { Icon: Calendar,   label: t("admin.projects.detail.due"),          value: formatDate(project.due_date) },
+            { Icon: Clock,      label: t("admin.projects.detail.estHoursShort"), value: project.estimated_hours ? `${project.estimated_hours}h` : "—" },
+            { Icon: DollarSign, label: t("admin.projects.detail.estCostShort"),  value: formatCurrency(project.estimated_cost) },
           ].map(({ Icon, label, value }) => (
             <div key={label} style={{ padding: "10px 12px", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 10 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 3 }}>
@@ -110,7 +112,7 @@ export default async function AdminProjetoDetailPage({ params }: { params: Promi
         {/* Timeline de updates */}
         <div>
           <h2 style={{ margin: "0 0 16px", fontSize: "1rem", fontWeight: 700, color: "var(--text)" }}>
-            Atualizações ({updates.length})
+            {t("admin.projects.detail.updates")} ({updates.length})
           </h2>
 
           {/* Adicionar update */}
@@ -119,7 +121,7 @@ export default async function AdminProjetoDetailPage({ params }: { params: Promi
               name="content"
               rows={3}
               required
-              placeholder="Escreva uma atualização para o cliente..."
+              placeholder={t("admin.projects.detail.phUpdate")}
               style={{ ...inputStyle, resize: "vertical", marginBottom: 8 }}
             />
             <button
@@ -130,13 +132,13 @@ export default async function AdminProjetoDetailPage({ params }: { params: Promi
                 border: "none", cursor: "pointer", fontFamily: "inherit",
               }}
             >
-              Adicionar Atualização
+              {t("admin.projects.detail.addUpdate")}
             </button>
           </form>
 
           {updates.length === 0 ? (
             <div style={{ padding: "32px", textAlign: "center", background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 12 }}>
-              <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>Nenhuma atualização ainda.</p>
+              <p style={{ margin: 0, fontSize: "13px", color: "var(--text-faint)" }}>{t("admin.projects.detail.noUpdates")}</p>
             </div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -145,17 +147,17 @@ export default async function AdminProjetoDetailPage({ params }: { params: Promi
                   {u.status_from && u.status_to && (
                     <div style={{ display: "flex", gap: 6, alignItems: "center", marginBottom: 8, flexWrap: "wrap" }}>
                       <span style={{ fontSize: "11px", fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: `${(PROJECT_STATUSES[u.status_from as ProjectStatus]?.color ?? "var(--text-faint)")}18`, color: PROJECT_STATUSES[u.status_from as ProjectStatus]?.color ?? "var(--text-faint)" }}>
-                        {PROJECT_STATUSES[u.status_from as ProjectStatus]?.label ?? u.status_from}
+                        {PROJECT_STATUSES[u.status_from as ProjectStatus] ? t(`admin.projects.status.${u.status_from}`) : u.status_from}
                       </span>
                       <span style={{ fontSize: "11px", color: "var(--text-faint)" }}>→</span>
                       <span style={{ fontSize: "11px", fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: `${(PROJECT_STATUSES[u.status_to as ProjectStatus]?.color ?? "var(--text-faint)")}18`, color: PROJECT_STATUSES[u.status_to as ProjectStatus]?.color ?? "var(--text-faint)" }}>
-                        {PROJECT_STATUSES[u.status_to as ProjectStatus]?.label ?? u.status_to}
+                        {PROJECT_STATUSES[u.status_to as ProjectStatus] ? t(`admin.projects.status.${u.status_to}`) : u.status_to}
                       </span>
                     </div>
                   )}
                   <p style={{ margin: "0 0 6px", fontSize: "13px", color: "var(--text)", lineHeight: 1.6 }}>{u.content}</p>
                   <div style={{ display: "flex", gap: 10, fontSize: "11px", color: "var(--text-faint)" }}>
-                    <span>{u.author_name ?? "Admin"}</span>
+                    <span>{u.author_name ?? t("admin.projects.detail.admin")}</span>
                     <span>{formatDateTime(u.created_at)}</span>
                   </div>
                 </div>
@@ -167,24 +169,24 @@ export default async function AdminProjetoDetailPage({ params }: { params: Promi
         {/* Atualizar status */}
         <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 14, padding: "20px" }}>
           <h3 style={{ margin: "0 0 16px", fontSize: "0.9rem", fontWeight: 700, color: "var(--text)" }}>
-            Atualizar status
+            {t("admin.projects.detail.updateStatus")}
           </h3>
           <form action={handleStatusUpdate} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <div>
               <label style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "var(--text-muted)", marginBottom: 6 }}>
-                Novo status
+                {t("admin.projects.detail.newStatus")}
               </label>
               <select name="status" defaultValue={project.status} style={inputStyle}>
-                {Object.entries(PROJECT_STATUSES).map(([k, v]) => (
-                  <option key={k} value={k}>{v.label}</option>
+                {Object.keys(PROJECT_STATUSES).map((k) => (
+                  <option key={k} value={k}>{t(`admin.projects.status.${k}`)}</option>
                 ))}
               </select>
             </div>
             <div>
               <label style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "var(--text-muted)", marginBottom: 6 }}>
-                Nota (opcional)
+                {t("admin.projects.detail.noteOptional")}
               </label>
-              <textarea name="note" rows={3} placeholder="Explique a mudança..." style={{ ...inputStyle, resize: "vertical" }} />
+              <textarea name="note" rows={3} placeholder={t("admin.projects.detail.phNote")} style={{ ...inputStyle, resize: "vertical" }} />
             </div>
             <button
               type="submit"
@@ -194,7 +196,7 @@ export default async function AdminProjetoDetailPage({ params }: { params: Promi
                 border: "none", cursor: "pointer", fontFamily: "inherit",
               }}
             >
-              Salvar
+              {t("admin.projects.detail.save")}
             </button>
           </form>
         </div>

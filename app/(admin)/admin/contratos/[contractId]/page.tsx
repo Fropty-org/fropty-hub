@@ -4,7 +4,8 @@ import Link from "next/link";
 import { ArrowLeft, Calendar, DollarSign, Download, FolderKanban, User } from "lucide-react";
 import { getContract, updateContractStatus } from "@/app/actions/contracts";
 import { CONTRACT_STATUS_MAP, CONTRACT_TYPE_MAP } from "@/app/lib/constants/projects";
-import { StatusBadge } from "@/app/components/ui/StatusBadge";
+import { AdminStatusBadge } from "@/app/components/admin/AdminStatusBadge";
+import { getServerI18n } from "@/app/lib/i18n/server";
 import type { ContractStatus } from "@/app/lib/types/projects";
 
 export const metadata: Metadata = { title: "Admin — Contrato" };
@@ -21,12 +22,13 @@ function formatCurrency(v?: number | null) {
 
 export default async function AdminContratoDetailPage({ params }: { params: Promise<{ contractId: string }> }) {
   const { contractId } = await params;
+  const { t } = await getServerI18n();
   const contract = await getContract(contractId);
 
   if (!contract) notFound();
 
   const st = CONTRACT_STATUS_MAP[contract.status] ?? { label: contract.status, color: "var(--text-faint)" };
-  const typeLabel = CONTRACT_TYPE_MAP[contract.type] ?? contract.type;
+  const typeLabel = CONTRACT_TYPE_MAP[contract.type] ? t(`admin.contracts.type.${contract.type}`) : contract.type;
 
   async function handleStatusUpdate(formData: FormData) {
     "use server";
@@ -47,7 +49,7 @@ export default async function AdminContratoDetailPage({ params }: { params: Prom
         href="/admin/contratos"
         style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "13px", color: "var(--text-muted)", textDecoration: "none", marginBottom: 20 }}
       >
-        <ArrowLeft size={14} /> Contratos
+        <ArrowLeft size={14} /> {t("admin.contracts.detail.back")}
       </Link>
 
       {/* Header */}
@@ -65,7 +67,7 @@ export default async function AdminContratoDetailPage({ params }: { params: Prom
               {contract.title}
             </h1>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-              <StatusBadge kind="contract" status={contract.status} size="sm" />
+              <AdminStatusBadge kind="contract" status={contract.status} size="sm" />
               <span style={{ fontSize: "11px", fontWeight: 600, padding: "3px 10px", borderRadius: 99, background: "var(--surface-2)", color: "var(--text-faint)" }}>{typeLabel}</span>
               <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: "12px", color: "var(--text-faint)" }}>
                 <User size={11} /> {contract.client_name ?? "—"}
@@ -82,10 +84,10 @@ export default async function AdminContratoDetailPage({ params }: { params: Prom
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 12 }}>
           {[
-            { Icon: Calendar,   label: "Início",  value: formatDate(contract.start_date) },
-            { Icon: Calendar,   label: "Término", value: formatDate(contract.end_date) },
-            { Icon: DollarSign, label: "Valor",   value: formatCurrency(contract.value) },
-            { Icon: Calendar,   label: "Assinado", value: formatDate(contract.signed_at) },
+            { Icon: Calendar,   label: t("admin.contracts.detail.start"),  value: formatDate(contract.start_date) },
+            { Icon: Calendar,   label: t("admin.contracts.detail.end"),    value: formatDate(contract.end_date) },
+            { Icon: DollarSign, label: t("admin.contracts.detail.value"),  value: formatCurrency(contract.value) },
+            { Icon: Calendar,   label: t("admin.contracts.detail.signed"), value: formatDate(contract.signed_at) },
           ].map(({ Icon, label, value }) => (
             <div key={label} style={{ padding: "10px 12px", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 10 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 3 }}>
@@ -103,7 +105,7 @@ export default async function AdminContratoDetailPage({ params }: { params: Prom
             padding: "10px 14px", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 10,
           }}>
             <FolderKanban size={14} style={{ color: "var(--text-faint)" }} />
-            <span style={{ fontSize: "12px", color: "var(--text-faint)" }}>Projeto vinculado:</span>
+            <span style={{ fontSize: "12px", color: "var(--text-faint)" }}>{t("admin.contracts.detail.linkedProject")}</span>
             <span style={{ fontSize: "12px", fontWeight: 700, color: "var(--text)" }}>{contract.project_title}</span>
           </div>
         )}
@@ -119,7 +121,7 @@ export default async function AdminContratoDetailPage({ params }: { params: Prom
               fontWeight: 700, fontSize: "13px", borderRadius: 9, textDecoration: "none",
             }}
           >
-            <Download size={13} /> Ver arquivo
+            <Download size={13} /> {t("admin.contracts.detail.viewFile")}
           </a>
         )}
       </div>
@@ -127,12 +129,12 @@ export default async function AdminContratoDetailPage({ params }: { params: Prom
       {/* Atualizar status */}
       <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 14, padding: "20px", maxWidth: 340 }}>
         <h3 style={{ margin: "0 0 16px", fontSize: "0.9rem", fontWeight: 700, color: "var(--text)" }}>
-          Atualizar status
+          {t("admin.contracts.detail.updateStatus")}
         </h3>
         <form action={handleStatusUpdate} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           <select name="status" defaultValue={contract.status} style={inputStyle}>
-            {Object.entries(CONTRACT_STATUS_MAP).map(([k, v]) => (
-              <option key={k} value={k}>{v.label}</option>
+            {Object.keys(CONTRACT_STATUS_MAP).map((k) => (
+              <option key={k} value={k}>{t(`admin.contracts.status.${k}`)}</option>
             ))}
           </select>
           <button
@@ -143,7 +145,7 @@ export default async function AdminContratoDetailPage({ params }: { params: Prom
               border: "none", cursor: "pointer", fontFamily: "inherit",
             }}
           >
-            Salvar
+            {t("admin.contracts.detail.save")}
           </button>
         </form>
       </div>

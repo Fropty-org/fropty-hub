@@ -634,6 +634,24 @@
         "ux": "UX",
         "performance": "Rendimiento",
         "outro": "Otro"
+      },
+      "form": {
+        "back": "Volver al Roadmap",
+        "newTitle": "Nuevo Ítem del Roadmap",
+        "title": "Título *",
+        "phTitle": "Ej.: Notificaciones por WhatsApp",
+        "description": "Descripción",
+        "phDescription": "Describe la funcionalidad en detalle...",
+        "status": "Estado",
+        "category": "Categoría",
+        "visibility": "Visibilidad",
+        "public": "Público",
+        "private": "Privado",
+        "targetVersion": "Versión objetivo",
+        "phVersion": "Ej.: v2.1",
+        "titleRequired": "El título es obligatorio.",
+        "saving": "Guardando...",
+        "create": "Crear Ítem"
       }
     },
     "feedback": {
@@ -662,6 +680,25 @@
         "aprovado": "Aprobado",
         "descartado": "Descartado",
         "implementado": "Implementado"
+      },
+      "detail": {
+        "back": "Volver",
+        "loading": "Cargando...",
+        "convertPrompt": "¿Buena idea? Convierte este feedback en un ítem público del roadmap.",
+        "addedToRoadmap": "Agregado al roadmap",
+        "converting": "Convirtiendo…",
+        "convert": "Convertir en roadmap",
+        "respond": "Responder",
+        "response": "Respuesta",
+        "phResponse": "Escribe una respuesta para el cliente...",
+        "status": "Estado",
+        "impact": "Impacto",
+        "impactUndefined": "— No definido —",
+        "impactHigh": "Alto",
+        "impactMedium": "Medio",
+        "impactLow": "Bajo",
+        "saving": "Guardando...",
+        "saveResponse": "Guardar Respuesta"
       }
     },
     "kb": {
@@ -694,7 +731,29 @@
         "integracao": "Integración"
       },
       "statePublished": "Publicado",
-      "stateDraft": "Borrador"
+      "stateDraft": "Borrador",
+      "form": {
+        "back": "Base de Conocimiento",
+        "newTitle": "Nuevo Artículo",
+        "editTitle": "Editar Artículo",
+        "title": "Título *",
+        "phTitle": "Título del artículo",
+        "slug": "Slug (URL)",
+        "phSlug": "como-usar-el-portal",
+        "slugHint": "Generado automáticamente a partir del título. Cámbialo solo si es necesario.",
+        "excerpt": "Resumen (excerpt)",
+        "phExcerpt": "Breve descripción mostrada en el listado",
+        "category": "Categoría *",
+        "product": "Producto asociado",
+        "productNone": "— Ninguno —",
+        "content": "Contenido (Markdown) *",
+        "phContent": "## Título\n\nContenido en Markdown...",
+        "published": "Publicado",
+        "draft": "Borrador",
+        "saveChanges": "Guardar cambios",
+        "createArticle": "Crear artículo",
+        "cancel": "Cancelar"
+      }
     },
     "projects": {
       "title": "Proyectos",
@@ -727,6 +786,43 @@
         "alta": "Alta",
         "media": "Media",
         "baixa": "Baja"
+      },
+      "form": {
+        "back": "Proyectos",
+        "newTitle": "Nuevo Proyecto",
+        "client": "Cliente *",
+        "selectClient": "Seleccionar cliente...",
+        "title": "Título *",
+        "phTitle": "Ej: App de gestión para clínica",
+        "description": "Descripción",
+        "phDescription": "Describe el alcance del proyecto...",
+        "initialStatus": "Estado inicial",
+        "priority": "Prioridad",
+        "startDate": "Fecha de inicio",
+        "dueDate": "Fecha de entrega",
+        "estHours": "Horas estimadas",
+        "estCost": "Costo estimado (R$)",
+        "internalNotes": "Notas internas",
+        "phNotes": "Notas visibles solo para el equipo...",
+        "cancel": "Cancelar",
+        "create": "Crear Proyecto"
+      },
+      "detail": {
+        "back": "Proyectos",
+        "updates": "Actualizaciones",
+        "phUpdate": "Escribe una actualización para el cliente...",
+        "addUpdate": "Agregar Actualización",
+        "noUpdates": "Aún no hay actualizaciones.",
+        "start": "Inicio",
+        "due": "Entrega",
+        "estHoursShort": "Horas est.",
+        "estCostShort": "Costo est.",
+        "updateStatus": "Actualizar estado",
+        "newStatus": "Nuevo estado",
+        "noteOptional": "Nota (opcional)",
+        "phNote": "Explica el cambio...",
+        "save": "Guardar",
+        "admin": "Admin"
       }
     },
     "contracts": {
@@ -758,6 +854,38 @@
         "retainer": "Retainer",
         "manutencao": "Mantenimiento",
         "licenca": "Licencia"
+      },
+      "form": {
+        "back": "Contratos",
+        "newTitle": "Nuevo Contrato",
+        "client": "Cliente *",
+        "selectClient": "Seleccionar cliente...",
+        "linkedProject": "Proyecto vinculado (opcional)",
+        "none": "Ninguno",
+        "title": "Título *",
+        "phTitle": "Ej: Contrato de desarrollo — v1",
+        "description": "Descripción",
+        "phDescription": "Describe el objeto del contrato...",
+        "status": "Estado",
+        "type": "Tipo",
+        "startDate": "Fecha de inicio",
+        "endDate": "Fecha de término",
+        "endBeforeStart": "El término no puede ser anterior al inicio.",
+        "value": "Valor (R$)",
+        "fileUrl": "URL del archivo",
+        "cancel": "Cancelar",
+        "create": "Crear Contrato"
+      },
+      "detail": {
+        "back": "Contratos",
+        "start": "Inicio",
+        "end": "Término",
+        "value": "Valor",
+        "signed": "Firmado",
+        "linkedProject": "Proyecto vinculado:",
+        "viewFile": "Ver archivo",
+        "updateStatus": "Actualizar estado",
+        "save": "Guardar"
       }
     }
   },
