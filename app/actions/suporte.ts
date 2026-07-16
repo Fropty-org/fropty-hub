@@ -13,6 +13,8 @@ import {
   sendTicketStatusChange,
   sendResolutionFeedbackToTeam,
 } from "@/app/lib/email/send";
+import { extractUrls } from "@/app/lib/security/urls";
+import { checkUrlsReputation } from "@/app/lib/security/url-reputation";
 
 // Os anexos são paths relativos do bucket no formato "<pasta>/<uuid>.<ext>".
 // A pasta é o uid do usuário (criação do chamado) ou o id do ticket (respostas).
@@ -178,15 +180,29 @@ export async function sendMessage(formData: FormData) {
     return { error: "Ticket não encontrado." };
   }
 
-  const { error } = await supabase.from("ticket_messages").insert({
+  // FroptySentinel: se há link, a mensagem entra "pendente" e a reputação é
+  // verificada logo em seguida (o resultado propaga por realtime UPDATE).
+  const urls = extractUrls(body);
+  const hasLinks = urls.length > 0;
+
+  const { data: inserted, error } = await supabase.from("ticket_messages").insert({
     ticket_id:   ticketId,
     sender_id:   userId,
     sender_role: senderRole,
     body,
     ...(attachments.length > 0 ? { attachments } : {}),
-  });
+    ...(hasLinks ? { link_status: "pending" } : {}),
+  }).select("id").single();
 
   if (error) return { error: "Erro ao enviar mensagem. Tente novamente." };
+
+  // Verifica a reputação e grava o veredito (via service client — o update do
+  // link_status não depende da policy de escrita do usuário).
+  if (hasLinks && inserted?.id) {
+    const verdict = await checkUrlsReputation(urls);
+    const service = createServiceClient();
+    await service.from("ticket_messages").update({ link_status: verdict }).eq("id", inserted.id);
+  }
 
   if (senderRole === "cliente") {
     const adminEmail = process.env.CONTACT_EMAIL;

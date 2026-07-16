@@ -620,6 +620,7 @@ export type Database = {
           body: string
           created_at: string
           id: string
+          link_status: string | null
           sender_id: string
           sender_role: string
           ticket_id: string
@@ -629,6 +630,7 @@ export type Database = {
           body: string
           created_at?: string
           id?: string
+          link_status?: string | null
           sender_id: string
           sender_role: string
           ticket_id: string
@@ -638,6 +640,7 @@ export type Database = {
           body?: string
           created_at?: string
           id?: string
+          link_status?: string | null
           sender_id?: string
           sender_role?: string
           ticket_id?: string
