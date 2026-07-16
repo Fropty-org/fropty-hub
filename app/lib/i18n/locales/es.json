@@ -970,5 +970,11 @@
         }
       ]
     }
+  },
+  "sentinel": {
+    "msg1": "No se encontraron problemas en tu cuenta.",
+    "msg2": "Sesión y acceso verificados — todo en orden.",
+    "msg3": "Escaneo completado: ninguna amenaza detectada.",
+    "close": "Cerrar"
   }
 }

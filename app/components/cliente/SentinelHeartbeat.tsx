@@ -4,33 +4,32 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { ShieldCheck, X } from "lucide-react";
+import { useT } from "@/app/lib/i18n/I18nProvider";
 
 /**
  * Toast leve do FroptySentinel a cada 5 min, passando a sensação de segurança
  * ("nenhum problema encontrado"). Hoje é apenas visual — a varredura real será
- * plugada depois (o texto/estado virá de uma checagem de verdade).
+ * plugada depois (o texto/estado virá de uma checagem de verdade). O texto segue
+ * o idioma ativo do Hub (guardamos só o índice; a tradução é resolvida no render).
  */
 const INTERVAL_MS = 2 * 60 * 1000; // 2 min (cadência de validação)
 const VISIBLE_MS  = 6000;
 const FIRST_MS    = 15 * 1000;     // primeira aparição ~15s após entrar
 
-const MESSAGES = [
-  "Nenhum problema encontrado na sua conta.",
-  "Sessão e acesso verificados — tudo certo.",
-  "Varredura concluída: nenhuma ameaça detectada.",
-];
+const MSG_COUNT = 3;
 
 export function SentinelHeartbeat() {
+  const t = useT();
   const [mounted, setMounted] = useState(false);
   const [show, setShow] = useState(false);
-  const [msg, setMsg] = useState(MESSAGES[0]);
+  const [msgIndex, setMsgIndex] = useState(1);
 
   useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
     let hideTimer: ReturnType<typeof setTimeout>;
     function ping() {
-      setMsg(MESSAGES[Math.floor(Math.random() * MESSAGES.length)]);
+      setMsgIndex(Math.floor(Math.random() * MSG_COUNT) + 1);
       setShow(true);
       hideTimer = setTimeout(() => setShow(false), VISIBLE_MS);
     }
@@ -63,9 +62,9 @@ export function SentinelHeartbeat() {
         <p style={{ margin: 0, fontSize: "12px", fontWeight: 800, color: "var(--text)", display: "flex", alignItems: "center", gap: 5 }}>
           FroptySentinel <ShieldCheck size={12} style={{ color: "var(--c-success)" }} />
         </p>
-        <p style={{ margin: "1px 0 0", fontSize: "11.5px", color: "var(--text-muted)", lineHeight: 1.35 }}>{msg}</p>
+        <p style={{ margin: "1px 0 0", fontSize: "11.5px", color: "var(--text-muted)", lineHeight: 1.35 }}>{t(`sentinel.msg${msgIndex}`)}</p>
       </div>
-      <button type="button" onClick={() => setShow(false)} aria-label="Fechar" style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-faint)", display: "flex", flexShrink: 0 }}>
+      <button type="button" onClick={() => setShow(false)} aria-label={t("sentinel.close")} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-faint)", display: "flex", flexShrink: 0 }}>
         <X size={14} />
       </button>
     </div>,

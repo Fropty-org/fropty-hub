@@ -970,5 +970,11 @@
         }
       ]
     }
+  },
+  "sentinel": {
+    "msg1": "Nenhum problema encontrado na sua conta.",
+    "msg2": "Sessão e acesso verificados — tudo certo.",
+    "msg3": "Varredura concluída: nenhuma ameaça detectada.",
+    "close": "Fechar"
   }
 }
