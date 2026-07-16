@@ -117,11 +117,13 @@
         "unassigned": "Unassigned"
       },
       "actions": {
-        "title": "Added actions",
+        "title": "History",
         "search": "Search",
         "filter": "Filter",
         "empty": "No actions logged yet.",
-        "closed": "This ticket is closed."
+        "closed": "This ticket is closed.",
+        "searchPlaceholder": "Search history…",
+        "noResults": "No items found."
       },
       "composer": {
         "placeholder": "What would you like to log?",

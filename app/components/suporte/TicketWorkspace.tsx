@@ -92,6 +92,9 @@ export function TicketWorkspace({ ticket, messages, currentUserId, currentUserNa
   const [detailsOpen, setDetailsOpen] = useState(true);
   const [attView, setAttView] = useState<"table" | "grid">("grid");
   const [signedUrls, setSignedUrls] = useState<Record<string, string>>({});
+  // Busca dentro do histórico (lupa do painel).
+  const [histSearchOpen, setHistSearchOpen] = useState(false);
+  const [histSearch, setHistSearch] = useState("");
 
   const { response, resolution } = computeSla({
     priority: ticket.priority,
@@ -233,15 +236,32 @@ export function TicketWorkspace({ ticket, messages, currentUserId, currentUserNa
           )}
         </div>
 
-        {/* Ações adicionadas */}
+        {/* Histórico */}
         <div className="ticket-ws__panel" style={{ display: "flex", flexDirection: "column", height: "min(620px, calc(100vh - 200px))" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
             <span style={{ fontSize: "15px", fontWeight: 700, color: "var(--text)" }}>{t("serviceDesk.detail.actions.title")}</span>
             <div style={{ display: "flex", gap: 4 }}>
-              <button className="ticket-iconbtn" style={{ width: 30, height: 30, border: "none", background: "none" }} title={t("serviceDesk.detail.actions.search")}><Search size={16} /></button>
+              <button className="ticket-iconbtn" data-active={histSearchOpen} style={{ width: 30, height: 30, border: "none", background: "none" }}
+                title={t("serviceDesk.detail.actions.search")}
+                onClick={() => { setHistSearchOpen((v) => { if (v) setHistSearch(""); return !v; }); }}>
+                <Search size={16} />
+              </button>
               <button className="ticket-iconbtn" style={{ width: 30, height: 30, border: "none", background: "none" }} title={t("serviceDesk.detail.actions.filter")}><SlidersHorizontal size={16} /></button>
             </div>
           </div>
+          {histSearchOpen && (
+            <div style={{ position: "relative", marginBottom: 12 }}>
+              <Search size={14} style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", color: "var(--text-faint)" }} />
+              <input
+                autoFocus
+                value={histSearch}
+                onChange={(e) => setHistSearch(e.target.value)}
+                placeholder={t("serviceDesk.detail.actions.searchPlaceholder")}
+                className="hub-input"
+                style={{ paddingLeft: 32, width: "100%", height: 34 }}
+              />
+            </div>
+          )}
           <TicketConversation
             variant="panel"
             ticketId={ticket.id}
@@ -252,6 +272,7 @@ export function TicketWorkspace({ ticket, messages, currentUserId, currentUserNa
             senderRole={senderRole}
             clientName={ticket.client_name}
             participants={participants}
+            filterQuery={histSearch}
           />
         </div>
       </aside>

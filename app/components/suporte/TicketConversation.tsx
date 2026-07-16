@@ -25,6 +25,8 @@ interface Props {
   variant?:        "chat" | "panel";
   /** Nome + avatar por sender_id (mesma foto do perfil). */
   participants?:   Record<string, { name: string; avatarUrl: string | null }>;
+  /** Filtro de busca no histórico (variant "panel"): filtra as mensagens por texto. */
+  filterQuery?:    string;
 }
 
 import { User, Headphones } from "lucide-react";
@@ -82,6 +84,7 @@ export function TicketConversation({
   clientName,
   variant = "chat",
   participants,
+  filterQuery = "",
 }: Props) {
   const tr = useT();
   const [messages,    setMessages]    = useState<MessageRow[]>(initialMessages);
@@ -263,6 +266,10 @@ export function TicketConversation({
 
   /* ── Variant "panel": timeline lateral (Service Desk) ── */
   if (variant === "panel") {
+    const query = filterQuery.trim().toLowerCase();
+    const visibleMessages = query
+      ? messages.filter((m) => m.body.toLowerCase().includes(query))
+      : messages;
     const ToolBtn = ({ onClick, title, children, disabled }: { onClick?: () => void; title: string; children: React.ReactNode; disabled?: boolean }) => (
       <button type="button" title={title} onClick={onClick} disabled={disabled}
         style={{ width: 28, height: 28, borderRadius: 6, background: "none", border: "none", cursor: disabled ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-faint)", opacity: disabled ? 0.4 : 1 }}>
@@ -288,7 +295,12 @@ export function TicketConversation({
               {tr("serviceDesk.detail.actions.empty")}
             </div>
           )}
-          {messages.map((msg) => {
+          {messages.length > 0 && visibleMessages.length === 0 && (
+            <div style={{ textAlign: "center", color: "var(--text-faint)", fontSize: "13px", padding: "24px 0" }}>
+              {tr("serviceDesk.detail.actions.noResults")}
+            </div>
+          )}
+          {visibleMessages.map((msg) => {
             const isClienteMsg = msg.sender_role === "cliente";
             const meta = isClienteMsg ? ROLE_META.cliente : ROLE_META.equipe;
             const person = participants?.[msg.sender_id];

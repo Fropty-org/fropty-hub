@@ -117,11 +117,13 @@
         "unassigned": "Sin asignar"
       },
       "actions": {
-        "title": "Acciones añadidas",
+        "title": "Historial",
         "search": "Buscar",
         "filter": "Filtrar",
         "empty": "Aún no hay acciones registradas.",
-        "closed": "Este ticket está cerrado."
+        "closed": "Este ticket está cerrado.",
+        "searchPlaceholder": "Buscar en el historial…",
+        "noResults": "No se encontraron elementos."
       },
       "composer": {
         "placeholder": "¿Qué te gustaría registrar?",

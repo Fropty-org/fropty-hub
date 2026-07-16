@@ -117,11 +117,13 @@
         "unassigned": "Não atribuído"
       },
       "actions": {
-        "title": "Ações adicionadas",
+        "title": "Histórico",
         "search": "Buscar",
         "filter": "Filtrar",
         "empty": "Nenhuma ação registrada ainda.",
-        "closed": "Este chamado está encerrado."
+        "closed": "Este chamado está encerrado.",
+        "searchPlaceholder": "Buscar no histórico…",
+        "noResults": "Nenhum item encontrado."
       },
       "composer": {
         "placeholder": "O que gostaria de registrar?",
