@@ -695,6 +695,70 @@
       },
       "statePublished": "Publicado",
       "stateDraft": "Rascunho"
+    },
+    "projects": {
+      "title": "Projetos",
+      "total": "{n} projetos no total",
+      "newProject": "Novo Projeto",
+      "all": "Todos",
+      "emptyTitle": "Nenhum projeto encontrado",
+      "emptyDesc": "Crie o primeiro projeto para começar.",
+      "details": "Detalhes",
+      "colProject": "Projeto",
+      "colStatus": "Status",
+      "colPriority": "Prioridade",
+      "colClient": "Cliente",
+      "colStart": "Início",
+      "colDue": "Prazo",
+      "colProgress": "Progresso %",
+      "status": {
+        "lead": "Lead",
+        "briefing": "Briefing",
+        "escopo": "Escopo",
+        "proposta": "Proposta",
+        "contrato": "Contrato",
+        "execucao": "Execução",
+        "entrega": "Entrega",
+        "suporte": "Suporte",
+        "encerrado": "Encerrado"
+      },
+      "priority": {
+        "critica": "Crítica",
+        "alta": "Alta",
+        "media": "Média",
+        "baixa": "Baixa"
+      }
+    },
+    "contracts": {
+      "title": "Contratos",
+      "total": "{n} contratos no total",
+      "newContract": "Novo Contrato",
+      "all": "Todos",
+      "emptyTitle": "Nenhum contrato encontrado",
+      "emptyDesc": "Crie o primeiro contrato para começar.",
+      "view": "Ver",
+      "kpiTotal": "Total",
+      "kpiSigned": "Assinados",
+      "kpiSent": "Enviados",
+      "kpiCancelled": "Cancelados",
+      "colContract": "Contrato / Cliente",
+      "colStatus": "Status",
+      "colType": "Tipo",
+      "colValue": "Valor/Mês",
+      "colTerm": "Vigência",
+      "status": {
+        "rascunho": "Rascunho",
+        "enviado": "Enviado",
+        "assinado": "Assinado",
+        "encerrado": "Encerrado",
+        "cancelado": "Cancelado"
+      },
+      "type": {
+        "projeto": "Projeto",
+        "retainer": "Retainer",
+        "manutencao": "Manutenção",
+        "licenca": "Licença"
+      }
     }
   },
   "legal": {

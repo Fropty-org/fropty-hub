@@ -3,9 +3,10 @@ import Link from "next/link";
 import { Plus, FileSignature, User, Calendar, CheckCircle, Clock, XCircle } from "lucide-react";
 import { getAllContracts } from "@/app/actions/contracts";
 import { CONTRACT_STATUS_MAP, CONTRACT_TYPE_MAP } from "@/app/lib/constants/projects";
-import { StatusBadge } from "@/app/components/ui/StatusBadge";
+import { AdminStatusBadge } from "@/app/components/admin/AdminStatusBadge";
 import { PaginationNav } from "@/app/components/ui/PaginationNav";
 import type { ContractStatus } from "@/app/lib/types/projects";
+import { getServerI18n } from "@/app/lib/i18n/server";
 
 const PAGE_SIZE = 20;
 
@@ -28,6 +29,7 @@ export default async function AdminContratosPage({
 }: {
   searchParams: Promise<{ status?: string; page?: string }>;
 }) {
+  const { t } = await getServerI18n();
   const { status: filterStatus, page } = await searchParams;
   const allContracts = await getAllContracts();
 
@@ -47,10 +49,10 @@ export default async function AdminContratosPage({
   const cancelados = allContracts.filter((c) => c.status === "cancelado").length;
 
   const kpis = [
-    { label: "Total",      value: total,      color: "var(--primary)",  Icon: FileSignature },
-    { label: "Assinados",  value: assinados,  color: "var(--c-success)",         Icon: CheckCircle },
-    { label: "Enviados",   value: enviados,   color: "var(--c-info)",         Icon: Clock },
-    { label: "Cancelados", value: cancelados, color: "var(--c-danger)",         Icon: XCircle },
+    { label: t("admin.contracts.kpiTotal"), value: total,      color: "var(--primary)",  Icon: FileSignature },
+    { label: t("admin.contracts.kpiSigned"), value: assinados,  color: "var(--c-success)",         Icon: CheckCircle },
+    { label: t("admin.contracts.kpiSent"), value: enviados,   color: "var(--c-info)",         Icon: Clock },
+    { label: t("admin.contracts.kpiCancelled"), value: cancelados, color: "var(--c-danger)",         Icon: XCircle },
   ];
 
   return (
@@ -59,11 +61,11 @@ export default async function AdminContratosPage({
       {/* ── Page header ── */}
       <div className="hub-page-header" style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
         <div>
-          <h1 className="hub-page-title">Contratos</h1>
-          <p className="hub-page-sub">{total} contrato{total !== 1 ? "s" : ""} no total</p>
+          <h1 className="hub-page-title">{t("admin.contracts.title")}</h1>
+          <p className="hub-page-sub">{t("admin.contracts.total", { n: total })}</p>
         </div>
         <Link href="/admin/contratos/novo" className="hub-btn" style={{ background: "var(--cta-bg)", color: "var(--cta-text)" }}>
-          <Plus size={14} /> Novo Contrato
+          <Plus size={14} /> {t("admin.contracts.newContract")}
         </Link>
       </div>
 
@@ -84,7 +86,7 @@ export default async function AdminContratosPage({
 
       {/* ── Filter strip ── */}
       <div className="hub-filter-strip" style={{ marginBottom: 20 }}>
-        {[{ key: "todos", label: "Todos" }, ...ALL_STATUSES.map((s) => ({ key: s, label: CONTRACT_STATUS_MAP[s].label }))].map(({ key, label }) => {
+        {[{ key: "todos", label: t("admin.contracts.all") }, ...ALL_STATUSES.map((s) => ({ key: s, label: t("admin.contracts.status." + s) }))].map(({ key, label }) => {
           const active = (filterStatus ?? "todos") === key;
           return (
             <Link key={key} href={`/admin/contratos?status=${key}`}
@@ -99,8 +101,8 @@ export default async function AdminContratosPage({
       {contracts.length === 0 ? (
         <div className="hub-card hub-empty">
           <div className="hub-empty-icon"><FileSignature size={22} /></div>
-          <p className="hub-empty-title">Nenhum contrato encontrado</p>
-          <p className="hub-empty-desc">Crie o primeiro contrato para começar.</p>
+          <p className="hub-empty-title">{t("admin.contracts.emptyTitle")}</p>
+          <p className="hub-empty-desc">{t("admin.contracts.emptyDesc")}</p>
         </div>
       ) : (
         <div className="hub-card" style={{ padding: 0, overflow: "hidden" }}>
@@ -108,11 +110,11 @@ export default async function AdminContratosPage({
             <table className="hub-table">
               <thead>
                 <tr>
-                  <th>Contrato / Cliente</th>
-                  <th>Status</th>
-                  <th>Tipo</th>
-                  <th>Valor/Mês</th>
-                  <th>Vigência</th>
+                  <th>{t("admin.contracts.colContract")}</th>
+                  <th>{t("admin.contracts.colStatus")}</th>
+                  <th>{t("admin.contracts.colType")}</th>
+                  <th>{t("admin.contracts.colValue")}</th>
+                  <th>{t("admin.contracts.colTerm")}</th>
                   <th></th>
                 </tr>
               </thead>
@@ -129,9 +131,9 @@ export default async function AdminContratosPage({
                         </span>
                       </td>
                       <td>
-                        <StatusBadge kind="contract" status={contract.status} size="sm" />
+                        <AdminStatusBadge kind="contract" status={contract.status} size="sm" />
                       </td>
-                      <td style={{ whiteSpace: "nowrap" }}>{CONTRACT_TYPE_MAP[contract.type] ?? contract.type}</td>
+                      <td style={{ whiteSpace: "nowrap" }}>{t("admin.contracts.type." + contract.type, {}) !== "admin.contracts.type." + contract.type ? t("admin.contracts.type." + contract.type) : (CONTRACT_TYPE_MAP[contract.type] ?? contract.type)}</td>
                       <td className="hub-td-primary" style={{ whiteSpace: "nowrap" }}>{formatCurrency(contract.value)}</td>
                       <td style={{ whiteSpace: "nowrap" }}>
                         {(contract.start_date || contract.end_date) ? (
@@ -143,7 +145,7 @@ export default async function AdminContratosPage({
                       </td>
                       <td className="hub-td-action">
                         <Link href={`/admin/contratos/${contract.id}`} className="hub-btn hub-btn-sm hub-btn-ghost">
-                          Ver
+                          {t("admin.contracts.view")}
                         </Link>
                       </td>
                     </tr>
