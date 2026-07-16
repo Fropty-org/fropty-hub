@@ -332,7 +332,7 @@ export async function updateTicket(formData: FormData) {
 // assigneeId vazio/null → remove a atribuição. Escrita via service role
 // (RLS de tickets restringe UPDATE ao time; alinhado ao updateTicket).
 export async function assignTicket(ticketId: string, assigneeId: string | null) {
-  await requireRole("admin");
+  const actorId = await requireRole("admin");
 
   const id = ticketId?.trim();
   if (!id) return { error: "ID do chamado inválido." };
@@ -353,12 +353,53 @@ export async function assignTicket(ticketId: string, assigneeId: string | null) 
     }
   }
 
+  // Estado anterior — para saber quem foi removido/adicionado e notificar.
+  const { data: prevTicket } = await supabase
+    .from("tickets")
+    .select("assigned_to, ticket_number, subject")
+    .eq("id", id)
+    .single();
+  const previous = prevTicket?.assigned_to ?? null;
+
   const { error } = await supabase
     .from("tickets")
     .update({ assigned_to: assignee })
     .eq("id", id);
 
   if (error) return { error: "Erro ao atribuir o chamado." };
+
+  // Notifica no sininho quando o responsável muda (definido, removido ou trocado).
+  // Não notifica quem executou a própria ação (evita ruído no self-assign).
+  if (previous !== assignee) {
+    const uft = prevTicket?.ticket_number != null
+      ? `UFT${String(prevTicket.ticket_number).padStart(4, "0")}`
+      : "chamado";
+    const subject = prevTicket?.subject ?? "";
+    const link = `/admin/suporte/${id}`;
+    const notes: { user_id: string; title: string; body: string; type: string; link: string }[] = [];
+
+    if (assignee && assignee !== actorId) {
+      notes.push({
+        user_id: assignee,
+        title: `Você é o responsável pelo ${uft}`,
+        body: subject,
+        type: "ticket_assigned",
+        link,
+      });
+    }
+    if (previous && previous !== actorId) {
+      notes.push({
+        user_id: previous,
+        title: `Você não é mais o responsável pelo ${uft}`,
+        body: subject,
+        type: "ticket_unassigned",
+        link,
+      });
+    }
+    if (notes.length > 0) {
+      await supabase.from("notifications").insert(notes);
+    }
+  }
 
   revalidatePath("/admin/suporte");
   revalidatePath(`/portal/suporte/${id}`);
