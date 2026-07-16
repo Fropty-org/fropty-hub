@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { PortalThemeToggle } from "@/app/components/cliente/PortalThemeToggle";
 import { useT } from "@/app/lib/i18n/I18nProvider";
 import {
   LayoutDashboard, Users, CreditCard, MessageCircle, BarChart2, ShieldCheck,
   BookOpen, Map, MessageSquarePlus, FolderKanban, FileSignature,
-  HeartPulse, Menu, PanelLeftClose, Shield,
+  HeartPulse, Menu, PanelLeftClose,
   ChevronDown, UserPlus, ListFilter,
   LayoutGrid, CalendarDays,
 } from "lucide-react";
@@ -49,7 +49,7 @@ interface Props {
   avatarUrl?:    string | null;
 }
 
-export function AdminSidebar({ name, initials, userId, initialTheme = "dark", avatarUrl }: Props) {
+export function AdminSidebar({ initialTheme = "dark" }: Props) {
   const t = useT();
   const pathname              = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -62,7 +62,6 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
     }
     return new Set();
   });
-  const footerRef  = useRef<HTMLDivElement>(null);
 
   // Auto-expand accordion based on current path
   useEffect(() => {
@@ -271,44 +270,8 @@ export function AdminSidebar({ name, initials, userId, initialTheme = "dark", av
           ))}
         </nav>
 
-        {/* Footer — identidade + link para o perfil (o menu de conta vive no
-            avatar do topo, AccountMenu). */}
-        <div ref={footerRef} style={{ flexShrink: 0, marginTop: 8 }}>
-          <div style={{ height: 1, background: "var(--border)", marginBottom: 6 }} />
-          <Link
-            href="/admin/perfil"
-            title={collapsed ? name : undefined}
-            style={{
-              width: "100%", display: "flex", alignItems: "center",
-              justifyContent: collapsed ? "center" : "flex-start",
-              gap: 8, padding: collapsed ? "6px 0" : "7px 10px",
-              borderRadius: "var(--r-md)", background: "transparent",
-              textDecoration: "none", color: "var(--text)",
-              transition: "background 0.12s",
-            }}
-            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = "var(--sidebar-item-hover)"; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = "transparent"; }}
-          >
-            <div style={{ position: "relative", flexShrink: 0 }}>
-              <div style={{ width: 30, height: 30, borderRadius: "50%", background: "var(--surface-2)", border: "1.5px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 700, color: "var(--text)", overflow: "hidden" }}>
-                {avatarUrl
-                  ? <img src={avatarUrl} alt={name} style={{ width: "100%", height: "100%", objectFit: "cover" }} referrerPolicy="no-referrer" />
-                  : initials}
-              </div>
-              <span style={{ position: "absolute", bottom: -2, right: -2, width: 12, height: 12, borderRadius: "50%", background: "var(--sidebar-bg)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2 }}>
-                <Shield size={7} style={{ color: "var(--primary)", opacity: 0.8 }} />
-              </span>
-            </div>
-            {!collapsed && (
-              <div style={{ flex: 1, overflow: "hidden", minWidth: 0, textAlign: "left" }}>
-                <p style={{ margin: 0, fontSize: "12.5px", fontWeight: 600, color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{name}</p>
-                <p style={{ margin: 0, fontSize: "10px", fontWeight: 600, color: "var(--text-faint)", display: "flex", alignItems: "center", gap: 3 }}>
-                  <Shield size={8} style={{ color: "var(--primary)", opacity: 0.7 }} /> {t("admin.nav.adminRole")}
-                </p>
-              </div>
-            )}
-          </Link>
-        </div>
+        {/* O perfil/menu de conta vive no avatar do topo (AccountMenu, HubTopbar).
+            O rodapé de identidade foi removido daqui para não duplicar. */}
       </div>
     </aside>
   );

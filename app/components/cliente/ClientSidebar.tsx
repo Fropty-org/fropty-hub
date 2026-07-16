@@ -9,7 +9,7 @@ import { PORTAL_NAV_ITEMS, PORTAL_NAV_GROUPS } from "../../lib/constants/portal-
 import {
   LayoutDashboard, MessageCircle, CreditCard, UserCircle, BookOpen, Map,
   MessageSquarePlus, FolderKanban, FileSignature,
-  Menu, X, PanelLeftClose, PanelLeftOpen, Search, Coins, Sparkles,
+  Menu, X, PanelLeftClose, PanelLeftOpen, Search, Sparkles,
   MessagesSquare, LayoutGrid, CalendarDays,
 } from "lucide-react";
 import Image from "next/image";
@@ -42,9 +42,7 @@ function NavIcon({ name, size = 16 }: { name: string; size?: number }) {
   return Icon ? <Icon size={size} /> : null;
 }
 
-const PLAN_LABEL: Record<string, string> = { basico: "Básico", pro: "Pro", sem_plano: "Sem plano" };
-
-export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) {
+export function ClientSidebar({ navItems, initialTheme = "dark" }: Props) {
   const pathname              = usePathname();
   const nav                   = navItems ?? DEFAULT_NAV;
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -62,9 +60,6 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
   }
 
   const W = collapsed ? 60 : 224;
-  const planKey   = (user.plan ?? "sem_plano") as string;
-  const planLabel = PLAN_LABEL[planKey] ?? planKey;
-  const hasPlan   = planKey !== "sem_plano";
 
   const sidebar = (
     <aside
@@ -255,60 +250,8 @@ export function ClientSidebar({ user, navItems, initialTheme = "dark" }: Props) 
           ))}
         </nav>
 
-        {/* ── Footer: identidade + link para o perfil (o menu de conta —
-            tema/sair — vive no avatar do topo, AccountMenu). ── */}
-        <div style={{ flexShrink: 0, marginTop: 8 }}>
-          <div style={{ height: 1, background: "var(--border)", marginBottom: 8 }} />
-
-          <Link
-            href="/portal/perfil"
-            title={collapsed ? user.name : undefined}
-            style={{
-              display: "flex", alignItems: "center",
-              justifyContent: collapsed ? "center" : "flex-start",
-              padding: collapsed ? "6px 0" : "7px 10px",
-              borderRadius: "var(--r-md)", gap: 8,
-              textDecoration: "none", color: "var(--text)", transition: "background 0.12s",
-            }}
-            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = "var(--sidebar-item-hover)"; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = "transparent"; }}
-          >
-            {/* Avatar */}
-            <div style={{
-              width: 30, height: 30, borderRadius: "50%", flexShrink: 0,
-              background: "var(--surface-2)", border: "1px solid var(--border)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: "12px", fontWeight: 700, color: "var(--text)", overflow: "hidden",
-            }}>
-              {user.avatarInitials}
-            </div>
-
-            {/* Name + plan — expanded */}
-            {!collapsed && (
-              <div style={{ flex: 1, overflow: "hidden", minWidth: 0 }}>
-                <p style={{ margin: 0, fontSize: "12.5px", fontWeight: 600, color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                  {user.name}
-                </p>
-                <div style={{ display: "flex", alignItems: "center", gap: 5, marginTop: 1 }}>
-                  <span style={{
-                    fontSize: "10px", fontWeight: 700,
-                    color: hasPlan ? "var(--primary)" : "var(--text-faint)",
-                    background: hasPlan ? "color-mix(in srgb, var(--primary) 10%, transparent)" : "var(--surface-3)",
-                    border: `1px solid ${hasPlan ? "color-mix(in srgb, var(--primary) 20%, transparent)" : "var(--border)"}`,
-                    borderRadius: "var(--r-full)", padding: "1px 7px",
-                  }}>
-                    {planLabel}
-                  </span>
-                  {user.tokenBalance != null && user.tokenBalance > 0 && (
-                    <span style={{ fontSize: "10px", color: "var(--text-faint)", display: "flex", alignItems: "center", gap: 2 }}>
-                      <Coins size={9} />{user.tokenBalance}
-                    </span>
-                  )}
-                </div>
-              </div>
-            )}
-          </Link>
-        </div>
+        {/* O perfil/menu de conta (identidade, plano/tokens, tema, sair) vive no
+            avatar do topo (AccountMenu, HubTopbar). Rodapé removido para não duplicar. */}
       </div>
     </aside>
   );
