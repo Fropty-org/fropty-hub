@@ -12,7 +12,10 @@ import { useT } from "@/app/lib/i18n/I18nProvider";
  * plugada depois (o texto/estado virá de uma checagem de verdade). O texto segue
  * o idioma ativo do Hub (guardamos só o índice; a tradução é resolvida no render).
  */
-const INTERVAL_MS = 2 * 60 * 1000; // 2 min (cadência de validação)
+// Recorrência do heartbeat. Ajuste ENABLED para religar o toast; hoje está
+// desligado a pedido (validação concluída). Quando religar, defina o intervalo.
+const ENABLED     = false;
+const INTERVAL_MS = 5 * 60 * 1000; // 5 min (cadência padrão quando religado)
 const VISIBLE_MS  = 6000;
 const FIRST_MS    = 15 * 1000;     // primeira aparição ~15s após entrar
 
@@ -27,6 +30,7 @@ export function SentinelHeartbeat() {
   useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
+    if (!ENABLED) return;
     let hideTimer: ReturnType<typeof setTimeout>;
     function ping() {
       setMsgIndex(Math.floor(Math.random() * MSG_COUNT) + 1);
@@ -38,7 +42,7 @@ export function SentinelHeartbeat() {
     return () => { clearTimeout(first); clearTimeout(hideTimer); clearInterval(interval); };
   }, []);
 
-  if (!mounted) return null;
+  if (!ENABLED || !mounted) return null;
 
   return createPortal(
     <div

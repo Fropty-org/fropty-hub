@@ -222,6 +222,13 @@ via migration. Já cobrem `health_scores`, `notifications`, `tickets` SLA cols, 
 - **Ícones**: no **Hub** use **Lucide React** (`lucide-react`). O webfont **Tabler** (`ti ti-`,
   `public/tabler-icons.min.css`) é usado **apenas** em `app/demo/*` (marketing) — não introduzir no Hub.
 - **Encoding**: arquivos em UTF-8. Evitar mojibake (ex. `Ã£`/`âŒ˜`) ao editar strings pt-BR.
+- **i18n obrigatório (Hub)**: **todo item novo ou editado do portal** (tela, componente, texto de UI,
+  option de select, placeholder, aria-label, toast, etc.) **já precisa nascer com a tradução para EN e
+  ES**, não só pt-BR. Regra: nada de string literal visível no Hub sem passar pelo dicionário
+  (`useT`/`getServerI18n` + chaves em `app/lib/i18n/locales/{pt,en,es}.json`). Ao mexer numa tela,
+  garanta que as 3 locales tenham a chave (rode a validação de JSON). Nomes técnicos (SLA, UFT,
+  Service Desk, Markdown, slug, Retainer) **não** se traduzem. Isso evita defasagem e palavras
+  esquecidas em outro idioma. (A landing/marketing segue em pt-BR e fica fora dessa regra.)
 - Mensagens de commit em português, descrevendo a mudança do ponto de vista do produto.
 - **Nunca criar PRs** — commitar e pushar direto no master.
 
