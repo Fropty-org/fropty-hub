@@ -228,8 +228,11 @@ export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }:
 
   return (
     <div className="hub-page" style={{ maxWidth: "none" }}>
+      {/* Cabeçalho + views + filtros num único card sólido — evita o fundo
+          rajado da página vazar por cima do texto. */}
+      <div className="hub-card" style={{ padding: "18px 18px 16px", marginBottom: 16, display: "flex", flexDirection: "column", gap: 14 }}>
       {/* Header + resumo */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 16, marginBottom: 20, flexWrap: "wrap" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 16, flexWrap: "wrap" }}>
         <div>
           <h1 style={{ margin: 0, fontSize: "1.5rem", fontWeight: 800, color: "var(--text)", letterSpacing: "-0.02em" }}>
             {t("serviceDesk.queue.title")}
@@ -248,7 +251,7 @@ export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }:
       </div>
 
       {/* Views salvas */}
-      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center", marginBottom: 12 }}>
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
         <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: "12px", fontWeight: 700, color: "var(--text-faint)" }}>
           <Bookmark size={13} /> {t("serviceDesk.queue.views")}
         </span>
@@ -271,7 +274,7 @@ export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }:
       </div>
 
       {/* Filtros */}
-      <div className="hub-card" style={{ padding: "12px 14px", marginBottom: 16, display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+      <div style={{ paddingTop: 14, borderTop: "1px solid var(--border)", display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
         <div style={{ position: "relative", flex: "1 1 220px", minWidth: 180 }}>
           <Search size={14} style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", color: "var(--text-faint)" }} />
           <input
@@ -311,6 +314,7 @@ export function AdminSuporteQueue({ tickets, clients, analysts, currentUserId }:
           <option value="urgencia">{t("serviceDesk.queue.options.urgency")}</option>
           <option value="recente">{t("serviceDesk.queue.options.recent")}</option>
         </select>
+      </div>
       </div>
 
       {/* Fila */}
