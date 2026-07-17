@@ -65,6 +65,27 @@ async function checkSafeBrowsing(urls: string[], key: string): Promise<boolean |
   }
 }
 
+/**
+ * A URL existe/responde? Falha de DNS, conexão recusada, timeout ou 404/410
+ * contam como inacessível. Qualquer outra resposta (inclusive 403/500) indica
+ * que o host existe. Usado para reprovar links inexistentes (ex.: domínio de
+ * teste que não resolve).
+ */
+async function isReachable(url: string): Promise<boolean> {
+  const attempt = (method: "HEAD" | "GET") =>
+    fetch(url, { method, redirect: "follow", signal: AbortSignal.timeout(7000) });
+  try {
+    let res = await attempt("HEAD");
+    // Alguns servidores não aceitam HEAD → tenta GET antes de decidir.
+    if (res.status === 405 || res.status === 501) res = await attempt("GET");
+    if (res.status === 404 || res.status === 410) return false;
+    return true;
+  } catch {
+    // DNS não resolve / conexão recusada / timeout → tratamos como inexistente.
+    return false;
+  }
+}
+
 async function checkSinkingYachts(urls: string[]): Promise<boolean | null> {
   const hosts = [...new Set(urls.map(hostOf).filter((h): h is string => !!h))];
   if (hosts.length === 0) return null;
@@ -109,6 +130,10 @@ export async function checkUrlsReputation(urls: string[]): Promise<LinkVerdict> 
   const sy = await checkSinkingYachts(urls);
   if (sy === true) return "blocked";
 
-  // Indeterminado ou limpo → libera (fail-open).
+  // 4. Existência: link que não resolve/responde é reprovado (bloqueado).
+  const reach = await Promise.all(urls.map(isReachable));
+  if (reach.some((ok) => !ok)) return "blocked";
+
+  // Reputação limpa e URL acessível → libera.
   return "clean";
 }
