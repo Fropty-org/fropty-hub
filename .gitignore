@@ -45,3 +45,10 @@ next-env.d.ts
 .claude/worktrees/
 /playwright-results/
 /playwright-report/
+
+# Ferramental de agente instalado localmente (nao e codigo do projeto)
+.agents/
+.claude/skills/
+.claude/settings.local.json
+skills-lock.json
+*.bak

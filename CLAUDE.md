@@ -1,6 +1,24 @@
-# CLAUDE.md
+# CLAUDE.md — Fropty Hub
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Herança
+
+Esta unidade é regida pela Constituição do ecossistema Fropty:
+
+    framework/CLAUDE.md   (repositório privado `fropty-com/framework`)
+
+Ela define a arquitetura do ecossistema, as regras globais de engenharia, dados, segurança,
+design, qualidade e operação, as proibições absolutas e o protocolo de execução. Quem tem
+acesso ao repositório `framework` deve lê-la antes de trabalho não trivial aqui.
+
+**Categoria:** Operação (Título VIII). O Hub é interno em propósito e externo em exposição —
+clientes o utilizam —, então seu padrão de segurança, disponibilidade e qualidade é o mesmo
+dos produtos, nunca inferior (Art. 51.1). O Hub **não** é o banco de dados do ecossistema:
+não centraliza dados dos produtos, e obtém informação de outras unidades por contrato
+explícito, nunca por acesso direto a banco alheio (Art. 51.2).
+
+Este documento contém o que é específico do Hub. As regras globais não são repetidas aqui.
 
 ## Project
 
