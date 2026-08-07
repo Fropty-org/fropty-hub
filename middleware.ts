@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import { SESSION_COOKIE_OPTIONS } from "./app/lib/supabase/cookies";
 
 const LOGIN_PAGE = "/area-cliente";
 const PROTECTED_PREFIXES = ["/admin", "/area-cliente/", "/portal/"];
@@ -87,6 +88,7 @@ export async function middleware(request: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
+      cookieOptions: SESSION_COOKIE_OPTIONS,
       cookies: {
         getAll: () => request.cookies.getAll(),
         setAll: (cookiesToSet) => {
@@ -121,10 +123,12 @@ export async function middleware(request: NextRequest) {
 
   if (HUB_HOST) {
     if (onHub) {
-      // Raiz do hub: com sessão válida vai direto para o portal; sem sessão vê a landing.
-      if (path === "/" && isAuthed) {
+      // Raiz do hub: é sempre login/portal (nunca a landing de marketing).
+      // Logado → portal; deslogado → tela de login. Assim um cliente que digita
+      // hub.fropty.com cai direto no lugar certo, sem passar pela landing.
+      if (path === "/" && authKnown) {
         const url = request.nextUrl.clone();
-        url.pathname = "/portal/dashboard";
+        url.pathname = isAuthed ? "/portal/dashboard" : LOGIN_PAGE;
         return NextResponse.redirect(url);
       }
     } else {
