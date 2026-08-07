@@ -1,5 +1,10 @@
 # DNA VISUAL PRELINE — Padrões extraídos para aplicação no Fropty Hub
 
+> **Cópia de trabalho.** A fonte canônica deste documento é
+> `shared/design-system/dna-visual-preline.md`, no repositório `fropty-com/shared`.
+> Alterações de conteúdo devem ser feitas lá. Esta cópia existe para consulta local e será
+> removida quando o `shared` estiver acessível a todos os colaboradores do Hub.
+
 > Fase 1 da auditoria de design. Fontes: scraping Firecrawl (preline.co, admin-dashboard,
 > analytics-dashboard, calendar-app, helpdesk — páginas de preview e demos `index-preview.html`),
 > referência do Figma Preline UI já mapeada (buttons: 6 variantes × 3 tamanhos × 7 cores × 4 estados),
